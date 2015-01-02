@@ -37,6 +37,7 @@ gem 'ember-rails'
 gem 'devise', github: 'demosophy/devise-3.4.1.usub'
 
 group :production, :staging do
+  gem 'unicorn'
   gem 'mina'
   gem 'mina-sidekiq', :require => false
   gem 'mina-unicorn', :require => false
