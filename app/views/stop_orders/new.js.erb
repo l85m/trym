@@ -1,0 +1,5 @@
+$(".modal-dialog").remove()
+$("#modal-container").append("<%= j render 'new' %>")
+$("title").html("<%= j title_helper(@title) %>")
+$("#modal-container").modal({backdrop: 'static'})
+$('#charge_merchant_name').focus()

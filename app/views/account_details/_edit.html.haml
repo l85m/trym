@@ -1,0 +1,25 @@
+.modal-dialog.modal-md
+  .modal-content.vertical-center
+    .modal-body.text-center
+      .modal-header-text 
+        %h3 What's your number?
+        %p#error-text
+      = simple_form_for @account_detail, remote: true do |f|
+        .form-inputs
+          = f.input :phone, label: "Phone Number", as: :string, input_html: { value: @account_detail.formatted_phone }
+        .text-center
+          .inline-block{style: "width: 6%;"}
+            %i.fa.fa-phone.fa-mobile.fa-3x{style: "color: black;"}
+          .inline-block{style: "width: 92%;"}
+            we'll verify your phone number by sending you a text message so grab your phone before you hit submit
+
+        .form-actions{style: "margin-top: 10px;"}
+          %button{ type: "button", class: "btn btn-default", data: {dismiss: "modal"} } Cancel
+          = f.button :submit, "Verify", class: "btn-primary"
+
+:javascript
+
+  $('#account_detail_phone').formatter({
+    'pattern': '({{999}}) {{999}}-{{9999}}',
+    'persistent': true
+  });

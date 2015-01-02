@@ -1,0 +1,61 @@
+.visible-lg-block
+  .row
+    .col-lg-12
+      %p.lead.text-center{style: "margin: 0px 0px 20px 0px;"}
+        ="Over the next twelve months you will pay" 
+        %span.brand-blue="#{number_to_currency @charges_outlook_chart_data.total_next_twelve_months}"
+        ="to #{pluralize @charges_outlook_chart_data.bar_categories.count, 'merchant'}."
+  .row
+    .col-lg-12
+      #charges-total-by-merchant-chart
+
+-if @charges_outlook_chart_data.any_charges_in_year?
+  :javascript
+    $(function () {
+      $('#charges-total-by-merchant-chart').highcharts({
+        chart: { 
+          type: 'bar',
+          height: ($(window).height() - $('#charges-total-by-merchant-chart').offset().top - 30),
+        },
+        colors: ['#088BFF'],
+        plotOptions: { 
+          bar: { 
+            dataLabels: {
+              enabled: true,
+              formatter: function () {
+                return '$' + this.y.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+              }
+            }
+          },
+          series: {
+            point: {
+              events: {
+                mouseOver: function(e) {
+                  $( ".merchant-" + e.currentTarget.category ).addClass("hover-glow")
+                },
+                mouseOut: function(e) {
+                  $( ".merchant-" + e.currentTarget.category ).removeClass("hover-glow")
+                }
+              }
+            }
+          } 
+        },
+        title: { text: null },
+        xAxis: {
+          categories: #{@charges_outlook_chart_data.bar_categories.to_json},
+          title: { text: null }
+        },
+        yAxis: { 
+          gridLineWidth: 0,
+          minorGridLineWidth: 0,
+          max: #{@charges_outlook_chart_data.bar_data.first[:data].max * 1.2},
+          min: 0,
+          title: { text: null },
+          labels: { enabled: false }
+        },
+        tooltip: { enabled: false },
+        legend: { enabled: false },
+        credits: { enabled: false },
+        series: #{@charges_outlook_chart_data.bar_data.to_json}
+      });
+    });

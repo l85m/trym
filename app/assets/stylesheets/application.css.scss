@@ -1,0 +1,195 @@
+@import "bootstrap-sprockets";
+@import "bootstrap";
+@import "jquery-ui/datepicker";
+@import "jquery_ui_bootstrap";
+@import "jquery-ui/autocomplete";
+@import "sessions";
+@import "charges";
+@import "verifications";
+$brand-blue: #088BFF;
+
+a:hover{ 
+	color: $brand-blue; 
+	cursor: pointer;
+}
+i{ color: $brand-blue; }
+.brand-blue{ color: $brand-blue; }
+.inline-block{ display: inline-block; }
+a.icon-link:hover{ 
+	border-bottom: 1px solid $brand-blue;
+	text-decoration: none;
+}
+input{ text-align: center; }
+input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
+	background-color: white;
+}
+.form-errors{ color: #a94442; }
+.input-group-addon, .form-control{ 
+	box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+}
+.extra-small{ font-size: 75%; }
+.small{ font-size: 85%; }
+.kinda-small{ font-size: 95%; }
+.small-gray{ color: gray; }
+.lg-font{ font-size: 250%; }
+.btn-primary{ 
+	background-color: $brand-blue; 
+	border-color: $brand-blue;
+	box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+}
+.disabled-style{
+	opacity: 0.7;
+}
+.disabled-style:hover{ 
+	cursor: not-allowed; 
+}
+.btn-primary:hover{
+	background-color: white;
+	color: $brand-blue;
+	border-color: $brand-blue;
+}
+.btn-primary-o{
+	background-color: transparent;
+	border-color: $brand-blue;
+	color: $brand-blue;
+	box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+}
+.btn-primary-o:focus{ color: $brand-blue; }
+.btn-primary-o.active:focus{ color: white; }
+.btn-primary-o.active, .btn-primary-o:active,
+.btn-primary-o:hover{
+	background-color: $brand-blue;
+	color: white;
+	i{color: white;}
+}
+.btn-white{ 
+	border-color: white;
+	background-color: white; 
+	color: $brand-blue;
+	box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+}
+.btn-white:hover{
+	background-color: $brand-blue;
+	color: white;
+	border-color: white;
+	box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+}
+.btn-default{ box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1); }
+.btn:focus, .btn.focus, .btn:active:focus, 
+.btn:active.focus, .btn.active:focus, .btn.active.focus{ 
+	outline: none; 
+}
+.without-margin{
+	margin: 0 !important;
+}
+.well{ 
+	background: transparent; 
+	box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+}
+.table-div{ display: table; }
+.table-cell{ display: table-cell; }
+.vertical-center{ display: table-cell; vertical-align: middle; }
+.dashed-border{ border-style: dashed; }
+
+.ui-icon-circle-triangle-e{ font-family: FontAwesome; }
+.ui-icon-circle-triangle-e:before{ content: "\f138"; }
+.ui-autocomplete { 
+  z-index: 5000 !important; 
+}
+.popover-list{
+	margin-left: -20px;
+}
+
+.navbar{ 
+	border-color: black; 
+	text-align: center;
+}
+.navbar-brand{
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 9999;
+}
+.active-header-link,
+.navbar-nav > li > a:hover{ 
+	color: $brand-blue !important; 
+}
+.navbar-sign-up-btn{ margin-right: 5px; }
+#flash-container{
+	position: relative;
+	width: 100%;
+	display: block;
+	.alert{
+		width: 100%;
+		margin: 0;
+		border: none;
+		border-radius: 0;
+	}
+	.alert-info {
+		border-bottom: 1px solid black;
+		background-color: #088bff;
+		color: white;
+	}
+}
+
+#home-banner{ 
+	background-color: $brand-blue;
+	color: white;
+	h1{ font-size: 300%; }
+	p{ 
+		font-size: 200%; 
+		color: whitesmoke;
+	}
+}
+#home-demo-steps{	
+	border-bottom: #e7e7e7 1px solid;
+	div.row > div{ padding: 10px 15px; }
+}
+@media (min-width: 992px) {
+	#home-demo-steps{	
+		display: table;
+		div.row{
+			display: table-row;
+		 	div{
+		 		display: table-cell;
+		 		vertical-align: middle;
+		 		float: none;
+		 	}
+		}
+	}
+}
+
+.modal-backdrop{
+	background: white;
+	opacity: 1 !important;
+}
+.modal-close-x{ 
+	font-weight: 200;
+	font-size: 200%;
+	position: absolute;
+	right: 15px;
+}
+.modal-dialog{ 
+	height: 100%; 
+	margin: 0 auto;
+	display: table;
+}
+.modal-md{ width: 400px; }
+.modal-content{
+	box-shadow: none;
+	border: none;
+}
+.modal-header-text{ margin-bottom: 20px; }
+.modal-footer{ border: none; }
+@media (max-width: 450px) {
+	.block-xxs{ display: block; }
+  .hidden-xxs{ display: none !important; }
+  .text-center-xxs{ text-align: center !important; }
+  .vertical-middle-xxs{ vertical-align: middle; }
+}
+@media (max-width: 770px) {
+	.block-xs{ display: block; }
+  .hidden-xs{ display: none !important; }
+  .text-center-xs{ text-align: center !important; }
+  .vertical-middle-xs{ vertical-align: middle; }
+}

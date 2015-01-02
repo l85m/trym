@@ -1,0 +1,24 @@
+.container-fluid#home-banner
+  .text-center{style: "margin: 30px auto;"}
+    %h1
+      Manage recurring charges without all the hassle
+    %p.lead
+      Trym helps you track recurring charges and cancel them in seconds
+    =link_to "Sign Up and Start Saving", new_user_registration_path, remote: true, class: "btn btn-lg btn-white"
+
+.container-fluid#home-demo-steps
+  .row.text-center
+    .col-md-2.col-md-offset-2.col-sm-12
+      %p.lead.without-margin track your spending on subscription charges
+    .col-md-1.col-sm-12
+      %i.fa.fa-arrow-circle-right.fa-4x.hidden-sm.hidden-xs
+      %i.fa.fa-arrow-circle-down.fa-4x.hidden-lg.hidden-md
+    .col-md-2.col-sm-12
+      %p.lead.without-margin cancel any subscription with a single click
+    .col-md-1.col-sm-12
+      %i.fa.fa-arrow-circle-right.fa-4x.hidden-sm.hidden-xs
+      %i.fa.fa-arrow-circle-down.fa-4x.hidden-lg.hidden-md
+    .col-md-2.col-sm-12
+      %p.lead.without-margin 
+        sit back and relax, we'll handel the rest
+

@@ -1,0 +1,39 @@
+.modal-dialog
+  .modal-content.vertical-center
+    = simple_form_for @charge do |f|
+      .modal-body.text-center
+        .multi-part-form.block1.show
+          %h2
+            what's the charge for?
+            %br
+            %small step 1 of 2
+          = f.input :merchant, as: :string
+          = f.input :description
+          %button{ type: "button", class: "btn btn-default", data: {dismiss: "modal"} } Cancel
+          %button.next{ type: "button", class: "btn btn-primary", data: {current_block: "1", next_block: "2"} } Next
+
+        .multi-part-form.block2.hidden
+          %h2
+            when was the last bill and how much do you usually pay?
+            %br
+            %small step 2 of 2
+          = f.input :amount
+          = f.input :last_date_billed, as: :string
+          = f.input :renewal_period_in_months
+          %button{ type: "button", class: "btn btn-default", data: {dismiss: "modal"} } Cancel
+          %button.next{ type: "button", class: "btn btn-default", data: {current_block: "2", next_block: "1"} } Back
+          = f.button :submit, "Save", class: "btn btn-success"
+
+:javascript
+  $('#modal-container').on('hidden.bs.modal', function (e) {
+    $('title').html("trym.io | charges")
+  })
+  $('#charge_last_date_billed').datepicker({dateFormat: 'yy-mm-dd'})
+
+  $('.next').on('click', function () {
+    var current = $(this).data('currentBlock');
+    var next = $(this).data('nextBlock');
+
+    $('.block' + current).removeClass('show').addClass('hidden');
+    $('.block' + next).removeClass('hidden').addClass('show');
+  });

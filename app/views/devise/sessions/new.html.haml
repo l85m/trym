@@ -1,0 +1,13 @@
+.col-lg-4.col-lg-offset-4.col-md-6.col-md-offset-3.col-sm-6.col-sm-offset-3
+  .text-center{style: "margin: 30px;"}
+    %h2.modal-header-text welcome back
+    = simple_form_for resource, as: resource_name, url: session_path(resource_name), defaults: {input_html: {class: "text-center"}} do |f|
+      = devise_error_messages!
+      .form-inputs
+        = f.input :email, required: false, autofocus: true 
+        = f.input :password, required: false 
+      .form-actions
+        = link_to "Back", :back, class: "btn btn-default"      
+        = f.button :submit, "Sign In", class: "btn-primary"
+
+    = render "devise/shared/links" 

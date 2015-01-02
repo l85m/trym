@@ -1,0 +1,12 @@
+function error_button_flash(button) {
+  //flash button red
+  button.css("background-color", "red");
+  button.css("border-color", "red");
+  button.css("color", "#fff");
+  button.css("outline", "none");
+  button.animate({ backgroundColor: "#088bff" }, {queue: false, duration: 1000});
+  button.animate({ borderColor: "#088bff" }, {queue: false, duration: 1000}); 
+};
+
+$("#error-text").text("confirmation code did not match - please try again")
+error_button_flash($('input[name="commit"]'))

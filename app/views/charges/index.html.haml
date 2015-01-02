@@ -1,0 +1,37 @@
+.container-fluid.scrollable-with-offset
+
+  .row{style: 'padding: 0px 20px;'}
+    .scrollable#charges-outlook{ class: "col-lg-#{@charges.present? ? "8" : "12"}"}
+      - if @charges.present?
+        =render 'contact_preferences'
+        =render 'twelve_month_outlook'
+      - else
+        =render 'new_user_prompt'
+    
+    - if @charges.present?
+      =render 'charge_list'
+
+:javascript
+  $(document).ready(function() {
+    if ($(window).width() >= 1200) {
+      var h = $(window).height();
+      var chart = $('#charges-total-by-merchant-chart');
+      $('.scrollable').height((h-70)+'px');
+      $('.scrollable-with-offset').height((h-100)+'px');
+      $('#charges-total-by-merchant-chart').height( ( h - chart.offset().top - 30 )+'px' );
+    }
+  });
+  $( window ).resize(function() {
+    if ($(window).width() >= 1200) {
+      var h = $(window).height();
+      var chart = $('#charges-total-by-merchant-chart');
+      $('.scrollable').height((h-70)+'px');
+      $('.scrollable-with-offset').height((h-100)+'px')
+      $('#charges-total-by-merchant-chart').height( ( h - chart.offset().top - 30 )+'px' );
+      chart.highcharts().setSize( chart.width() , h - chart.offset().top - 30 );
+    } else {
+      $('.scrollable').height('auto');
+      $('.scrollable-with-offset').height('auto');
+      $('#charges-total-by-merchant-chart').height('auto');
+    }
+  });

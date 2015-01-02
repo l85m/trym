@@ -1,0 +1,9 @@
+= simple_form_for(@merchant) do |f|
+  = f.error_notification
+
+  .form-inputs
+    = f.input :name
+    = f.input :type
+
+  .form-actions
+    = f.button :submit

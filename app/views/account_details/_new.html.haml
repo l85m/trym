@@ -1,0 +1,33 @@
+.modal-dialog.modal-md
+  .modal-content.vertical-center
+    .modal-body.text-center
+      .modal-header-text{style: "margin-bottom: 10px;"}
+        %h3
+          To continue we need a bit more information
+        %p#error-text{style: "margin: 10px auto"}
+        -if session[:referring_charge_id].present?
+          %a.icon-link#account-data-explain-tooltip{data: {toggle: "tooltip"}}
+            %i.fa.fa-question-circle.fa-fw
+            why do we need this?
+      = simple_form_for @account_detail, remote: true do |f|
+        .form-inputs
+          .row
+            .col-md-6= f.input :first_name, label: "First Name", required: true, as: :string
+            .col-md-6= f.input :last_name, label: "Last Name", required: true, as: :string
+          = f.input :phone, label: "Phone Number", as: :string, input_html: { value: @account_detail.phone.present? ? @account_detail.formatted_phone : '' }
+        .text-center
+          .inline-block{style: "width: 6%;"}
+            %i.fa.fa-phone.fa-mobile.fa-3x{style: "color: black;"}
+          .inline-block{style: "width: 92%;"}
+            we'll verify your phone number by sending you a text message so grab your phone before you hit submit
+        .form-actions{style: "margin-top: 10px;"}
+          %button{ type: "button", class: "btn btn-default", data: {dismiss: "modal"} } Cancel
+          = f.button :submit, "Continue", class: "btn-primary"
+
+:javascript
+  $("#account-data-explain-tooltip").tooltip({'title':"We need your name so that we know who we're talking to and we need your phone number so we can call you to verify the cancelation."});
+
+  $('#account_detail_phone').formatter({
+    'pattern': '({{999}}) {{999}}-{{9999}}',
+    'persistent': true
+  });

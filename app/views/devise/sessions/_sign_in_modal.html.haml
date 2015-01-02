@@ -1,0 +1,14 @@
+.modal-dialog.modal-md
+  .modal-content.vertical-center
+    .modal-body.text-center
+      %h2.modal-header-text welcome back
+      = simple_form_for resource, as: resource_name, url: session_path(resource_name) do |f|
+        = devise_error_messages!
+        .form-inputs
+          = f.input :email, autofocus: true 
+          = f.input :password
+        .form-actions
+          %button{ type: "button", class: "btn btn-default", data: {dismiss: "modal"} } Cancel
+          = f.button :submit, "Sign In", class: "btn-primary"
+
+      = render "devise/shared/links" 

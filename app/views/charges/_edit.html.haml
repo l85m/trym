@@ -1,0 +1,248 @@
+.modal-dialog.modal-lg
+  .modal-content.vertical-center
+    = simple_form_for @charge do |f|
+      .modal-body.text-center
+        %h2.modal-header-text
+          what's new?
+
+        %ul.list-unstyled.form-errors
+
+        .row
+          .col-md-4= f.input :merchant_name, label: "name of company", input_html: {class: "charge-merchant-attributes"}
+          .col-md-4= f.input :merchant_website, label: "company website", input_html: {class: "charge-merchant-attributes"}
+          .col-md-4= f.input :description, as: :string, label: "what's the charge for?"
+
+        .row
+          .col-md-4.col-xs-7= f.input :last_date_billed, as: :string, label: "when was your last charge?"
+          .col-md-4.col-xs-5= f.input :amount, as: :currency, label: "how much was it?", input_html: {value: f.object.amount.to_f / 100.0}
+          .col-md-4.col-xs-12
+            .form-group#renewal-period-selects
+              = f.input :renewal_period_in_words, collection: Charge.renewal_period_in_words.to_h.invert, selected: 4, label: "how often are you charged?", wrapper: false
+              = f.input :renewal_period_in_weeks, as: :integer, label: false, placeholder: "charging frequency in weeks", wrapper: false
+        = link_to "Delete", @charge, method: :delete, class: "button btn btn-default", data: {confirm: "Are you sure you want to delete this charge?"}
+        %button.btn.btn-default{ type: "button", data: {dismiss: "modal"} } Cancel
+        = f.button :submit, "Save", class: "btn btn-primary"
+
+        %h5#error-reminder{style: "color: red;"}
+
+:javascript
+
+  //autofill website from name
+  function updateMerchantWebsiteText(website) {
+    if( typeof website == 'string' ) {
+      $("#charge_merchant_website").css("color", "#fff");
+      $("#charge_merchant_website")[0].value = website;
+      $("#charge_merchant_website").animate({ color: "#66afe9" }, 300 );
+      $("#charge_merchant_website").animate({ color: "#000" }, 2000 );
+    }
+  }
+
+  function is_valid_url(url) {
+    return url.match(/^((ftp|http|https):\/\/)?([a-zA-Z0-9]+(\.[a-zA-Z0-9]+)+.*)$/);
+  };
+
+  function is_valid_currency(amount) {
+    var present = !(amount == "");
+    var valid = amount.match(/^\$?([1-9]{1}[0-9]{0,2}(\,[0-9]{3})*(\.[0-9]{0,2})?|[1-9]{1}[0-9]{0,}(\.[0-9]{0,2})?|0(\.[0-9]{0,2})?|(\.[0-9]{1,2})?)$/);
+    return (valid && present);
+  };
+
+  function is_valid_date(date) {
+    return date.match(/^\d{4}-\d{2}-\d{2}$/)
+  };
+
+  //BEGIN: merchant website validation
+  function error_button_flash(button) {
+    //flash button red
+    button.css("background-color", "red");
+    button.css("border-color", "red");
+    button.css("color", "#fff");
+    button.css("outline", "none");
+    button.animate({ backgroundColor: "#088bff" }, {queue: false, duration: 1000});
+    button.animate({ borderColor: "#088bff" }, {queue: false, duration: 1000}); 
+  };
+
+  function remove_error_reminder_if_form_valid() {
+    if( !($(".form-errors").children().length) ) { $('#error-reminder').text("") }
+  }
+
+  //set page title
+  $('#modal-container').on('hidden.bs.modal', function (e) {
+    $('title').html("trym.io | charges")
+    $('.modal-dialog').remove();
+  });
+
+  //intialize jqueryui date-picker
+  $('#charge_last_date_billed').datepicker({dateFormat: 'yy-mm-dd'});
+
+  //BEGIN: autocomplete for merchant-name
+  var websiteIndex = JSON.parse('#{@merchant_names_and_websites.to_json}');
+
+  $(function() {
+    $( "#charge_merchant_name" ).autocomplete({
+      source: #{@merchant_names}
+    });
+  });
+
+  $("#charge_merchant_name").on({
+    change: function() {
+      updateMerchantWebsiteText( websiteIndex[$("#charge_merchant_name")[0].value.toUpperCase()] );
+    }, autocompleteselect: function( event, ui ) {
+      updateMerchantWebsiteText( websiteIndex[ui.item.value.toUpperCase()] );
+    }
+  });
+  //END: autocomplete for merchant-name
+
+  //BEGIN: renewal period - other input
+  $("#charge_renewal_period_in_words").change(function() {
+    if( $(this)[0].value == "0" ) {
+      $(this).css("width", "30%")
+      $("label[for='charge_renewal_period_in_words']").text("how often (in weeks) are you charged?")
+      $("#charge_renewal_period_in_weeks").css("display", "inline-block")
+    } else {
+      $(this).css("width", "100%")
+      $("label[for='charge_renewal_period_in_words']").text("how often are you charged?")
+      $("#charge_renewal_period_in_weeks").css("display", "none")
+    }
+  });
+  //END: renewal period - other input
+
+  //BEGIN: website validation
+  $("#charge_merchant_website").change(function() {
+    if( is_valid_url( $(this)[0].value ) || $(this)[0].value == '' ) {
+      $(this).parent().removeClass('has-error');
+      if( !($(this)[0].value == '') ) { $('#charge_merchant_name').parent().removeClass('has-error'); }; 
+      $('#merchant-name-or-website-error').remove();
+      remove_error_reminder_if_form_valid();
+    } else {
+      $(this).parent().addClass('has-error');
+      if( !($("#merchant-name-or-website-error").length ) ) {
+        error_text = "company name or valid company website is required";
+        $('.form-errors').append("<li class='text-center' id=merchant-name-or-website-error>" + error_text + "</li>");
+      }
+    }
+  });
+  //END: merchant website validation
+
+  //Merchant name validation
+  $("#charge_merchant_name").change(function() {
+    var website = $("#charge_merchant_website")[0].value
+    if( !($(this)[0].value == '') && (is_valid_url(website) || website == "") ) { 
+      $(this).parent().removeClass('has-error');
+      $('#merchant-name-or-website-error').remove();
+      remove_error_reminder_if_form_valid();
+    }
+  });
+    
+  //charge amount validation
+  $("#charge_amount").change(function() {
+    if( is_valid_currency( $(this)[0].value ) ) { 
+      $(this).parent().removeClass('has-error');
+      $('#amount-error').remove();
+      remove_error_reminder_if_form_valid()
+    } else {
+      $(this).parent().addClass('has-error');
+      if( !($("#amount-error").length ) ) {
+        $('.form-errors').append("<li class='text-center' id=amount-error>charge amount must be present and must be a number</li>");
+      }
+    }
+  });
+
+  //last date billed validation
+  $("#charge_last_date_billed").change(function() {
+    if( is_valid_date( $(this)[0].value ) ) { 
+      $(this).parent().removeClass('has-error');
+      $('#charge-date-error').remove();
+      remove_error_reminder_if_form_valid()
+    } else {
+      $(this).parent().addClass('has-error');
+      if( !($("#charge-date-error").length ) ) {
+        $('.form-errors').append("<li class='text-center' id=charge-date-error>last bill date must be present and must be valid (yyyy-mm-dd)</li>");
+      }
+    }
+  });
+
+  //BEGIN: other renewal period validation
+  $('#charge_renewal_period_in_weeks').change(function() {
+    var renewal_period_in_words = $('#charge_renewal_period_in_words')[0].value
+    var renewal_period_in_weeks = $(this)[0].value
+
+    if( renewal_period_in_words.value == "0" && $.isNumeric(renewal_period_in_weeks) ) {
+      $(this).parent().removeClass('has-error');
+      $('#renewal-weeks-error').remove();
+      remove_error_reminder_if_form_valid()
+    } else {
+      $(this).parent().addClass('has-error');
+      if( !($("#renewal-weeks-error").length ) ) {
+        $('.form-errors').append("<li class='text-center' id=charge-date-error>other renewal period must be a number</li>");
+      }
+    }
+  });
+  $('#charge_renewal_period_in_words').change(function() {
+    if( $(this).value != "0" ) {
+      $('#charge_renewal_period_in_weeks').parent().removeClass('has-error');
+      $('#renewal-weeks-error').remove();
+      remove_error_reminder_if_form_valid()
+    }
+  });
+  //END: other renewal period validation
+
+  //BEGIN: form error handler
+  $('#edit_charge_' + #{@charge.id.to_s}).on('submit', function (event) {
+
+    var website = $("#charge_merchant_website")[0].value
+    var website_present = !( website == '' )
+    var website_valid = is_valid_url(website)
+    var name_present =  !( $("#charge_merchant_name")[0].value == '' )
+    var amount = $("#charge_amount")[0].value;
+    var last_date_billed = $('#charge_last_date_billed')[0].value;
+    var renewal_period_in_words = $('#charge_renewal_period_in_words')[0].value;
+    var renewal_period_in_weeks = $('#charge_renewal_period_in_weeks')[0].value;
+
+    var errors = [];
+    var error_classes = [];
+
+    console.log(website_valid);
+
+    if( !website_valid || (!name_present && (!website_valid || !website_present)) ) {
+      errors.push("company name or valid company website is required");
+      error_classes.push("merchant-name-or-website-error")
+      $(".charge-merchant-attributes").parent().addClass('has-error');
+    }
+
+    if( !is_valid_date(last_date_billed) ) { 
+      errors.push("date of last bill must be present and must be a date (yyyy-mm-dd)");
+      error_classes.push("charge-date-error")
+      $("#charge_last_date_billed").parent().addClass('has-error');
+    };
+
+    if( !is_valid_currency(amount) ) { 
+      errors.push("charge cost must be present and must be a number");
+      error_classes.push("amount-error")
+      $("#charge_amount").parent().addClass('has-error');
+    };
+
+    if( renewal_period_in_words == "0" && !$.isNumeric(renewal_period_in_weeks) ) { 
+      errors.push("other renewal period must be a number")
+      error_classes.push("renewal-weeks-error")
+      $("#charge_renewal_period_in_weeks").parent().addClass('has-error');
+    };
+
+    if( errors.length > 0 ) {
+      
+      event.preventDefault();
+      error_button_flash( $('input[name="commit"]') );
+      $('#error-reminder').text("it looks like there's something wrong with the information you provided.  please fix it before continuing.");
+      
+      for ( var i = 0; i < errors.length; i = i + 1 ) {
+        if( !($("#" + error_classes[i]).length ) ) {
+          $('.form-errors').append("<li class='text-center' id=" + error_classes[i] + ">" + errors[i] + "</li>");
+        }
+      };
+    
+    } else {
+      $('#error-reminder').text("");
+    }
+  });
+  //END: form error handler
+
