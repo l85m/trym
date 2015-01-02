@@ -5,6 +5,7 @@ ruby '2.1.5'
 #infra!
 gem 'rails', '4.1.7'
 gem 'turbolinks'
+gem 'pg'
 gem 'bcrypt-ruby', '3.1.2'
 gem 'mechanize'
 gem 'twilio-ruby'
@@ -13,7 +14,6 @@ gem 'phony_rails'
 #account linking gems
 gem 'similar_text'
 gem 'capybara', '2.1.0'
-gem 'poltergeist'
 
 #langauge abstraction
 gem 'sass-rails'
