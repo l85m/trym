@@ -45,7 +45,6 @@ end
 group :development, :test do
   gem 'rspec-rails', '2.13.1'
   gem 'spork-rails', '4.0.0'
-  gem 'pg'
   gem 'childprocess'
   gem 'better_errors'
   gem 'binding_of_caller'
