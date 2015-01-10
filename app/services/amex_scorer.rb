@@ -1,11 +1,23 @@
 class AmexScorer
 
   def initialize(charge_list)
-    @charge_list = charge_list.map{ |c| c[:recurring_score] = 0 }
+    @charge_list = convert_to_hash charge_list
     @merchant_names = Merchant.pluck(:name).uniq.map(&:downcase)
+  end
+
+  def score
     group_charges_by_description
     match_to_merchants
     calculate_recurring_score
+  end
+
+  private
+
+  def convert_to_hash(charge_list)
+    charge_list.map do |c| 
+      keys = [:categories, :date, :description, :amount, :recurring_score][(c.size > 3 ? 0 : 1)..-1]
+      keys.zip(c).to_h
+    end
   end
 
   def group_charges_by_description
@@ -32,16 +44,17 @@ class AmexScorer
           charge[:date] << sibling[:date]
           completed_list << sibling[:description]
         end
-      end      
+      end
+      charge[:charges] = charge[:date].zip(charge[:amount]).to_h
       grouped_list << charge
     end
 
-    grouped_list
+    @charge_list = grouped_list
   end
 
   def calculate_recurring_score
     @charge_list.map do |c|
-      
+      c[:recurring_score] = 0
       if amex_charge?(c)
         c[:recurring_score] = 10 if c[:description].downcase.include?("membership")
       else  
@@ -95,7 +108,7 @@ class AmexScorer
   end
 
   def match_to_merchants
-    @charge_list.map{ |c| c[:merchant] = merchant_recognized?(c[:description]) }
+    @charge_list.map{ |c| c[:merchant] = find_merchant(c[:description]) }
   end
 
   def amex_charge?(charge)
@@ -107,6 +120,7 @@ class AmexScorer
     @merchant_names.uniq.each do |m|
       return m if m.similar(description) > 70 || description.include?(m)
     end
+    nil
   end
 
   def unlikely_subcategory?(categories)

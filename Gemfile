@@ -10,10 +10,17 @@ gem 'bcrypt-ruby', '3.1.2'
 gem 'mechanize'
 gem 'twilio-ruby'
 gem 'phony_rails'
+gem 'sidekiq'
+gem 'sinatra', require: false
+gem 'slim'
+gem 'fuzzily'
+gem 'active_model_serializers'
 
 #account linking gems
 gem 'similar_text'
 gem 'capybara', '2.1.0'
+gem 'poltergeist'
+gem 'phantomjs'
 
 #langauge abstraction
 gem 'sass-rails'
@@ -31,7 +38,7 @@ gem 'jquery-rails'
 gem 'jbuilder', '~> 2.0'
 gem 'uglifier', '>= 1.3.0'
 gem 'json'
-gem 'ember-rails'
+gem 'select2-rails', github: 'demosophy/select2.trym'
 
 #users
 gem 'devise', github: 'demosophy/devise-3.4.1.usub'
@@ -39,8 +46,8 @@ gem 'devise', github: 'demosophy/devise-3.4.1.usub'
 group :production, :staging do
   gem 'unicorn'
   gem 'mina'
-  gem 'mina-sidekiq', :require => false
-  gem 'mina-unicorn', :require => false
+  gem 'mina-sidekiq', require: false
+  gem 'mina-unicorn', require: false
 end
 
 group :development, :test do

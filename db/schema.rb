@@ -11,10 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141230140647) do
+ActiveRecord::Schema.define(version: 20150109222232) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "hstore"
 
   create_table "account_details", force: true do |t|
     t.integer  "user_id"
@@ -52,6 +53,14 @@ ActiveRecord::Schema.define(version: 20141230140647) do
 
   add_index "charges", ["user_id"], name: "index_charges_on_user_id", using: :btree
 
+  create_table "financial_institutions", force: true do |t|
+    t.string   "name"
+    t.string   "website"
+    t.boolean  "read_enabled"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "merchants", force: true do |t|
     t.text     "name"
     t.text     "type"
@@ -86,6 +95,31 @@ ActiveRecord::Schema.define(version: 20141230140647) do
   add_index "stop_orders", ["charge_id"], name: "index_stop_orders_on_charge_id", using: :btree
   add_index "stop_orders", ["merchant_id"], name: "index_stop_orders_on_merchant_id", using: :btree
 
+  create_table "transaction_data_requests", force: true do |t|
+    t.integer  "user_id",                  null: false
+    t.integer  "financial_institution_id", null: false
+    t.string   "status"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "failure_reason"
+    t.json     "transaction_data"
+    t.integer  "amount_complete"
+  end
+
+  add_index "transaction_data_requests", ["financial_institution_id"], name: "index_transaction_data_requests_on_financial_institution_id", using: :btree
+  add_index "transaction_data_requests", ["user_id"], name: "index_transaction_data_requests_on_user_id", using: :btree
+
+  create_table "trigrams", force: true do |t|
+    t.string  "trigram",     limit: 3
+    t.integer "score",       limit: 2
+    t.integer "owner_id"
+    t.string  "owner_type"
+    t.string  "fuzzy_field"
+  end
+
+  add_index "trigrams", ["owner_id", "owner_type", "fuzzy_field", "trigram", "score"], name: "index_for_match", using: :btree
+  add_index "trigrams", ["owner_id", "owner_type"], name: "index_by_owner", using: :btree
+
   create_table "users", force: true do |t|
     t.string   "email",                  default: "",    null: false
     t.string   "encrypted_password",     default: "",    null: false
@@ -106,6 +140,7 @@ ActiveRecord::Schema.define(version: 20141230140647) do
     t.string   "confirmation_token"
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
+    t.boolean  "admin"
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree

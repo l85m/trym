@@ -1,0 +1,61 @@
+.modal-dialog.modal-lg
+  .modal-content.vertical-center
+    
+    .modal-body.text-center#transaction-data-progress-tracker
+      %h3 Scanning your Account for Reccuring Charges
+      .progress
+        .progress-bar.progress-bar-striped.active#trasanction-data-request-bar{role: "progressbar", "aria-valuenow"=>@transaction_data_request.amount_complete, "aria-valuemin" => "0", "aria-valuemax" => "100", style: "width: #{@transaction_data_request.amount_complete}%"}
+          %span.sr-only#trasanction-data-request-amount-complete= "#{@transaction_data_request.amount_complete}% complete"
+      %p.lead
+        %i.fa.fa-circle-o-notch.fa-spin#trasanction-data-request-status-icon
+        %span#trasanction-data-request-status= "#{@transaction_data_request.status}"
+    
+    .modal-body.text-center#transaction-data-progress-success{style: "display: none;"}
+      %p.lead
+        Account scan was successful!  Click
+        =link_to "here", new_charge_path(transaction_data: @transaction_data_request.transaction_data)
+        to continue.
+
+
+:javascript
+  var statusElement = $("#trasanction-data-request-status");
+  var amountCompleteElement = $("#trasanction-data-request-amount-complete");
+  var statusBar = $("#trasanction-data-request-bar");
+  // this function will run each 1000 ms until stopped with clearInterval()
+  var i = setInterval(function () {
+    $.ajax({
+      url: "#{transaction_data_request_path(@transaction_data_request)}",
+      dataType: "json",
+
+      success: function (json) {
+        if (json.failure_reason == null) {
+
+          // progress updates
+          statusElement.text(json.status);
+          amountCompleteElement.text(json.amount_complete + "% complete")
+          statusBar.attr('aria-valuenow', json.amount_complete)
+          statusBar.css('width', json.amount_complete + "%")
+
+          // when the worker process is done (reached 100%), stop execution
+          if (json.amount_complete == 100) { 
+            clearInterval(i);
+            $('#trasanction-data-request-status-icon').removeClass("fa-spin fa-circle-o-notch").addClass("fa-check-circle green")
+            $("#transaction-data-progress-tracker").fadeOut(2000, function(){
+              $("#transaction-data-progress-success").fadeIn();
+            });
+          }
+        } else {
+          $('#trasanction-data-request-status-icon').removeClass("fa-spin fa-circle-o-notch").addClass("fa-times-circle red")
+          $(".progress-bar").removeClass("progress-bar-striped active").addClass("progress-bar-danger") 
+          statusElement.text(json.failure_reason);
+        }
+      },
+
+      error: function () {
+        // on error, stop execution
+        $(".progress-bar").removeClass("progress-bar-striped active").addClass("progress-bar-danger")
+        statusElement.text("could not communicate to the server, please refresh the page")
+        clearInterval(i);
+      }
+    });
+  }, 1000);

@@ -1,0 +1,1 @@
+json.extract! @transaction_data_request, :status, :failure_reason, :amount_complete

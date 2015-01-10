@@ -6,6 +6,10 @@
 @import "sessions";
 @import "charges";
 @import "verifications";
+@import "select2";
+@import "select2-bootstrap";
+@import "financial_data_requests";
+
 $brand-blue: #088BFF;
 
 a:hover{ 
@@ -37,6 +41,8 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 	border-color: $brand-blue;
 	box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
 }
+.green{ color: green; }
+.red{ color: red; }
 .disabled-style{
 	opacity: 0.7;
 }

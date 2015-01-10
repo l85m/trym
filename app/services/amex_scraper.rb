@@ -1,35 +1,77 @@
+##TODO - make cancelable
+
 class AmexScraper
-  attr_accessor :session
+  include Sidekiq::Worker
+  sidekiq_options retry: 3
 
-  def initialize(user, pass, months_of_data)
-    @user = user
-    @pass = pass
-    @months_of_data = months_of_data
-    @session = Capybara::Session.new(:selenium)
-
-    @results = []
+  sidekiq_retries_exhausted do |msg|
+    transaction_id = JSON.parse(msg['ars'])['transaction_id'].to_i
+    TransactionDataRequest.find(transaction_id).update( status: "failed", failure_reason: error_reason )
+    Sidekiq.logger.warn "Failed #{msg['class']} on Transaction=#{transaction_id} with: #{msg['error_message']}"
   end
 
-  def get_charge_list
-    fully_load_statement_data if login && get_statements_page
-    @results
+  def perform(user, pass, transaction_id)
+    @user = user
+    @pass = pass
+    @transaction = TransactionDataRequest.find(transaction_id)
+
+    sleep 3
+    @transaction.update( status: "getting statement page" )
+    sleep 6
+    @transaction.update( status: "loading past 6 months of data" )
+    sleep 5
+    @transaction.update( status: "analyzing data to find recurring items" )
+    sleep 3
+    @transaction.update( status: "complete" )
+
+    # @months_of_data = 6
+    # @results = []
+    # @session = Capybara::Session.new(:poltergeist)
+
+    # handle_error( "Unable to Login" ) unless login
+    # @transaction.update( status: "getting statement page" )
+    # handle_error( "Failed to Load Statements Page" ) unless get_statements_page
+    # @transaction.update( status: "loading past 6 months of data" )
+    # handle_error( "Failed to parse Statement Data" ) unless fully_load_statement_data
+    # @transaction.update( status: "analyzing data to find recurring items" )
+    # handle_error( "Failed to parse Statement Data" ) unless analyze_statement_data
+
+    # @transaction.update( transaction_data: @results.to_json, status: "complete" ) 
+    # @session.driver.quit
   end
 
   private
+
+  def handle_error(error_reason)
+    @session.driver.quit
+    raise error_reason
+  end
+
+  def analyze_statement_data
+    @results = AmexScorer.new(@results).score rescue false
+  end
 
   def login
     @session.visit "https://www.americanexpress.com"
     @session.fill_in('Username', with: @user)
     @session.fill_in('Password', with: @pass)
-    @session.click_link('loginLink') == "ok"
+    @session.click_link('loginLink')["status"] == "success"
   end
 
   def get_statements_page
-    @session.click_link_or_button('Statements & Activity')
+    if @session.click_link_or_button('Statements & Activity')["status"] == "success"
+      select_statement_interval
+      return true
+    else
+      return false
+    end
+  end
+
+  def select_statement_interval
     @session.click_link_or_button('periodSelect')
     @session.fill_in("startDateTxt", with: @months_of_data.months.ago.strftime("%m/%d/%Y"))
     @session.fill_in("endDateTxt", with: Date.today.strftime("%m/%d/%Y"))
-    @session.click_link_or_button('periodGo') == "ok"
+    @session.click_link_or_button('periodGo')
   end
 
   def fully_load_statement_data
@@ -38,6 +80,7 @@ class AmexScraper
     else
       load_on_single_page
     end
+    @results.present?
   end
 
   def load_on_multiple_pages
@@ -54,9 +97,9 @@ class AmexScraper
     parse_statement_data
   end
 
-  def parse_statement_data
+  def parse_statement_data    
     doc = Nokogiri::HTML(@session.body)
-    
+
     doc.search("tbody").each do |tb|
       r = []
       tb.traverse do |e|

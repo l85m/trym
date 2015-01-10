@@ -50,3 +50,9 @@ test:
   <<: *default
   database: stopcharge_test
   password: hayrf9oNcXHpRuK%CT(2nr3EG(yBxu
+
+production:
+  database: trym_production
+  username: postgres
+  password: MvWkijyEgCdDgwE+zriFCkvU9m2qfeAWs{Nm8qbrz{M4VFuJwk
+  host: localhost

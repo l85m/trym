@@ -1,5 +1,10 @@
+require 'sidekiq/web'
+
 Rails.application.routes.draw do
   
+  resources :transaction_data_requests
+  resources :financial_institutions, only: :index
+
   resources :account_details, only: [:new, :create, :edit, :update]
   resources :merchants
 
@@ -17,6 +22,10 @@ Rails.application.routes.draw do
     devise_scope :user do
       root to: "charges#index", :as => "my-charges"
     end
+  end
+
+  authenticate :user, lambda { |u| u.admin? } do
+    mount Sidekiq::Web => '/sidekiq'
   end
 
   get 'static_pages/home'

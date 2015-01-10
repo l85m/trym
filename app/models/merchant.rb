@@ -1,6 +1,7 @@
 class Merchant < ActiveRecord::Base
 	has_many :charges
 	has_many :notes, as: :noteable
+	fuzzily_searchable :name
 
 	scope :has_website, -> {where.not(website: nil)}
 

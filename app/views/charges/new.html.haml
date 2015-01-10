@@ -1,0 +1,40 @@
+.col-md-11
+  .row{style: "margin-left: 10px;"}
+    = simple_form_for edit_user_registration_path(current_user) do |u|
+      = u.error_notification
+      = u.simple_fields_for :charges do |f|
+        .col-md-1.col-sm-12= f.input :enabled, as: :boolean
+        .col-md-2.col-sm-12= f.input :merchant, label: "name of company"
+        .col-md-3.col-sm-12= f.input :description, placeholder: "optional"
+        .col-md-2.col-sm-12= f.input :last_date_billed, as: :string, label: "date of last charge?"
+        .col-md-2.col-sm-12= f.input :amount, as: :currency, label: "how much was it?"
+        .col-md-2.col-sm-12
+          .form-group#renewal-period-selects
+            = f.input :renewal_period_in_words, collection: Charge.renewal_period_in_words.to_h.invert, selected: 4, label: "how often are you charged?", wrapper: false
+      = u.button :submit, "Save", class: "btn btn-primary"
+
+/ :javascript
+/   function format(item) { return item.name; };
+
+/   $('#transaction_data_request_financial_institution').select2({
+/     placeholder: "American Express, USBank, ect.",
+/     minimumInputLength: 3,
+/     data:{ text: "name" },
+/     formatSelection: format,
+/     formatResult: format,
+/     ajax:{ 
+/       url: "#{financial_institutions_path}",
+/       dataType: 'json',
+/       quietMillis: 250,
+/       data: function (term, page) { return { q: term }; },
+/       results: function (data, page) { return { results: data }; },
+/       cache: true
+/     },
+/     formatNoMatches: function(term) { return "Sorry we're not ready to link to "+term+" yet. Please check back soon."; },
+/     createSearchChoice: function(term) { return { id: term, text: "other: " + term }; },
+/     createSearchChoicePosition: 'bottom'
+/   });
+/   $('#transaction_data_request_financial_institution').on("change", function(e) { 
+/     $("#transaction_data_request_username").attr("placeholder","Your " + e.added.name + " Username"); 
+/     $("#transaction_data_request_password").attr("placeholder","Your " + e.added.name + " Password");
+/   });

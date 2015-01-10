@@ -21,6 +21,7 @@ class ChargesController < ApplicationController
     @charge = Charge.new
     respond_to do |format|
       format.js
+      format.html
     end
   end
 

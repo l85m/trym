@@ -7,7 +7,7 @@
         %small to get started, take 5 minutes to help us collect information about your current recurring charges
       %span.first-time-input-options
         %p.lead
-          %a#card-account-link.disabled-style{ class: "btn btn-primary-o btn-lg btn-block", data: {toggle: "tooltip"} }
+          =link_to new_transaction_data_request_path, remote:true, class: "btn btn-primary-o btn-lg btn-block" do
             %i.fa.fa-credit-card
             scan an account
           %small

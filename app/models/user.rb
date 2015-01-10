@@ -7,6 +7,8 @@ class User < ActiveRecord::Base
  	validates :email, presence: true, uniqueness: true, on: :create
  	
  	has_many :charges
+  accepts_nested_attributes_for :charges
+
  	has_many :notes, as: :noteable
  	has_one :account_detail
 

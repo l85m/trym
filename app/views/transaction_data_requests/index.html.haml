@@ -1,0 +1,27 @@
+%h1 Listing transaction_data_requests
+
+%table
+  %thead
+    %tr
+      %th User
+      %th Financial institution
+      %th Status
+      %th Failure reason
+      %th
+      %th
+      %th
+      
+  %tbody
+    - @transaction_data_requests.each do |transaction_data_request|
+      %tr
+        %td= transaction_data_request.user
+        %td= transaction_data_request.financial_institution
+        %td= transaction_data_request.status
+        %td= transaction_data_request.failure_reason
+        %td= link_to 'Show', transaction_data_request
+        %td= link_to 'Edit', edit_transaction_data_request_path(transaction_data_request)
+        %td= link_to 'Destroy', transaction_data_request, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Transaction data request', new_transaction_data_request_path
