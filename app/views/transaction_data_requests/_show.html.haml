@@ -16,6 +16,17 @@
         =link_to "here", new_charge_path(transaction_data: @transaction_data_request.transaction_data)
         to continue.
 
+    .modal-body.text-center#transaction-data-progress-failure{style: "display: none;"}
+      %p.lead
+        %span We're sorry, but something went wrong:
+        %span#transaction-data-request-failed-reason
+      %p
+        %span Please click
+        %span=link_to "here", new_charge_path(transaction_data: @transaction_data_request.transaction_data)
+        to continue.
+        %span to retry.
+
+
 
 :javascript
   var statusElement = $("#trasanction-data-request-status");
@@ -45,9 +56,14 @@
             });
           }
         } else {
+          clearInterval(i);
           $('#trasanction-data-request-status-icon').removeClass("fa-spin fa-circle-o-notch").addClass("fa-times-circle red")
           $(".progress-bar").removeClass("progress-bar-striped active").addClass("progress-bar-danger") 
           statusElement.text(json.failure_reason);
+          $("#transaction-data-request-failed-reason").text(json.failure_reason);
+          $("#transaction-data-progress-tracker").fadeOut(2000, function(){
+            $("#transaction-data-progress-failure").fadeIn();
+          });
         }
       },
 

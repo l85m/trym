@@ -35,7 +35,7 @@ class ChargesOutlookChartData
 	end
 
 	def user_charges_in_scope
-		@user.charges.with_merchant.select do |c|
+		@user.charges.recurring.with_merchant.select do |c|
 			c.next_billing_date < Date.today + @outlook_period.weeks
 		end
 	end

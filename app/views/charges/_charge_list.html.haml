@@ -7,7 +7,7 @@
     =link_to new_charge_path, remote: true, class: "icon-link" do
       %i.fa.fa-plus-circle
       add charge
-  -@charges.sort_by(&:next_billing_date).each do |charge|
+  -@charges.with_merchant.sort_by(&:next_billing_date).each do |charge|
     .well.charge-item{class: "merchant-#{charge.merchant.name}" }
       .charge-info.charge-amount.text-center{style: "padding-right: 10px;"}
         %b
@@ -15,15 +15,10 @@
         %br
         every month
       .charge-info.charge-description        
-        %p.lead.without-margin=charge.merchant.name
+        %p.lead.without-margin=charge.merchant_name
         %p.without-margin.small.small-gray
           %i.fa.fa-clock-o
-          -if charge.next_billing_date == Date.today
-            due today
-          -else
-            next charge in
-            =distance_of_time_in_words charge.next_billing_date.to_time - Time.now.beginning_of_day
-          %br
+          =time_to_next_bill(charge)
         %p.without-margin=charge.description
 
       .charge-info.charge-actions.pull-right{style: "width: 100%;"}

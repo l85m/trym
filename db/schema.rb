@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150109222232) do
+ActiveRecord::Schema.define(version: 20150111225130) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -49,8 +49,14 @@ ActiveRecord::Schema.define(version: 20150109222232) do
     t.boolean  "active"
     t.date     "last_date_billed"
     t.integer  "merchant_id"
+    t.integer  "transaction_data_request_id"
+    t.boolean  "recurring"
+    t.integer  "billed_to_date"
+    t.integer  "recurring_score",             default: 0, null: false
   end
 
+  add_index "charges", ["recurring"], name: "index_charges_on_recurring", where: "(recurring = true)", using: :btree
+  add_index "charges", ["transaction_data_request_id"], name: "index_charges_on_transaction_data_request_id", using: :btree
   add_index "charges", ["user_id"], name: "index_charges_on_user_id", using: :btree
 
   create_table "financial_institutions", force: true do |t|

@@ -7,7 +7,7 @@ class ChargesController < ApplicationController
 
   def index
     @title = "charges"
-    @charges = current_user.charges.with_merchant
+    @charges = current_user.charges.recurring.with_merchant
     @charges_outlook_chart_data = ChargesOutlookChartData.new(current_user)
     respond_with(@charges)
   end
@@ -38,8 +38,12 @@ class ChargesController < ApplicationController
   end
 
   def update
-    @charge.create_or_update_from_params(charge_params)
-    redirect_to charges_path
+    if charge_params["recurring"].present? && charge_params.size == 1
+      @charge.update(charge_params)
+    else
+      @charge.create_or_update_from_params(charge_params)
+      redirect_to charges_path
+    end
   end
 
   def destroy
@@ -67,7 +71,7 @@ class ChargesController < ApplicationController
     end
 
     def charge_params
-      p = params.require(:charge).permit(:merchant_name, :merchant_website, :description, :amount,
+      p = params.require(:charge).permit(:merchant_name, :merchant_website, :description, :amount, :recurring,
                                          :last_date_billed, :renewal_period_in_weeks, :renewal_period_in_words)
     end
 

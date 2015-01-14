@@ -2,48 +2,35 @@
 
 class AmexScraper
   include Sidekiq::Worker
-  sidekiq_options retry: 3
-
-  sidekiq_retries_exhausted do |msg|
-    transaction_id = JSON.parse(msg['ars'])['transaction_id'].to_i
-    TransactionDataRequest.find(transaction_id).update( status: "failed", failure_reason: error_reason )
-    Sidekiq.logger.warn "Failed #{msg['class']} on Transaction=#{transaction_id} with: #{msg['error_message']}"
-  end
+  sidekiq_options retry: false
 
   def perform(user, pass, transaction_id)
     @user = user
     @pass = pass
     @transaction = TransactionDataRequest.find(transaction_id)
 
-    sleep 3
+    @months_of_data = 6
+    @results = []
+    @session = Capybara::Session.new(:poltergeist)
+
+    handle_error( "Unable to Login" ) unless login
     @transaction.update( status: "getting statement page" )
-    sleep 6
+    handle_error( "Failed to Load Statements Page" ) unless get_statements_page
     @transaction.update( status: "loading past 6 months of data" )
-    sleep 5
+    handle_error( "Failed to parse Statement Data" ) unless fully_load_statement_data
     @transaction.update( status: "analyzing data to find recurring items" )
-    sleep 3
-    @transaction.update( status: "complete" )
+    handle_error( "Failed to parse Statement Data" ) unless analyze_statement_data
 
-    # @months_of_data = 6
-    # @results = []
-    # @session = Capybara::Session.new(:poltergeist)
-
-    # handle_error( "Unable to Login" ) unless login
-    # @transaction.update( status: "getting statement page" )
-    # handle_error( "Failed to Load Statements Page" ) unless get_statements_page
-    # @transaction.update( status: "loading past 6 months of data" )
-    # handle_error( "Failed to parse Statement Data" ) unless fully_load_statement_data
-    # @transaction.update( status: "analyzing data to find recurring items" )
-    # handle_error( "Failed to parse Statement Data" ) unless analyze_statement_data
-
-    # @transaction.update( transaction_data: @results.to_json, status: "complete" ) 
-    # @session.driver.quit
+    @transaction.update( transaction_data: @results.to_json, status: "complete" ) 
+    @session.driver.quit
   end
 
   private
 
   def handle_error(error_reason)
     @session.driver.quit
+    @transaction.update( status: "failed", failure_reason: error_reason )
+    Sidekiq.logger.warn "Failed #{msg['class']} on Transaction=#{transaction_id} with: #{msg['error_message']}"
     raise error_reason
   end
 
@@ -115,7 +102,7 @@ class AmexScraper
       end  
       @results << r if r.present?
     end  
-    @results.map{ |r| [:categories, :date, :description, :amount][(r.size > 3 ? 0 : 1)..-1].zip(r).to_h }
+    @results.map{ |r| [:categories, :date, :description, :amounts][(r.size > 3 ? 0 : 1)..-1].zip(r).to_h }
   end
 
   def on_last_page?

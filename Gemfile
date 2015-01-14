@@ -31,6 +31,7 @@ gem 'autoprefixer-rails'
 #ohhh pretty
 gem 'bootstrap-sass'
 gem 'jquery-ui-rails'
+gem "font-awesome-rails"
 
 #javascript
 gem 'coffee-rails', '4.0.1'

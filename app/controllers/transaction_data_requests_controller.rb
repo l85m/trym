@@ -1,5 +1,5 @@
 class TransactionDataRequestsController < ApplicationController
-  before_action :set_transaction_data_request, only: :show
+  before_action :set_transaction_data_request, only: [:show, :edit]
   respond_to :html, :js, :json
 
   def show
@@ -13,6 +13,9 @@ class TransactionDataRequestsController < ApplicationController
 
   def create
     @transaction_data_request = TransactionDataRequest.create_and_start_scan(transaction_data_request_params)
+  end
+
+  def edit
   end
 
   private

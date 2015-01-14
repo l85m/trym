@@ -1,0 +1,7 @@
+<% if @charge.recurring %>
+	$("#<%= @charge.id %>-deactivate-recurring-button").removeClass("hidden")
+	$("#<%= @charge.id %>-activate-recurring-button").addClass("hidden")
+<% else %>
+	$("#<%= @charge.id %>-deactivate-recurring-button").addClass("hidden")
+	$("#<%= @charge.id %>-activate-recurring-button").removeClass("hidden")
+<% end %>

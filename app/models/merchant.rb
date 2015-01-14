@@ -19,4 +19,13 @@ class Merchant < ActiveRecord::Base
 		find_or_create_by website: website, name: name
 	end
 
+	def self.find_by_fuzzy_name_with_similar_threshold(query, threshold = 70)
+		result = find_by_fuzzy_name(query, limit: 1).first
+		if result.present? && (result.name.similar(query) >= threshold || query.downcase.include?(result.name.downcase))
+			result
+		else
+			nil
+		end
+	end
+
 end

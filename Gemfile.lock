@@ -99,6 +99,8 @@ GEM
       railties (>= 3.0.0)
     ffaker (1.25.0)
     ffi (1.9.6)
+    font-awesome-rails (4.2.0.0)
+      railties (>= 3.2, < 5.0)
     fuzzily (0.3.2)
       activerecord (>= 2.3.17)
     haml (4.1.0.beta.1)
@@ -334,6 +336,7 @@ DEPENDENCIES
   devise!
   factory_girl_rails
   ffaker
+  font-awesome-rails
   fuzzily
   haml-rails
   jbuilder (~> 2.0)
