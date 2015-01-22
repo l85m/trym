@@ -30,7 +30,6 @@ class AmexScraper
   def handle_error(error_reason)
     @session.driver.quit
     @transaction.update( status: "failed", failure_reason: error_reason )
-    Sidekiq.logger.warn "Failed #{msg['class']} on Transaction=#{transaction_id} with: #{msg['error_message']}"
     raise error_reason
   end
 

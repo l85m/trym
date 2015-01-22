@@ -31,7 +31,7 @@ class ChargesController < ApplicationController
   end
 
   def update
-    @update_from_account_scan = charge_params
+    @update_from_account_scan = ( charge_params["recurring"].present? || params["charge"]["account_scan"].present? )
     @charge.update(charge_params)
     respond_with(@charge)
   end
@@ -51,18 +51,20 @@ class ChargesController < ApplicationController
     end
 
     def convert_amount_to_number
-      return true if (@charge.present? && params[:charge][:amount] == ( @charge.amount * 100 )) || params[:charge][:merchant_id].nil?
-      if params[:charge][:amount].is_a?(String)
-        params[:charge][:amount] = (params[:charge][:amount].gsub("$","").gsub(" ","").to_f * 100).to_i
+      unless (@charge.present? && params[:charge][:amount] == ( @charge.amount * 100 )) || params[:charge][:merchant_id].nil?
+        if params[:charge][:amount].is_a?(String)
+          params[:charge][:amount] = (params[:charge][:amount].gsub("$","").gsub(" ","").to_f * 100).to_i
+        end
       end
     end
 
     def create_merchant_if_new
-      return true if (@charge.present? && params[:charge][:merchant_id] == @charge.merchant_id) || params[:charge][:merchant_id].nil?
-      if (true if Integer(params[:charge][:merchant_id]) rescue false)
-        params[:charge][:merchant_id] = Merchant.find(params[:charge][:merchant_id]).id
-      else
-        params[:charge][:merchant_id] = Merchant.create(name: params[:charge][:merchant_id]).id
+      unless (@charge.present? && params[:charge][:merchant_id] == @charge.merchant_id) || params[:charge][:merchant_id].nil?
+        if (true if Integer(params[:charge][:merchant_id]) rescue false)
+          params[:charge][:merchant_id] = Merchant.find(params[:charge][:merchant_id]).id
+        else
+          params[:charge][:merchant_id] = Merchant.create(name: params[:charge][:merchant_id]).id
+        end
       end
     end
 

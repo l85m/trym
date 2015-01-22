@@ -13,18 +13,17 @@
     .modal-body.text-center#transaction-data-progress-success{style: "display: none;"}
       %p.lead
         Account scan was successful!  Click
-        =link_to "here", new_charge_path(transaction_data: @transaction_data_request.transaction_data)
+        =link_to "here", edit_transaction_data_request_path(@transaction_data_request)
         to continue.
 
     .modal-body.text-center#transaction-data-progress-failure{style: "display: none;"}
       %p.lead
         %span We're sorry, but something went wrong:
         %span#transaction-data-request-failed-reason
-      %p
+      %p.lead
         %span Please click
-        %span=link_to "here", new_charge_path(transaction_data: @transaction_data_request.transaction_data)
-        to continue.
-        %span to retry.
+        %span=link_to "here", new_transaction_data_request_path, remote: true
+        to retry.
 
 
 

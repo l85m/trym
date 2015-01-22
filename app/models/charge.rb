@@ -31,7 +31,7 @@ class Charge < ActiveRecord::Base
 
   def warnings
     warnings = {}
-    warnings["We don't recognize the company name"] = "Make sure to choose an existing company if it's available or we may won't be able to help you stop this charge" unless merchant.validated
+    warnings["We don't recognize the company name"] = "Make sure to choose an existing company if it's available or we may won't be able to help you stop this charge" unless (merchant.present? && merchant.validated)
     warnings["There is no charge amount"] = "We can't show you how much you're paying to this company over time" unless (amount.present? && amount > 0)
     warnings["There is no renewal period"] = "We can't show you how much you're paying to this company over time or warn you before future charges" unless ( renewal_period_in_weeks.present? && renewal_period_in_weeks > 0 )
     warnings["There is no next billing date"] = "We can't show you how much you're paying to this company over time or warn you before future charges" unless billing_day.present?

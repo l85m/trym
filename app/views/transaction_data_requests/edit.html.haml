@@ -36,33 +36,20 @@
 
 :javascript
 
-  function updateRecurringButton(button) {
-    if( button.hasClass('active') ) {
-      button.removeClass("active");
-      button.text( "do not " + button.data('target') );
-    } else {
-      button.addClass("active");
-      button.text( button.data('target') );
+  $("[name='track-switch']").bootstrapSwitch({
+    onText: "Yes",
+    offText: "No"
+  }).on('switchChange.bootstrapSwitch', function(event, state) {
+    var marginState = $(this).parent().css('margin-left')
+    if ( marginState == '-48px' || marginState == '0px' ) {
+      $.ajax({
+        type: "PUT",
+        url: "/charges/" + $(this).data("charge-id"),
+        data: { charge: { recurring: state }, scan: "scan" },
+        dataType: "script"
+      })
     }
-  }
-
-  function getRecurringButtonState(button) {
-    if( button.hasClass('active') ) {
-      return "false"
-    } else {
-      return "true"
-    }
-  }
-
-  $('.recurring-button-toggle').off('click').click( function (e) {
-    e.preventDefault();
-    $.ajax({
-      type: "PUT",
-      url: "/charges/" + $(this).data("charge-id"),
-      data: { charge: { recurring: getRecurringButtonState($(this)) } },
-      success: updateRecurringButton($(this))
-    })
-  })
+  });
 
   $("#edit-transation-data-request-loader").fadeOut("slow", function() {
     $("#edit-transaction-data-request-container").animate({"opacity":1},1000)

@@ -75,6 +75,7 @@ class AmexScorer
         c[:recurring_score] -= 2 if unlikely_subcategory?( c[:categories] )
         c[:recurring_score] += 1 if c[:merchant_id].present?
       end
+      c[:recurring] = true if ( c[:recurring_score] > 4 && c[:merchant_id].present? )
     end
     @charge_list.sort_by{ |x| x[:recurring_score] }.reverse
   end

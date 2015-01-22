@@ -3,5 +3,5 @@
 		%dt= warning_header
 		%dd.small-gray= warning
 
-%button.btn.btn-primary.btn-block{ onclick: "$('.popover-for-charge-#{@charge.id}').each( function() { $(this).parents('.popover').remove() }); $('#charge-item-#{@charge.id}').popover('disable');" }
+%button.btn.btn-primary.btn-block{ onclick: "$('.popover-for-charge-#{@charge.id}').each( function() { $(this).parents('.popover').remove() }); $('#charge-item-#{@charge.id}').popover('destroy');" }
 	Ok, got it
