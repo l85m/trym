@@ -1,0 +1,12 @@
+.col-lg-4.col-lg-offset-4.col-md-6.col-md-offset-3.col-sm-6.col-sm-offset-3
+  .text-center{style: "margin: 30px;"}
+    %h2.modal-header-text= t "devise.invitations.edit.header"
+    = simple_form_for resource, :as => resource_name, :url => invitation_path(resource_name), :html => {:method => :put} do |f|
+      = devise_error_messages!
+      = f.hidden_field :invitation_token
+
+      .form-inputs
+        = f.input :password
+        = f.input :password_confirmation
+
+      = f.button :submit, "create my account", class: "btn btn-primary"

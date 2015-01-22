@@ -1,4 +1,5 @@
 class StopOrdersController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_stop_order, only: [:show, :edit, :update, :destroy]
 
   respond_to :html, :js

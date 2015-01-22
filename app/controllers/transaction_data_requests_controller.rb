@@ -1,9 +1,14 @@
 class TransactionDataRequestsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_transaction_data_request, only: [:show, :edit]
   respond_to :html, :js, :json
 
   def show
     respond_with(@transaction_data_request)
+  end
+
+  def index
+    @transaction_data_requests = current_user.transaction_data_requests.has_data.order(created_at: :desc)
   end
 
   def new

@@ -6,43 +6,44 @@ class Charge < ActiveRecord::Base
   
   has_many :notes, as: :noteable
 
-  validates_presence_of :amount, :user_id, :renewal_period_in_weeks, :last_date_billed
-  validates :amount, numericality: { only_integer: true, greater_than: 0 }
+  validates_presence_of :user_id
+  validates_numericality_of :amount, only_integer: true, greater_than_or_equal_to: 0, allow_nil: true
 
   scope :with_merchant, -> { includes(:merchant) }
   scope :recurring, -> { where(recurring: true) }
   scope :sort_by_recurring_score, -> { order(recurring_score: :desc) }
+  scope :chartable, -> { where('renewal_period_in_weeks > ?', 0).where('amount > 0').where.not(billing_day: nil) }
 
   before_validation :add_user_if_transaction_data_request_exists
 
   def self.renewal_period_in_words
-    Hash.new("other").merge({
-      0   => "other",
-      2   => "bi-weekly - two times a month",
-      4   => "monthly - once every month",
-      8   => "bi-monthly - every other month",
-      12  => "quarterly - once every three months",
-      16  => "4-monthly - once every four months",
-      26  => "bi-annually - twice a year",
-      52  => "annually - once a year"
-    })
+    {
+      1   => "Weekly - every week",
+      2   => "Bi-Weekly - every other week",
+      4   => "Monthly - once every month",
+      8   => "Bi-Monthly - every other month",
+      12  => "Quarterly - once every three months",
+      16  => "4-Monthly - once every four months",
+      26  => "Bi-Annually - twice a year",
+      52  => "Annually - once a year"
+    }
+  end
+
+  def warnings
+    warnings = {}
+    warnings["We don't recognize the company name"] = "Make sure to choose an existing company if it's available or we may won't be able to help you stop this charge" unless merchant.validated
+    warnings["There is no charge amount"] = "We can't show you how much you're paying to this company over time" unless (amount.present? && amount > 0)
+    warnings["There is no renewal period"] = "We can't show you how much you're paying to this company over time or warn you before future charges" unless ( renewal_period_in_weeks.present? && renewal_period_in_weeks > 0 )
+    warnings["There is no next billing date"] = "We can't show you how much you're paying to this company over time or warn you before future charges" unless billing_day.present?
+    warnings
   end
 
   def details_not_required?
     false
   end
 
-  def create_or_update_from_params(p)
-    p = p.collect{ |k,v| [k.to_sym,v] }.to_h
-    p[:last_date_billed] = Date.parse(p[:last_date_billed])
-    p[:amount] = (p[:amount].to_f * 100).round
-    p[:merchant_id] = Merchant.find_or_create_by_name_or_website(p[:merchant_name], p[:merchant_website]).id
-    p[:renewal_period_in_weeks] = p[:renewal_period_in_words] == "0" ? p[:renewal_period_in_weeks].to_i : p[:renewal_period_in_words].to_i
-    update_attributes p.select{ |k,v| has_attribute?(k) }.to_h
-    save! ? self : nil
-  end
-
   def amount_in_currency
+    return "??" unless amount.present?
     amount.to_f / 100.0
   end
 
@@ -70,8 +71,14 @@ class Charge < ActiveRecord::Base
     Charge.renewal_period_in_words[renewal_period_in_weeks]
   end
 
-  def next_billing_date(bill_day = last_date_billed)
-    return nil unless (bill_day.present? && renewal_period_in_weeks.present?)
+  def next_billing_date(bill_day = billing_day)
+    return nil unless (bill_day.present? && renewal_period_in_weeks.present? && renewal_period_in_weeks > 0)
+    return bill_day if Date.today <= bill_day
+    iterate_billing_date(bill_day)
+  end
+
+  def iterate_billing_date(bill_day = billing_day)
+    return nil unless (bill_day.present? && renewal_period_in_weeks.present? && renewal_period_in_weeks > 0)
     if renewal_period_in_weeks%4 == 0
       bill_day.to_time.advance(months: bills_since_first_reported_bill * renewal_period_in_months)
                       .advance(months: renewal_period_in_months).to_date
@@ -90,8 +97,8 @@ class Charge < ActiveRecord::Base
   end
 
   def bills_since_first_reported_bill
-    return 0 if renewal_period_in_weeks == 0 
-    ( (Date.today - last_date_billed) / 7 / renewal_period_in_weeks ).to_i
+    return 0 if (renewal_period_in_weeks == 0 || billing_day.nil? || Date.today < billing_day)
+    ( (Date.today - billing_day) / 7 / renewal_period_in_weeks ).to_i
   end
 
   def renewal_period_in_months

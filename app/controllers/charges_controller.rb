@@ -1,78 +1,69 @@
 class ChargesController < ApplicationController
-  before_action :set_charge, only: [:show, :edit, :update, :destroy]
-  before_action :merchant_options, only: [:new, :edit]
-  before_action :redirect_if_no_user
+  before_action :set_charge, only: [:edit, :update, :destroy]
+  before_action :create_merchant_if_new, only: [:create, :update]
+  before_action :convert_amount_to_number, only: [:create, :update]
+  before_action :authenticate_user!
 
-  respond_to :html
+  respond_to :html, :js
 
   def index
     @title = "charges"
     @charges = current_user.charges.recurring.with_merchant
-    @charges_outlook_chart_data = ChargesOutlookChartData.new(current_user)
+    @charges_outlook_chart_data = ChargesOutlookChartData.new(current_user, @charges)
     respond_with(@charges)
-  end
-
-  def show
-    respond_with(@charge)
   end
 
   def new
     @title = "new charge"
-    @charge = Charge.new
-    respond_to do |format|
-      format.js
-      format.html
-    end
+    @charge = current_user.charges.build
   end
 
   def edit
-    @title = "edit charge"
-    respond_to do |format|
-      format.js
-    end
+    @attribute = params[:attribute]
   end
 
   def create
-    Charge.new.create_or_update_from_params(charge_params.merge( user_id: current_user.id ))
-    redirect_to charges_path, notice: "new charge successfully created"
+    @charge = current_user.charges.create(charge_params)
+    respond_to do |format|
+      format.js
+      format.html {redirect_to charges_path}
+    end
   end
 
   def update
-    if charge_params["recurring"].present? && charge_params.size == 1
-      @charge.update(charge_params)
-    else
-      @charge.create_or_update_from_params(charge_params)
-      redirect_to charges_path
-    end
+    @update_from_account_scan = charge_params
+    @charge.update(charge_params)
+    respond_with(@charge)
   end
 
   def destroy
     @charge.destroy
-    respond_with(@charge)
   end
 
   private
-
-    def merchant_options
-      merchants = Merchant.names_and_websites
-      @merchant_names_and_websites = merchants.collect{ |n,w| [n.upcase, w] }.to_h
-      @merchant_names = merchants.keys
-    end
-
-    def redirect_if_no_user
-      unless current_user.present?
-        flash.now[:notice] = "Please sign in first"
-        redirect_to new_user_session_path 
-      end
-    end
 
     def set_charge
       @charge = Charge.find(params[:id])
     end
 
     def charge_params
-      p = params.require(:charge).permit(:merchant_name, :merchant_website, :description, :amount, :recurring,
-                                         :last_date_billed, :renewal_period_in_weeks, :renewal_period_in_words)
+      params.require(:charge).permit(:merchant_id, :description, :amount, :recurring, :billing_day, :renewal_period_in_weeks)
+    end
+
+    def convert_amount_to_number
+      return true if (@charge.present? && params[:charge][:amount] == ( @charge.amount * 100 )) || params[:charge][:merchant_id].nil?
+      if params[:charge][:amount].is_a?(String)
+        params[:charge][:amount] = (params[:charge][:amount].gsub("$","").gsub(" ","").to_f * 100).to_i
+      end
+    end
+
+    def create_merchant_if_new
+      return true if (@charge.present? && params[:charge][:merchant_id] == @charge.merchant_id) || params[:charge][:merchant_id].nil?
+      if (true if Integer(params[:charge][:merchant_id]) rescue false)
+        params[:charge][:merchant_id] = Merchant.find(params[:charge][:merchant_id]).id
+      else
+        params[:charge][:merchant_id] = Merchant.create(name: params[:charge][:merchant_id]).id
+      end
     end
 
 end

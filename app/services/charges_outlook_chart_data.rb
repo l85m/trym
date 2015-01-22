@@ -1,8 +1,8 @@
 class ChargesOutlookChartData
-	def initialize(user, outlook_period = 53)
+	def initialize(user, charges, outlook_period = 53)
 		@user = user
 		@outlook_period = outlook_period
-		@charges = user_charges_in_scope
+		@charges = charges.chartable
 		@billing_outlooks = billing_outlook_for_all_charges
 	end
 
@@ -34,12 +34,6 @@ class ChargesOutlookChartData
 		data.sort_by{|k,v| v}.reverse.to_h
 	end
 
-	def user_charges_in_scope
-		@user.charges.recurring.with_merchant.select do |c|
-			c.next_billing_date < Date.today + @outlook_period.weeks
-		end
-	end
-
 	def cumulative_outlook_for_all_charges
 		total = 0
 		cumulative = zip_billing_outlooks.to_h.sort{ |x,y| x.first <=> y.first }
@@ -60,8 +54,8 @@ class ChargesOutlookChartData
 		bill_day = charge.next_billing_date
 		charge_outlook = Array.new
 		while bill_day < Date.today + @outlook_period.weeks
-			charge_outlook << [ bill_day, (charge.amount / 100.0) ]
-			bill_day = charge.next_billing_date(bill_day)
+			charge_outlook << [ charge.next_billing_date(bill_day), (charge.amount / 100.0) ]
+			bill_day = charge.iterate_billing_date(bill_day)
 		end
 		charge_outlook
 	end

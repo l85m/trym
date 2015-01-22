@@ -6,10 +6,10 @@
 @import "jquery-ui/datepicker";
 @import "jquery_ui_bootstrap";
 @import "jquery-ui/autocomplete";
-@import "dataTables.bootstrap";
 
 @import "sessions";
 @import "charges";
+@import "static_pages";
 @import "transaction_data_requests";
 @import "verifications";
 
@@ -45,6 +45,7 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 .small{ font-size: 85%; }
 .kinda-small{ font-size: 95%; }
 .small-gray{ color: gray; }
+.small-gray:hover{ color: inherit; }
 .lg-font{ font-size: 250%; }
 .btn-primary{ 
 	background-color: $brand-color; 
@@ -95,6 +96,7 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 .btn:active.focus, .btn.active:focus, .btn.active.focus{ 
 	outline: none; 
 }
+.btn-danger{ color: white; }
 .without-margin{
 	margin: 0 !important;
 }
@@ -108,14 +110,23 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 .vertical-center{ display: table-cell; vertical-align: middle; }
 .dashed-border{ border-style: dashed; }
 
-.ui-icon-circle-triangle-e{ font-family: FontAwesome; }
-.ui-icon-circle-triangle-e:before{ content: "\f138"; }
 .ui-autocomplete { 
   z-index: 5000 !important; 
 }
-.popover-list{
-	margin-left: -20px;
+.ui-datepicker .ui-datepicker-next {
+	right: 14px;
 }
+.popover-list{ margin-left: -20px; }
+.popover{ max-width: 400px; }
+.tooltip.right .tooltip-inner,
+.tooltip.left .tooltip-inner{ 
+	text-align: center;
+	padding: 2px 4px;
+	background-color: white; 
+	border: solid 1px lightgray;
+}
+.tooltip.right .tooltip-arrow{ border-right-color: lightgray; }
+.tooltip.left .tooltip-arrow{ border-left-color: lightgray; }
 
 .navbar{ 
 	background-color: rgba(255,255,255,0.9);
@@ -144,38 +155,15 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 		border-radius: 0;
 	}
 	.alert-info {
-		border-bottom: 1px solid black;
-		background-color: $brand-color;
 		color: white;
+		background-color: $brand-color;
 	}
 }
-
-#home-banner{ 
-	background-color: $brand-color;
-	color: white;
-	h1{ font-size: 300%; }
-	p{ 
-		font-size: 200%; 
-		color: whitesmoke;
-	}
+.select2-container .select2-choice > .select2-chosen {
+	margin-right: 0px !important;
 }
-#home-demo-steps{	
-	border-top: #e7e7e7 1px solid;
-	div.row > div{ padding: 10px 15px; }
-}
-@media (min-width: 992px) {
-	#home-demo-steps{	
-		display: table;
-		div.row{
-			display: table-row;
-		 	div{
-		 		display: table-cell;
-		 		vertical-align: middle;
-		 		float: none;
-		 	}
-		}
-	}
-}
+.select2-search input{ padding: 4px 5px; }
+.select2-results{ text-align: center; }
 
 .modal-backdrop{
 	background: white;

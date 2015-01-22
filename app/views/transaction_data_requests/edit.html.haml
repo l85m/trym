@@ -8,8 +8,8 @@
     %h2{style: "height: 114px;"}
       %p.lead{style: "margin-bottom: 10px;"}
         We found 
-        %span.brand-blue= "#{pluralize @transaction_data_request.charges.count, 'charge' }."
-        Charges that we think you might want to track are at the top of the page.
+        %span.brand-blue= "#{pluralize @transaction_data_request.charges.count, 'charge' }"
+        in your account. Charges that we think you might want to track are at the top of the page.
         %br
         %small
           select those that you'd like his to track.  you can edit any charges by clicking on the part of it that you want to change.
@@ -18,7 +18,7 @@
 
   .row{style: "padding: 10px;"}
     -likely_threshold = [5, 3, -999]
-    -likely_text = ["these charges look likely to recur, but less than the charges above", "these charges do not look like they are recurring"]
+    -likely_text = ["these charges look likely to recur", "these charges do not look like they are recurring"]
     -likely_index = 0
     -@transaction_data_request.charges.sort_by_recurring_score.with_merchant.each do |charge|
       -if charge.recurring_score < likely_threshold[likely_index]
@@ -30,59 +30,58 @@
             %i.fa.fa-angle-double-down
 
       .col-lg-4.col-md-6.col-xs-12
-        .well.charge-item{class: "charge-item-#{charge.id} #{charge.recurring_score > 4 ? 'super-glow' : ''} #{charge.recurring_score.between?(3,4) ? 'medium-glow' : ''}" }
-          .charge-info-container 
-            .charge-info.charge-amount.text-center{style: "padding-right: 10px;"}
-              %p.lead.without-margin
-                %a.charge-mini-edit-link{href: "#"}=number_to_currency charge.amount / 100.0
+        =render partial: "shared/charge_item", locals: {charge: charge}
 
-            .charge-info.charge-description{style: "pardding: 3px;"}
-              %p.lead.without-margin
-                %a.charge-mini-edit-link{href: "#"}=charge.merchant_name
-              %p.without-margin.small.small-gray
-                %a.charge-mini-edit-link{href: "#"}
-                  %i.fa.fa-clock-o
-                  =time_to_next_bill(charge)
-                %br
-              .inline-block
-                %a.charge-mini-edit-link{href: "#"}
-                  =charge.description
-
-            .charge-info.text-center{style: "width: 100%;"}
-              .inline-block.charge-toggle
-                %b.small Track This?
-                %input{ type: "checkbox", name: "track-switch", checked: charge.recurring_score > 4}
-
-
-              / =link_to "Do Not Track", charge_path(charge, charge: {recurring: false}), method: :put, class: "btn btn-primary #{charge.recurring ? '' : 'hidden'}", id: "#{charge.id}-deactivate-recurring-button", remote: true
-              / =link_to "Track", charge_path(charge, charge: {recurring: true}), method: :put, class: "btn btn-default #{charge.recurring ? 'hidden' : ''}", id: "#{charge.id}-activate-recurring-button", remote: true
-              / =link_to "Edit", edit_charge_path(charge), class: "btn btn-default", remote: true
+=render "shared/charge_item_script"
 
 :javascript
-  $("[name='track-switch']").bootstrapSwitch({
-    onText: "Yes",
-    offText: "No"
-  });
+
+  function updateRecurringButton(button) {
+    if( button.hasClass('active') ) {
+      button.removeClass("active");
+      button.text( "do not " + button.data('target') );
+    } else {
+      button.addClass("active");
+      button.text( button.data('target') );
+    }
+  }
+
+  function getRecurringButtonState(button) {
+    if( button.hasClass('active') ) {
+      return "false"
+    } else {
+      return "true"
+    }
+  }
+
+  $('.recurring-button-toggle').off('click').click( function (e) {
+    e.preventDefault();
+    $.ajax({
+      type: "PUT",
+      url: "/charges/" + $(this).data("charge-id"),
+      data: { charge: { recurring: getRecurringButtonState($(this)) } },
+      success: updateRecurringButton($(this))
+    })
+  })
+
   $("#edit-transation-data-request-loader").fadeOut("slow", function() {
     $("#edit-transaction-data-request-container").animate({"opacity":1},1000)
   });
 
-  jQuery(function($) {
-    function fixDiv() {
-      var $cache = $('#submit-edit-transaction-button');
-      if ($(window).scrollTop() > 129)
-        $cache.css({
-          'position': 'fixed',
-          'top': '10px',
-          'left': ($(window).width() / 2) - 70
-        });
-      else
-        $cache.css({
-          'position': 'relative',
-          'top': 'auto',
-          'left': 'auto'
-        });
-    }
-    $(window).scroll(fixDiv);
-    fixDiv();
-  });
+  function fixDiv() {
+    var $cache = $('#submit-edit-transaction-button');
+    if ($(window).scrollTop() > 129)
+      $cache.css({
+        'position': 'fixed',
+        'top': '10px',
+        'left': ($(window).width() / 2) - 70
+      });
+    else
+      $cache.css({
+        'position': 'relative',
+        'top': 'auto',
+        'left': 'auto'
+      });
+  }
+  $(window).scroll(fixDiv);
+  fixDiv();

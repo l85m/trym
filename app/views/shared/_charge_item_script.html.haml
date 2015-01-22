@@ -1,0 +1,23 @@
+#charge-list-script
+  :javascript
+    $(".charge-mini-edit-link").tooltip({html:'true', title:"<i class='fa fa-pencil'></i>", trigger: "manual"});
+
+    $(".charge-item").on("mouseenter", function () {
+      $(this).find(".charge-mini-edit-link").tooltip("show");
+    }).on("mouseleave", function () {
+      $(this).find(".charge-mini-edit-link").tooltip("hide");
+    });
+
+    function hideChargeSubmit(chargeContainer) {
+      chargeContainer.find(".charge-attribute-input").remove();
+      chargeContainer.find(".charge-item-form-buttons").addClass("hidden");
+      chargeContainer.find(".charge-item-action-buttons").removeClass("hidden");
+      chargeContainer.find(".charge-mini-edit-link").removeClass("hidden");
+    }
+
+    function editChargeSubmit(submitButton) {
+      var charge_container = submitButton.parents(".charge-item");
+      charge_container.find('.charge-attribute-input').each( function() {
+        $( "#" + $(this).data('sibling') ).val( $(this).val() );
+      });
+    }

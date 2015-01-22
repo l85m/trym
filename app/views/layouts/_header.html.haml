@@ -21,5 +21,5 @@
           -unless user_signed_in? && current_page?(new_user_session_path)
             %li
               %span.hidden-xs
-                =link_to "sign up", new_user_registration_path, remote: true, class: "btn btn-primary navbar-btn navbar-sign-up-btn"
-              =link_to "sign up", new_user_registration_path, remote: true, class: "visible-xs-block"
+                =link_to "request invite", new_invite_request_path, remote: true, class: "btn btn-primary navbar-btn navbar-sign-up-btn"
+              =link_to "request invite", new_invite_request_path, remote: true, class: "visible-xs-block"

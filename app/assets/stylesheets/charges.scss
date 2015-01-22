@@ -1,3 +1,5 @@
+$brand-color: rgb(129, 202, 166);
+
 .charge-item{ 
 	height: 120px; 
 	width: 100%;
@@ -23,7 +25,7 @@ form#new_charge{
 .charge-actions{ margin-top: 3px; }
 .scrollable{ overflow: auto; }
 .hover-glow{ 
-	border-color: #66afe9;
+	border-color: $brand-color;
 	outline: 0;
 	box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(129, 202, 166, 0.6);
 }
@@ -46,11 +48,14 @@ label[for=charge_renewal_period_in_words]{
 	display: block;
 }
 
+@media (max-width: 767px) { #new-charge-links{ margin-top: 2px; } }
+@media (min-width: 767px) { #new-charge-links{ margin-top: 6px; } }
+
 @media (min-width: 1200px) {
-	#charges-outlook{ padding-right: 30px; }
+	#charges-outlook{ padding-left: 30px; }
 	#charge-side-list{
-		padding: 20px 2px 2px 30px;
-		border-left: black 1px solid;
+		padding: 20px 30px 2px 2px;
+		border-right: lightgray 1px solid;
 	}
 }
 @media (max-width: 1199px) {

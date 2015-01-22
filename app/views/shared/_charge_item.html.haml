@@ -1,0 +1,43 @@
+.well.charge-item{class: "merchant-#{charge.merchant_name}", id: "charge-item-#{charge.id.present? ? charge.id : 'new'}" }
+  
+  = simple_form_for charge, html: { class: "charge-info-container", method: "put" }, remote: true do |f|
+    =f.input :amount, as: :hidden, input_html: { value: charge.amount_in_currency, id: "charge-hidden-input-amount-#{charge.id}" }
+    =f.input :renewal_period_in_weeks, as: :hidden, input_html: { id: "charge-hidden-input-renewal_period_in_weeks-#{charge.id}" }
+    =f.input :merchant_id, as: :hidden, input_html: { id: "charge-hidden-input-merchant_id-#{charge.id}" }
+    =f.input :billing_day, as: :hidden, input_html: { id: "charge-hidden-input-billing_day-#{charge.id}" }
+    =f.input :description, as: :hidden, input_html: { id: "charge-hidden-input-description-#{charge.id}" }
+
+    .charge-info.charge-amount.text-center{style: "padding-right: 10px;"}
+      %p.lead.without-margin
+        =charge_attribute_edit_link(charge, "amount") do
+          =charge.amount.present? ? number_to_currency(charge.amount_in_currency) : charge.amount_in_currency
+      %p.without-margin
+        =charge_attribute_edit_link(charge, "renewal_period_in_weeks") do
+          =billing_interval_in_words(charge.renewal_period_in_weeks)
+    .charge-info.charge-description        
+      %p.lead.without-margin
+        =charge_attribute_edit_link(charge, "merchant_id") do
+          =charge.merchant_name.present? ? charge.merchant_name : "(no company)"
+      %p.without-margin.small
+        =charge_attribute_edit_link(charge, "billing_day") do
+          %i.fa.fa-clock-o
+          %span.small-gray
+            =time_to_next_bill(charge.next_billing_date)
+      %p.without-margin
+        =charge_attribute_edit_link(charge, "description") do
+          =charge.description.present? ? charge.description : "(no description)"
+
+    .charge-info.text-center{style: "width: 100%;"}          
+      .inline-block.charge-item-action-buttons
+        -if controller_name == "charges"
+          =link_to new_charge_stop_order_path(charge), remote: true, class: "btn btn-default btn-lg" do
+            %i.fa.fa-stop
+            stop
+        -elsif controller_name == "transaction_data_requests"
+          %b.small Track This?
+          %button.btn.btn-primary-o.btn-md.recurring-button-toggle{ class: charge.recurring ? "active" : "", data: { enabled: charge.recurring.to_s, charge_id: charge.id } }
+            =charge.recurring ? "Yes" : "No"
+      .inline-block.charge-item-form-buttons.hidden
+        =f.submit "save", class: "btn btn-primary btn-xs", style: "width: 70px; margin-bottom: 3px;", onclick:"editChargeSubmit($(this));"
+        =link_to "delete", {action: "destroy", id: charge.id}, method: :delete, class: "btn btn-danger btn-xs", style: "width: 70px; margin-bottom: 3px;", data: {confirm: "Are you sure you want to delete this charge? This can't be undone."}, remote: true
+        %button.btn.btn-default.btn-xs{style: "width: 70px;", onclick:"hideChargeSubmit($(this).parents('.charge-item')); return false;"} cancel

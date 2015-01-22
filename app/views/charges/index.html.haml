@@ -1,15 +1,15 @@
 .container-fluid.scrollable-with-offset
 
   .row{style: 'padding: 0px 20px;'}
-    .scrollable#charges-outlook{ class: "col-lg-#{@charges.present? ? "8" : "12"}"}
-      - if @charges.present?
-        =render 'contact_preferences'
-        =render 'twelve_month_outlook'
-      - else
-        =render 'new_user_prompt'
-    
     - if @charges.present?
       =render 'charge_list'
+      .scrollable#charges-outlook{ class: "col-lg-#{@charges.present? ? "8" : "12"}"}
+        =render 'contact_preferences'
+        =render 'twelve_month_outlook'
+    - else
+      .scrollable#charges-outlook{ class: "col-lg-#{@charges.present? ? "8" : "12"}"}
+        =render 'new_user_prompt'
+          
 
 :javascript
   $(document).ready(function() {

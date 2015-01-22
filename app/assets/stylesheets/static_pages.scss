@@ -1,3 +1,33 @@
 // Place all the styles related to the static-pages controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+$brand-color: rgb(129, 202, 166);
+
+
+#home-banner{ 
+	background-color: $brand-color;
+	color: white;
+	h1{ font-size: 300%; }
+	p{ 
+		font-size: 200%; 
+		color: whitesmoke;
+	}
+}
+#home-demo-steps{	
+	border-top: #e7e7e7 1px solid;
+	div.row > div{ padding: 10px 15px; }
+}
+@media (min-width: 992px) {
+	#home-demo-steps{	
+		display: table;
+		div.row{
+			display: table-row;
+		 	div{
+		 		display: table-cell;
+		 		vertical-align: middle;
+		 		float: none;
+		 	}
+		}
+	}
+}

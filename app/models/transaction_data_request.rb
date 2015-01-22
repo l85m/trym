@@ -7,6 +7,8 @@ class TransactionDataRequest < ActiveRecord::Base
 
   after_save :create_charges_from_transaction_data
 
+  scope :has_data, -> {where.not(transaction_data: nil)}
+
   def self.create_and_start_scan(params)
   	t = self.new(financial_institution_id: params[:financial_institution], user: params[:user])
   	if t.save
@@ -32,7 +34,7 @@ class TransactionDataRequest < ActiveRecord::Base
   def create_charges_from_transaction_data
     if transaction_data.present? && transaction_data_changed?
       transaction_data.each do |t|
-        params = t.to_h.symbolize_keys.select{ |k,_| [:merchant_id, :description, :amount, :last_date_billed, :renewal_period_in_weeks, :recurring_score].include?(k) }
+        params = t.to_h.symbolize_keys.select{ |k,_| [:merchant_id, :description, :amount, :billing_day, :renewal_period_in_weeks, :recurring_score].include?(k) }
         charges.create(params)
       end
     end

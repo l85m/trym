@@ -23,7 +23,7 @@ class AmexScorer
   def create_attributes_for_charges
     @charge_list.each do |charge|
       charge[:amount] = ((charge[:amounts].sum / charge[:amounts].size) * 100).to_i
-      charge[:last_date_billed] = charge[:date].max
+      charge[:billing_day] = charge[:date].max
       charge[:renewal_period_in_weeks] = round_to_months( average_distance_between_dates(charge[:date]) / 7 )
     end
   end

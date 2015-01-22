@@ -1,39 +1,63 @@
-.modal-dialog
+.modal-dialog.modal-md
   .modal-content.vertical-center
     = simple_form_for @charge do |f|
       .modal-body.text-center
-        .multi-part-form.block1.show
-          %h2
-            what's the charge for?
-            %br
-            %small step 1 of 2
-          = f.input :merchant, as: :string
-          = f.input :description
-          %button{ type: "button", class: "btn btn-default", data: {dismiss: "modal"} } Cancel
-          %button.next{ type: "button", class: "btn btn-primary", data: {current_block: "1", next_block: "2"} } Next
+        %h2.modal-header-text add a recurring charge and we'll track it for you
+        %p.form-errors
+          = f.error_notification
+        .form-inputs
+          = f.input :recurring, as: :hidden, input_html: {value: true}
+          = f.input :merchant_id, label: "Search for Company"
+          = f.input :description, as: :string, label: "Service Description", placeholder: "optional"
 
-        .multi-part-form.block2.hidden
-          %h2
-            when was the last bill and how much do you usually pay?
-            %br
-            %small step 2 of 2
-          = f.input :amount
-          = f.input :last_date_billed, as: :string
-          = f.input :renewal_period_in_months
-          %button{ type: "button", class: "btn btn-default", data: {dismiss: "modal"} } Cancel
-          %button.next{ type: "button", class: "btn btn-default", data: {current_block: "2", next_block: "1"} } Back
-          = f.button :submit, "Save", class: "btn btn-success"
+        .form-inputs
+          .row
+            .col-xs-7= f.input :billing_day, as: :string, label: "When is your next charge?", placeholder: "estimate if you're not sure"
+            .col-xs-5= f.input :amount, as: :currency, label: "How much?"
+
+        .form-inputs
+          .row
+            .col-xs-12
+              = f.input :renewal_period_in_weeks, label: "How often are you charged?", input_html: { value: 4, data: {init_text: "Monthly - once every month"}}
+
+        .form-actions
+          -if request.format.html?
+            =link_to "cancel", :back, class: "btn btn-default btn-lg"
+          = f.button :submit, "Save", class: "btn btn-primary btn-lg"
+
 
 :javascript
-  $('#modal-container').on('hidden.bs.modal', function (e) {
-    $('title').html("trym.io | charges")
-  })
-  $('#charge_last_date_billed').datepicker({dateFormat: 'yy-mm-dd'})
+  function format(item) { return item.name; };
 
-  $('.next').on('click', function () {
-    var current = $(this).data('currentBlock');
-    var next = $(this).data('nextBlock');
+  $('#charge_merchant_id').select2({
+    placeholder: "Comcast, AT&T, Geico, Netflix, ect.",
+    minimumInputLength: 3,
+    data:{ text: "name" },
+    formatSelection: format,
+    formatResult: format,
+    createSearchChoice: function(term, data) { 
+      if (data.length > 0) {
+        return null;
+      } else {
+        return { id: term, name: "Other: " + term }; 
+      }
+    },
+    createSearchChoicePosition:'bottom',
+    ajax:{ 
+      url: "#{merchants_path}",
+      dataType: 'json',
+      quietMillis: 250,
+      data: function (term, page) { return { q: term }; },
+      results: function (data, page) { return { results: data }; },
+      cache: true
+    }
+  });
+  
+  $('#charge_billing_day').datepicker({dateFormat: 'yy-mm-dd'});
 
-    $('.block' + current).removeClass('show').addClass('hidden');
-    $('.block' + next).removeClass('hidden').addClass('show');
+  $('#charge_renewal_period_in_weeks').select2({
+    data:#{Charge.renewal_period_in_words.to_h.collect{ |id,text| {id: id, text: text} }.to_json},
+    initSelection : function (element, callback) {
+      callback({"text":"Monthly - once every month","id":4});
+    }
   });

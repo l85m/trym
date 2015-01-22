@@ -1,0 +1,30 @@
+var charge_item = $("#charge-item-<%= @charge.id.present? ? @charge.id : 'new' %>");
+charge_item.replaceWith("<%= j render partial: 'shared/charge_item', locals: {charge: @charge} %>");
+charge_item = $("#charge-item-<%= @charge.id.present? ? @charge.id : 'new' %>");
+
+$("#charge-list-script").replaceWith("<%= j render 'shared/charge_item_script' %>");
+
+<% if @charge.warnings.present? %>
+var popover_direction = "";
+
+if ( $(window).width() > 1000 ) { 
+	popover_direction = "auto right" 
+} else { 
+	popover_direction = "bottom" 
+}
+
+
+charge_item.popover({
+	placement: popover_direction, 
+	title: "Adding some details will help us do more for you", 
+	content: "<%= j render 'warnings' %>", 
+	html: "true",
+	container: 'body'
+}).popover("show");
+
+<% end %>
+
+var charge_flash_elements = charge_item.find("a").andSelf();
+charge_flash_elements.animate({ borderColor: "<%= brand_color %>", color: "<%= brand_color %>" }, "fast", function() {
+	charge_flash_elements.animate({ borderColor: "#e3e3e3", color: "rgba(0,0,0,0.7)" }, "slow");
+});

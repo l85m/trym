@@ -2,11 +2,13 @@ require 'sidekiq/web'
 
 Rails.application.routes.draw do
   
+  resources :invite_requests, only: [:new, :create]
+
   resources :transaction_data_requests
   resources :financial_institutions, only: :index
 
   resources :account_details, only: [:new, :create, :edit, :update]
-  resources :merchants
+  resources :merchants, only: :index
 
   resources :charges do
     resources :stop_orders, only: [:new, :create, :show, :edit, :destroy]

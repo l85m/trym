@@ -1,31 +1,19 @@
 .col-lg-4#charge-side-list.scrollable
   .text-left.inline-block
     %p.lead
-      %i.fa.fa-credit-card
+      %i.fa.fa-calculator
       active charges
-  .text-right.inline-block.pull-right{style: "margin:5px 5px 0px 0px;"}
-    =link_to new_charge_path, remote: true, class: "icon-link" do
-      %i.fa.fa-plus-circle
-      add charge
-  -@charges.with_merchant.sort_by(&:next_billing_date).each do |charge|
-    .well.charge-item{class: "merchant-#{charge.merchant.name}" }
-      .charge-info.charge-amount.text-center{style: "padding-right: 10px;"}
-        %b
-          =number_to_currency charge.amount / 100.0
-        %br
-        every month
-      .charge-info.charge-description        
-        %p.lead.without-margin=charge.merchant_name
-        %p.without-margin.small.small-gray
-          %i.fa.fa-clock-o
-          =time_to_next_bill(charge)
-        %p.without-margin=charge.description
+  .text-right.inline-block.pull-right
+    %p#new-charge-links
+      =link_to new_charge_path, class: "icon-link" do
+        %i.fa.fa-plus-circle
+        add charge
+      or
+      =link_to new_transaction_data_request_path, class: "icon-link", remote: true do
+        %i.fa.fa-credit-card
+        scan account
+  
+  -(@charges.select(&:next_billing_date).sort_by(&:next_billing_date) + @charges.reject(&:next_billing_date)).each do |charge|
+    =render partial: "shared/charge_item", locals: {charge: charge}
 
-      .charge-info.charge-actions.pull-right{style: "width: 100%;"}
-        =link_to new_charge_stop_order_path(charge), remote: true, class: "btn btn-default btn-block" do
-          %i.fa.fa-stop
-          stop
-        =link_to edit_charge_path(charge), remote: true, class: "btn btn-default btn-block" do
-          %i.fa.fa-edit
-          edit
-        
+=render "shared/charge_item_script"

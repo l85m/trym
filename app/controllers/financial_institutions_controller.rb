@@ -1,4 +1,5 @@
 class FinancialInstitutionsController < ApplicationController
+  before_action :authenticate_user!
 	respond_to :json
 
 	def index
@@ -6,6 +7,3 @@ class FinancialInstitutionsController < ApplicationController
 	end
 	
 end
-
-
-

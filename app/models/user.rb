@@ -1,14 +1,14 @@
 class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :registerable, :confirmable,
+  devise :invitable, :database_authenticatable, :registerable, :confirmable,
          :recoverable, :rememberable, :trackable, :validatable
 
  	validates :email, presence: true, uniqueness: true, on: :create
  	
  	has_many :charges
-  accepts_nested_attributes_for :charges
 
+  has_many :transaction_data_requests
  	has_many :notes, as: :noteable
  	has_one :account_detail
 
