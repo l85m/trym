@@ -2,7 +2,8 @@
   .modal-content.vertical-center.text-center
     %h4 Scan your external accounts for recurring charges
     
-    =link_to "review past account scans", transaction_data_requests_path
+    -if current_user.transaction_data_requests.has_data.present?
+      =link_to "review past account scans", transaction_data_requests_path
 
     = simple_form_for @transaction_data_request, remote: true do |f|
       .modal-body
