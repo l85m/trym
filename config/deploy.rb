@@ -11,7 +11,7 @@ require 'mina/unicorn'
 #   repository   - Git repo to clone from. (needed by mina/git)
 #   branch       - Branch name to deploy. (needed by mina/git)
 
-set :domain, '104.236.135.213'
+set :domain, '198.199.106.96'
 set :deploy_to, '/home/deployer/trym/'
 set :repository, 'https://github.com/demosophy/trym.git'
 set :branch, 'master'
