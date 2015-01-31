@@ -27,6 +27,8 @@ a:hover{
 	cursor: pointer;
 }
 i{ color: $brand-color; }
+.fa-inverted{ color: white; }
+button:hover > .fa-inverted{ color: $brand-color; }
 .brand-blue{ color: $brand-color; }
 .inline-block{ display: inline-block; }
 a.icon-link:hover{ 

@@ -1,0 +1,25 @@
+%h2.modal-header-text
+  ="#{@merchant.name} requires the following information to cancel your account" 
+          
+.row
+  .col-lg-4.col-lg-offset-4
+    .form-group  
+    =f.simple_fields_for :cancelation_data do |cancelation_datum|
+      -@merchant.cancelation_fields.each do |cancelation_field|
+        =cancelation_datum.input cancelation_field.to_sym
+
+.row
+  .form-group
+    %button.btn.btn-default{ type: "button", data: {dismiss: "modal"} } Cancel
+    = f.button :submit, "Stop this Charge!", class: "btn btn-primary"
+
+%h5#error-reminder{style: "color: red;"}
+
+:javascript
+
+  $('.call-window-button-select').on('click', function (e) {
+    $('.call-window-button-select.active').removeClass('active');
+    $(this).addClass('active');
+    $('#stop_order_call_window_id').val($(this).data('window-id'));
+    return false;
+  });

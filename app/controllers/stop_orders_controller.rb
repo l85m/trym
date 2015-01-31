@@ -22,14 +22,15 @@ class StopOrdersController < ApplicationController
     end
     
     @merchant = @charge.merchant
-    @stop_order = StopOrder.new charge: @charge, status: 'requested', merchant: @merchant    
+    @stop_order = @charge.stop_orders.new
   end
 
   def edit
   end
 
   def create
-    @stop_order = stop_order.new(stop_order_params)
+    binding.pry
+    @stop_order = StopOrder.new(stop_order_params)
     @stop_order.save
     respond_with(@stop_order)
   end
@@ -49,7 +50,11 @@ class StopOrdersController < ApplicationController
       @stop_order = StopOrder.find(params[:id])
     end
 
+    def cancelation_params
+      Charge.find(params[:stop_order][:charge_id]).merchant.cancelation_fields.collect(&:to_sym)
+    end
+
     def stop_order_params
-      params.require(:stop_order).permit(:name, :type)
+      params.require(:stop_order).permit(:name, :type, :charge_id, :status, cancelation_data: cancelation_params)
     end
 end

@@ -11,10 +11,10 @@ Rails.application.routes.draw do
   resources :merchants, only: :index
 
   resources :charges do
-    resources :stop_orders, only: [:new, :create, :show, :edit, :destroy]
+    resources :stop_orders, only: :new
   end
 
-  resources :stop_orders, only: :index
+  resources :stop_orders, only: [:create, :show, :edit, :destroy, :index]
   resources :verifications, only: [:new, :create], defaults: {format: 'js'}
   resources :contact_preferences, only: :update, defaults: {format: 'js'}
 

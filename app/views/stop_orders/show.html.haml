@@ -1,0 +1,13 @@
+.modal-dialog.modal-lg
+  .modal-content.vertical-center.text-center
+    %h2
+      ="#{@stop_order.merchant.name} Cancelation Request made on #{@stop_order.created_at.strftime('%d %B, %Y')}"  
+    .modal-body
+      %b current status:
+      %p.lead 
+        =@stop_order.status_message
+      -if @stop_order.cancelable?
+        %p
+          %button.btn.btn-primary 
+            %i.fa.fa-times.fa-inverted
+            I no longer want to cancel my account

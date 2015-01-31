@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150119023234) do
+ActiveRecord::Schema.define(version: 20150131041903) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -79,7 +79,8 @@ ActiveRecord::Schema.define(version: 20150119023234) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "website"
-    t.boolean  "validated",  default: false, null: false
+    t.boolean  "validated",          default: false, null: false
+    t.text     "cancelation_fields",                              array: true
   end
 
   create_table "notes", force: true do |t|
@@ -102,6 +103,7 @@ ActiveRecord::Schema.define(version: 20150119023234) do
     t.datetime "updated_at"
     t.datetime "call_window"
     t.integer  "call_window_id"
+    t.hstore   "cancelation_data"
   end
 
   add_index "stop_orders", ["call_window_id"], name: "index_stop_orders_on_call_window_id", using: :btree
@@ -162,6 +164,7 @@ ActiveRecord::Schema.define(version: 20150119023234) do
     t.integer  "invited_by_id"
     t.string   "invited_by_type"
     t.integer  "invitations_count",      default: 0
+    t.string   "plaid_access_token"
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree

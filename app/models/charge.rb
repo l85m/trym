@@ -3,6 +3,7 @@ class Charge < ActiveRecord::Base
   belongs_to :merchant
   belongs_to :transaction_data_request
   has_one :financial_institution, through: :transaction_data_request
+  has_many :stop_orders
   
   has_many :notes, as: :noteable
 
