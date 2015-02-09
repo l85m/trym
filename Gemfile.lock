@@ -11,16 +11,18 @@ GIT
       warden (~> 1.2.3)
 
 GIT
+  remote: git://github.com/demosophy/plaid-ruby.git
+  revision: 3a44d34f1a2bfb43c44605f217620ad7b4e9b776
+  branch: release_v_1.0
+  specs:
+    plaid (1.0.1)
+
+GIT
   remote: git://github.com/demosophy/select2.trym.git
   revision: 669d5174faa4377313b6647faff704e5824d0085
   specs:
     select2-rails (3.5.9.1)
       thor (~> 0.14)
-
-PATH
-  remote: /Users/lmossburg/Projects/plaid-ruby
-  specs:
-    plaid (1.0.1)
 
 GEM
   remote: https://rubygems.org/

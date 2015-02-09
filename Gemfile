@@ -19,7 +19,7 @@ gem 'whenever'
 
 #account linking gems
 gem 'similar_text'
-gem 'plaid', path: '/Users/lmossburg/Projects/plaid-ruby'
+gem 'plaid', github: 'demosophy/plaid-ruby', branch: "release_v_1.0"
 
 #langauge abstraction
 gem 'sass-rails'
