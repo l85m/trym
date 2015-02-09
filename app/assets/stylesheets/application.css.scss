@@ -10,8 +10,9 @@
 @import "sessions";
 @import "charges";
 @import "static_pages";
-@import "transaction_data_requests";
+@import "linked_accounts";
 @import "verifications";
+@import "arrows";
 
 @import "select2";
 @import "select2-bootstrap";
@@ -29,16 +30,44 @@ a:hover{
 i{ color: $brand-color; }
 .fa-inverted{ color: white; }
 button:hover > .fa-inverted{ color: $brand-color; }
-.brand-blue{ color: $brand-color; }
+.brand-color{ color: $brand-color; }
 .inline-block{ display: inline-block; }
 a.icon-link:hover{ 
 	border-bottom: 1px solid $brand-color;
 	text-decoration: none;
 }
+.strong{
+	font-weight: bold;
+}
+i.fa-stack-1x{
+	color: white;
+}
 input{ text-align: center; }
 input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 	background-color: white;
 }
+.info-box{
+	border: 1px dashed #81caa6;
+	border-radius: 5px;
+	display: table;
+	padding: 3px;
+}
+.info-box-text{
+	display: table-cell;
+	text-align: left;
+	padding-right: 3px;
+}
+.info-box:before{
+	color: #81caa6;
+	display: table-cell;
+	content: "\f05a";
+	font-family: FontAwesome;
+	vertical-align: middle;
+	width: 10%;
+	text-align: center;
+	font-size: 170%;
+}
+.transparent{ opacity: 0; }
 .form-errors{ color: #a94442; }
 .input-group-addon, .form-control{ 
 	box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
@@ -53,6 +82,16 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 	background-color: $brand-color; 
 	border-color: $brand-color;
 	box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+	i{ color: white; }
+}
+.label-default{
+	background: white;
+	color: $brand-color;
+	border: $brand-color 1px solid;
+}
+.label-primary{
+	background: $brand-color;
+	border: $brand-color 1px solid;
 }
 .green{ color: green; }
 .red{ color: red; }
@@ -62,10 +101,34 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 .disabled-style:hover{ 
 	cursor: not-allowed; 
 }
+.dl-horizontal-left{
+	dt{ 
+		float: left;
+		clear: left;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		text-align: left;
+		width: 140px;
+		margin-left: 8px;
+	}
+	dd{ 
+		text-align: left;
+		width: 200px;
+		margin-left: 150px;
+	}
+}
+.btn-primary:focus, .btn-primary.focus, .btn-primary:active, 
+.btn-primary.active, .open > .btn-primary.dropdown-toggle{
+	background-color: $brand-color;
+	border-color: $brand-color;
+	color: white;
+}
 .btn-primary:hover{
 	background-color: white;
 	color: $brand-color;
 	border-color: $brand-color;
+	i{ color: $brand-color; }
 }
 .btn-primary-o{
 	background-color: transparent;

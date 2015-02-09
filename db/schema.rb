@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150131041903) do
+ActiveRecord::Schema.define(version: 20150206071812) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -49,22 +49,28 @@ ActiveRecord::Schema.define(version: 20150131041903) do
     t.boolean  "active"
     t.date     "last_date_billed"
     t.integer  "merchant_id"
-    t.integer  "transaction_data_request_id"
     t.boolean  "recurring"
     t.integer  "billed_to_date"
-    t.integer  "recurring_score",             default: 0, null: false
+    t.integer  "recurring_score",         default: 0, null: false
+    t.integer  "transaction_request_id"
+    t.integer  "linked_account_id"
+    t.string   "category_id"
   end
 
+  add_index "charges", ["linked_account_id"], name: "index_charges_on_linked_account_id", using: :btree
   add_index "charges", ["recurring"], name: "index_charges_on_recurring", where: "(recurring = true)", using: :btree
-  add_index "charges", ["transaction_data_request_id"], name: "index_charges_on_transaction_data_request_id", using: :btree
+  add_index "charges", ["transaction_request_id"], name: "index_charges_on_transaction_request_id", using: :btree
   add_index "charges", ["user_id"], name: "index_charges_on_user_id", using: :btree
 
   create_table "financial_institutions", force: true do |t|
     t.string   "name"
-    t.string   "website"
-    t.boolean  "read_enabled"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "plaid_type"
+    t.boolean  "has_mfa"
+    t.string   "mfa",        array: true
+    t.string   "plaid_id"
+    t.boolean  "connect"
   end
 
   create_table "invite_requests", force: true do |t|
@@ -72,6 +78,21 @@ ActiveRecord::Schema.define(version: 20150131041903) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "linked_accounts", force: true do |t|
+    t.integer  "user_id",                  null: false
+    t.integer  "financial_institution_id", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "plaid_access_token"
+    t.datetime "last_successful_sync"
+    t.hstore   "last_api_response"
+    t.text     "mfa_question"
+    t.text     "mfa_type"
+  end
+
+  add_index "linked_accounts", ["financial_institution_id"], name: "index_linked_accounts_on_financial_institution_id", using: :btree
+  add_index "linked_accounts", ["user_id"], name: "index_linked_accounts_on_user_id", using: :btree
 
   create_table "merchants", force: true do |t|
     t.text     "name"
@@ -110,19 +131,10 @@ ActiveRecord::Schema.define(version: 20150131041903) do
   add_index "stop_orders", ["charge_id"], name: "index_stop_orders_on_charge_id", using: :btree
   add_index "stop_orders", ["merchant_id"], name: "index_stop_orders_on_merchant_id", using: :btree
 
-  create_table "transaction_data_requests", force: true do |t|
-    t.integer  "user_id",                  null: false
-    t.integer  "financial_institution_id", null: false
-    t.string   "status"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "failure_reason"
-    t.json     "transaction_data"
-    t.integer  "amount_complete"
+  create_table "transaction_requests", force: true do |t|
+    t.integer "linked_account_id"
+    t.json    "data"
   end
-
-  add_index "transaction_data_requests", ["financial_institution_id"], name: "index_transaction_data_requests_on_financial_institution_id", using: :btree
-  add_index "transaction_data_requests", ["user_id"], name: "index_transaction_data_requests_on_user_id", using: :btree
 
   create_table "trigrams", force: true do |t|
     t.string  "trigram",     limit: 3

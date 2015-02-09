@@ -3,11 +3,12 @@
   .row{style: 'padding: 0px 20px;'}
     - if @charges.present?
       =render 'charge_list'
-      .scrollable#charges-outlook{ class: "col-lg-#{@charges.present? ? "8" : "12"}"}
+      .scrollable#charges-outlook{ class: "col-md-#{@charges.present? ? "8" : "12"}"}
         =render 'contact_preferences'
+        =render 'linked_accounts/index'
         =render 'twelve_month_outlook'
     - else
-      .scrollable#charges-outlook{ class: "col-lg-#{@charges.present? ? "8" : "12"}"}
+      .scrollable#charges-outlook{ class: "col-md-#{@charges.present? ? "8" : "12"}"}
         =render 'new_user_prompt'
           
 
@@ -17,8 +18,6 @@
       var h = $(window).height();
       var chart = $('#charges-total-by-merchant-chart');
       $('.scrollable').height((h-70)+'px');
-      $('.scrollable-with-offset').height((h-100)+'px');
-      $('#charges-total-by-merchant-chart').height( ( h - chart.offset().top - 30 )+'px' );
     }
   });
   $( window ).resize(function() {
@@ -26,9 +25,8 @@
       var h = $(window).height();
       var chart = $('#charges-total-by-merchant-chart');
       $('.scrollable').height((h-70)+'px');
-      $('.scrollable-with-offset').height((h-100)+'px')
-      $('#charges-total-by-merchant-chart').height( ( h - chart.offset().top - 30 )+'px' );
-      chart.highcharts().setSize( chart.width() , h - chart.offset().top - 30 );
+      $('.scrollable-with-offset').height((h-139)+'px')
+      chart.highcharts().setSize( chart.width() , h - chart.offset().top() - 30 );
     } else {
       $('.scrollable').height('auto');
       $('.scrollable-with-offset').height('auto');

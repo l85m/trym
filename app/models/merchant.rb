@@ -15,4 +15,8 @@ class Merchant < ActiveRecord::Base
 		end
 	end
 
+	def self.selection_search(query)
+		find_by_fuzzy_name(query, limit: 5).select(&:validated) + [OpenStruct.new(id: query, name: "New: " + query)]
+	end
+
 end

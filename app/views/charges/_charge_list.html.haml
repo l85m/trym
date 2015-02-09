@@ -8,11 +8,7 @@
       =link_to new_charge_path, class: "icon-link" do
         %i.fa.fa-plus-circle
         add charge
-      or
-      =link_to new_transaction_data_request_path, class: "icon-link", remote: true do
-        %i.fa.fa-credit-card
-        scan account
-  
+
   -(@charges.select(&:next_billing_date).sort_by(&:next_billing_date) + @charges.reject(&:next_billing_date)).each do |charge|
     =render partial: "shared/charge_item", locals: {charge: charge}
 

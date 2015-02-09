@@ -1,7 +1,7 @@
 .well.charge-item{class: "merchant-#{charge.merchant_name}", id: "charge-item-#{charge.id.present? ? charge.id : 'new'}" }
   
   = simple_form_for charge, html: { class: "charge-info-container", method: "put" }, remote: true do |f|
-    -if ( controller_name == "transaction_data_requests" || @update_from_account_scan )
+    -if ( controller_name == "linked_accounts" || @update_from_account_scan )
       =f.input :account_scan, as: :hidden, input_html: { value: true }
     =f.input :amount, as: :hidden, input_html: { value: charge.amount_in_currency, id: "charge-hidden-input-amount-#{charge.id}" }
     =f.input :renewal_period_in_weeks, as: :hidden, input_html: { id: "charge-hidden-input-renewal_period_in_weeks-#{charge.id}" }
@@ -31,7 +31,7 @@
 
     .charge-info.text-center{style: "width: 100%;"}          
       .inline-block.charge-item-action-buttons
-        -if ( controller_name == "transaction_data_requests" || @update_from_account_scan )
+        -if ( controller_name == "linked_accounts" || @update_from_account_scan )
           %b.small Track This?
           %input{ type: "checkbox", name: "track-switch", checked: charge.recurring, data: { charge_id: charge.id } }
 

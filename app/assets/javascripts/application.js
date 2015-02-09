@@ -19,7 +19,9 @@
 //= require bootstrap/collapse
 //= require bootstrap/tooltip
 //= require bootstrap/popover
+//= require bootstrap/carousel
 //= require jquery-ui/datepicker
 //= require jquery-ui/autocomplete
 //= require jquery-ui/effect
 //= require select2
+//= require jquery.form-validator

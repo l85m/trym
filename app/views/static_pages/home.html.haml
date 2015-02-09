@@ -1,24 +1,9 @@
 .container-fluid
   .text-center{style: "margin: 30px auto;"}
     %p.lead{style: "font-weight: 400; font-size: 500%; margin-bottom: 10px;"}
-      <span class="brand-blue">t</span>rym
+      <span class="brand-color">t</span>rym
     %p.lead{style: "font-size: 200%;"}
       manage recurring charges without all the hassle
     =link_to "Request an Invite", new_invite_request_path, remote: true, class: "btn btn-lg btn-primary"
 
-.container-fluid#home-demo-steps{style:"margin:0px 20px;"}
-  .row.text-center
-    .col-md-2.col-md-offset-2.col-sm-12
-      %p.lead.without-margin track your spending on subscription charges
-    .col-md-1.col-sm-12
-      %i.fa.fa-arrow-circle-right.fa-4x.hidden-sm.hidden-xs
-      %i.fa.fa-arrow-circle-down.fa-4x.hidden-lg.hidden-md
-    .col-md-2.col-sm-12
-      %p.lead.without-margin cancel any subscription with a single click
-    .col-md-1.col-sm-12
-      %i.fa.fa-arrow-circle-right.fa-4x.hidden-sm.hidden-xs
-      %i.fa.fa-arrow-circle-down.fa-4x.hidden-lg.hidden-md
-    .col-md-2.col-sm-12
-      %p.lead.without-margin 
-        sit back and relax, we'll handel the rest
-
+=render 'home_carousel'

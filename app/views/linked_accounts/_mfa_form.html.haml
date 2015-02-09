@@ -1,0 +1,28 @@
+%h2 Almost there!
+%p.lead
+  ="#{@linked_account.financial_institution.name} requires some additional information before we can link to your account"
+=simple_form_for @linked_account, remote: true do |f|
+  =f.input :mfa_response, input_html: {value: ''}
+  %button.btn.btn-primary.btn-lg#mfa-submit-button Continue
+
+#mfa-error-container{style: "margin-top: 10px;"}
+
+:javascript
+  function clear_old_errors() {
+    $(".form-group.has-error").each( function() { $(this).removeClass("has-error") });
+    $("#mfa-error-container").empty();
+  };
+
+  $("form.edit_linked_account").submit( function(e) {
+    clear_old_errors();
+
+    var mfa_response = $("#linked_account_mfa_response");
+
+    if ( mfa_response.val() == "" ) {
+      mfa_response.parent().addClass("has-error");
+      $("#mfa-error-container").append("<p class='form-errors'>Please complete all fields before continuing</p>");
+      flash_error_button($("#mfa-submit-button"));
+      e.preventDefault();
+      return false;
+    }
+  });

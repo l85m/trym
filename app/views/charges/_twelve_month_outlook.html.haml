@@ -3,7 +3,7 @@
     .col-lg-12
       %p.lead.text-center{style: "margin: 0px 0px 20px 0px;"}
         ="Over the next twelve months you will pay" 
-        %span.brand-blue="#{number_to_currency @charges_outlook_chart_data.total_next_twelve_months}"
+        %span.brand-color="#{number_to_currency @charges_outlook_chart_data.total_next_twelve_months}"
         ="to #{pluralize @charges_outlook_chart_data.bar_categories.count, 'merchant'}."
   .row
     .col-lg-12
@@ -15,7 +15,7 @@
       $('#charges-total-by-merchant-chart').highcharts({
         chart: { 
           type: 'bar',
-          height: ($(window).height() - $('#charges-total-by-merchant-chart').offset().top - 30),
+          height: ($(window).height() - $('#charges-total-by-merchant-chart').offset().top - 39)
         },
         colors: ["#{brand_color}"],
         plotOptions: { 
