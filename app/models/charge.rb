@@ -1,8 +1,9 @@
 class Charge < ActiveRecord::Base
   belongs_to :user
   belongs_to :merchant
-  belongs_to :transaction_data_request
-  has_one :financial_institution, through: :transaction_data_request
+  belongs_to :linked_account
+  belongs_to :transaction_request
+  has_one :financial_institution, through: :linked_account
   has_many :stop_orders
   
   has_many :notes, as: :noteable
@@ -12,10 +13,11 @@ class Charge < ActiveRecord::Base
 
   scope :with_merchant, -> { includes(:merchant) }
   scope :recurring, -> { where(recurring: true) }
+  scope :not_recurring, -> { where(recurring: false) }
   scope :sort_by_recurring_score, -> { order(recurring_score: :desc) }
   scope :chartable, -> { where('renewal_period_in_weeks > ?', 0).where('amount > 0').where.not(billing_day: nil) }
 
-  before_validation :add_user_if_transaction_data_request_exists
+  before_validation :add_user_if_linked_account_exists
 
   def self.renewal_period_in_words
     {
@@ -48,15 +50,13 @@ class Charge < ActiveRecord::Base
     amount.to_f / 100.0
   end
 
-  def recurring_score_display
+  def recurring_score_grouping
     case recurring_score
-    when -100..0 then "Very Unlikely"
-    when 1 then "Unlikely"
-    when 2 then "Average"
-    when 3 then "Somewhat Likely"
-    when 4 then "Likely"
+    when -100..-1 then "very unlikely"
+    when 0..1 then "unlikely"
+    when 2..3 then "likely"
     else 
-      "Very Likely"
+      "very likely"
     end
   end
  
@@ -91,9 +91,9 @@ class Charge < ActiveRecord::Base
 
   private
 
-  def add_user_if_transaction_data_request_exists
-    if user_id.nil? && transaction_data_request_id.present?
-      self.user = transaction_data_request.user
+  def add_user_if_linked_account_exists
+    if user_id.nil? && linked_account_id.present?
+      self.user = linked_account.user
     end
   end
 

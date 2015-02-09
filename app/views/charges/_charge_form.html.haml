@@ -30,7 +30,7 @@
 
 
 :javascript
-  function format(item) { return item.name; };
+  function format(item) { name: return item.name; };
 
   $('#charge_merchant_id').select2({
     placeholder: "Comcast, AT&T, Geico, Netflix, ect.",
@@ -38,14 +38,6 @@
     data:{ text: "name" },
     formatSelection: format,
     formatResult: format,
-    createSearchChoice: function(term, data) { 
-      if (data.length > 0) {
-        return null;
-      } else {
-        return { id: term, name: "Other: " + term }; 
-      }
-    },
-    createSearchChoicePosition:'bottom',
     ajax:{ 
       url: "#{merchants_path}",
       dataType: 'json',

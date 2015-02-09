@@ -3,7 +3,7 @@ class MerchantsController < ApplicationController
   respond_to :json
 
   def index
-    @merchants = Merchant.validated.find_by_fuzzy_name(params[:q], limit: 5)
+    @merchants = Merchant.selection_search(params[:q])
   end
   
 end

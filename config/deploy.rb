@@ -4,6 +4,7 @@ require 'mina/git'
 require 'mina/rbenv'
 require 'mina_sidekiq/tasks'
 require 'mina/unicorn'
+require 'mina/whenever'
 
 # Basic settings:
 #   domain       - The hostname to SSH to.

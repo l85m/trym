@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   
   resources :invite_requests, only: [:new, :create]
 
-  resources :transaction_data_requests
+  resources :linked_accounts
   resources :financial_institutions, only: :index
 
   resources :account_details, only: [:new, :create, :edit, :update]
@@ -30,8 +30,8 @@ Rails.application.routes.draw do
     mount Sidekiq::Web => '/sidekiq'
   end
 
-  get 'static_pages/home'
-  get 'static_pages/about'
+  get 'home', to: 'static_pages#home'
+  get 'legal', to: 'static_pages#legal'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

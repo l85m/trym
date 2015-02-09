@@ -1,0 +1,1 @@
+json.extract! @linked_account, :id, :last_api_response, :error_message, :mfa_prompt

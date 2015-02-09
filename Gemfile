@@ -15,12 +15,11 @@ gem 'sinatra', require: false
 gem 'slim'
 gem 'fuzzily'
 gem 'active_model_serializers'
+gem 'whenever'
 
 #account linking gems
 gem 'similar_text'
-gem 'capybara', '2.1.0'
-gem 'poltergeist'
-gem 'phantomjs'
+gem 'plaid', path: '/Users/lmossburg/Projects/plaid-ruby'
 
 #langauge abstraction
 gem 'sass-rails'
@@ -32,6 +31,8 @@ gem 'autoprefixer-rails'
 gem 'bootstrap-sass'
 gem 'jquery-ui-rails'
 gem "font-awesome-rails"
+gem 'premailer-rails'
+gem 'nokogiri' #for premailer
 
 #javascript
 gem 'coffee-rails', '4.0.1'

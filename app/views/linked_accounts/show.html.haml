@@ -1,0 +1,92 @@
+-unless @linked_account.charges.present?
+  .row.text-center
+    .col-xs-10.col-xs-offset-1
+      %h3{style: "margin: 100px;"} We haven't find any charges in this account yet.  Check back soon! 
+-else 
+  #edit-transation-data-request-loader
+    %p.lead
+      %i.fa.fa-spinner.fa-spin
+      one moment while we tidy things up
+
+  .container-fluid#edit-transaction-data-request-container{ style: "opacity: 0;"}
+    #linked-account-charges-header  
+      .row.text-center
+        %p.lead{style: "margin: 20px auto 0px auto;"}
+          We found 
+          %span.brand-color= "#{pluralize @linked_account.charges.count, 'charge' }"
+          in your account. Charges that we think you might want to track are at the top of the page.
+      -if @linked_account.charges.maximum(:recurring_score) < 2
+        .row
+          .col-lg-offset-3.col-lg-6
+            .info-box{style: "margin: 10px auto;"}
+              We couldn't find any charges in your account that look likely to recur.  See if you can find any below.  We'll pull more data from your account and let you know if we find any more.        
+      .row.text-center
+        %p.lead.without-margin
+          %small
+            select those that you'd like his to track.  you can edit any charges by clicking on the part of it that you want to change.
+      
+      .row.text-center{style: "margin-top: 10px;"}
+        .col-lg-offset-3.col-lg-6#submit-button-container
+          =link_to charges_path, class: "btn btn-primary btn-md", id: "save-changes-to-linked-account-charges", style: "z-index: 9999;" do 
+            save and continue
+
+    .row{style: "padding: 10px;"}
+      -@linked_account.charges.sort_by_recurring_score.with_merchant.group_by(&:recurring_score_grouping).each do |grouping, grouped_charges|
+        .col-xs-12.text-center
+          %h2.lead
+            ="#{grouped_charges.count > 1 ? 'These ' + pluralize(grouped_charges.count, 'charge') + ' look' : "This charge looks"}" 
+            %b.brand-color= grouping
+            to be recurring
+            %br
+            %i.fa.fa-angle-double-down
+        -grouped_charges.in_groups_of(3,false) do |charges|
+          -charges.each do |charge|
+            %div{ class: cols_for_grouped_charges(grouped_charges, charges, charge) }
+              =render partial: "shared/charge_item", locals: {charge: charge}
+
+
+  =render "shared/charge_item_script"
+
+  :javascript
+
+    $("[name='track-switch']").bootstrapSwitch({
+      onText: "Yes",
+      offText: "No"
+    }).on('switchChange.bootstrapSwitch', function(event, state) {
+      var marginState = $(this).parent().css('margin-left')
+      if ( marginState == '-48px' || marginState == '0px' ) {
+        $.ajax({
+          type: "PUT",
+          url: "/charges/" + $(this).data("charge-id"),
+          data: { charge: { recurring: state }, scan: "scan" },
+          dataType: "script"
+        })
+      }
+    });
+
+    $("#edit-transation-data-request-loader").fadeOut("slow", function() {
+      $("#edit-transaction-data-request-container").animate({"opacity":1},1000)
+    });
+
+    function fixDiv() {
+      var $submitButton = $('#save-changes-to-linked-account-charges');
+      var clipHeight = ($("#submit-button-container").offset().top - ($("#submit-button-container").height() / 2) + 5);
+      
+      if ($(window).scrollTop() > clipHeight) {
+        $submitButton.css({
+          'position': 'fixed',
+          'top': '10px',
+          'left': ($(window).width() / 2) - 70
+        });
+      } else {
+        $submitButton.css({
+          'position': 'relative',
+          'top': 'auto',
+          'left': 'auto'
+        });
+      }
+    }
+    
+    $("#linked-account-charges-header").css("height",$("#linked-account-charges-header").height());
+    $(window).scroll(fixDiv);
+    fixDiv();
