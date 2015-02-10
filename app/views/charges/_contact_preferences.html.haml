@@ -9,7 +9,7 @@
   .preferences.text-center-xxs.table-cell
     .preferences-cell.text-right
       %p.lead.without-margin
-        %small.extra-small.text-center-xxs two days before any charge
+        %small.extra-small.text-center-xxs three days before any charge
         %br.hidden-lg.hidden-md.hidden-sm
         %button.btn.btn-primary-o.btn-sm.contact-pref-button{ class: current_user.email_alert ? "active" : "", data: { enabled: current_user.email_alert.to_s, url: contact_preference_path(current_user.id, email_alert: "placeholder"), target: "email"}}
           = current_user.email_alert ? "email" : "do not email"

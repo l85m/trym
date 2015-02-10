@@ -4,12 +4,12 @@ module ChargesHelper
     if next_billing_date == Date.today
       "due today"
     else
-      "next charge in " + (next_billing_date.present? ? (distance_of_time_in_words next_billing_date.to_time - Time.now.beginning_of_day) : "???")
+      "next charge in " +  (distance_of_time_in_words next_billing_date.to_time - Time.now.beginning_of_day)
     end
   end
 
   def billing_interval_in_words(renewal_period_in_weeks)
-    interval = Charge.renewal_period_in_words.merge({0 => "Monthly?", nil => "Monthly?"})[renewal_period_in_weeks]
+    interval = Charge.renewal_period_in_words[renewal_period_in_weeks]
     interval.present? ? interval.split(" - ").first : "#{renewal_period_in_weeks}-Weekly"
   end
 
@@ -25,7 +25,7 @@ module ChargesHelper
     case attribute
     when "merchant" then nil
     when "amount" then number_to_currency(charge.amount / 100.0, precision: 2)
-    when "billing_day" then charge.next_billing_date
+    when "billing_day" then charge.next_billing_date.present? ? charge.next_billing_date : charge.billing_day
     else 
       charge.send(attribute)
     end

@@ -12,19 +12,44 @@
     .charge-info.charge-amount.text-center{style: "padding-right: 10px;"}
       %p.lead.without-margin
         =charge_attribute_edit_link(charge, "amount") do
-          =charge.amount.present? ? number_to_currency(charge.amount_in_currency) : charge.amount_in_currency
+          -if charge.amount.present? && charge.amount > 0
+            =number_to_currency(charge.amount_in_currency)
+          -else 
+            %i.fa.fa-exclamation-circle
+            $
       %p.without-margin
         =charge_attribute_edit_link(charge, "renewal_period_in_weeks") do
-          =billing_interval_in_words(charge.renewal_period_in_weeks)
+          -if charge.renewal_period_in_weeks.present? && charge.renewal_period_in_weeks > 0
+            =billing_interval_in_words(charge.renewal_period_in_weeks)
+          -else
+            %i.fa.fa-exclamation-circle
+            ???
+      -if charge.financial_institution.present? 
+        .small.without-margin
+          %i.fa.fa-credit-card
+          =charge.financial_institution.plaid_type
     .charge-info.charge-description        
       %p.lead.without-margin
         =charge_attribute_edit_link(charge, "merchant_id") do
-          =charge.merchant_name.present? ? charge.merchant_name : "(no company)"
+          -if charge.merchant_name.present?
+            -unless charge.merchant.present? && charge.merchant.validated
+              %i.fa.fa-exclamation-circle
+            =charge.merchant_name
+          -else
+            %i.fa.fa-exclamation-circle
+            Unknown
       %p.without-margin.small
         =charge_attribute_edit_link(charge, "billing_day") do
-          %i.fa.fa-clock-o
           %span.small-gray
-            =time_to_next_bill(charge.next_billing_date)
+            -if charge.next_billing_date.present?
+              %i.fa.fa-clock-o
+              =time_to_next_bill(charge.next_billing_date)
+            -elsif charge.billing_day.present?
+              %i.fa.fa-clock-o
+              ="last charge " + (distance_of_time_in_words charge.billing_day.to_time - Time.now) + " ago"
+            -else
+              %i.fa.fa-exclamation-circle
+              ???
       %p.without-margin
         =charge_attribute_edit_link(charge, "description") do
           =charge.description.present? ? charge.description : "(no description)"

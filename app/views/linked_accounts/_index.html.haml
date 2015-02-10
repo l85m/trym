@@ -4,8 +4,11 @@
       =link_to new_linked_account_path, remote: true do 
         .table-div{style: "width: 100%; height: 100%;"}
           .vertical-center
-            %i.fa.fa-plus
-            link new account    
+            %div
+              %i.fa.fa-credit-card.fa-2x
+            %div
+              %i.fa.fa-plus
+              link new account    
 
     -current_user.linked_accounts.each do |link|
       .linked-account-index-item.text-center
