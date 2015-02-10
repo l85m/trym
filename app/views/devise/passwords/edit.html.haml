@@ -7,6 +7,7 @@
         = f.error_notification
 
         .form-inputs
+          = f.input :reset_password_token, as: :hidden, input_html: { value: resource.reset_password_token }
           = f.input :password, label: "New password", required: true, autofocus: true
           = f.input :password_confirmation, label: "Confirm your new password", required: true
 

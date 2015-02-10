@@ -43,7 +43,7 @@ gem 'json'
 gem 'select2-rails', github: 'demosophy/select2.trym'
 
 #users
-gem 'devise', github: 'demosophy/devise-3.4.1.usub'
+gem 'devise', path: '/Users/lmossburg/Projects/devise-3.4.1.usub'
 gem 'devise_invitable' #alpha invites
 
 group :production, :staging do
