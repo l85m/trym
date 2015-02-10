@@ -14,3 +14,24 @@ attribute_parent.find(".charge-item-action-buttons").addClass("hidden")
 <% elsif ["amount", "description"].include?(@attribute) %>
 	$("#<%=@charge.id%>-<%=@attribute%>-attribute-input").css("width", input_width);
 <% end %>
+
+<% if @charge.warnings.present? %>
+
+var charge_item = $("#charge-item-<%= @charge.id.present? ? @charge.id : 'new' %>");
+var popover_direction = "";
+
+if ( $(window).width() > 1000 ) { 
+	popover_direction = "auto right" 
+} else { 
+	popover_direction = "bottom" 
+}
+
+charge_item.popover({
+	placement: popover_direction, 
+	title: "Adding some details will help us do more for you", 
+	content: "<%= j render 'warnings' %>", 
+	html: "true",
+	container: 'body'
+}).popover("show");
+
+<% end %>

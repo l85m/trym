@@ -32,6 +32,7 @@ Rails.application.routes.draw do
 
   get 'home', to: 'static_pages#home'
   get 'legal', to: 'static_pages#legal'
+  get 'test', to: 'static_pages#test'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
