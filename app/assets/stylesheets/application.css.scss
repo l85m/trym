@@ -73,9 +73,11 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 .input-group-addon, .form-control{ 
 	box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
 }
+.red-on-hover:hover{ color: red; }
 .extra-small{ font-size: 75%; }
 .small{ font-size: 85%; }
 .kinda-small{ font-size: 95%; }
+.gray{color: gray;}
 .small-gray{ color: gray; }
 .small-gray:hover{ color: inherit; }
 .lg-font{ font-size: 250%; }

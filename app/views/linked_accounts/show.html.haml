@@ -27,7 +27,7 @@
       
       .row.text-center{style: "margin-top: 10px;"}
         .col-lg-offset-3.col-lg-6#submit-button-container
-          =link_to "unlink account", {action: "destroy", id: @linked_account.id}, method: :delete, class: "btn btn-danger btn-md linked-account-charges-buttons", style: "z-index: 9999;", data: {confirm: "Are you sure you want to unlink this account? This can't be undone."}
+          =link_to "unlink account", {action: "destroy", id: @linked_account.id}, method: :delete, class: "btn btn-danger btn-md linked-account-charges-buttons", style: "z-index: 9999;", data: {confirm: "Are you sure you want to unlink this account? This can't be undone and all non recurring charges will be deleted"}
           =link_to charges_path, class: "btn btn-primary btn-md linked-account-charges-buttons", style: "z-index: 9999;" do 
             save and continue
 
@@ -35,14 +35,14 @@
       -@charges.each do |grouping, grouped_charges|
         .row
           .col-xs-12
-            %a.btn.btn-primary-o.btn-block.collapse-expand-button{href:"#collapse-#{grouping.downcase.gsub(" ","-")}", aria_expanded:"false", aria_controls:"collapse-#{grouping.downcase.gsub(" ","-")}", style: "margin-bottom: 10px;", class: grouping == "very likely" ? 'active' : '', data: {toggle:"collapse"}} 
+            %a.btn.btn-primary-o.btn-block.collapse-expand-button{href:"#collapse-#{grouping.downcase.gsub(" ","-")}", aria_expanded:"false", aria_controls:"collapse-#{grouping.downcase.gsub(" ","-")}", style: "margin-bottom: 10px;", class: grouped_charges.first.recurring_score > 3 ? 'active' : '', data: {toggle:"collapse"}} 
               ="#{pluralize(grouped_charges.count, 'charge')}" 
               %b= grouping
               to be recurring
               -if grouped_charges.select{ |c| c.new_transaction }.present?
                 ="(#{grouped_charges.select{ |c| c.new_transaction }.count} new)"
           .col-xs-12
-            .collapse{id: "collapse-#{grouping.downcase.gsub(" ","-")}", class: grouping == "very likely" ? 'in' : ''}
+            .collapse{id: "collapse-#{grouping.downcase.gsub(" ","-")}", class: grouped_charges.first.recurring_score > 3 ? 'in' : ''}
               -grouped_charges.in_groups_of(3,false) do |charges|
                 -charges.each do |charge|
                   %div{ class: cols_for_grouped_charges(grouped_charges, charges, charge) }

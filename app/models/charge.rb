@@ -20,6 +20,7 @@ class Charge < ActiveRecord::Base
   scope :chartable, -> { where('renewal_period_in_weeks > ?', 0).where('amount > 0').where.not(billing_day: nil) }
 
   before_validation :add_user_if_linked_account_exists
+  before_validation :update_recurring_score_if_recurring_changed
 
   def self.renewal_period_in_words
     {
@@ -57,8 +58,9 @@ class Charge < ActiveRecord::Base
     when -100..-1 then "very unlikely"
     when 0..1 then "unlikely"
     when 2..3 then "likely"
-    else 
-      "very likely"
+    when 99 then "confirmed by you"
+    else
+      "very likely" 
     end
   end
  
@@ -97,6 +99,17 @@ class Charge < ActiveRecord::Base
     if user_id.nil? && linked_account_id.present?
       self.user = linked_account.user
     end
+  end
+
+  def update_recurring_score_if_recurring_changed
+    if recurring_changed?
+      if recurring 
+        self.recurring_score = 99
+      else
+        self.recurring_score = 4
+      end
+    end
+    true
   end
 
   def bills_since_first_reported_bill

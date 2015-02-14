@@ -59,6 +59,9 @@
         -if ( controller_name == "linked_accounts" || @update_from_account_scan )
           %b.small Track This?
           %input{ type: "checkbox", name: "track-switch", checked: charge.recurring, data: { charge_id: charge.id } }
+          %small
+            =link_to "(delete)", {controller: "charges", action: "destroy", id: charge.id}, method: :delete, class: "gray red-on-hover", style: "margin-top: 5px;", data: {confirm: "Are you sure you want to delete this charge? This can't be undone."}, remote: true
+
           -if charge.new_transaction
             %span.label.label-primary New Charge!
         -else

@@ -1,4 +1,4 @@
-class GetPlaidTransactions
+class PlaidTransactionGetter
   include Sidekiq::Worker
   sidekiq_options retry: false
 

@@ -33,6 +33,8 @@ class LinkedAccount < ActiveRecord::Base
   def delink
     #AccountDelinker.perform_async(id)
     update( destroyed_at: Time.now )
+    charges.recurring.update_all(linked_account_id: nil)
+    charges.delete_all
   end
 
   def account_name

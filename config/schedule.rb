@@ -17,4 +17,8 @@ every 6.hours do
   runner "FinancialInstitutionUpdater.perform_async"
 end
 
+every 1.hours do
+	runner "PlaidLinkedAccountUpdater.new"
+end
+
 # Learn more: http://github.com/javan/whenever

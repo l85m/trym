@@ -76,6 +76,7 @@ task :deploy => :environment do
     to :launch do
       invoke :'sidekiq:restart'
       invoke :'unicorn:restart'
+      invoke :'whenever:update'
     end
   end
 end
