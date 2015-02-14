@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150206071812) do
+ActiveRecord::Schema.define(version: 20150212221044) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -51,10 +51,11 @@ ActiveRecord::Schema.define(version: 20150206071812) do
     t.integer  "merchant_id"
     t.boolean  "recurring"
     t.integer  "billed_to_date"
-    t.integer  "recurring_score",         default: 0, null: false
+    t.integer  "recurring_score",         default: 0,     null: false
     t.integer  "transaction_request_id"
     t.integer  "linked_account_id"
     t.string   "category_id"
+    t.boolean  "new_transaction",         default: false, null: false
   end
 
   add_index "charges", ["linked_account_id"], name: "index_charges_on_linked_account_id", using: :btree
@@ -89,6 +90,7 @@ ActiveRecord::Schema.define(version: 20150206071812) do
     t.hstore   "last_api_response"
     t.text     "mfa_question"
     t.text     "mfa_type"
+    t.datetime "destroyed_at"
   end
 
   add_index "linked_accounts", ["financial_institution_id"], name: "index_linked_accounts_on_financial_institution_id", using: :btree

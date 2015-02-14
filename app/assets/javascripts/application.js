@@ -16,6 +16,7 @@
 //= require_tree .
 //= require bootstrap/modal
 //= require bootstrap/button
+//= require bootstrap/transition
 //= require bootstrap/collapse
 //= require bootstrap/tooltip
 //= require bootstrap/popover

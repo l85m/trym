@@ -230,7 +230,13 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 }
 .select2-search input{ padding: 4px 5px; }
 .select2-results{ text-align: center; }
-
+#loading-cover{
+	position: fixed;
+	top: 50%;
+	transform: translateY(-50%);
+	text-align: center;
+	width: 100%;
+}
 .modal-backdrop{
 	background: white;
 	opacity: 1 !important;

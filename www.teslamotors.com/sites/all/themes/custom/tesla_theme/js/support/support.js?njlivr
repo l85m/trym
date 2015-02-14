@@ -1,0 +1,81 @@
+var BCLS = {};
+(function (window, document, $, Drupal) {
+    "use strict";
+
+    Drupal.behaviors.display_more_articles = {
+        attach: function (context) {
+
+            $('.support-articles, .support-walkthrough').on('click', '.view-more', function(){
+                var $this = $(this),
+                    hiddenArticleLinks = $this.prev('.chapter-list, .article-list').children('[data-action="is-hidden"]');
+
+                hiddenArticleLinks.attr('data-action', 'is-showing');
+
+                // remove "show more" link once clicked
+                $this.remove();
+            });
+        }
+    };
+    Drupal.behaviors.load_new_video_chapter= {
+        attach: function (context) {
+            $('.chapter-list').on('click', '.chapter-marker', function() {
+                var $this = $(this),
+                    vimeoID = $this.data('vimeo-id'),
+                    nextChapterMarker      = $this.data('marker'),
+                    nextChapterChapter     = $this.data('chapter'),
+                    nextChapterTitle       = $this.find('.chapter-title'),
+                    nextChapterDuration    = $this.find('.chapter-duration'),
+                    nextChapterDescription = $this.find('.chapter-description'),
+
+                    currentChapterWrap        = $('.video-player'),
+                    currentChapter            = currentChapterWrap.data('chapter'),
+                    currentChapterMarker      = currentChapterWrap.data('marker'),
+                    currentChapterTitle       = currentChapterWrap.find('.chapter-title'),
+                    currentChapterDuration    = currentChapterWrap.find('.chapter-duration'),
+                    currentChapterDescription = currentChapterWrap.find('.chapter-description'),
+
+                    videoWalkThroughDiv = $('#video-walkthrough'),
+                    videoIframe = videoWalkThroughDiv.find('.vimeo-embed'),
+                    videoWalkThroughTitle = videoWalkThroughDiv.find('.section-title'),
+                    vimeoBaseURL = '//player.vimeo.com/video/',
+                    autoPlay = '?autoplay=1';
+                $this.siblings().removeClass("chapterlist-item-selected");
+                $this.addClass("chapterlist-item-selected");
+                // Replace the current chapter data with the chapter data that was just clicked on
+                $(currentChapterTitle).text($(nextChapterTitle).text());
+                $(currentChapterDuration).text($(nextChapterDuration).text());
+                $(currentChapterWrap).data('chapter', nextChapterChapter);
+                $(currentChapterWrap).data('marker', nextChapterMarker);
+                $(currentChapterDescription).text($(nextChapterDescription).text());
+                $(videoIframe).attr('src', vimeoBaseURL + vimeoID + autoPlay);
+                // We want to always scroll so the video is in the viewport.
+                // This is especially helpful when there are a lot of chapters.
+                $(document).scrollTop(videoWalkThroughTitle.offset().top);
+
+            });
+        }
+    };
+
+    Drupal.behaviors.support_search_box = {
+        attach: function(context){
+            var $form = $("#apachesolr-panels-search-form");
+            var $submit = $("#apachesolr-panels-search-form .form-submit");
+            var $text = $("#apachesolr-panels-search-form .form-text");
+            $submit.click(
+                function(e){
+                    e.preventDefault();
+                    if($text.val() != ''){
+                        $form.submit();
+                    }
+                }
+            );
+        }
+    };
+
+    Drupal.behaviors.search_box_placeholder_support = {
+        attach: function(context){
+            $("input[type=text]").placeholder();
+        }
+    };
+
+}(this, this.document, this.jQuery, this.Drupal));

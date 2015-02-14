@@ -1,0 +1,32 @@
+(function (window, document, $, Drupal) {
+    "use strict";
+
+    $(window).on('load', function() {
+        var homepageImage = $('.lazy-load', '.section-hero');
+
+        homepageImage.map(function() {
+            return $(this).data('src');
+        }).preload();
+
+    });
+
+    Drupal.behaviors.lazyload_images = {
+        attach: function (context) {
+
+            $.fn.preload = function() {
+                this.each(function(){
+                    $('<img/>')[0].src = this;
+                });
+
+                $('html').addClass('show-gigantor');
+
+                var sectionHero = $('.section-hero'),
+                    sectionHeroDataSrc = sectionHero.data('src');
+
+                sectionHero.attr('src', sectionHeroDataSrc);
+
+            }
+        }
+    };
+
+}(this, this.document, this.jQuery, this.Drupal));

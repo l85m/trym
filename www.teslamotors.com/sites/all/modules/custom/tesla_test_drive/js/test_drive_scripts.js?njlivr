@@ -1,0 +1,59 @@
+(function ($) {
+    
+    "use strict";
+    Drupal.behaviors.test_drive_form = {
+        attach: function () {
+            var $form = $('#test-drive-form');
+            var $zip_code = $('#edit-zipcode-td');
+            var $ajax_country = true;
+            if ($form.length) {
+                $form.parsley().destroy();
+                $form.parsley();
+
+                $('.btn-ajax', '#test-drive-form').click(function (event) {
+                    event.preventDefault(); //prevent default form submit
+                    var valid = $form.parsley().validate();
+                    if (valid && $ajax_country) {
+                        $('#test-drive-modal .modal-throbber').removeClass('hidden');
+                        $(this).trigger('submit_form');
+                    }
+                });
+
+                $('#test-drive-modal').on('hide.bs.modal', function (event) {
+                    //var mymodal = $(this);
+                    if ($('#test-drive-modal .thanks').length) {
+                        //e.preventDefault();
+                        var country = (Drupal.settings.tesla.locale != 'en_US') ? "/" + Drupal.settings.tesla.locale : '';
+                        $('.modal-body', '#test-drive-modal').load(country + "/models/drive/ajax", function () {
+                            Drupal.attachBehaviors();
+                        });
+                    }
+                });
+
+                //check whenever the dropdown menu change and ask the backend for the new regex and message to display
+                $('#edit-countries-td').change(function (event) {
+                    //disable the submit button meanwhile the ajax is begin processed
+                    $ajax_country = false;
+                    //get the actual url with Drupal settings
+                    var url = (Drupal.settings.tesla.locale != 'en_US') ? "/" + Drupal.settings.tesla.locale : '';
+                    var country = $('#edit-countries-td').val();
+                    $.ajax({
+                        url: url + '/regex/' + country,
+                        dataType: "json"
+                    }).success(function (data, textStatus, jqXHR) {
+                        //Little hack to change the regex and message that parsley will do
+                        $zip_code.attr('data-parsley-pattern', data.regex);
+                        $zip_code.attr('data-parsley-pattern-message', data.message);
+                        $(':input[name="phonenumber_td"]').val(data.phone_code);
+                        //Reactivate the parsley validation
+                        $zip_code.focusout();
+                    }).done(function (data, textStatus, jqXHR) {
+                        //enable the submit button
+                        $ajax_country = true;
+                    })
+                });
+            }
+        }
+    };
+
+}(jQuery));

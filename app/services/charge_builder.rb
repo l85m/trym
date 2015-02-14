@@ -19,7 +19,8 @@ class ChargeBuilder
 	end
 
 	def charge_already_exists?(charge)
-		Charge.where( description: charge[:name], linked_account_id: @transaction_request.linked_account.id ).present?
+		Charge.where( description: charge[:name], linked_account_id: @transaction_request.linked_account.id ).present? || 
+		Charge.where( merchant_id: charge[:merchant_id], linked_account_id: @transaction_request.linked_account.id ).present?
 	end
 
 	def is_debit?(charge)
@@ -37,6 +38,7 @@ class ChargeBuilder
 			renewal_period_in_weeks: charge[:renewal_period_in_weeks],
 			user_id: @user_id,
 			transaction_request_id: @transaction_request.id,
+			new_transaction: charge[:new_transaction],
 			linked_account_id: @transaction_request.linked_account.id
 		}
 	end

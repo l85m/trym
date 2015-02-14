@@ -6,9 +6,9 @@ class LinkedAccount < ActiveRecord::Base
   has_many :charges
   has_many :transaction_requests
 
-  #after_save :create_charges_from_transaction_data
-
   scope :has_data, -> {where.not(transaction_data: nil)}
+  scope :not_destroyed, -> {where( destroyed_at: nil)}
+  default_scope {not_destroyed}
 
   def error_message
     return nil if (last_api_response.nil? || last_api_response["response_code"].to_i < 202)
@@ -26,11 +26,20 @@ class LinkedAccount < ActiveRecord::Base
     end
   end
 
+  def set_new_transaction_false_on_charges
+    charges.where(new_transaction: true).update_all(new_transaction: false)
+  end
+
+  def delink
+    #AccountDelinker.perform_async(id)
+    update( destroyed_at: Time.now )
+  end
+
   def account_name
     financial_institution.name
   end
 
-  #TODO: find way to get rid of stub functions for forms
+  #stub functions for forms
   def username
   end
 
@@ -38,14 +47,6 @@ class LinkedAccount < ActiveRecord::Base
   end
 
   def pin
-  end
-
-  private
-
-  def create_charges_from_transaction_data
-    if transaction_data.present? && transaction_data_changed?
-      PlaidTransactionParser.new(self)
-    end
   end
 
 end

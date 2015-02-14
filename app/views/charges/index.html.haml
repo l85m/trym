@@ -33,3 +33,9 @@
       $('#charges-total-by-merchant-chart').height('auto');
     }
   });
+
+  function showLoader() {
+    $(".modal-dialog").remove();
+    $("#modal-container").append("#{ j render 'shared/loading' }");
+    $("#modal-container").modal({backdrop: 'static'});
+  }

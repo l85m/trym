@@ -1,4 +1,4 @@
-.well.charge-item{class: "merchant-#{charge.merchant_name}", id: "charge-item-#{charge.id.present? ? charge.id : 'new'}" }
+.well.charge-item{class: "merchant-#{charge.merchant_name} #{charge.new_transaction ? 'hover-glow' : ''}", id: "charge-item-#{charge.id.present? ? charge.id : 'new'}" }
   
   = simple_form_for charge, html: { class: "charge-info-container", method: "put" }, remote: true do |f|
     -if ( controller_name == "linked_accounts" || @update_from_account_scan )
@@ -59,7 +59,8 @@
         -if ( controller_name == "linked_accounts" || @update_from_account_scan )
           %b.small Track This?
           %input{ type: "checkbox", name: "track-switch", checked: charge.recurring, data: { charge_id: charge.id } }
-
+          -if charge.new_transaction
+            %span.label.label-primary New Charge!
         -else
           =link_to new_charge_stop_order_path(charge), remote: true, class: "btn btn-default btn-lg" do
             %i.fa.fa-stop

@@ -2,7 +2,8 @@ class PlaidTransactionParser
   attr_reader :charge_list
 
   def initialize(transaction_data)
-    @charge_list = transaction_data.collect{ |t| t.collect{ |k,v| [k.to_sym,v] }.to_h }
+    @link = transaction_data.linked_account
+    create_charge_list
     parse
   end
 
@@ -14,6 +15,12 @@ class PlaidTransactionParser
   end
 
   private
+
+  def create_charge_list
+    @charge_list = transaction_data.collect{ |t| t.collect{ |k,v| [k.to_sym,v] }.to_h.merge({ new_transaction: true }) }
+    @charge_list = @charge_list + transaction_data.previous_transactions
+    @charge_list.uniq!
+  end
 
   def create_attributes_for_charges
     @charge_list.each do |charge|
@@ -40,6 +47,7 @@ class PlaidTransactionParser
           if charge[:name] == sibling[:name]
             charge[:amount] << sibling[:amount]
             charge[:date] << Date.parse(sibling[:date])
+            charge[:new_transaction] = (charge[:new_transaction] || sibling[:new_transaction])
             completed_list << sibling[:name]
           end
         end
@@ -47,7 +55,7 @@ class PlaidTransactionParser
       grouped_list << charge
     end
 
-    @charge_list = grouped_list
+    @charge_list = grouped_list.select{ |c| c[:new_transaction] }
   end
 
   def calculate_recurring_score

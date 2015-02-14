@@ -1,9 +1,11 @@
 class LinkedAccountsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_linked_account, only: [:show, :edit, :update]
+  before_action :set_linked_account, only: [:show, :edit, :update, :destroy]
+  after_action :set_new_transaction_false_on_charges, only: :show
   respond_to :html, :js, :json
 
   def show
+    @charges = @linked_account.charges.sort_by_recurring_score.sort_by_new_first.with_merchant.group_by(&:recurring_score_grouping)
     respond_with(@linked_account)
   end
 
@@ -37,6 +39,11 @@ class LinkedAccountsController < ApplicationController
     end
   end
 
+  def destroy
+    @linked_account.delink
+    redirect_to root_path
+  end
+
   private
     def set_linked_account
       @linked_account = LinkedAccount.find(params[:id])
@@ -52,6 +59,10 @@ class LinkedAccountsController < ApplicationController
 
     def mfa_params
       params.require(:linked_account).permit(:mfa_response)
+    end
+
+    def set_new_transaction_false_on_charges
+      @linked_account.set_new_transaction_false_on_charges
     end
 
 end

@@ -13,8 +13,10 @@ class Charge < ActiveRecord::Base
 
   scope :with_merchant, -> { includes(:merchant) }
   scope :recurring, -> { where(recurring: true) }
+  scope :new_transaction, -> {where(new_transaction: true)}
   scope :not_recurring, -> { where(recurring: false) }
   scope :sort_by_recurring_score, -> { order(recurring_score: :desc) }
+  scope :sort_by_new_first, -> { order(new_transaction: :desc) }
   scope :chartable, -> { where('renewal_period_in_weeks > ?', 0).where('amount > 0').where.not(billing_day: nil) }
 
   before_validation :add_user_if_linked_account_exists
