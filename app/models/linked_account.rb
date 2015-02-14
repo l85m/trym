@@ -1,7 +1,7 @@
 class LinkedAccount < ActiveRecord::Base
   belongs_to :user
   belongs_to :financial_institution
-  validates_uniqueness_of :user_id, scope: :financial_institution_id
+  validates_uniqueness_of :user_id, scope: [:financial_institution_id, :destroyed_at], if: Proc.new { |link| link.destroyed_at.nil? }
 
   has_many :charges
   has_many :transaction_requests
@@ -32,11 +32,12 @@ class LinkedAccount < ActiveRecord::Base
 
   def delink
     #AccountDelinker.perform_async(id)
-    update( destroyed_at: Time.now )
+    update!( destroyed_at: Time.now )
     if charges.present?
       charges.recurring.update_all(linked_account_id: nil)
       charges.delete_all
     end
+    true
   end
 
   def account_name
