@@ -30,7 +30,7 @@ class StopOrdersController < ApplicationController
 
   def create
     if Charge.find(stop_order_params[:charge_id]).user == current_user
-      @stop_order = StopOrder.new( stop_order_params.merge({status: "requested"}) )
+      @stop_order = StopOrder.create( stop_order_params.merge({status: "requested"}) )
     end
     redirect_to root_path
   end
