@@ -1,28 +1,10 @@
 %h2.modal-header-text
-  ="We're still learning how to cancel accounts at #{@merchant.name} so will need more help from you than usual"
+  ="We're still learning how to cancel accounts at #{@merchant.name} and so will need more help from you than usual"
 %p.lead
-  Don't worry we'll still do most of the work.  We just need to do a bit of research first and give you a call to collect the information we need to cancel this for you.  When can we call you?
-.form-group
-  %dl
-    -CallWindow.available_windows_for_next_days.each do |day,windows|
-      %dt{style: "margin-top: 5px;"}=day.strftime("%A, %b %d")
-      %dd{style: "max-width: 570px; margin: 0 auto;"}
-        -windows.each do |window|
-          %button.btn.btn-primary-o.btn-sm.call-window-button-select{style: "margin: 2px 0px; width: 102px;", data: { window_id: window.id }}
-            = "#{window.window_start.localtime.strftime("%l%p")} to #{(window.window_start.localtime + 1.hour).strftime("%l%p")}"
-.hidden
-  =f.input :call_window_id, as: :hidden
+  Don't worry we'll still do most of the work.  We just need to do a bit of research first and give you a call to collect the information we need to cancel this for you.
+
 .form-group
   %button.btn.btn-default{ type: "button", data: {dismiss: "modal"} } Cancel
   = f.button :submit, "Stop this Charge!", class: "btn btn-primary"
 
 %h5#error-reminder{style: "color: red;"}
-
-:javascript
-
-  $('.call-window-button-select').on('click', function (e) {
-    $('.call-window-button-select.active').removeClass('active');
-    $(this).addClass('active');
-    $('#stop_order_call_window_id').val($(this).data('window-id'));
-    return false;
-  });

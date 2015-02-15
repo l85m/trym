@@ -14,8 +14,13 @@
             we'll verify your phone number by sending you a text message so grab your phone before you hit submit
 
         .form-actions{style: "margin-top: 10px;"}
-          %button{ type: "button", class: "btn btn-default", data: {dismiss: "modal"} } Cancel
-          = f.button :submit, "Verify", class: "btn-primary"
+          -if params[:format] == "js"
+            %button{ type: "button", class: "btn btn-default", data: {dismiss: "modal"} } Cancel
+            =f.button :submit, "Verify", class: "btn-primary"
+          -else
+            %p
+              =link_to "Cancel", :back, class: "btn btn-default"
+              =f.button :submit, "Verify", class: "btn-primary"
 
 :javascript
 

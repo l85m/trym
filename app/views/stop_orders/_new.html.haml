@@ -6,17 +6,20 @@
           .row
             .col-xs-12.text-center
               %h2.modal-header-text
-                Two things you need to know before we continue
+                Two things you need to know before we continue:
               %p.lead                
-                = "1. If you are locked in to a contract we can't cancel for you"
+                = "1. If you are locked in to a contract we can't cancel this for you"
               %p.lead
-                = "2. We can't guarantee that we will be able to stop the charge before your next bill, but we'll try to let you know ASAP if we're having trouble"
+                = "2. If we have trouble canceling your charge in time we'll try to contact you before you're charged"
+                %small
+                  (We'll try and call you at
+                  =link_to current_user.phone, edit_account_detail_path(current_user.account_detail), class: "btn btn-xs btn-default"
+                  if we have any issues)
               %button{ type: "button", class: "btn btn-default", data: {dismiss: "modal"} } Cancel
               %button.next{ type: "button", class: "btn btn-primary", data: {current_block: "1", next_block: "2"} } Ok, lets do this!
 
         .multi-part-form.block2.hidden.text-center
           =f.input :charge_id, as: :hidden
-          =f.input :status, as: :hidden, input_html: {value: "requested"}
           -if @merchant.cancelation_fields.present?
             =render partial: "click_to_cancel", locals: { f: f }
           -else

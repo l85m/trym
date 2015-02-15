@@ -7,6 +7,8 @@ class AccountDetail < ActiveRecord::Base
   phony_normalize :phone, :default_country_code => 'US'
 	validates_plausible_phone :phone, :normalized_country_code => 'US'
 
+	after_update :force_reverification, if: Proc.new { |detail| detail.phone_changed? } #################TODO
+
 	def formatted_phone
 		phone.phony_formatted(spaces: '-', normalize: 'US')[2..-1]
 	end
@@ -36,6 +38,10 @@ class AccountDetail < ActiveRecord::Base
 
 	def generate_confirmation_code
 		update( confirmation_code: rand(1000..9999) )
+	end
+
+	def force_reverification
+		self.phone_verified = nil
 	end
 
 end

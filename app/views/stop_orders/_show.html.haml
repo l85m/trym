@@ -1,0 +1,12 @@
+-if stop_order.cancelable?
+  %b cancelation:
+  %span.label.label-primary
+    %i.fa{class: "fa-#{stop_order.status == 'requested' ? 'send' : 'cog'}"}
+    =stop_order.status
+  %small
+    =link_to "don't stop", {controller: "stop_orders", action: "destroy", id: stop_order.id}, method: :delete, class: "gray red-on-hover", style: "width: 70px; margin-bottom: 3px;", data: {confirm: "Are you sure you want to keep this charge? You may not be able to cancel it again before your next bill."}, remote: true
+-else
+  %b cancelation:
+  %span.label.label-primary
+    %i.fa.fa-check-circle
+    =stop_order.status

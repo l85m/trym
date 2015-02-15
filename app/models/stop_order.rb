@@ -7,6 +7,9 @@ class StopOrder < ActiveRecord::Base
   validates_presence_of :charge, :status
   validates :status, inclusion: { in: %w(requested working succeeded failed canceled) }
 
+  scope :active_or_complete, -> {where(status: ["requested", "working", "succeeded"]).first}
+  scope :active, -> {where(status: ["requested", "working"]).first}
+
   def status_message
     case status
     when "requested"

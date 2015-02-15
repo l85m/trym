@@ -1,8 +1,9 @@
 class PlaidTransactionParser
   attr_reader :charge_list
 
-  def initialize(transaction_data)
-    @link = transaction_data.linked_account
+  def initialize(transaction_request_id)
+    @transaction_request = TransactionRequest.find(transaction_request_id)
+    @link = @transaction_request.linked_account
     create_charge_list
     parse
   end
@@ -17,8 +18,8 @@ class PlaidTransactionParser
   private
 
   def create_charge_list
-    @charge_list = transaction_data.collect{ |t| t.collect{ |k,v| [k.to_sym,v] }.to_h.merge({ new_transaction: true }) }
-    @charge_list = @charge_list + transaction_data.previous_transactions
+    @charge_list = @transaction_request.data.collect{ |t| t.collect{ |k,v| [k.to_sym,v] }.to_h.merge({ new_transaction: true }) }
+    @charge_list = @charge_list + @transaction_request.previous_transactions
     @charge_list.uniq!
   end
 
@@ -54,7 +55,6 @@ class PlaidTransactionParser
       end
       grouped_list << charge
     end
-
     @charge_list = grouped_list.select{ |c| c[:new_transaction] }
   end
 

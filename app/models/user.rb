@@ -22,4 +22,8 @@ class User < ActiveRecord::Base
   def phone_verified?
   	account_detail.present? && account_detail.phone_verified.present?
   end
+
+  def phone
+    account_detail.formatted_phone
+  end
 end

@@ -16,8 +16,8 @@ class AccountLinker
     linked_account_params = { last_api_response: @user.api_res }
 
     if @user.api_res['response_code'].between?(200,201)
-      ChargeBuilder.new( @link.transaction_requests.create(data: @user.transactions) ) if account_linked_and_transaction_data_present?
       linked_account_params.merge!(prep_linked_account_params)
+      ChargeBuilder.new( @link.transaction_requests.create(data: @user.transactions) ) if account_linked_and_transaction_data_present?
     end
     
     @link.update( linked_account_params )

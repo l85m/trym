@@ -29,10 +29,10 @@ class StopOrdersController < ApplicationController
   end
 
   def create
-    binding.pry
-    @stop_order = StopOrder.new(stop_order_params)
-    @stop_order.save
-    respond_with(@stop_order)
+    if Charge.find(stop_order_params[:charge_id]).user == current_user
+      @stop_order = StopOrder.new( stop_order_params.merge({status: "requested"}) )
+    end
+    redirect_to root_path
   end
 
   def update
@@ -42,7 +42,7 @@ class StopOrdersController < ApplicationController
 
   def destroy
     @stop_order.destroy
-    respond_with(@stop_order)
+    redirect_to root_path
   end
 
   private
@@ -51,10 +51,15 @@ class StopOrdersController < ApplicationController
     end
 
     def cancelation_params
-      Charge.find(params[:stop_order][:charge_id]).merchant.cancelation_fields.collect(&:to_sym)
+      merchant = Charge.find(params[:stop_order][:charge_id]).merchant
+      if merchant.present? && merchant.cancelation_fields.present?
+        Charge.find(params[:stop_order][:charge_id]).merchant.cancelation_fields.collect(&:to_sym)
+      else
+        nil
+      end
     end
 
     def stop_order_params
-      params.require(:stop_order).permit(:name, :type, :charge_id, :status, cancelation_data: cancelation_params)
+      params.require(:stop_order).permit(:charge_id, cancelation_data: cancelation_params)
     end
 end

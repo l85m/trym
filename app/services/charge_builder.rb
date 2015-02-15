@@ -7,7 +7,7 @@ class ChargeBuilder
 	end
 
 	def create_charges
-		charges = PlaidTransactionParser.new(@transaction_request.data).charge_list
+		charges = PlaidTransactionParser.new(@transaction_request.id).charge_list
 		if charges.present?
 			charges.each do |charge|
 				unless charge_already_exists?(charge) || is_debit?(charge)

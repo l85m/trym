@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150212221044) do
+ActiveRecord::Schema.define(version: 20150214072749) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -29,12 +29,6 @@ ActiveRecord::Schema.define(version: 20150212221044) do
   end
 
   add_index "account_details", ["user_id"], name: "index_account_details_on_user_id", using: :btree
-
-  create_table "call_windows", force: true do |t|
-    t.datetime "window_start",                  null: false
-    t.integer  "stop_orders_count", default: 0, null: false
-    t.integer  "operators",         default: 1
-  end
 
   create_table "charges", force: true do |t|
     t.text     "description"
@@ -124,12 +118,9 @@ ActiveRecord::Schema.define(version: 20150212221044) do
     t.text     "status"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.datetime "call_window"
-    t.integer  "call_window_id"
     t.hstore   "cancelation_data"
   end
 
-  add_index "stop_orders", ["call_window_id"], name: "index_stop_orders_on_call_window_id", using: :btree
   add_index "stop_orders", ["charge_id"], name: "index_stop_orders_on_charge_id", using: :btree
   add_index "stop_orders", ["merchant_id"], name: "index_stop_orders_on_merchant_id", using: :btree
 

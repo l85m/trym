@@ -76,6 +76,14 @@ class Charge < ActiveRecord::Base
     Charge.renewal_period_in_words[renewal_period_in_weeks]
   end
 
+  def has_stop_order_or_is_stopped?
+    stop_orders.active_or_complete.present?
+  end
+
+  def active_stop_order
+    stop_orders.active
+  end
+
   def next_billing_date(bill_day = billing_day)
     return nil unless (bill_day.present? && renewal_period_in_weeks.present? && renewal_period_in_weeks > 0)
     return bill_day if Date.today <= bill_day
