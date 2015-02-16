@@ -1,0 +1,41 @@
+.row
+  .col-xs-12
+    %a.btn.btn-primary-o.btn-block.collapse-expand-button{charge_group_button(grouping, grouped_charges, @grouping)} 
+      ="#{pluralize(grouped_charges.count, 'charge')}" 
+      %b= grouping
+      to be recurring
+      -if grouped_charges.select{ |c| c.new_transaction }.present?
+        ="(#{grouped_charges.select{ |c| c.new_transaction }.count} new)"
+  .col-xs-12
+    .collapse{id: "collapse-#{grouping.downcase.gsub(" ","-")}", class: grouped_charges.first.recurring_score > 3 ? 'in' : ''}
+      -if @grouping.present? || grouped_charges.first.recurring_score > 1  
+        -grouped_charges.in_groups_of(3,false) do |charges|
+          -charges.each do |charge|
+            %div{ class: cols_for_grouped_charges(grouped_charges, charges, charge) }
+              =render partial: "shared/charge_item", locals: {charge: charge}
+
+:javascript
+  $(".collapse").on('show.bs.collapse', function () {
+    $(this).parent().parent().find('.collapse-expand-button').addClass('active');
+  });
+
+  $(".collapse").on('shown.bs.collapse', function () {
+    $(this).find("[name='track-switch']").bootstrapSwitch({
+      onText: "Yes",
+      offText: "No"
+    }).on('switchChange.bootstrapSwitch', function(event, state) {
+      var marginState = $(this).parent().css('margin-left')
+      if ( marginState == '-48px' || marginState == '0px' ) {
+        $.ajax({
+          type: "PUT",
+          url: "/charges/" + $(this).data("charge-id"),
+          data: { charge: { recurring: state }, scan: "scan" },
+          dataType: "script"
+        })
+      }
+    });
+  });
+
+  $(".collapse").on('hide.bs.collapse', function () {
+    $(this).parent().parent().find('.collapse-expand-button').removeClass('active');
+  });

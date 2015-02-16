@@ -8,6 +8,7 @@ $brand-color: rgb(129, 202, 166);
 	display: table;
 	height: 100%;
 	width: 100%;
+	table-layout: fixed;
 }
 .charge-info{ 
 	vertical-align: middle;
@@ -18,10 +19,21 @@ form#new_charge{
 	.btn{ min-width: 70px; }
 }
 .popover-title{ text-align: center; }
-.charge-amount{ width: 25%; }
+.charge-amount{ 
+	overflow: hidden;
+	width: 85px; 
+}
 .charge-description{ 
-	width: 60%; 
+	width: auto; 
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 	padding: 0px 5px;
+}
+.charge-buttons{ 
+	width: 105px;
+	overflow: hidden;
+	padding-left: 5px;
 }
 .charge-actions{ margin-top: 3px; }
 .scrollable{ overflow: auto; }

@@ -31,19 +31,4 @@ module ChargesHelper
     end
   end
 
-  def cols_for_grouped_charges(grouped_charges, charges, charge)
-    base = "col-lg-4 col-md-6 col-xs-12"
-    if charges.index(charge) == 0
-      case charges.count
-      when 1
-        base += " col-lg-offset-4"
-        base += " col-md-offset-3" if (grouped_charges.count < 3 && charges.count < 3)
-      when 2
-        base += " col-lg-offset-2"
-        base += " col-md-offset-3" if (grouped_charges.count < 3 && charges.count < 3)
-      end
-    end
-    base
-  end
-
 end

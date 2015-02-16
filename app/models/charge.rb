@@ -12,11 +12,21 @@ class Charge < ActiveRecord::Base
   validates_numericality_of :amount, only_integer: true, greater_than_or_equal_to: 0, allow_nil: true
 
   scope :with_merchant, -> { includes(:merchant) }
+  scope :with_stop_orders, -> { includes(:stop_orders) }
+  scope :with_financial_institution, -> { includes(:financial_institution) }
+  scope :fully_loaded, -> {with_merchant.with_stop_orders.with_financial_institution}
+  
+  scope :recurring_very_likely, -> {where('recurring_score > ?', 3).where.not(recurring_score: 99)}
+  scope :recurring_likely, -> {where(recurring_score: 2..3)}
+  scope :recurring_unlikely, -> {where(recurring_score: 0..1)}
+  scope :recurring_very_unlikely, -> {where('recurring_score < ?', 0)}
+
   scope :recurring, -> { where(recurring: true) }
   scope :new_transaction, -> {where(new_transaction: true)}
   scope :not_recurring, -> { where(recurring: false) }
   scope :sort_by_recurring_score, -> { order(recurring_score: :desc) }
   scope :sort_by_new_first, -> { order(new_transaction: :desc) }
+  
   scope :chartable, -> { where('renewal_period_in_weeks > ?', 0).where('amount > 0').where.not(billing_day: nil) }
 
   before_validation :add_user_if_linked_account_exists

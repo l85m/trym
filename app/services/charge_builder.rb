@@ -10,20 +10,28 @@ class ChargeBuilder
 		charges = PlaidTransactionParser.new(@transaction_request.id).charge_list
 		if charges.present?
 			charges.each do |charge|
-				unless charge_already_exists?(charge) || is_debit?(charge)
-					#Do not add the charge if there's already a charge with the same description on that linked account
-					Charge.create(sanitize_charge_params(charge))
+				unless is_not_charge?(charge)
+					old_charge = existing_charge(charge)
+					if old_charge.present?
+						old_charge.update(sanitize_charge_params(charge))
+					else
+						#Do not add the charge if there's already a charge with the same description on that linked account
+						Charge.create(sanitize_charge_params(charge))
+					end
 				end
 			end
 		end
 	end
 
-	def charge_already_exists?(charge)
-		Charge.where( description: charge[:name], linked_account_id: @transaction_request.linked_account.id ).present? || 
-		Charge.where( merchant_id: charge[:merchant_id], linked_account_id: @transaction_request.linked_account.id ).present?
+	def existing_charge(charge)
+		if charge[:merchant_id].present?
+			Charge.where( merchant_id: charge[:merchant_id], linked_account_id: @transaction_request.linked_account.id ).first
+		else
+			Charge.where( description: charge[:name], linked_account_id: @transaction_request.linked_account.id ).first
+		end
 	end
 
-	def is_debit?(charge)
+	def is_not_charge?(charge)
 		charge[:amount] < 0
 	end
 
@@ -39,7 +47,8 @@ class ChargeBuilder
 			user_id: @user_id,
 			transaction_request_id: @transaction_request.id,
 			new_transaction: charge[:new_transaction],
-			linked_account_id: @transaction_request.linked_account.id
+			linked_account_id: @transaction_request.linked_account.id,
+			history: charge[:history]
 		}
 	end
 end

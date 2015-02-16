@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150215064345) do
+ActiveRecord::Schema.define(version: 20150216190152) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -50,6 +50,7 @@ ActiveRecord::Schema.define(version: 20150215064345) do
     t.integer  "linked_account_id"
     t.string   "category_id"
     t.boolean  "new_transaction",         default: false, null: false
+    t.hstore   "history"
   end
 
   add_index "charges", ["linked_account_id"], name: "index_charges_on_linked_account_id", using: :btree

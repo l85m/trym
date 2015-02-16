@@ -24,10 +24,16 @@
           -else
             %i.fa.fa-exclamation-circle
             ???
-      -if charge.financial_institution.present? 
+      -if controller_name != "linked_accounts" && charge.financial_institution.present? 
         .small.without-margin
-          %i.fa.fa-credit-card
-          =charge.financial_institution.plaid_type
+          %a.icon-link{data: {toggle: "popover", content: "<p class='without-margin text-center'>" + charge.history.collect{ |d,v| "#{d}: #{number_to_currency v.to_f}" }.join("</p><p class='without-margin text-center'>") + "<p class='strong without-margin strong text-center'>Total: #{number_to_currency charge.history.values.inject(0.0){ |s,v| s+= v.to_f }}</p>" }}
+            %i.fa.fa-credit-card
+            =charge.financial_institution.plaid_type
+      -elsif charge.history.present?
+        .small
+          %a.icon-link{data: {toggle: "popover", content: "<p class='without-margin text-center'>" + charge.history.collect{ |d,v| "#{d}: #{number_to_currency v.to_f}" }.join("</p><p class='without-margin text-center'>") + "<p class='strong without-margin strong text-center'>Total: #{number_to_currency charge.history.values.inject(0.0){ |s,v| s+= v.to_f }}</p>" }}
+            %i.fa.fa-calendar
+            history
     .charge-info.charge-description        
       %p.lead.without-margin
         =charge_attribute_edit_link(charge, "merchant_id") do
@@ -42,10 +48,10 @@
         =charge_attribute_edit_link(charge, "billing_day") do
           %span.small-gray
             -if charge.next_billing_date.present?
-              %i.fa.fa-clock-o
+              %i.fa.fa-clock-o.hidden-xs
               =time_to_next_bill(charge.next_billing_date)
             -elsif charge.billing_day.present?
-              %i.fa.fa-clock-o
+              %i.fa.fa-clock-o.hidden-xs
               ="last charge " + (distance_of_time_in_words charge.billing_day.to_time - Time.now) + " ago"
             -else
               %i.fa.fa-exclamation-circle
@@ -54,9 +60,10 @@
         =charge_attribute_edit_link(charge, "description") do
           =charge.description.present? ? charge.description : "(no description)"
 
-    .charge-info.text-center{style: "width: 100%; min-width: 91px;"}
-      -if charge.has_stop_order_or_is_stopped?
+    .charge-info.charge-buttons.text-center
+      -if ( controller_name == "linked_accounts" ? @stop_order_charge_ids.include?(charge.id) : true ) && charge.has_stop_order_or_is_stopped?
         =render partial: "stop_orders/show", locals: {stop_order: charge.active_stop_order}
+
       -else        
         .inline-block.charge-item-action-buttons
           -if ( controller_name == "linked_accounts" || @update_from_account_scan )

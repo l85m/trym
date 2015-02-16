@@ -68,6 +68,10 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 	text-align: center;
 	font-size: 170%;
 }
+.truncate-text{
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
 .transparent{ opacity: 0; }
 .form-errors{ color: #a94442; }
 .input-group-addon, .form-control{ 
@@ -186,7 +190,10 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 	right: 14px;
 }
 .popover-list{ margin-left: -20px; }
-.popover{ max-width: 400px; }
+.popover{ 
+	max-width: 400px; 
+	z-index: 99999;
+}
 .tooltip.right .tooltip-inner,
 .tooltip.left .tooltip-inner{ 
 	text-align: center;

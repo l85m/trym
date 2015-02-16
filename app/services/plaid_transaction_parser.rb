@@ -5,7 +5,11 @@ class PlaidTransactionParser
     @transaction_request = TransactionRequest.find(transaction_request_id)
     @link = @transaction_request.linked_account
     create_charge_list
-    parse
+    if @charge_list.select{ |c| c[:new_transaction] }.present?
+      parse 
+    else
+      @charge_list = nil
+    end
   end
 
   def parse
@@ -18,14 +22,18 @@ class PlaidTransactionParser
   private
 
   def create_charge_list
-    @charge_list = @transaction_request.data.collect{ |t| t.collect{ |k,v| [k.to_sym,v] }.to_h.merge({ new_transaction: true }) }
-    @charge_list = @charge_list + @transaction_request.previous_transactions
-    @charge_list.uniq!
+    @charge_list = @transaction_request.data.collect{ |t| t.collect{ |k,v| [k.to_sym,v] }.to_h }
+    
+    all_transactions = (@transaction_request.previous_transactions + @charge_list).uniq{ |c| c[:_id] }
+    new_transaction_ids = (@charge_list - @transaction_request.previous_transactions).collect{ |c| c[:_id] }
+
+    @charge_list = all_transactions.collect{ |c| c.merge( {new_transaction: new_transaction_ids.include?(c[:_id])} ) }
   end
 
   def create_attributes_for_charges
     @charge_list.each do |charge|
-      charge[:amount] = ((charge[:amount].sum / charge[:amount].size) * 100).to_i
+      charge[:history] = charge[:date].zip(charge[:amount]).sort_by{ |d,v| d }.to_h
+      charge[:amount] = (charge[:amount].last * 100).to_i
       charge[:billing_day] = charge[:date].max
       charge[:renewal_period_in_weeks] = round_to_months( average_distance_between_dates(charge[:date]) / 7 )
     end

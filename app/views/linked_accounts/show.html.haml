@@ -11,13 +11,13 @@
       .row.text-center
         %p.lead{style: "margin: 20px auto 0px auto;"}
           We found 
-          %span.brand-color= "#{pluralize @linked_account.charges.count, 'charge' }"
+          %b= "#{pluralize @linked_account.charges.count, 'charge' }"
           in your account. Charges that we think you might want to track are at the top of the page.
       -if @linked_account.charges.maximum(:recurring_score) < 2
         .row
           .col-lg-offset-3.col-lg-6
             .info-box{style: "margin: 10px auto;"}
-              We couldn't find any charges in your account that look likely to recur.  See if you can find any below.  We'll keep an eye on your account and let you know when we find more.
+              We couldn't find any charges in your account that look likely to recur.  See if you can find any we missed below.  We'll keep an eye on your account and let you know when we find more.
       .row.text-center
         %p.lead.without-margin
           %small
@@ -33,25 +33,16 @@
 
     %div{style: "margin-top: 20px;"}
       -@charges.each do |grouping, grouped_charges|
-        .row
-          .col-xs-12
-            %a.btn.btn-primary-o.btn-block.collapse-expand-button{href:"#collapse-#{grouping.downcase.gsub(" ","-")}", aria_expanded:"false", aria_controls:"collapse-#{grouping.downcase.gsub(" ","-")}", style: "margin-bottom: 10px;", class: grouped_charges.first.recurring_score > 3 ? 'active' : '', data: {toggle:"collapse"}} 
-              ="#{pluralize(grouped_charges.count, 'charge')}" 
-              %b= grouping
-              to be recurring
-              -if grouped_charges.select{ |c| c.new_transaction }.present?
-                ="(#{grouped_charges.select{ |c| c.new_transaction }.count} new)"
-          .col-xs-12
-            .collapse{id: "collapse-#{grouping.downcase.gsub(" ","-")}", class: grouped_charges.first.recurring_score > 3 ? 'in' : ''}
-              -grouped_charges.in_groups_of(3,false) do |charges|
-                -charges.each do |charge|
-                  %div{ class: cols_for_grouped_charges(grouped_charges, charges, charge) }
-                    =render partial: "shared/charge_item", locals: {charge: charge}
-
+        .charge-group{id: "charge-group-#{grouping.gsub(" ","-")}"}
+          =render partial: 'charge_group', locals: {grouping: grouping, grouped_charges: grouped_charges}
 
   =render "shared/charge_item_script"
 
   :javascript
+    function buttonLoader(button) {
+      button.parent().parent().parent().after("<p id='grouped-charge-button-loader' class='lead text-center'><i class='fa fa-cog fa-spin'></i> loading...</p>");
+    };
+
     $("[name='track-switch']:visible").bootstrapSwitch({
       onText: "Yes",
       offText: "No"
@@ -65,31 +56,6 @@
           dataType: "script"
         })
       }
-    });
-
-    $(".collapse").on('show.bs.collapse', function () {
-      $(this).parent().parent().find('.collapse-expand-button').addClass('active');
-    });
-
-    $(".collapse").on('shown.bs.collapse', function () {
-      $(this).find("[name='track-switch']").bootstrapSwitch({
-        onText: "Yes",
-        offText: "No"
-      }).on('switchChange.bootstrapSwitch', function(event, state) {
-        var marginState = $(this).parent().css('margin-left')
-        if ( marginState == '-48px' || marginState == '0px' ) {
-          $.ajax({
-            type: "PUT",
-            url: "/charges/" + $(this).data("charge-id"),
-            data: { charge: { recurring: state }, scan: "scan" },
-            dataType: "script"
-          })
-        }
-      });
-    });
-
-    $(".collapse").on('hide.bs.collapse', function () {
-      $(this).parent().parent().find('.collapse-expand-button').removeClass('active');
     });
 
     if( $('#modal-container').find('#loading-modal').size() > 0 ){
