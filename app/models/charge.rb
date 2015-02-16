@@ -111,6 +111,16 @@ class Charge < ActiveRecord::Base
     end
   end
 
+  def formatted_history
+    if history.present?      
+      "<p class='without-margin text-center'>" + 
+      history.collect{ |d,v| "#{d}: #{number_to_currency v.to_f}" }.join("</p><p class='without-margin text-center'>") + 
+      "<p class='strong without-margin strong text-center'>Total: #{number_to_currency charge.history.values.inject(0.0){ |s,v| s+= v.to_f }}</p>"
+    else
+      nil
+    end
+  end
+
   private
 
   def add_user_if_linked_account_exists

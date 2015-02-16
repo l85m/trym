@@ -26,12 +26,16 @@
             ???
       -if controller_name != "linked_accounts" && charge.financial_institution.present? 
         .small.without-margin
-          %a.icon-link{data: {toggle: "popover", content: "<p class='without-margin text-center'>" + charge.history.collect{ |d,v| "#{d}: #{number_to_currency v.to_f}" }.join("</p><p class='without-margin text-center'>") + "<p class='strong without-margin strong text-center'>Total: #{number_to_currency charge.history.values.inject(0.0){ |s,v| s+= v.to_f }}</p>" }}
+          -if charge.history.present?
+            %a.icon-link{data: {toggle: "popover", content: "<p class='without-margin text-center'>" + charge.formatted_history}
+              %i.fa.fa-credit-card
+              =charge.financial_institution.plaid_type
+          -else
             %i.fa.fa-credit-card
-            =charge.financial_institution.plaid_type
+              =charge.financial_institution.plaid_type
       -elsif charge.history.present?
         .small
-          %a.icon-link{data: {toggle: "popover", content: "<p class='without-margin text-center'>" + charge.history.collect{ |d,v| "#{d}: #{number_to_currency v.to_f}" }.join("</p><p class='without-margin text-center'>") + "<p class='strong without-margin strong text-center'>Total: #{number_to_currency charge.history.values.inject(0.0){ |s,v| s+= v.to_f }}</p>" }}
+          %a.icon-link{data: {toggle: "popover", content: charge.formatted_history}
             %i.fa.fa-calendar
             history
     .charge-info.charge-description        
