@@ -27,7 +27,7 @@
       -if controller_name != "linked_accounts" && charge.financial_institution.present? 
         .small.without-margin
           -if charge.history.present?
-            %a.icon-link{data: {toggle: "popover", content: "<p class='without-margin text-center'>" + charge.formatted_history}
+            %a.icon-link{data: {toggle: "popover", content: "<p class='without-margin text-center'>" + formatted_history(charge.history)} }
               %i.fa.fa-credit-card
               =charge.financial_institution.plaid_type
           -else
@@ -35,7 +35,7 @@
               =charge.financial_institution.plaid_type
       -elsif charge.history.present?
         .small
-          %a.icon-link{data: {toggle: "popover", content: charge.formatted_history}
+          %a.icon-link{data: {toggle: "popover", content: formatted_history(charge.history)} }
             %i.fa.fa-calendar
             history
     .charge-info.charge-description        
