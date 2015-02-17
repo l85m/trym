@@ -52,10 +52,10 @@
         =charge_attribute_edit_link(charge, "billing_day") do
           %span.small-gray
             -if charge.next_billing_date.present?
-              %i.fa.fa-clock-o.hidden-xs
+              %i.fa.fa-clock-o.hidden-md
               =time_to_next_bill(charge.next_billing_date)
             -elsif charge.billing_day.present?
-              %i.fa.fa-clock-o.hidden-xs
+              %i.fa.fa-clock-o.hidden-md
               ="last charge " + (distance_of_time_in_words charge.billing_day.to_time - Time.now) + " ago"
             -else
               %i.fa.fa-exclamation-circle
@@ -78,9 +78,9 @@
             -if charge.new_transaction
               %span.label.label-primary New Charge!
           -else
-            =link_to new_charge_stop_order_path(charge), remote: true, class: "btn btn-default btn-lg" do
+            =link_to new_charge_stop_order_path(charge), remote: true, class: "btn btn-default charge-btn-responsive" do
               %i.fa.fa-stop
-              stop
+              %span.hidden-sm.hidden-md.hidden-xs stop
 
         .inline-block.charge-item-form-buttons.hidden
           =f.submit "save", class: "btn btn-primary btn-xs", style: "width: 70px; margin-bottom: 3px;", onclick:"editChargeSubmit($(this));"

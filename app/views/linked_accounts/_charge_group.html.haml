@@ -39,3 +39,7 @@
   $(".collapse").on('hide.bs.collapse', function () {
     $(this).parent().parent().find('.collapse-expand-button').removeClass('active');
   });
+
+  $(function () {
+    $('[data-toggle="popover"]').popover({html: true, trigger: 'hover', title: "<i class='fa fa-calendar'></i> Charge History"});
+  })

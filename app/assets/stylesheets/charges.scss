@@ -31,9 +31,9 @@ form#new_charge{
 	padding: 0px 5px;
 }
 .charge-buttons{ 
-	width: 105px;
-	overflow: hidden;
+	width: 105px;	
 	padding-left: 5px;
+	overflow: hidden; 
 }
 .charge-actions{ margin-top: 3px; }
 .scrollable{ overflow: auto; }
@@ -59,21 +59,40 @@ form#new_charge{
 label[for=charge_renewal_period_in_words]{
 	display: block;
 }
+.charge-btn-responsive{ @extend .btn-lg; }
 
-@media (max-width: 767px) { #new-charge-links{ margin-top: 2px; } }
-@media (min-width: 767px) { #new-charge-links{ margin-top: 6px; } }
 
-@media (min-width: 1200px) {
+@media (max-width: 1199px) { 
+	.charge-btn-responsive{ 
+		padding: 6px 12px;
+		font-size: 14px;
+		line-height: 1.428571429; 
+	}
+	.charge-item{ 
+		height: 95px !important;
+		padding: 5px 10px !important; 
+	}
+	.charge-buttons{
+		width: 45px;	
+		padding-left: 2px;
+	}
+	.charge-item-action-buttons{ min-width: 45px !important; }
+}
+
+@media (min-width: 767px) {
+	#new-charge-links{ margin-top: 6px; }
 	#charges-outlook{ padding-left: 30px; }
 	#charge-side-list{
 		padding: 20px 30px 2px 2px;
 		border-right: lightgray 1px solid;
 	}
 }
-@media (max-width: 1199px) {
-	#charges-outlook{ padding-bottom: 30px; }
+@media (max-width: 766px) {
+	#new-charge-links{ margin-top: 2px; }
+	#charges-outlook{ padding: 0px; }
 	#charge-side-list{
 		padding: 20px 2px 2px 0px;
 		border-top: #e7e7e7 1px solid;
 	}
+	.charge-item-action-buttons{ min-width: 45px !important; }
 }

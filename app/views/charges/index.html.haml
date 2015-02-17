@@ -3,18 +3,18 @@
   .row{style: 'padding: 0px 20px;'}
     - if @charges.present?
       =render 'charge_list'
-      .scrollable#charges-outlook{ class: "col-md-#{@charges.present? ? "8" : "12"}"}
+      .scrollable#charges-outlook{ class: @charges.present? ? "col-md-8 col-sm-6" : "col-xs-12"}
         =render 'contact_preferences'
         =render 'linked_accounts/index'
         =render 'twelve_month_outlook'
     - else
-      .scrollable#charges-outlook{ class: "col-md-#{@charges.present? ? "8" : "12"}"}
+      .scrollable#charges-outlook{ class: @charges.present? ? "col-md-8 col-sm-6" : "col-xs-12"}
         =render 'new_user_prompt'
           
 
 :javascript
   $(document).ready(function() {
-    if ($(window).width() >= 1200) {
+    if ($(window).width() >= 767) {
       var h = $(window).height();
       var chart = $('#charges-total-by-merchant-chart');
       chart.highcharts().setSize( chart.width() , h - chart.offset().top - 60 );
@@ -22,7 +22,7 @@
     }
   });
   $( window ).resize(function() {
-    if ($(window).width() >= 1200) {
+    if ($(window).width() >= 767) {
       var h = $(window).height();
       var chart = $('#charges-total-by-merchant-chart');
       $('.scrollable').height((h-109)+'px');
@@ -39,3 +39,7 @@
     $("#modal-container").append("#{ j render 'shared/loading' }");
     $("#modal-container").modal({backdrop: 'static'});
   }
+
+  $(function () {
+    $('[data-toggle="popover"]').popover({html: true, trigger: 'hover', title: "<i class='fa fa-calendar'></i> Charge History"});
+  })
