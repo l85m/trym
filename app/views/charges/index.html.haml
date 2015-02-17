@@ -1,7 +1,7 @@
 .container-fluid.scrollable-with-offset
 
   .row{style: 'padding: 0px 20px;'}
-    - if @charges.present?
+    - if @charges.present? || current_user.linked_accounts.present?
       =render 'charge_list'
       .scrollable#charges-outlook{ class: @charges.present? ? "col-md-8 col-sm-6" : "col-xs-12"}
         =render 'contact_preferences'
