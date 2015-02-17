@@ -23,28 +23,20 @@
               <span style="color: #81CAA6;">t</span>rym
             %p{style: "margin:0 0 10px"}
               We are writing to alert you that in 3 days you will be billed for the following recurring services
-          %dl{style: "border-top-color:gray; border-top-style:solid; border-top-width:1px; margin-bottom:5px; margin-top:10px"}
-            %dt{style: "clear:left; float:left; font-weight:bold; margin-left:8px; overflow:hidden; text-align:left; text-overflow:ellipsis; white-space:nowrap; width:140px"} Charge:
-            %dd{style: "margin-left:150px; text-align:left; width:200px"} Centurylink Internet
-            %dt{style: "clear:left; float:left; font-weight:bold; margin-left:8px; overflow:hidden; text-align:left; text-overflow:ellipsis; white-space:nowrap; width:140px"} Amount:
-            %dd{style: "margin-left:150px; text-align:left; width:200px"} $39.99
-            %dt{style: "clear:left; float:left; font-weight:bold; margin-left:8px; overflow:hidden; text-align:left; text-overflow:ellipsis; white-space:nowrap; width:140px"} Account Charged:
-            %dd{style: "margin-left:150px; text-align:left; width:200px"} American Express
-            %dt{style: "clear:left; float:left; font-weight:bold; margin-left:8px; overflow:hidden; text-align:left; text-overflow:ellipsis; white-space:nowrap; width:140px"} Date:
-            %dd{style: "margin-left:150px; text-align:left; width:200px"} Febuary 11, 2015 (3 days)
-          %div{:align => "center", style: "text-align:center"}
-            %a{:href => "https://trym.io/", style: "background: #81CAA6; color: #FFF; border-radius:4px; border:1px solid #81caa6; display:inline-block; font-size:14px; font-weight:normal; margin-bottom:0; padding:6px 12px; text-align:center; text-decoration: none;"} stop this charge
-          %dl{style: "border-top-color:gray; border-top-style:solid; border-top-width:1px; margin-bottom:5px; margin-top:10px"}
-            %dt{style: "clear:left; float:left; font-weight:bold; margin-left:8px; overflow:hidden; text-align:left; text-overflow:ellipsis; white-space:nowrap; width:140px"} Charge:
-            %dd{style: "margin-left:150px; text-align:left; width:200px"} Audible Audiobooks
-            %dt{style: "clear:left; float:left; font-weight:bold; margin-left:8px; overflow:hidden; text-align:left; text-overflow:ellipsis; white-space:nowrap; width:140px"} Amount:
-            %dd{style: "margin-left:150px; text-align:left; width:200px"} $14.99
-            %dt{style: "clear:left; float:left; font-weight:bold; margin-left:8px; overflow:hidden; text-align:left; text-overflow:ellipsis; white-space:nowrap; width:140px"} Account Charged:
-            %dd{style: "margin-left:150px; text-align:left; width:200px"} Chase
-            %dt{style: "clear:left; float:left; font-weight:bold; margin-left:8px; overflow:hidden; text-align:left; text-overflow:ellipsis; white-space:nowrap; width:140px"} Date:
-            %dd{style: "margin-left:150px; text-align:left; width:200px"} Febuary 11, 2015 (3 days)
-          %div{:align => "center", style: "text-align:center"}
-            %a{:href => "https://trym.io/", style: "background: #81CAA6; color: #FFF; border-radius:4px; border:1px solid #81caa6; display:inline-block; font-size:14px; font-weight:normal; margin-bottom:0; padding:6px 12px; text-align:center; text-decoration: none;"} stop this charge
+          -@charges.each do |charge|
+            %dl{style: "border-top-color:gray; border-top-style:solid; border-top-width:1px; margin-bottom:5px; margin-top:10px"}
+              %dt{style: "clear:left; float:left; font-weight:bold; margin-left:8px; overflow:hidden; text-align:left; text-overflow:ellipsis; white-space:nowrap; width:140px"} Charge:
+              %dd{style: "margin-left:150px; text-align:left; width:200px"}=charge.merchant.present? ? charge.merchant_name : charge.description
+              %dt{style: "clear:left; float:left; font-weight:bold; margin-left:8px; overflow:hidden; text-align:left; text-overflow:ellipsis; white-space:nowrap; width:140px"} Amount:
+              %dd{style: "margin-left:150px; text-align:left; width:200px"}=number_to_currency charge.amount_in_currency
+              -if charge.linked_account.present?
+                %dt{style: "clear:left; float:left; font-weight:bold; margin-left:8px; overflow:hidden; text-align:left; text-overflow:ellipsis; white-space:nowrap; width:140px"} Account Charged:
+                %dd{style: "margin-left:150px; text-align:left; width:200px"}= charge.linked_account.account_name
+              %dt{style: "clear:left; float:left; font-weight:bold; margin-left:8px; overflow:hidden; text-align:left; text-overflow:ellipsis; white-space:nowrap; width:140px"} Date:
+              %dd{style: "margin-left:150px; text-align:left; width:200px"}= charge.next_billing_date.strftime
+            %div{:align => "center", style: "text-align:center"}
+              =link_to "stop this charge", new_charge_stop_order_url(charge), style: "background: #81CAA6; color: #FFF; border-radius:4px; border:1px solid #81caa6; display:inline-block; font-size:14px; font-weight:normal; margin-bottom:0; padding:6px 12px; text-align:center; text-decoration: none;"
+
           %div{:align => "left", style: "margin-top:20px; text-align:left"}
             %p{style: "margin:0 0 10px"}
               Click

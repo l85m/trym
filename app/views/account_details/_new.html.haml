@@ -21,7 +21,7 @@
           .inline-block{style: "width: 92%;"}
             we'll verify your phone number by sending you a text message so grab your phone before you hit submit
         .form-actions{style: "margin-top: 10px;"}
-          %button{ type: "button", class: "btn btn-default", data: {dismiss: "modal"} } Cancel
+          = render 'shared/cancel_button'
           = f.button :submit, "Continue", class: "btn-primary"
 
 :javascript

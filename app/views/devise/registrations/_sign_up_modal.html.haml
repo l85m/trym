@@ -14,7 +14,7 @@
           %small We will never share your information without your permission
 
         .form-actions
-          %button{ type: "button", class: "btn btn-default", data: {dismiss: "modal"} } Cancel
+          = render 'shared/cancel_button'
           = f.button :submit, "Sign up!", class: "btn-primary"
 
       = render "devise/shared/links"

@@ -9,7 +9,7 @@
         .form-inputs
           = f.input :confirmation_code, label: "4 Digit Confirmation Number", as: :string, input_html: { value: '' }
         .form-actions{style: "margin-top: 10px;"}
-          %button{ type: "button", class: "btn btn-default", data: {dismiss: "modal"} } Cancel
+          = render 'shared/cancel_button'
           = f.button :submit, "Continue", class: "btn-primary"
 
       .text-center{style: "margin-top: 10px;"}

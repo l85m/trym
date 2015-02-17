@@ -4,7 +4,7 @@
   Don't worry we'll still do most of the work.  We just need to do a bit of research first and give you a call to collect the information we need to cancel this for you.
 
 .form-group
-  %button.btn.btn-default{ type: "button", data: {dismiss: "modal"} } Cancel
+  = render 'shared/cancel_button'
   = f.button :submit, "Stop this Charge!", class: "btn btn-primary"
 
 %h5#error-reminder{style: "color: red;"}

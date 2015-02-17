@@ -10,6 +10,7 @@
           = f.input :email, required: true, autofocus: true, input_html: { class: "text-center" }
 
         .form-actions
+          = render 'shared/cancel_button'
           = f.button :submit, "Send me reset password instructions"
 
       = render "devise/shared/links"

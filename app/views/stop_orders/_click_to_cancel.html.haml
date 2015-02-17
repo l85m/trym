@@ -11,7 +11,7 @@
 
 .row
   .form-group
-    %button.btn.btn-default{ type: "button", data: {dismiss: "modal"} } Cancel
+    = render 'shared/cancel_button'
     = f.button :submit, "Stop this Charge!", class: "btn btn-primary"
 
 %h5#error-reminder{style: "color: red;"}

@@ -12,6 +12,7 @@
           = f.input :password_confirmation, label: "Confirm your new password", required: true
 
         .form-actions
+          = render 'shared/cancel_button'
           = f.button :submit, "Change my password"
 
       = render "devise/shared/links"

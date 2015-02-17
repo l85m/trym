@@ -15,7 +15,7 @@
                   (We'll try and call you at
                   =link_to current_user.phone, edit_account_detail_path(current_user.account_detail), class: "btn btn-xs btn-default"
                   if we have any issues)
-              %button{ type: "button", class: "btn btn-default", data: {dismiss: "modal"} } Cancel
+              = render 'shared/cancel_button'
               %button.next{ type: "button", class: "btn btn-primary", data: {current_block: "1", next_block: "2"} } Ok, lets do this!
 
         .multi-part-form.block2.hidden.text-center

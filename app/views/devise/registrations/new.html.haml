@@ -8,6 +8,6 @@
         = f.input :password, required: true, placeholder: ("#{@minimum_password_length} characters minimum" if @validatable)
         = f.input :password_confirmation, required: true
       .form-actions
-        = link_to "Back", :back, class: "btn btn-default"
+        = render 'shared/cancel_button'
         = f.button :submit, "Sign up"
     = render "devise/shared/links"
