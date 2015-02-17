@@ -1,14 +1,14 @@
 .container-fluid.scrollable-with-offset
 
   .row{style: 'padding: 0px 20px;'}
-    - if @charges.present? || current_user.linked_accounts.present?
+    - if @charges.present? || @linked_accounts.present?
       =render 'charge_list'
-      .scrollable#charges-outlook{ class: @charges.present? ? "col-md-8 col-sm-6" : "col-xs-12"}
+      .scrollable#charges-outlook{ class: (@charges.present? || @linked_accounts.present?) ? "col-md-8 col-sm-6" : "col-xs-12"}
         =render 'contact_preferences'
         =render 'linked_accounts/index'
         =render 'twelve_month_outlook'
     - else
-      .scrollable#charges-outlook{ class: @charges.present? ? "col-md-8 col-sm-6" : "col-xs-12"}
+      .scrollable#charges-outlook{ class: (@charges.present? || @linked_accounts.present?) ? "col-md-8 col-sm-6" : "col-xs-12"}
         =render 'new_user_prompt'
           
 
@@ -16,21 +16,25 @@
   $(document).ready(function() {
     if ($(window).width() >= 767) {
       var h = $(window).height();
-      var chart = $('#charges-total-by-merchant-chart');
-      chart.highcharts().setSize( chart.width() , h - chart.offset().top - 60 );
+      if ($('#charges-total-by-merchant-chart').size() > 0 ) {
+        var chart = $('#charges-total-by-merchant-chart');
+        chart.highcharts().setSize( chart.width() , h - chart.offset().top - 60 );
+      }
       $('.scrollable').height((h-109)+'px');
     }
   });
   $( window ).resize(function() {
     if ($(window).width() >= 767) {
       var h = $(window).height();
-      var chart = $('#charges-total-by-merchant-chart');
+      if ($('#charges-total-by-merchant-chart').size() > 0 ) {
+        var chart = $('#charges-total-by-merchant-chart');
+        chart.highcharts().setSize( chart.width() , h - chart.offset().top - 60 );
+      }
       $('.scrollable').height((h-109)+'px');
-      chart.highcharts().setSize( chart.width() , h - chart.offset().top - 60 );
     } else {
       $('.scrollable').height('auto');
       $('.scrollable-with-offset').height('auto');
-      $('#charges-total-by-merchant-chart').height('auto');
+      if ($('#charges-total-by-merchant-chart').size() > 0 ) { $('#charges-total-by-merchant-chart').height('auto'); }
     }
   });
 

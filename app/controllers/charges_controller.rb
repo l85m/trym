@@ -10,6 +10,7 @@ class ChargesController < ApplicationController
     @title = "charges"
     @charges = current_user.charges.recurring.with_merchant
     @charges_outlook_chart_data = ChargesOutlookChartData.new(current_user, @charges)
+    @linked_accounts = current_user.linked_accounts
     respond_with(@charges)
   end
 
