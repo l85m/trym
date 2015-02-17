@@ -1,13 +1,19 @@
 .hidden-xs
-  .row
-    .col-lg-12
-      %p.lead.text-center{style: "margin: 0px 0px 20px 0px;"}
-        ="Over the next twelve months you will pay" 
-        %span.brand-color="#{number_to_currency @charges_outlook_chart_data.total_next_twelve_months}"
-        ="to #{pluralize @charges_outlook_chart_data.bar_categories.count, 'merchant'}."
-  .row
-    .col-lg-12
-      #charges-total-by-merchant-chart
+  -if @charges.present?
+    .row
+      .col-lg-12
+        %p.lead.text-center{style: "margin: 0px 0px 20px 0px;"}
+          ="Over the next twelve months you will pay" 
+          %span.brand-color="#{number_to_currency @charges_outlook_chart_data.total_next_twelve_months}"
+          ="to #{pluralize @charges_outlook_chart_data.bar_categories.count, 'merchant'}."
+    .row
+      .col-lg-12
+        #charges-total-by-merchant-chart
+  -else
+    .row
+      .col-lg-12
+        %p.lead.text-center{style: "margin: 0px 0px 20px 0px;"}
+          Thanks for linking an account.  Add some charges to get started!
 
 -if @charges_outlook_chart_data.any_charges_in_year?
   :javascript

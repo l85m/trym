@@ -1,15 +1,14 @@
 .col-sm-6.col-md-4#charge-side-list.scrollable
-  .text-left.inline-block
-    %p.lead
+  .text-center{ style: "min-width: 200px;" }
+    %p.lead.without-margin
       %i.fa.fa-calculator
       active charges
-  .text-right.inline-block.pull-right
-    %p#new-charge-links
-      =link_to new_charge_path, class: "icon-link" do
-        %i.fa.fa-plus-circle
-        add charge
+  =link_to new_charge_path, class: "btn btn-primary-o btn-lg btn-block", style: "margin:10px auto 15px auto;" do
+    %i.fa.fa-plus-circle
+    add charge
 
   -(@charges.select(&:next_billing_date).sort_by(&:next_billing_date) + @charges.reject(&:next_billing_date)).each do |charge|
     =render partial: "shared/charge_item", locals: {charge: charge}
+
 
 =render "shared/charge_item_script"
