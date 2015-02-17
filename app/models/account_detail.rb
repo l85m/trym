@@ -18,7 +18,7 @@ class AccountDetail < ActiveRecord::Base
 		Twilio::REST::Client.new.account.sms.messages.create(
 			from: Rails.application.secrets.twilio_from_number,
 			to: phone,
-			body: "Hi There! Here's your verification code: #{confirmation_code}"
+			body: "Hi There! Here's your verification code from trym.io: #{confirmation_code}"
 		)
 	end
 
