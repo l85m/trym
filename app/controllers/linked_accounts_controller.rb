@@ -7,7 +7,7 @@ class LinkedAccountsController < ApplicationController
   def show
     if params[:grouping].present?
       @grouping = params[:grouping].downcase.gsub(" ", "_").strip
-      if ["very_likely", "likely", "unlikely", "very_unlikely"].include?(@grouping)
+      if ["likely_to_be", "might_be", "unlikely_to_be", "very_unlikely_to_be"].include?(@grouping)
         charges = Charge.where(linked_account: @linked_account).send("recurring_#{@grouping}") 
         @stop_order_charge_ids = charges.includes(:stop_orders).pluck('stop_orders.id')
         @charges = charges.with_merchant.sort_by_recurring_score.sort_by_new_first

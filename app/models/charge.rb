@@ -16,10 +16,10 @@ class Charge < ActiveRecord::Base
   scope :with_financial_institution, -> { includes(:financial_institution) }
   scope :fully_loaded, -> {with_merchant.with_stop_orders.with_financial_institution}
   
-  scope :recurring_very_likely, -> {where('recurring_score > ?', 3).where.not(recurring_score: 99)}
-  scope :recurring_likely, -> {where(recurring_score: 2..3)}
-  scope :recurring_unlikely, -> {where(recurring_score: 0..1)}
-  scope :recurring_very_unlikely, -> {where('recurring_score < ?', 0)}
+  scope :recurring_likely_to_be, -> {where('recurring_score > ?', 3).where.not(recurring_score: 99)}
+  scope :recurring_might_be, -> {where(recurring_score: 2..3)}
+  scope :recurring_unlikely_to_be, -> {where(recurring_score: 0..1)}
+  scope :recurring_very_unlikely_to_be, -> {where('recurring_score < ?', 0)}
 
   scope :recurring, -> { where(recurring: true) }
   scope :new_transaction, -> {where(new_transaction: true)}
