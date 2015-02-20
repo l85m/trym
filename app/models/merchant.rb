@@ -4,7 +4,6 @@ class Merchant < ActiveRecord::Base
 	fuzzily_searchable :name
 
 	scope :validated, -> {where(validated: true)}
-	scope :has_website, -> {where.not(website: nil)}
 
 	def self.find_by_fuzzy_name_with_similar_threshold(query, threshold = 70)
 		result = validated.find_by_fuzzy_name(query, limit: 1).first rescue nil

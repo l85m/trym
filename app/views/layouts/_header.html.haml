@@ -9,6 +9,7 @@
     .collapse.navbar-collapse#navbar-collapse-menu
       %ul.nav.navbar-nav.navbar-right
         -if user_signed_in?
+          %li=link_to "front page", home_path, class: class_header_link_formatting(home_path)
           %li=link_to "my charges", charges_path, class: class_header_link_formatting(charges_path)
           %li=link_to "sign out", destroy_user_session_path, method: :delete, class: class_header_link_formatting(destroy_user_session_path)
         -else

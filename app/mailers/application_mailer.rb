@@ -1,3 +1,3 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: "team@trym.io"
+  default from: "Trym.io <team@trym.io>"
 end

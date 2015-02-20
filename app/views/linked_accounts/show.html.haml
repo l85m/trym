@@ -45,7 +45,8 @@
 
     $("[name='track-switch']:visible").bootstrapSwitch({
       onText: "Yes",
-      offText: "No"
+      offText: "No",
+      size: "mini"
     }).on('switchChange.bootstrapSwitch', function(event, state) {
       var marginState = $(this).parent().css('margin-left')
       if ( marginState == '-48px' || marginState == '0px' ) {

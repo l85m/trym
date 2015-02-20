@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150216190152) do
+ActiveRecord::Schema.define(version: 20150218184455) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -96,9 +96,9 @@ ActiveRecord::Schema.define(version: 20150216190152) do
     t.text     "type"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "website"
     t.boolean  "validated",          default: false, null: false
     t.text     "cancelation_fields",                              array: true
+    t.integer  "recurring_score",    default: 0,     null: false
   end
 
   create_table "notes", force: true do |t|

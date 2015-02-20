@@ -3,11 +3,11 @@
     %a.btn.btn-primary-o.btn-block.collapse-expand-button{charge_group_button(grouping, grouped_charges, @grouping)} 
       ="#{pluralize(grouped_charges.count, 'charge')}" 
       %b= grouping
-      to be recurring
+      recurring
       -if grouped_charges.select{ |c| c.new_transaction }.present?
         ="(#{grouped_charges.select{ |c| c.new_transaction }.count} new)"
   .col-xs-12
-    .collapse{id: "collapse-#{grouping.downcase.gsub(" ","-")}", class: grouped_charges.first.recurring_score > 3 ? 'in' : ''}
+    .collapse{id: "collapse-#{grouping.downcase.gsub(" ","-")}", class: ["likely to be", "confirmed by you as"].include?(grouped_charges.first.recurring_score_grouping) ? 'in' : ''}
       -if @grouping.present? || grouped_charges.first.recurring_score > 1  
         -grouped_charges.in_groups_of(3,false) do |charges|
           -charges.each do |charge|
@@ -22,7 +22,8 @@
   $(".collapse").on('shown.bs.collapse', function () {
     $(this).find("[name='track-switch']").bootstrapSwitch({
       onText: "Yes",
-      offText: "No"
+      offText: "No",
+      size: "mini"
     }).on('switchChange.bootstrapSwitch', function(event, state) {
       var marginState = $(this).parent().css('margin-left')
       if ( marginState == '-48px' || marginState == '0px' ) {

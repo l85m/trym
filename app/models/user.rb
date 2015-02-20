@@ -19,6 +19,10 @@ class User < ActiveRecord::Base
     account_detail.present? ? "#{account_detail.first_name} #{account_detail.last_name}" : nil
   end
 
+  def first_name
+    account_detail.present? ? account_detail.first_name : nil
+  end
+
   def phone_verified?
   	account_detail.present? && account_detail.phone_verified.present?
   end

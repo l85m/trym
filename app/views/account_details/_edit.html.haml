@@ -17,6 +17,12 @@
           = render 'shared/cancel_button'
           =f.button :submit, "Verify", class: "btn-primary"
 
+      %p{style: "margin-top: 30px;"}
+        %small
+          %b Note: 
+          We don't charge for text messages sent to your mobile device; but your carrier's standard messaging rates still apply
+
+
 :javascript
 
   $('#account_detail_phone').formatter({

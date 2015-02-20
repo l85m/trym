@@ -65,21 +65,17 @@ class Charge < ActiveRecord::Base
 
   def recurring_score_grouping
     case recurring_score
-    when -100..-1 then "very unlikely"
-    when 0..1 then "unlikely"
-    when 2..3 then "likely"
-    when 99 then "confirmed by you"
+    when -100..-1 then "very unlikely to be"
+    when 0..1 then "unlikely to be"
+    when 2..3 then "might be"
+    when 99 then "confirmed by you as"
     else
-      "very likely" 
+      "likely to be" 
     end
   end
  
   def merchant_name
     merchant.present? ?  merchant.name : "Unknown"
-  end
-
-  def merchant_website
-    merchant.present? ?  merchant.website : nil
   end
 
   def renewal_period_in_words

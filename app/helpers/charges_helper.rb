@@ -32,10 +32,10 @@ module ChargesHelper
   end
 
   def formatted_history(history)
-    if history.present?      
+    if history.present?
+      "<p class='strong text-center'>Total: #{number_to_currency history.values.inject(0.0){ |s,v| s+= v.to_f }}</p>" +
       "<p class='without-margin text-center'>" + 
-      history.collect{ |d,v| "#{d}: #{number_to_currency v.to_f}" }.join("</p><p class='without-margin text-center'>") + 
-      "<p class='strong without-margin strong text-center'>Total: #{number_to_currency history.values.inject(0.0){ |s,v| s+= v.to_f }}</p>"
+      history.to_a.reverse.collect{ |d,v| "#{d}: #{number_to_currency v.to_f}" }.join("</p><p class='without-margin text-center'>")
     else
       nil
     end
