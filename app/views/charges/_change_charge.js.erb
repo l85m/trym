@@ -28,7 +28,8 @@ charge_item.popover({
 
 	charge_item.find("[name='track-switch']").bootstrapSwitch({
     onText: "Yes",
-    offText: "No"
+    offText: "No",
+    size: "mini"
   }).on('switchChange.bootstrapSwitch', function(event, state) {
     $.ajax({
       type: "PUT",
