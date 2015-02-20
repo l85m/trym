@@ -25,15 +25,12 @@
       offText: "No",
       size: "mini"
     }).on('switchChange.bootstrapSwitch', function(event, state) {
-      var marginState = $(this).parent().css('margin-left')
-      if ( marginState == '-48px' || marginState == '0px' ) {
-        $.ajax({
-          type: "PUT",
-          url: "/charges/" + $(this).data("charge-id"),
-          data: { charge: { recurring: state }, scan: "scan" },
-          dataType: "script"
-        })
-      }
+      $.ajax({
+        type: "PUT",
+        url: "/charges/" + $(this).data("charge-id"),
+        data: { charge: { recurring: state }, scan: "scan" },
+        dataType: "script"
+      })
     });
   });
 

@@ -33,7 +33,7 @@ class ChargesController < ApplicationController
 
   def update
     @update_from_account_scan = ( charge_params["recurring"].present? || params["charge"]["account_scan"].present? )
-    @charge.update(charge_params)
+    @charge.update!(charge_params)
     respond_with(@charge)
   end
 
