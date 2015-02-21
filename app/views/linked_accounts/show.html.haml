@@ -9,6 +9,7 @@
   .container-fluid#edit-transaction-data-request-container
     #linked-account-charges-header  
       .row.text-center
+        %h2 Tell us which charges you want to track
         %p.lead{style: "margin: 20px auto 0px auto;"}
           We found 
           %b= "#{pluralize @linked_account.charges.count, 'charge' }"

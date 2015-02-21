@@ -119,11 +119,19 @@ class PlaidTransactionParser
   end
 
   def match_to_merchants
-    @charge_list.map do |c| 
+    @charge_list.map do |c|
       match = Merchant.find_by_fuzzy_name_with_similar_threshold(c[:name])
+      if ( !match.present? && c[:meta]["payment_processor"].present? )
+        match = Merchant.find_by_fuzzy_name_with_similar_threshold(c[:meta]["payment_processor"]) if c[:meta]["payment_processor"].present?
+      elsif ( !match.present? && card_membership_fees.include?(c[:name].downcase) )
+        match = Merchant.find_by_fuzzy_name_with_similar_threshold(@link.financial_institution.name)
+      end
       c[:merchant_id] = match.id if match.present?
     end
   end
 
 
+  def card_membership_fees
+    ["annual membership fee"]
+  end
 end
