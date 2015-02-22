@@ -1,0 +1,10 @@
+= simple_form_for(@charge_wizard) do |f|
+  = f.error_notification
+
+  .form-inputs
+    = f.association :linked_account
+    = f.input :progress
+    = f.input :in_progress
+
+  .form-actions
+    = f.button :submit

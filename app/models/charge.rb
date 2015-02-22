@@ -3,6 +3,8 @@ class Charge < ActiveRecord::Base
   belongs_to :merchant
   belongs_to :linked_account
   belongs_to :transaction_request
+  belongs_to :plaid_category, foreign_key: :category_id, primary_key: :plaid_id
+
   has_one :financial_institution, through: :linked_account
   has_many :stop_orders
   
@@ -45,9 +47,14 @@ class Charge < ActiveRecord::Base
     }
   end
 
-  def plaid_category
-    return nil unless category_id.present?
-    PlaidCategory.find_by_plaid_id(category_id)
+  def trym_category
+    if merchant.present?
+      merchant.trym_category
+    elsif plaid_category.present?
+      plaid_category.trym_category
+    else
+      nil
+    end
   end
 
   def warnings

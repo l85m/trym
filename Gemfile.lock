@@ -324,6 +324,8 @@ GEM
     websocket (1.2.1)
     whenever (0.9.4)
       chronic (>= 0.6.3)
+    wicked (1.1.0)
+      rails (>= 3.0.7)
 
 PLATFORMS
   ruby
@@ -378,3 +380,4 @@ DEPENDENCIES
   uglifier (>= 1.3.0)
   unicorn
   whenever
+  wicked

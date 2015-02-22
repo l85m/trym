@@ -2,6 +2,8 @@ class Merchant < ActiveRecord::Base
 	has_many :charges
 	has_many :notes, as: :noteable
 
+	belongs_to :trym_category
+
 	validates_uniqueness_of :name, conditions: -> { where( validated: true ) }
 	fuzzily_searchable :name
 

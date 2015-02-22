@@ -1,0 +1,15 @@
+%p#notice= notice
+
+%p
+  %b Linked account:
+  = @charge_wizard.linked_account
+%p
+  %b Progress:
+  = @charge_wizard.progress
+%p
+  %b In progress:
+  = @charge_wizard.in_progress
+
+= link_to 'Edit', edit_charge_wizard_path(@charge_wizard)
+\|
+= link_to 'Back', charge_wizards_path

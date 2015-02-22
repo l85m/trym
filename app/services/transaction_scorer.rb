@@ -4,13 +4,15 @@ class TransactionScorer
   ## @dates = past transactions from this merchant/source (ie all transactions 
   ##          from the apple store) sorted in ascending order (newer dates last)
   ## @merchant_id = 
-  def initialize(charge)
+  def initialize(charge, transaction_request)
     @charge = charge
     @dates = charge[:date].sort
     @name = charge[:name].downcase
     @amounts = charge[:amount]
     @merchant_id = charge[:merchant_id]
     @category_id = charge[:category_id]
+
+    @date_data_was_pulled = transaction_request.created_at
     calculate_recurring_score
   end
 
@@ -22,14 +24,13 @@ class TransactionScorer
     if @dates.size > 1
 
       if ( uniform_distance_between_dates > 6 || dates_are_yearly? ) && interval_likely_recurring?
-        score += 4
+        score += 6
         score += 2 if amounts_are_similar?
       else
         score += -1 if not (dates_are_weekly? || dates_are_monthly?)
       end
 
     end
-      
     
     score += 3 if likely_category?
     score += 6 if very_likely_category?
@@ -38,19 +39,41 @@ class TransactionScorer
     score += -2 if very_unlikely_category?
 
     score += 3 if likely_description?
-    score -= 1 if unlikely_description?
+    score -= 3 if unlikely_description?
     
     if @merchant_id.present?
       score += Merchant.find(@merchant_id).recurring_score
     end
 
-    score -= 10 if last_charge_over_one_year_ago?
+    score -= 10 if last_charge_too_long_ago?
 
     score
   end
 
-  def last_charge_over_one_year_ago?
-    @dates.max < 1.year.ago
+  def last_charge_too_long_ago?    
+    if charge_looks_annual?
+      @dates.max < (@date_data_was_pulled - 1.year)
+    elsif charge_looks_quarterly?
+      @dates.max < (@date_data_was_pulled - 3.months)
+    else
+      @dates.max < (@date_data_was_pulled - 1.month)
+    end
+  end
+
+  def charge_looks_annual?
+    dates_are_yearly? || @name.include?("annual") || annual_category?
+  end
+
+  def charge_looks_quarterly?
+    distance_between_last_two_dates.between?(84, 93)  || @name.include?("quarterly") || quarterly_category?
+  end
+
+  def annual_category?
+    ["10000000"].include?(@category_id)
+  end
+
+  def quarterly_category?
+    ["18030000"].include?(@category_id)
   end
 
   def interval_likely_recurring?
@@ -64,16 +87,19 @@ class TransactionScorer
   end
 
   def dates_are_weekly?
+    return false unless @dates.size > 1
     weeks = @dates.collect{ |d| d.strftime("%U").to_i }
     (weeks.sort[-1] - weeks.sort[0]) == (weeks.size - 1)
   end
 
   def dates_are_monthly?
+    return false unless @dates.size > 1
     months = @dates.collect{ |d| d.strftime("%-m").to_i }
     (months.sort[-1] - months.sort[0]) == (months.size - 1)
   end
 
   def dates_are_yearly?
+    return false unless @dates.size > 1
     years = @dates.collect{ |d| d.strftime("%-y").to_i }
     (years.sort[-1] - years.sort[0]) == (years.size - 1)
   end
@@ -107,13 +133,13 @@ class TransactionScorer
       "airport", "toll", "beverage", "resort", "airlines", "fuel", "gas", "coffee", "market", "drive-thru", "limo", "cafe", "air lines",
       "drugs", "emergency", "halloween", "christmas", "tire", "toys", "breakfast", "lunch", "dinner", "donuts", "ice cream", "tacos",
       "pub", "juice", "thai", "japanese", "mexican", "italian", "chinese", "kitchen", "hamburger", "grill", "sushi", "grocery",
-      "google checkout seller", "transaction processed by"
+      "google checkout seller", "transaction processed by", "foreign transaction fee", "late payment fee", "interest charge", "adjustment"
     ].select{ |d| @name.include?(d) }.present?
   end
 
   def likely_description?
     [
-      "membership", "recurring", "monthly", "annual", "periodic", "insurance"
+      "membership", "recurring", "monthly", "annual", "periodic", "insurance", "renewal"
     ].select{ |d| @name.include?(d) }.present?
   end
 

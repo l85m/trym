@@ -1,0 +1,25 @@
+%h1 Listing charge_wizards
+
+%table
+  %thead
+    %tr
+      %th Linked account
+      %th Progress
+      %th In progress
+      %th
+      %th
+      %th
+      
+  %tbody
+    - @charge_wizards.each do |charge_wizard|
+      %tr
+        %td= charge_wizard.linked_account
+        %td= charge_wizard.progress
+        %td= charge_wizard.in_progress
+        %td= link_to 'Show', charge_wizard
+        %td= link_to 'Edit', edit_charge_wizard_path(charge_wizard)
+        %td= link_to 'Destroy', charge_wizard, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Charge wizard', new_charge_wizard_path

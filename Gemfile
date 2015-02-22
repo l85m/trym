@@ -16,6 +16,7 @@ gem 'slim'
 gem 'fuzzily'
 gem 'active_model_serializers'
 gem 'whenever'
+gem 'wicked' #form wizard
 
 #account linking gems
 gem 'similar_text'

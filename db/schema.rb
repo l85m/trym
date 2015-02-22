@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150222051554) do
+ActiveRecord::Schema.define(version: 20150222225541) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -30,6 +30,16 @@ ActiveRecord::Schema.define(version: 20150222051554) do
 
   add_index "account_details", ["user_id"], name: "index_account_details_on_user_id", using: :btree
 
+  create_table "charge_wizards", force: true do |t|
+    t.integer  "linked_account_id"
+    t.json     "progress"
+    t.boolean  "in_progress"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "charge_wizards", ["linked_account_id"], name: "index_charge_wizards_on_linked_account_id", using: :btree
+
   create_table "charges", force: true do |t|
     t.text     "description"
     t.integer  "user_id"
@@ -40,7 +50,7 @@ ActiveRecord::Schema.define(version: 20150222051554) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.date     "billing_day"
-    t.boolean  "active"
+    t.boolean  "wizard_complete"
     t.date     "last_date_billed"
     t.integer  "merchant_id"
     t.boolean  "recurring"
@@ -100,7 +110,10 @@ ActiveRecord::Schema.define(version: 20150222051554) do
     t.boolean  "validated",          default: false, null: false
     t.text     "cancelation_fields",                              array: true
     t.integer  "recurring_score",    default: 0,     null: false
+    t.integer  "trym_category_id"
   end
+
+  add_index "merchants", ["trym_category_id"], name: "index_merchants_on_trym_category_id", using: :btree
 
   create_table "notes", force: true do |t|
     t.integer  "noteable_id"
@@ -116,13 +129,15 @@ ActiveRecord::Schema.define(version: 20150222051554) do
 
   create_table "plaid_categories", force: true do |t|
     t.string   "plaid_type"
-    t.string   "hierarchy",  array: true
+    t.string   "hierarchy",        array: true
     t.string   "plaid_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "trym_category_id"
   end
 
   add_index "plaid_categories", ["plaid_id"], name: "index_plaid_categories_on_plaid_id", unique: true, using: :btree
+  add_index "plaid_categories", ["trym_category_id"], name: "index_plaid_categories_on_trym_category_id", using: :btree
 
   create_table "stop_orders", force: true do |t|
     t.integer  "charge_id"
@@ -137,8 +152,10 @@ ActiveRecord::Schema.define(version: 20150222051554) do
   add_index "stop_orders", ["merchant_id"], name: "index_stop_orders_on_merchant_id", using: :btree
 
   create_table "transaction_requests", force: true do |t|
-    t.integer "linked_account_id"
-    t.json    "data"
+    t.integer  "linked_account_id"
+    t.json     "data"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "trigrams", force: true do |t|
@@ -151,6 +168,13 @@ ActiveRecord::Schema.define(version: 20150222051554) do
 
   add_index "trigrams", ["owner_id", "owner_type", "fuzzy_field", "trigram", "score"], name: "index_for_match", using: :btree
   add_index "trigrams", ["owner_id", "owner_type"], name: "index_by_owner", using: :btree
+
+  create_table "trym_categories", force: true do |t|
+    t.string   "name",                       null: false
+    t.boolean  "recurring",  default: false, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "users", force: true do |t|
     t.string   "email",                  default: "",    null: false

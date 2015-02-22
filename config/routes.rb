@@ -2,6 +2,8 @@ require 'sidekiq/web'
 
 Rails.application.routes.draw do
   
+  resources :charge_wizards
+
   resources :invite_requests, only: [:new, :create]
 
   resources :linked_accounts

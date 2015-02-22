@@ -91,7 +91,7 @@ class PlaidTransactionParser
 
   def calculate_recurring_score
     @charge_list.map do |c|
-      c[:recurring_score] = TransactionScorer.new(c).calculate_recurring_score
+      c[:recurring_score] = TransactionScorer.new(c, @transaction_request).calculate_recurring_score
       c[:recurring] = true if ( c[:recurring_score] > 4 && c[:merchant_id].present? )
     end
   end
@@ -116,7 +116,7 @@ class PlaidTransactionParser
   def avg_distance_between_last_four_dates(dates)
     return 0 if dates.size <= 1
     floor = dates.size >= 4 ? 4 : dates.size
-    dates.sort[-floor..-1].each_cons(2).collect{ |a,b| (b - a).to_i }.inject(:+) / floor rescue binding.pry
+    dates.sort[-floor..-1].each_cons(2).collect{ |a,b| (b - a).to_i }.inject(:+) / dates.sort[-floor..-1].each_cons(2).size rescue binding.pry
   end
 
   def recurring_interval(distance)
