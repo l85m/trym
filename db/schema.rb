@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150218184455) do
+ActiveRecord::Schema.define(version: 20150222051554) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -51,6 +51,7 @@ ActiveRecord::Schema.define(version: 20150218184455) do
     t.string   "category_id"
     t.boolean  "new_transaction",         default: false, null: false
     t.hstore   "history"
+    t.string   "plaid_name"
   end
 
   add_index "charges", ["linked_account_id"], name: "index_charges_on_linked_account_id", using: :btree
@@ -112,6 +113,16 @@ ActiveRecord::Schema.define(version: 20150218184455) do
 
   add_index "notes", ["noteable_id", "noteable_type"], name: "index_notes_on_noteable_id_and_noteable_type", using: :btree
   add_index "notes", ["user_id"], name: "index_notes_on_user_id", using: :btree
+
+  create_table "plaid_categories", force: true do |t|
+    t.string   "plaid_type"
+    t.string   "hierarchy",  array: true
+    t.string   "plaid_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "plaid_categories", ["plaid_id"], name: "index_plaid_categories_on_plaid_id", unique: true, using: :btree
 
   create_table "stop_orders", force: true do |t|
     t.integer  "charge_id"

@@ -61,7 +61,7 @@ class ChargesOutlookChartData
 	end
 
 	def total_cost_outlook_for_charge(charge)
-		[charge.merchant.name, (@outlook_period / charge.renewal_period_in_weeks) * charge.amount / 100.0]
+		[charge.descriptor, (@outlook_period / charge.renewal_period_in_weeks) * charge.amount / 100.0]
 	end
 
 end

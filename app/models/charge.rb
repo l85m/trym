@@ -45,6 +45,11 @@ class Charge < ActiveRecord::Base
     }
   end
 
+  def plaid_category
+    return nil unless category_id.present?
+    PlaidCategory.find_by_plaid_id(category_id)
+  end
+
   def warnings
     warnings = {}
     warnings["We don't recognize the company name"] = "Make sure to choose an existing company if it's available or we may won't be able to help you stop this charge" unless (merchant.present? && merchant.validated)
@@ -73,6 +78,25 @@ class Charge < ActiveRecord::Base
       "likely to be" 
     end
   end
+
+  def smart_description
+    return description if description.present?
+    if merchant.present? && plaid_category.present?
+      return plaid_category.description
+    elsif plaid_name.present?
+      return plaid_name
+    else
+      return "(no description)"
+    end
+  end
+
+  def descriptor
+    if merchant.present?
+      merchant.name
+    else
+      smart_description
+    end
+  end
  
   def merchant_name
     merchant.present? ?  merchant.name : "Unknown"
@@ -91,7 +115,7 @@ class Charge < ActiveRecord::Base
   end
 
   def next_billing_date(bill_day = billing_day)
-    return nil unless (bill_day.present? && renewal_period_in_weeks.present? && renewal_period_in_weeks > 0)
+    return nil unless (bill_day.present? && renewal_period_in_weeks.present? && renewal_period_in_weeks > 0 && recurring)
     return bill_day if Date.today <= bill_day
     iterate_billing_date(bill_day)
   end

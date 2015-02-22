@@ -14,7 +14,8 @@
 # end
 #
 every 6.hours do
-  runner "FinancialInstitutionUpdater.perform_async"
+  runner "PlaidFinancialInstitutionUpdater.perform_async"
+  runner "PlaidCategoryUpdater.perform_async"
 end
 
 every 1.hours do

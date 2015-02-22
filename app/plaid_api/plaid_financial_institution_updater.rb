@@ -1,4 +1,4 @@
-class FinancialInstitutionUpdater
+class PlaidFinancialInstitutionUpdater
   include Sidekiq::Worker
 
   def perform

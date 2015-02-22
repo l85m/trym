@@ -7,13 +7,12 @@ class Merchant < ActiveRecord::Base
 
 	scope :validated, -> {where(validated: true)}
 
-	def self.find_by_fuzzy_name_with_similar_threshold(query, threshold = 60)
+	def self.find_by_fuzzy_name_with_similar_threshold(query, threshold = 80)
 		query = query.downcase.gsub(/[^0-9a-z ]/i, '')
 		result = find_by_fuzzy_name(query).select(&:validated).first rescue nil
-
 		if result.present?
 			result_name = result.name.downcase.gsub(/[^0-9a-z ]/i, '')
-			if ( result_name.similar(query) >= threshold || query.include?(result_name) )
+			if ( result_name.similar(query) >= threshold || ( [query.size,result_name.size].min > 4 && ( query.include?(result_name) || result_name.include?(query) ) ) )
 				result
 			else
 				nil

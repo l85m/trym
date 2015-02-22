@@ -41,7 +41,7 @@ class ChargeBuilder
 			billing_day: charge[:billing_day],
 			category_id: charge[:category_id],
 			recurring_score: charge[:recurring_score],
-			description: charge[:name],
+			plaid_name: charge[:name],
 			merchant_id: charge[:merchant_id],
 			renewal_period_in_weeks: charge[:renewal_period_in_weeks],
 			user_id: @user_id,

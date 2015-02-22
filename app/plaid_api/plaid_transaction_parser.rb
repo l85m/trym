@@ -16,13 +16,18 @@ class PlaidTransactionParser
     group_charges_by_description
     match_to_merchants
     remove_old_charges
+    remove_zero_dollar_charges
     calculate_recurring_score
     create_attributes_for_charges
-    consolidate_by_merchant_id
+    # consolidate_by_merchant_id
     exclude_items_below_threshold(-2)
   end
 
   private
+
+  def remove_zero_dollar_charges
+    @charge_list.reject!{ |c| c[:amount].inject(:+) <= 0 }
+  end
 
   def exclude_items_below_threshold(threshold)
     @charge_list.reject!{ |c| c[:recurring_score] < threshold }
@@ -40,10 +45,15 @@ class PlaidTransactionParser
   def create_attributes_for_charges
     @charge_list.each do |charge|
       charge[:history] = charge[:date].zip(charge[:amount]).sort_by{ |d,v| d }.to_h
-      charge[:amount] = (charge[:history].values.last * 100).to_i
+      charge[:amount] = average_amount_of_recent_transactions(charge)
       charge[:billing_day] = charge[:date].max
-      charge[:renewal_period_in_weeks] = round_to_months( distance_between_last_two_dates(charge[:date]) / 7 )
+      charge[:renewal_period_in_weeks] = recurring_interval( avg_distance_between_last_four_dates(charge[:date]) )
     end
+  end
+
+  def average_amount_of_recent_transactions(charge)
+    num_items = charge[:history].size > 3 ? 3 : charge[:history].size
+    (charge[:history].values[-num_items..-1].inject(:+) / num_items.to_f * 100).to_i
   end
 
   def group_charges_by_description
@@ -75,7 +85,7 @@ class PlaidTransactionParser
   def remove_old_charges
     @charge_list.reject! do |c|
       dates = c[:date].sort
-      dates.max < 12.months.ago && distance_between_last_two_dates(dates).between?(350,380)
+      dates.max < 12.months.ago && avg_distance_between_last_four_dates(dates).between?(350,380)
     end
   end
 
@@ -103,19 +113,19 @@ class PlaidTransactionParser
     @charge_list = (no_merch + with_merch).uniq{ |c| c[:name] }
   end
 
-  def distance_between_last_two_dates(dates)
-    return 0 unless dates.size > 1
-    dates.sort[-2..-1].reverse.inject(:-).to_i
+  def avg_distance_between_last_four_dates(dates)
+    return 0 if dates.size <= 1
+    floor = dates.size >= 4 ? 4 : dates.size
+    dates.sort[-floor..-1].each_cons(2).collect{ |a,b| (b - a).to_i }.inject(:+) / floor rescue binding.pry
   end
 
-  def round_to_months(weeks)
-    if weeks.floor.remainder(4.0) == 0
-      weeks.floor
-    elsif weeks.ceil.remainder(4.0) == 0
-      weeks.ceil
-    else
-      weeks
-    end
+  def recurring_interval(distance)
+    return 1 if distance <= 7     #weekly
+    return 2 if distance <= 16    #bi-weekly
+    return 4 if distance <= 35    #monthly
+    return 13 if distance <= 100  #quarterly
+    return 26 if distance <= 200  #bi-annually
+    52 #annually
   end
 
   def match_to_merchants
