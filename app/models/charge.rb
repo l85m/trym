@@ -4,6 +4,7 @@ class Charge < ActiveRecord::Base
   belongs_to :linked_account
   belongs_to :transaction_request
   belongs_to :plaid_category, foreign_key: :category_id, primary_key: :plaid_id
+  belongs_to :trym_category
 
   has_one :financial_institution, through: :linked_account
   has_many :stop_orders
@@ -18,18 +19,23 @@ class Charge < ActiveRecord::Base
   scope :with_financial_institution, -> { includes(:financial_institution) }
   scope :fully_loaded, -> {with_merchant.with_stop_orders.with_financial_institution}
   
+  scope :recurring_or_likely_to_be_recurring, -> { where(Charge.arel_table[:recurring].eq(true).or(Charge.arel_table[:recurring_score].gt(3))) }
+  scope :recurring, -> { where(recurring: true) }
   scope :recurring_likely_to_be, -> {where('recurring_score > ?', 3).where.not(recurring_score: 99)}
   scope :recurring_might_be, -> {where(recurring_score: 2..3)}
   scope :recurring_unlikely_to_be, -> {where(recurring_score: 0..1)}
   scope :recurring_very_unlikely_to_be, -> {where('recurring_score < ?', 0)}
 
-  scope :recurring, -> { where(recurring: true) }
   scope :new_transaction, -> {where(new_transaction: true)}
   scope :not_recurring, -> { where(recurring: false) }
   scope :sort_by_recurring_score, -> { order(recurring_score: :desc) }
   scope :sort_by_new_first, -> { order(new_transaction: :desc) }
-  
+  scope :from_link, -> { where.not(transaction_request_id: nil) }
+  scope :from_user, -> { where(transaction_request_id: nil) }
+
   scope :chartable, -> { where('renewal_period_in_weeks > ?', 0).where('amount > 0').where.not(billing_day: nil) }
+
+  fuzzily_searchable :plaid_name
 
   before_validation :add_user_if_linked_account_exists
   before_validation :update_recurring_score_if_recurring_changed
@@ -47,19 +53,9 @@ class Charge < ActiveRecord::Base
     }
   end
 
-  def trym_category
-    if merchant.present?
-      merchant.trym_category
-    elsif plaid_category.present?
-      plaid_category.trym_category
-    else
-      nil
-    end
-  end
-
   def warnings
     warnings = {}
-    warnings["We don't recognize the company name"] = "Make sure to choose an existing company if it's available or we may won't be able to help you stop this charge" unless (merchant.present? && merchant.validated)
+    warnings["We don't recognize the company name"] = "Make sure to tell trym which company charged you or we may won't be able to help you stop this charge" unless (merchant.present?)
     warnings["There is no charge amount"] = "We can't show you how much you're paying to this company over time" unless (amount.present? && amount > 0)
     warnings["There is no renewal period"] = "We can't show you how much you're paying to this company over time or warn you before future charges" unless ( renewal_period_in_weeks.present? && renewal_period_in_weeks > 0 )
     warnings["There is no next billing date"] = "We can't show you how much you're paying to this company over time or warn you before future charges" unless billing_day.present?
@@ -86,10 +82,23 @@ class Charge < ActiveRecord::Base
     end
   end
 
+  def smart_trym_category
+    if trym_category.present?
+      trym_category
+    elsif merchant.present? && merchant.trym_category.present?
+      merchant.trym_category
+    elsif plaid_category.present? && plaid_category.trym_category.present?
+      plaid_category.trym_category
+    else
+      nil
+    end
+  end
+
   def smart_description
-    return description if description.present?
-    if merchant.present? && plaid_category.present?
-      return plaid_category.description
+    if description.present?
+      description
+    elsif smart_trym_category.present?
+      smart_trym_category.name
     elsif plaid_name.present?
       return plaid_name
     else

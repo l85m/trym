@@ -10,8 +10,7 @@
     - else
       .scrollable#charges-outlook{ class: (@charges.present? || @linked_accounts.present?) ? "col-md-8 col-sm-6" : "col-xs-12"}
         =render 'new_user_prompt'
-          
-
+  
 :javascript
   $(document).ready(function() {
     if ($(window).width() >= 767) {

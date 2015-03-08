@@ -1,0 +1,22 @@
+%h2 Recurring Charge Categories
+
+%p.lead 
+	These are the most common types of recurring charges.  Select the categories which apply to you and we'll help you identify charges in those categories to track with trym.
+
+=simple_form_for current_user, url: wizard_path, method: :put do |f|
+	.row
+		-TrymCategory.recurring.in_groups_of(5, false) do |category_group|
+			.col-md-6
+				-category_group.each do |category|
+					.checkbox.wizard-checkbox
+						%label
+							=wizard_charge_category_checkboxes(category, @category_ids)
+
+	.row.charge-wizard-actions
+		.col-xs-2
+			=link_to "Back", :back, class: "btn btn-default"
+		.col-xs-10.text-right
+			=f.submit "Next", class: "btn btn-primary"
+
+%div{style: "min-height: 20px;"}
+	

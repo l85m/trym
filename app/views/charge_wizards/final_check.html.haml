@@ -1,0 +1,89 @@
+%h2 Did we miss anything?
+
+.paragraph-spacer
+
+-if current_user.charges.recurring.present?
+  %p.lead Here are all the charges you've told us are recurring:
+  .row#recurring-charges-list
+    -current_user.charges.recurring.order(recurring_score: :desc).in_groups_of(2,false) do |charge_group|
+      -charge_group.each do |charge|
+        .col-md-6{class: charge_group.size == 1 ? "col-md-offset-3" : ''}
+          =render partial: "shared/charge_item", locals: {charge: charge}
+  
+  .paragraph-spacer
+
+  %p.lead If there are any more charges you'd like to track we can help you do that now:
+
+-else
+  %p.lead#no-charges-message Whoops - it looks like you havn't told Trym to track any charges yet.  No worries - it's not too late to track some:
+
+.row
+  -if current_user.linked_accounts.present?
+    .col-md-6.text-center
+      =link_to new_charge_path, class: "btn btn-primary btn-block btn-lg", remote: true do
+        %i.fa.fa-plus
+        Add a new charge
+      .paragraph-spacer
+    .col-md-6.text-center
+      .input-group
+        .input-group-addon
+          %i.fa.fa-search
+        %input.input-lg.form-control#search-charges-field{ placeholder: "Search your linked #{'account'.pluralize(current_user.linked_accounts.count)} ", type: "text" }
+      .paragraph-spacer
+
+    #charge-search-results-container
+
+  -else
+    .col-md-6.col-md-offset-3.text-center
+      =link_to "Add a new charge", new_charge_path, class: "btn btn-primary btn-block btn-lg", remote: true
+
+.row.charge-wizard-actions
+  .col-xs-6
+    =link_to "Back", :back, class: "btn btn-default btn-responsive"
+  .col-xs-6.text-right
+    =link_to "Next", next_wizard_path, class: "btn btn-primary btn-responsive"
+
+%div{style: "min-height: 20px;"}
+
+=render 'shared/charge_item_script'
+
+:javascript
+
+  var thread = null;
+
+  function findMember(str) {
+    if( str.length > 0 ) {
+      $.get("#{charges_path}", "q="+str, null, 'script');
+    } else {
+      $("#charge-search-results-container").empty();
+    }
+  } 
+
+  $("#search-charges-field").keyup(function() {
+    clearTimeout(thread);
+    var target = $(this);
+    thread = setTimeout(function() { findMember(target.val()); }, 500); 
+  });
+
+
+  $("[name='track-switch']").bootstrapSwitch({
+    onText: "Yes",
+    offText: "No",
+    size: "mini"
+  }).on('switchChange.bootstrapSwitch', function(event, state) {
+    $.ajax({
+      type: "PUT",
+      url: "/charges/" + $(this).data("charge-id"),
+      data: { charge: { recurring: state }, scan: "scan" },
+      dataType: "script"
+    })
+  });
+  
+  $('[data-toggle="popover"]').popover({html: true, trigger: 'hover', title: "<i class='fa fa-calendar'></i> Charge History"});
+  $('#recurring-charge-score-explanation').popover({
+    html: 'true',
+    trigger: 'focus',
+    placement: 'bottom',
+    title: "<div style='text-align: left;'>How do we determine what might be recurring?</div>",
+    content: "We look at three things: <ul style='margin-top:5px;'><li>when and how frequent you're charged</li><li>category information from your bank and</li><li>the merchant name</li></ul>  We don't always get this right so if you see something that's clearly wrong please send us an email at <a href='mailto:ai@trym.io'>ai@trym.io</a>."
+  });

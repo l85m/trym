@@ -13,6 +13,7 @@
 @import "linked_accounts";
 @import "verifications";
 @import "arrows";
+@import "charge_wizards";
 
 @import "select2";
 @import "select2-bootstrap";
@@ -280,4 +281,12 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
   .hidden-xs{ display: none !important; }
   .text-center-xs{ text-align: center !important; }
   .vertical-middle-xs{ vertical-align: middle; }
+}
+
+@media (max-width: 770px) {
+  .btn-responsive {
+    padding:6px 12px;
+    font-size:90%;
+    line-height: 1.2;
+  }
 }

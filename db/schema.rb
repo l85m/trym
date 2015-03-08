@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150222225541) do
+ActiveRecord::Schema.define(version: 20150227062854) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,14 +31,14 @@ ActiveRecord::Schema.define(version: 20150222225541) do
   add_index "account_details", ["user_id"], name: "index_account_details_on_user_id", using: :btree
 
   create_table "charge_wizards", force: true do |t|
-    t.integer  "linked_account_id"
     t.json     "progress"
     t.boolean  "in_progress"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "user_id"
   end
 
-  add_index "charge_wizards", ["linked_account_id"], name: "index_charge_wizards_on_linked_account_id", using: :btree
+  add_index "charge_wizards", ["user_id"], name: "index_charge_wizards_on_user_id", using: :btree
 
   create_table "charges", force: true do |t|
     t.text     "description"
@@ -62,11 +62,13 @@ ActiveRecord::Schema.define(version: 20150222225541) do
     t.boolean  "new_transaction",         default: false, null: false
     t.hstore   "history"
     t.string   "plaid_name"
+    t.integer  "trym_category_id"
   end
 
   add_index "charges", ["linked_account_id"], name: "index_charges_on_linked_account_id", using: :btree
   add_index "charges", ["recurring"], name: "index_charges_on_recurring", where: "(recurring = true)", using: :btree
   add_index "charges", ["transaction_request_id"], name: "index_charges_on_transaction_request_id", using: :btree
+  add_index "charges", ["trym_category_id"], name: "index_charges_on_trym_category_id", using: :btree
   add_index "charges", ["user_id"], name: "index_charges_on_user_id", using: :btree
 
   create_table "financial_institutions", force: true do |t|
@@ -170,10 +172,11 @@ ActiveRecord::Schema.define(version: 20150222225541) do
   add_index "trigrams", ["owner_id", "owner_type"], name: "index_by_owner", using: :btree
 
   create_table "trym_categories", force: true do |t|
-    t.string   "name",                       null: false
-    t.boolean  "recurring",  default: false, null: false
+    t.string   "name",                        null: false
+    t.boolean  "recurring",   default: false, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "description"
   end
 
   create_table "users", force: true do |t|

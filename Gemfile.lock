@@ -11,6 +11,14 @@ GIT
       warden (~> 1.2.3)
 
 GIT
+  remote: git://github.com/demosophy/fuzzily.git
+  revision: 54739cf6e8ce7fc9528f2d4ac3d204279cfde2b5
+  ref: 54739cf6e8ce7fc9528f2d4ac3d204279cfde2b5
+  specs:
+    fuzzily (0.3.1)
+      activerecord (>= 2.3.17)
+
+GIT
   remote: git://github.com/demosophy/plaid-ruby.git
   revision: 3a44d34f1a2bfb43c44605f217620ad7b4e9b776
   branch: release_v_1.0
@@ -108,8 +116,6 @@ GEM
     ffi (1.9.6)
     font-awesome-rails (4.2.0.0)
       railties (>= 3.2, < 5.0)
-    fuzzily (0.3.2)
-      activerecord (>= 2.3.17)
     haml (4.1.0.beta.1)
       tilt
     haml-rails (0.6.0)
@@ -344,7 +350,7 @@ DEPENDENCIES
   factory_girl_rails
   ffaker
   font-awesome-rails
-  fuzzily
+  fuzzily!
   haml-rails
   jbuilder (~> 2.0)
   jquery-rails

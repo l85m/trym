@@ -1,42 +1,38 @@
 .modal-dialog.modal-md
   .modal-content.vertical-center
-    = simple_form_for @charge do |f|
-      .modal-body.text-center
-        %h2.modal-header-text add a recurring charge and we'll track it for you
+    = simple_form_for @charge, remote: true do |f|
+      .modal-body
+        %h2.modal-header-text.text-center Add New Charge
         %p.form-errors
           = f.error_notification
         .form-inputs
           = f.input :recurring, as: :hidden, input_html: {value: true}
-          = f.input :merchant_id, label: "Search for Company"
-          = f.input :description, as: :string, label: "Service Description", placeholder: "optional"
+          -if @trym_category_id.present?
+            = f.input :trym_category_id, as: :hidden, input_html: {value: @trym_category_id}
+          = f.input :merchant_id, as: :string, label: "Which company is the charge from?"
 
         .form-inputs
-          .row
-            .col-xs-7= f.input :billing_day, as: :string, label: "When is your next charge?", placeholder: "estimate if you're not sure"
-            .col-xs-5= f.input :amount, as: :currency, label: "How much?"
+          = f.input :amount, as: :currency, label: "How much is your average bill?"
+          = f.input :billing_day, as: :string, label: "When is your next charge?", placeholder: "estimate if you're not sure", input_html: {class: "text-left"}
+          = f.input :renewal_period_in_weeks, label: "How often are you charged?", input_html: { value: 4 }
 
-        .form-inputs
-          .row
-            .col-xs-12
-              = f.input :renewal_period_in_weeks, label: "How often are you charged?", input_html: { value: 4, data: {init_text: "Monthly - once every month"}}
-
-        .form-actions
+        .form-actions.text-center
           = render partial: 'shared/cancel_button', locals: {btn_size: 'btn-lg'}
 
           = f.button :submit, "Save", class: "btn btn-primary btn-lg"
-
+        .paragraph-spacer
 
 :javascript
   function format(item) { name: return item.name; };
 
   $('#charge_merchant_id').select2({
-    placeholder: "Comcast, AT&T, Geico, Netflix, ect.",
+    placeholder: "#{merchant_name_example_helper(@trym_category_id)}",
     minimumInputLength: 3,
     data:{ text: "name" },
     formatSelection: format,
     formatResult: format,
     ajax:{ 
-      url: "#{merchants_path}",
+      url: "#{merchants_path(trym_category_id: @trym_category_id)}",
       dataType: 'json',
       quietMillis: 250,
       data: function (term, page) { return { q: term }; },

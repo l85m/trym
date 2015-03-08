@@ -1,0 +1,35 @@
+%h2 Link Accounts
+
+
+%p.lead 
+	First tell us which accounts you want us to link.  
+	%span.hidden-xs You can link as many as you want.
+	If your account is not listed check back soon, we're adding more accounts all the time.
+
+.row
+	.col-md-1
+	-FinancialInstitution.connect_enabled.in_groups_of(4, false) do |institution_group|		
+		.col-md-5
+			%ul.list-group.wizard-list-group
+				-institution_group.each do |institution|		
+					%li.list-group-item
+						%span.lead=institution.name
+						.pull-right
+							-if current_user.linked_account_at?(institution.id).present?
+								%button.btn.btn-primary-o.btn-responsive.disabled
+									%i.fa.fa-check
+									Linked
+							-else
+								=link_to "Link", new_linked_account_path(financial_institution_id: institution.id), remote: true, class: "btn btn-primary btn-responsive"
+
+%p.lead 
+	When you're done click next and we'll review the charges we found in your account that seem to be recurring.
+
+
+.row.charge-wizard-actions
+	.col-xs-2
+		=link_to "Back", :back, class: "btn btn-default"
+	.col-xs-10.text-right
+		=link_to "Next", next_wizard_path, class: "btn btn-primary"
+
+%div{style: "min-height: 20px;"}

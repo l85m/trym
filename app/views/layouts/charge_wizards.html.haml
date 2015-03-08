@@ -1,0 +1,21 @@
+!!!
+%html
+  %head
+    =render 'layouts/head'
+  
+  %body
+    = render 'layouts/header'
+    
+    .header-padding{style: "padding-top: 50px;"}
+      = render 'layouts/flash'
+      .container
+        .row
+          .col-sm-12.col-md-10.col-md-offset-1
+            = yield
+      = render 'layouts/footer'
+
+
+    .modal.fade#modal-container
+
+    = link_to root_path, class: "navbar-brand" do
+      =image_tag "logo.svg", size: "25"

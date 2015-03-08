@@ -24,8 +24,12 @@ class Merchant < ActiveRecord::Base
 		end
 	end
 
-	def self.selection_search(query)
-		find_by_fuzzy_name(query, limit: 5).select(&:validated) + [OpenStruct.new(id: query, name: "New: " + query)]
+	def self.selection_search(query, category_id)
+		if category_id.present?
+			find_by_fuzzy_name(query, limit: 5).reject{ |m| m.trym_category_id != category_id.to_i }.select(&:validated)
+		else
+			find_by_fuzzy_name(query, limit: 5).select(&:validated)
+		end + [OpenStruct.new(id: query, name: "New: " + query)]
 	end
 
 end

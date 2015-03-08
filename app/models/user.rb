@@ -10,6 +10,9 @@ class User < ActiveRecord::Base
   has_many :linked_accounts
   has_many :financial_institutions, through: :linked_accounts
 
+  has_many :charge_wizards
+  accepts_nested_attributes_for :charge_wizards
+
  	has_many :notes, as: :noteable
  	has_one :account_detail
 
@@ -29,5 +32,9 @@ class User < ActiveRecord::Base
 
   def phone
     account_detail.formatted_phone
+  end
+
+  def linked_account_at?(institution_id)
+    linked_accounts.where(financial_institution_id: institution_id)
   end
 end

@@ -6,7 +6,6 @@ class LinkedAccount < ActiveRecord::Base
   has_many :charges
   has_many :transaction_requests
 
-  scope :has_data, -> {where.not(transaction_data: nil)}
   scope :not_destroyed, -> {where( destroyed_at: nil)}
   default_scope {not_destroyed}
 

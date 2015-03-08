@@ -7,15 +7,22 @@ class ChargesController < ApplicationController
   respond_to :html, :js
 
   def index
-    @title = "charges"
-    @charges = current_user.charges.recurring.with_merchant
-    @charges_outlook_chart_data = ChargesOutlookChartData.new(current_user, @charges)
-    @linked_accounts = current_user.linked_accounts
+    
+    if request.format.html?
+      @charges = current_user.charges.recurring.with_merchant
+      @title = "charges"
+      @charges_outlook_chart_data = ChargesOutlookChartData.new(current_user, @charges)
+      @linked_accounts = current_user.linked_accounts
+    elsif request.format.js?
+      @query = params[:q]
+      @charges = current_user.charges.find_by_fuzzy_plaid_name(@query, limit: 4).select{ |r| r.plaid_name.similar(@query) >= 0.7 }
+    end
     respond_with(@charges)
   end
 
   def new
     @title = "new charge"
+    @trym_category_id = params[:trym_category_id].to_i if params[:trym_category_id].present?
     @charge = current_user.charges.build
   end
 
@@ -33,6 +40,7 @@ class ChargesController < ApplicationController
 
   def update
     @update_from_account_scan = ( charge_params["recurring"].present? || params["charge"]["account_scan"].present? )
+    @recurring_switch_update = charge_params["recurring"].present?
     @charge.update!(charge_params)
     respond_with(@charge)
   end
@@ -48,7 +56,7 @@ class ChargesController < ApplicationController
     end
 
     def charge_params
-      params.require(:charge).permit(:merchant_id, :description, :amount, :recurring, :billing_day, :renewal_period_in_weeks)
+      params.require(:charge).permit(:merchant_id, :description, :amount, :recurring, :billing_day, :renewal_period_in_weeks, :trym_category_id)
     end
 
     def convert_amount_to_number

@@ -1,31 +1,46 @@
 class ChargeWizard < ActiveRecord::Base
-  belongs_to :linked_account
   belongs_to :user
   before_create :set_progress
 
+  scope :in_progress, -> { find_by_in_progress( true ) }
+
+  validates_uniqueness_of :user_id, conditions: -> { where( in_progress: true ) }
+
   # STEPS
-  # :select_categories, :select_categorized_charges, :validate_charge, :charge_not_found, :add_charge, 
-  # :categories_complete, :select_uncategorized_charges, :final_check, :we_missed_something
+  # :link_or_manual, :select_financial_institutions, :link_account, :select_categories, :select_categorized_charges, :validate_charge, 
+  # :charge_not_found, :add_charge, :categories_complete, :select_uncategorized_charges, :final_check, :we_missed_something
 
   def find_step
-    if incomplete_categories.present?
-      current_category_id = incomplete_categories.keys.first
-      current_category_body = incomplete_categories.values.first
-
-      if category_not_started?(current_category_id)
-        return [:select_categorized_charges, {category_id: current_category_id}]
-
-      elsif category_has_incomplete_charges?(current_category_id)
-        charge_id = current_category_body["charges"].select{ |_,v| false }.first.keys.first
-        return [:validate_charge, {charge_id: charge_id, category_id: current_category_id}]
-
-      elsif category_has_other?(current_category_id)
-        return [:charge_not_found, {category_id: current_category_id}]
-      end
-
-    else
-      :categories_complete
+    if account_id_pending_link.present?
+      [:link_account, {financial_institution_id: account_id_pending_link.first}]
+    elsif incomplete_categories.present?
+      find_category_step
     end
+  end
+
+  private
+
+  def account_id_pending_link
+    progress["financial_institutions"].reject{ |_,linked| linked }.first
+  end
+
+  def find_category_step
+    current_category_id = incomplete_categories.keys.first
+    current_category_body = incomplete_categories.values.first
+
+    if category_not_started?(current_category_id)
+      return [:select_categorized_charges, {category_id: current_category_id}]
+
+    elsif category_has_incomplete_charges?(current_category_id)
+      charge_id = current_category_body["charges"].select{ |_,v| false }.first.keys.first
+      return [:validate_charge, {charge_id: charge_id, category_id: current_category_id}]
+
+    elsif category_has_other?(current_category_id)
+      return [:charge_not_found, {category_id: current_category_id}]
+    else
+      [:categories_complete]
+    end
+
   end
 
   def select_categories(category_ids)
@@ -112,6 +127,10 @@ end
 =begin
 **progress JSON structure
 {
+  financial_institutions: 
+  {
+    :institution_id => linked?
+  },
   trym_categories:
   {
     :category_id =>

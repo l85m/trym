@@ -29,6 +29,7 @@ class LinkedAccountsController < ApplicationController
   end
 
   def new
+    @financial_institution = FinancialInstitution.find(params[:financial_institution_id]) if params[:financial_institution_id].present?
     @linked_account = LinkedAccount.new
     respond_with(@linked_account)
   end

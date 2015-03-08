@@ -1,23 +1,14 @@
 !!!
 %html
   %head
-    %title= title_helper @title
-    = favicon_link_tag 'logo.ico'
-    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
-    = javascript_include_tag 'application', 'data-turbolinks-track' => true
-    = csrf_meta_tags
-    %meta{ name: "viewport", content: "width=device-width, initial-scale=1" }
+    =render 'layouts/head'
   
   %body.scrollable
-    = render 'layouts/header'    
+    = render 'layouts/header'
     .header-padding{style: "padding-top: 50px;"}
       = render 'layouts/flash'
       = yield
       = render 'layouts/footer'
-    
-    .modal.fade#modal-container
-      %button.hidden-xs{ type: "button", class: "close", data: {dismiss: "modal"}, onClick: '$(".modal-dialog").remove()' }
-        %span.modal-close-x{ aria_hidden: "true"} &times;
-        %span.sr-only Close
-        
-    = render 'layouts/brand'
+
+
+    =render 'layouts/modal_and_brand'

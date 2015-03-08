@@ -13,7 +13,7 @@ gem 'phony_rails'
 gem 'sidekiq'
 gem 'sinatra', require: false
 gem 'slim'
-gem 'fuzzily'
+gem 'fuzzily', github: 'demosophy/fuzzily', ref: "54739cf6e8ce7fc9528f2d4ac3d204279cfde2b5" #use fork commit for scoped searches (see: https://github.com/mezis/fuzzily/issues/37)
 gem 'active_model_serializers'
 gem 'whenever'
 gem 'wicked' #form wizard

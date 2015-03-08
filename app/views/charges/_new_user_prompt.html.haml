@@ -4,24 +4,6 @@
       %h2 
         Welcome to Trym!
         %br
-        %small to get started, take 5 minutes to help us collect information about your current recurring charges
-      %span.first-time-input-options
-        %p.lead
-          =link_to new_linked_account_path, remote:true, class: "btn btn-primary-o btn-lg btn-block" do
-            %i.fa.fa-credit-card
-            scan an account
-          %small
-            %a.icon-link{href: "#"} 
-              %i.fa.fa-lock
-              securely
-            link your credit or bank accounts and we'll look for recurring charges automatically
-          
-      %span.first-time-input-options
-        %p.lead.without-margin
-          =link_to new_charge_path, remote: true, class: "btn btn-primary-o btn-lg btn-block" do
-            %i.fa.fa-plus-circle
-            add charges one at a time
-          %small input charges by hand - we need to know how much it costs and when the bill is due
-
-:javascript
-  $("#card-account-link").tooltip({'title':"Sorry - this feature is still under development"});
+        %small To get started, take 5 minutes to help us collect information about your current recurring charges
+      =link_to charge_wizard_path(:link_or_manual), class: "btn btn-primary-o btn-lg" do
+        Let's Go!

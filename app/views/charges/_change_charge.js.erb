@@ -1,48 +1,52 @@
-var charge_item = $("#charge-item-<%= @charge.id.present? ? @charge.id : 'new' %>");
-charge_item.replaceWith("<%= j render partial: 'shared/charge_item', locals: {charge: @charge} %>");
-charge_item = $("#charge-item-<%= @charge.id.present? ? @charge.id : 'new' %>");
+<% if request.format.js? %>
 
-$("#charge-list-script").replaceWith("<%= j render 'shared/charge_item_script' %>");
+  location.reload(true);
 
-<% if @charge.warnings.present? %>
+<% else %>
 
-var popover_direction = "";
+  var charge_item = $("#charge-item-<%= @charge.id.present? ? @charge.id : 'new' %>");
 
-if ( $(window).width() > 1000 ) { 
-	popover_direction = "auto right" 
-} else { 
-	popover_direction = "bottom" 
-}
+  <% unless @recurring_switch_update %>
+    charge_item.replaceWith("<%= j render partial: 'shared/charge_item', locals: {charge: @charge} %>");
+    $("#charge-list-script").replaceWith("<%= j render 'shared/charge_item_script' %>");
 
-charge_item.popover({
-	placement: popover_direction, 
-	title: "Adding some details will help us do more for you", 
-	content: "<%= j render 'warnings' %>", 
-	html: "true",
-	container: 'body'
-}).popover("show");
+      <% if @update_from_account_scan || request.referrer.include?("charge_wizards") %>
 
+        $("[name='track-switch']").bootstrapSwitch({
+          onText: "Yes",
+          offText: "No",
+          size: "mini"
+        }).on('switchChange.bootstrapSwitch', function(event, state) {
+          $.ajax({
+            type: "PUT",
+            url: "/charges/" + $(this).data("charge-id"),
+            data: { charge: { recurring: state }, scan: "scan" },
+            dataType: "script"
+          })
+        });
+
+      <% end %>
+
+  <% end %>
+
+  <% if @charge.warnings.present? %>
+
+    var popover_direction = "";
+
+    if ( $(window).width() > 1000 ) { 
+    	popover_direction = "auto right" 
+    } else { 
+    	popover_direction = "bottom" 
+    }
+
+    charge_item.popover({
+    	placement: popover_direction, 
+    	title: "Adding some details will help us do more for you", 
+    	content: "<%= j render 'charges/warnings' %>", 
+    	html: "true",
+    	container: 'body'
+    }).popover("show");
+
+  <% end %>
+  
 <% end %>
-
-<% if @update_from_account_scan %>
-
-	charge_item.find("[name='track-switch']").bootstrapSwitch({
-    onText: "Yes",
-    offText: "No",
-    size: "mini"
-  }).on('switchChange.bootstrapSwitch', function(event, state) {
-    $.ajax({
-      type: "PUT",
-      url: "/charges/" + $(this).data("charge-id"),
-      data: { charge: { recurring: state }, scan: "scan" },
-      dataType: "script"
-    })
-  });
-
-
-<% end %>
-
-var charge_flash_elements = charge_item.find("a").andSelf();
-charge_flash_elements.animate({ borderColor: "<%= brand_color %>", color: "<%= brand_color %>" }, "fast", function() {
-	charge_flash_elements.animate({ borderColor: "#e3e3e3", color: "rgba(0,0,0,0.7)" }, "slow");
-});

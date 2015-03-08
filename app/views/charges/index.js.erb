@@ -1,0 +1,14 @@
+$("#charge-search-results-container").html("<%= j render 'index' %>")
+
+$("[name='track-switch']").bootstrapSwitch({
+  onText: "Yes",
+  offText: "No",
+  size: "mini"
+}).on('switchChange.bootstrapSwitch', function(event, state) {
+  $.ajax({
+    type: "PUT",
+    url: "/charges/" + $(this).data("charge-id"),
+    data: { charge: { recurring: state }, scan: "scan" },
+    dataType: "script"
+  })
+});
