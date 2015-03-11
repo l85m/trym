@@ -30,6 +30,8 @@ class PlaidTransactionGetter
         mfa_type: mfa.first,
         mfa_question: mfa.last
       }
+    else
+      {}
     end
   end
 

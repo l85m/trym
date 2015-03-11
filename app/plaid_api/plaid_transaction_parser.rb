@@ -16,7 +16,7 @@ class PlaidTransactionParser
     calculate_recurring_score
     create_attributes_for_charges
     # consolidate_by_merchant_id
-    exclude_items_below_threshold(-2)
+    # exclude_items_below_threshold(-5)
   end
 
   private
