@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150227062854) do
+ActiveRecord::Schema.define(version: 20150308200434) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -55,11 +55,10 @@ ActiveRecord::Schema.define(version: 20150227062854) do
     t.integer  "merchant_id"
     t.boolean  "recurring"
     t.integer  "billed_to_date"
-    t.integer  "recurring_score",         default: 0,     null: false
+    t.integer  "recurring_score",         default: 0, null: false
     t.integer  "transaction_request_id"
     t.integer  "linked_account_id"
     t.string   "category_id"
-    t.boolean  "new_transaction",         default: false, null: false
     t.hstore   "history"
     t.string   "plaid_name"
     t.integer  "trym_category_id"

@@ -1,0 +1,15 @@
+trym uses industry leading
+%a.icon-link#security-notice{href: "#", tabindex: "0"} 
+  %i.fa.fa-lock
+  security
+to protect your data
+
+:javascript
+
+  $('#security-notice').popover({
+    html: 'true',
+    trigger: 'focus',
+    placement: 'auto',
+    title: "<div style='text-align: center;'><i class='fa fa-lock fa-inline'></i> Security & Privacy</div>",
+    content: "<p>Trym utilizes industry leading security measures to protect you and your information:</p><ul style='padding-left: 25px;'><li>All information you exchange with Trym.io is encrypted.</li><li>The “https” indicator in your browser’s address bar is your signal that encryption is working and active.</li><li>Trym stores your sensitive information securely and will never sell your personal data to anyone.</li></ul><p style='margin-top:10px;'>If you have any questions or concerns about privacy or security, please contact us at <a href='mailto:infosec@trym.io'>infosec@trym.io</a>.</p>"
+  });

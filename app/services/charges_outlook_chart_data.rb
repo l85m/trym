@@ -1,5 +1,6 @@
 class ChargesOutlookChartData
-	def initialize(user, charges, outlook_period = 53)
+	
+	def initialize(user, charges, outlook_period = 51)
 		@user = user
 		@outlook_period = outlook_period
 		@charges = charges.chartable
@@ -61,7 +62,7 @@ class ChargesOutlookChartData
 	end
 
 	def total_cost_outlook_for_charge(charge)
-		[charge.descriptor, (@outlook_period / charge.renewal_period_in_weeks) * charge.amount / 100.0]
+		[charge.descriptor, (charge.renewal_period_in_weeks == 52 ? charge.amount / 100.0 : (@outlook_period / charge.renewal_period_in_weeks).to_i * charge.amount / 100.0)]
 	end
 
 end

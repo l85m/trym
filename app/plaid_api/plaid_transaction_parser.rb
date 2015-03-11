@@ -5,11 +5,7 @@ class PlaidTransactionParser
     @transaction_request = TransactionRequest.find(transaction_request_id)
     @link = @transaction_request.linked_account
     create_charge_list
-    if @charge_list.select{ |c| c[:new_transaction] }.present?
-      parse 
-    else
-      @charge_list = nil
-    end
+    parse 
   end
 
   def parse
@@ -35,11 +31,7 @@ class PlaidTransactionParser
 
   def create_charge_list
     @charge_list = @transaction_request.data.collect{ |t| t.collect{ |k,v| [k.to_sym,v] }.to_h }
-    
-    all_transactions = (@transaction_request.previous_transactions + @charge_list).uniq{ |c| c[:_id] }
-    new_transaction_ids = (@charge_list - @transaction_request.previous_transactions).collect{ |c| c[:_id] }
-
-    @charge_list = all_transactions.collect{ |c| c.merge( {new_transaction: new_transaction_ids.include?(c[:_id])} ) }
+    @charge_list = (@transaction_request.previous_transactions + @charge_list).uniq{ |c| c[:_id] }
   end
 
   def create_attributes_for_charges
@@ -47,7 +39,7 @@ class PlaidTransactionParser
       charge[:history] = charge[:date].zip(charge[:amount]).sort_by{ |d,v| d }.to_h
       charge[:amount] = average_amount_of_recent_transactions(charge)
       charge[:billing_day] = charge[:date].max
-      charge[:renewal_period_in_weeks] = recurring_interval( avg_distance_between_last_four_dates(charge[:date]) )
+      charge[:renewal_period_in_weeks] = charge[:recurring_score] > 3 ? recurring_interval( avg_distance_between_last_four_dates(charge[:date]) ) : 0
     end
   end
 
@@ -72,14 +64,13 @@ class PlaidTransactionParser
           if charge[:name] == sibling[:name]
             charge[:amount] << sibling[:amount]
             charge[:date] << Date.parse(sibling[:date])
-            charge[:new_transaction] = (charge[:new_transaction] || sibling[:new_transaction])
             completed_list << sibling[:name]
           end
         end
       end
       grouped_list << charge
     end
-    @charge_list = grouped_list.select{ |c| c[:new_transaction] }
+    @charge_list = grouped_list
   end
 
   def remove_old_charges

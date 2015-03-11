@@ -1,8 +1,9 @@
 $brand-color: rgb(129, 202, 166);
 
 .charge-item{ 
-	height: 120px; 
+	height: 95px; 
 	width: 100%;
+	padding: 5px 10px !important; 
 }
 .charge-info-container{
 	display: table;
@@ -56,21 +57,33 @@ form#new_charge{
 	display: none;
 	width: 70%; 
 }
+.charge-history-container{
+	max-height: 250px;
+	overflow: auto;
+}
+.charge-history-left{
+	width: 78px;
+	color: gray;
+	text-align: right;
+	display: inline-block;
+}
+.charge-history-right{
+	width: 70px;
+	text-align: right;
+	display: inline-block;
+}
+
 label[for=charge_renewal_period_in_words]{
 	display: block;
 }
 .charge-btn-responsive{ @extend .btn-lg; }
-
+#linked-account-heading{ margin: 20px 5px 5px auto; }
 
 @media (max-width: 1199px) { 
 	.charge-btn-responsive{ 
 		padding: 6px 12px;
 		font-size: 14px;
 		line-height: 1.428571429; 
-	}
-	.charge-item{ 
-		height: 95px !important;
-		padding: 5px 10px !important; 
 	}
 	.charge-buttons{
 		width: 80px;	
@@ -90,6 +103,10 @@ label[for=charge_renewal_period_in_words]{
 @media (max-width: 766px) {
 	#new-charge-links{ margin-top: 2px; }
 	#charges-outlook{ padding: 0px; }
+	#linked-account-heading{ 
+		text-align: center; 
+		margin: 20px auto 5px auto;
+	}
 	#charge-side-list{
 		padding: 20px 2px 2px 0px;
 		border-top: #e7e7e7 1px solid;

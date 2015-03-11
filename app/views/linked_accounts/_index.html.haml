@@ -1,4 +1,8 @@
-.well{style: "margin-top: 20px; width: 100%; overflow-x: scroll; height: 92px;"}
+%p.lead#linked-account-heading
+  %i.fa.fa-credit-card
+  Linked Accounts
+
+.well{style: "width: 100%; overflow-x: scroll; height: 92px;"}
   %div{style: "width: #{(current_user.linked_accounts.count+1) * 155}px; height: 60px;"}
     .empty-linked-account-index-item.text-center
       =link_to charge_wizard_path(:select_financial_institutions) do 

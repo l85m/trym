@@ -1,6 +1,6 @@
 .modal-dialog.modal-md
   .modal-content.vertical-center
-    = simple_form_for @charge, remote: true do |f|
+    = simple_form_for @charge, remote: request.format.js? do |f|
       .modal-body
         %h2.modal-header-text.text-center Add New Charge
         %p.form-errors

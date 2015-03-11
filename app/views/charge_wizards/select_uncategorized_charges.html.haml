@@ -8,6 +8,24 @@
 
 .paragraph-spacer
 
+-recurring_charges = current_user.charges.with_merchant.recurring.order(recurring_score: :desc).reject{ |c| c.smart_trym_category }
+-if recurring_charges.present?
+  %p.text-center You've told us these charges are recurring:
+  .row
+    -recurring_charges.in_groups_of(2,false) do |charge_group|
+      -charge_group.each do |charge|
+        .col-md-6{class: charge_group.size == 1 ? "col-md-offset-3" : ''}
+          =render partial: "shared/charge_item", locals: {charge: charge}
+
+  .paragraph-spacer
+
+%p.text-center
+  We found these
+  %a#recurring-charge-score-explanation.icon-link{tabindex: "0"}
+    potentially recurring
+    %i.fa.fa-question-circle
+  charges in your linked #{'account'.pluralize current_user.linked_accounts.count}:
+
 .row
   -@uncategorized_charges.in_groups_of(2, false) do |charge_group|
     -charge_group.each do |charge|
@@ -38,7 +56,7 @@
     })
   });
   
-  $('[data-toggle="popover"]').popover({html: true, trigger: 'hover', title: "<i class='fa fa-calendar'></i> Charge History"});
+  $('[data-toggle="popover"]').popover({html: true, trigger: 'focus', title: "<i class='fa fa-calendar'></i> Charge History"});
   $('#recurring-charge-score-explanation').popover({
     html: 'true',
     trigger: 'focus',

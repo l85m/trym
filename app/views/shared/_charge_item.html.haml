@@ -1,4 +1,4 @@
-.well.charge-item{class: "merchant-#{charge.descriptor.downcase.gsub(/\W/, '')} #{charge.new_transaction ? 'hover-glow' : ''}", id: "charge-item-#{charge.id.present? ? charge.id : 'new'}" }
+.well.charge-item{class: "merchant-#{charge.descriptor.downcase.gsub(/\W/, '')}", id: "charge-item-#{charge.id.present? ? charge.id : 'new'}" }
   
   = simple_form_for charge, html: { class: "charge-info-container", method: "put" }, remote: true do |f|
     -if ( controller_name == "linked_accounts" || controller_name == "charge_wizards" || @update_from_account_scan )
@@ -26,7 +26,7 @@
             ???
       -if charge.history.present?
         .small
-          %a.icon-link{data: {toggle: "popover", content: "<p class='without-margin text-center'>" + formatted_history(charge.history)} }
+          %a.icon-link{tabindex: "0", data: {toggle: "popover", content: formatted_history(charge.history)} }
             -if charge.transaction_request_id.present?
               %i.fa.fa-credit-card
               =charge.transaction_request.linked_account.financial_institution.plaid_type              
@@ -64,13 +64,11 @@
 
       -else        
         .inline-block.charge-item-action-buttons
-          -unless controller_name == "charges"
+          -unless controller_name == "charges" && request.format.html?
             %b.small Track This?
             %input{ type: "checkbox", name: "track-switch", checked: charge.recurring, data: { charge_id: charge.id } }
             %small
               =link_to "(delete)", {controller: "charges", action: "destroy", id: charge.id}, method: :delete, class: "gray red-on-hover", style: "margin-top: 5px;", data: {confirm: "Are you sure you want to delete this charge? This can't be undone."}, remote: true
-            -if charge.new_transaction
-              %span.label.label-primary New Charge!
           -else
             =link_to new_charge_stop_order_path(charge), remote: true, class: "btn btn-default charge-btn-responsive" do
               %i.fa.fa-stop
@@ -78,5 +76,5 @@
 
         .inline-block.charge-item-form-buttons.hidden
           =f.submit "save", class: "btn btn-primary btn-xs", style: "width: 70px; margin-bottom: 3px;", onclick:"editChargeSubmit($(this));"
-          =link_to "delete", {action: "destroy", id: charge.id}, method: :delete, class: "btn btn-danger btn-xs", style: "width: 70px; margin-bottom: 3px;", data: {confirm: "Are you sure you want to delete this charge? This can't be undone."}, remote: true
+          =link_to "un-track", charge_path(charge, charge: {recurring: false}), method: :put, class: "btn btn-danger btn-xs", style: "width: 70px; margin-bottom: 3px;", data: {confirm: "Are you sure you don't want us to track this charge?"}, remote: true
           %button.btn.btn-default.btn-xs{style: "width: 70px;", onclick:"hideChargeSubmit($(this).parents('.charge-item')); return false;"} cancel

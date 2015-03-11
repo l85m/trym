@@ -25,10 +25,6 @@ class LinkedAccount < ActiveRecord::Base
     end
   end
 
-  def set_new_transaction_false_on_charges
-    charges.where(new_transaction: true).update_all(new_transaction: false)
-  end
-
   def delink
     #AccountDelinker.perform_async(id)
     update!( destroyed_at: Time.now )

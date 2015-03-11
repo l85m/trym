@@ -46,7 +46,6 @@ class ChargeBuilder
 			renewal_period_in_weeks: charge[:renewal_period_in_weeks],
 			user_id: @user_id,
 			transaction_request_id: @transaction_request.id,
-			new_transaction: charge[:new_transaction],
 			linked_account_id: @transaction_request.linked_account.id,
 			history: charge[:history]
 		}

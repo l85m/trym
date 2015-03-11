@@ -21,15 +21,13 @@ class Charge < ActiveRecord::Base
   
   scope :recurring_or_likely_to_be_recurring, -> { where(Charge.arel_table[:recurring].eq(true).or(Charge.arel_table[:recurring_score].gt(3))) }
   scope :recurring, -> { where(recurring: true) }
+  scope :not_recurring, -> { where(recurring: [false,nil]) }
   scope :recurring_likely_to_be, -> {where('recurring_score > ?', 3).where.not(recurring_score: 99)}
   scope :recurring_might_be, -> {where(recurring_score: 2..3)}
   scope :recurring_unlikely_to_be, -> {where(recurring_score: 0..1)}
   scope :recurring_very_unlikely_to_be, -> {where('recurring_score < ?', 0)}
 
-  scope :new_transaction, -> {where(new_transaction: true)}
-  scope :not_recurring, -> { where(recurring: false) }
   scope :sort_by_recurring_score, -> { order(recurring_score: :desc) }
-  scope :sort_by_new_first, -> { order(new_transaction: :desc) }
   scope :from_link, -> { where.not(transaction_request_id: nil) }
   scope :from_user, -> { where(transaction_request_id: nil) }
 
@@ -39,6 +37,11 @@ class Charge < ActiveRecord::Base
 
   before_validation :add_user_if_linked_account_exists
   before_validation :update_recurring_score_if_recurring_changed
+
+
+  def self.new_transaction(new_after = 30.days.ago.to_date)
+    where("history ?| :date", date: "{#{(new_after..Date.today).to_a.map(&:to_s).join(",")}}")
+  end
 
   def self.renewal_period_in_words
     {
@@ -51,6 +54,12 @@ class Charge < ActiveRecord::Base
       26  => "Bi-Annually - twice a year",
       52  => "Annually - once a year"
     }
+  end
+
+  def new_transaction(new_after = 30.days.ago)
+    if history.present?
+      history.keys.max >= new_after
+    end
   end
 
   def warnings
@@ -97,12 +106,14 @@ class Charge < ActiveRecord::Base
   def smart_description
     if description.present?
       description
+    elsif merchant_id.nil? && plaid_name.present?
+      plaid_name
     elsif smart_trym_category.present?
       smart_trym_category.name
     elsif plaid_name.present?
-      return plaid_name
+      plaid_name
     else
-      return "(no description)"
+      "(no description)"
     end
   end
 
@@ -168,7 +179,11 @@ class Charge < ActiveRecord::Base
 
   def bills_since_first_reported_bill
     return 0 if (renewal_period_in_weeks == 0 || billing_day.nil? || Date.today < billing_day)
-    ( (Date.today - billing_day) / 7 / renewal_period_in_weeks ).to_i
+    if renewal_period_in_weeks % 4 == 0
+      ( ( (Date.today - billing_day) / 30.43683 ).floor / renewal_period_in_months ).floor
+    else
+      ( ( (Date.today - billing_day) / 7.0 ).floor / renewal_period_in_weeks ).floor
+    end
   end
 
   def renewal_period_in_months

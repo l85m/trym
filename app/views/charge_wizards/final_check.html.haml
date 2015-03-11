@@ -62,9 +62,11 @@
   $("#search-charges-field").keyup(function() {
     clearTimeout(thread);
     var target = $(this);
+    if( $(this).val().length > 0 ) { $("#charge-search-results-container").html("<p class='lead text-center'><i class='fa fa-cog fa-spin'></i> Searching ...</p>") }
     thread = setTimeout(function() { findMember(target.val()); }, 500); 
   });
 
+  $('[data-toggle="popover"]').popover({html: true, trigger: 'focus', title: "<i class='fa fa-calendar'></i> Charge History"});
 
   $("[name='track-switch']").bootstrapSwitch({
     onText: "Yes",
@@ -77,13 +79,4 @@
       data: { charge: { recurring: state }, scan: "scan" },
       dataType: "script"
     })
-  });
-  
-  $('[data-toggle="popover"]').popover({html: true, trigger: 'hover', title: "<i class='fa fa-calendar'></i> Charge History"});
-  $('#recurring-charge-score-explanation').popover({
-    html: 'true',
-    trigger: 'focus',
-    placement: 'bottom',
-    title: "<div style='text-align: left;'>How do we determine what might be recurring?</div>",
-    content: "We look at three things: <ul style='margin-top:5px;'><li>when and how frequent you're charged</li><li>category information from your bank and</li><li>the merchant name</li></ul>  We don't always get this right so if you see something that's clearly wrong please send us an email at <a href='mailto:ai@trym.io'>ai@trym.io</a>."
   });

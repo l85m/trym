@@ -15,7 +15,7 @@ class ChargesController < ApplicationController
       @linked_accounts = current_user.linked_accounts
     elsif request.format.js?
       @query = params[:q]
-      @charges = current_user.charges.find_by_fuzzy_plaid_name(@query, limit: 4).select{ |r| r.plaid_name.similar(@query) >= 0.7 }
+      @charges = current_user.charges.not_recurring.find_by_fuzzy_plaid_name(@query, limit: 4).select{ |r| r.plaid_name.similar(@query) >= 0.7 }
     end
     respond_with(@charges)
   end

@@ -1,7 +1,6 @@
 class LinkedAccountsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_linked_account, only: [:show, :edit, :update, :destroy]
-  after_action :set_new_transaction_false_on_charges, only: :show
   respond_to :html, :js, :json
 
   def show
@@ -10,7 +9,7 @@ class LinkedAccountsController < ApplicationController
       if ["likely_to_be", "might_be", "unlikely_to_be", "very_unlikely_to_be"].include?(@grouping)
         charges = Charge.where(linked_account: @linked_account).send("recurring_#{@grouping}") 
         @stop_order_charge_ids = charges.includes(:stop_orders).pluck('stop_orders.id')
-        @charges = charges.with_merchant.sort_by_recurring_score.sort_by_new_first
+        @charges = charges.with_merchant.sort_by_recurring_score
         @grouping = @grouping.gsub("_","-")
       end
     
@@ -18,7 +17,7 @@ class LinkedAccountsController < ApplicationController
       charges = @linked_account.charges
     
       @stop_order_charge_ids = charges.includes(:stop_orders).pluck('stop_orders.id')
-      @charges = charges.with_merchant.sort_by_recurring_score.sort_by_new_first.group_by(&:recurring_score_grouping)
+      @charges = charges.with_merchant.sort_by_recurring_score.group_by(&:recurring_score_grouping)
       
       respond_with(@linked_account)
     end
@@ -62,7 +61,7 @@ class LinkedAccountsController < ApplicationController
 
   private
     def set_linked_account
-      @linked_account = LinkedAccount.find(params[:id])
+      @linked_account = current_user.linked_accounts.find(params[:id])
     end
 
     def linked_account_params
@@ -75,10 +74,6 @@ class LinkedAccountsController < ApplicationController
 
     def mfa_params
       params.require(:linked_account).permit(:mfa_response)
-    end
-
-    def set_new_transaction_false_on_charges
-      @linked_account.set_new_transaction_false_on_charges
     end
 
 end

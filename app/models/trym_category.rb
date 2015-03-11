@@ -10,6 +10,12 @@ class TrymCategory < ActiveRecord::Base
 	def charges
 		t = Charge.arel_table
 
-		Charge.where( t[:merchant_id].in(merchants.pluck(:id)).or( t[:category_id].in(plaid_categories.pluck(:plaid_id)) ).or( t[:trym_category_id].eq(id) ) )
+		Charge.where( t[:trym_category_id].eq(id).or(
+				t[:trym_category_id].eq(nil).and( t[:merchant_id].in(merchants.pluck(:id))).or(
+					t[:merchant_id].in([nil] + Merchant.not_categorized.pluck(:id)).and( t[:category_id].in(plaid_categories.pluck(:plaid_id)))
+				)
+			)
+		)
 	end
+
 end

@@ -8,6 +8,8 @@ class Merchant < ActiveRecord::Base
 	fuzzily_searchable :name
 
 	scope :validated, -> {where(validated: true)}
+	scope :not_validated, -> {where(validated: false)}
+	scope :not_categorized, -> {where(trym_category_id: nil)}
 
 	def self.find_by_fuzzy_name_with_similar_threshold(query, threshold = 80)
 		query = query.downcase.gsub(/[^0-9a-z ]/i, '')

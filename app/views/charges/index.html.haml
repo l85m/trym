@@ -1,14 +1,13 @@
 .container-fluid.scrollable-with-offset
 
   .row{style: 'padding: 0px 20px;'}
-    - if @charges.present? || @linked_accounts.present?
+    - if @charges.present?
       =render 'charge_list'
       .scrollable#charges-outlook{ class: (@charges.present? || @linked_accounts.present?) ? "col-md-8 col-sm-6" : "col-xs-12"}
-        =render 'contact_preferences'
         =render 'linked_accounts/index'
         =render 'twelve_month_outlook'
     - else
-      .scrollable#charges-outlook{ class: (@charges.present? || @linked_accounts.present?) ? "col-md-8 col-sm-6" : "col-xs-12"}
+      .scrollable#charges-outlook.col-md-8.col-sm-6.col-md-offset-2.col-sm-offset-3
         =render 'new_user_prompt'
   
 :javascript
@@ -44,5 +43,5 @@
   }
 
   $(function () {
-    $('[data-toggle="popover"]').popover({html: true, trigger: 'hover', title: "<i class='fa fa-calendar'></i> Charge History"});
+    $('[data-toggle="popover"]').popover({html: true, trigger: 'focus', title: "<i class='fa fa-calendar'></i> Charge History"});
   })

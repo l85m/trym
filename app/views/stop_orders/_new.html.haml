@@ -4,19 +4,21 @@
       .modal-body
         .multi-part-form.block1.show
           .row
-            .col-xs-12.text-center
+            .col-xs-12
               %h2.modal-header-text
-                Two things you need to know before we continue:
-              %p.lead                
-                = "1. If you are locked in to a contract we can't cancel this for you"
-              %p.lead
-                = "2. If we have trouble canceling your charge in time we'll try to contact you before you're charged"
-                %small
-                  (We'll try and call you at
-                  =link_to current_user.phone, edit_account_detail_path(current_user.account_detail), class: "btn btn-xs btn-default"
-                  if we have any issues)
-              = render 'shared/cancel_button'
-              %button.next{ type: "button", class: "btn btn-primary", data: {current_block: "1", next_block: "2"} } Ok, lets do this!
+                A few things to note before we continue:
+              %ol                
+                %li.lead If you are currently under contract with this merchant, we cannot stop this expense; and
+                %li.lead If we are unable to cancel this expense prior to your next recurring charge, we will promptly notify you.
+              
+              %p.text-center
+                ="(We'll try and call you at #{current_user.phone}"
+                =link_to "change", edit_account_detail_path(current_user.account_detail), class: "btn btn-xs btn-default"
+                if we have any issues)
+              
+              %span= render 'shared/cancel_button'
+              %span.pull-right
+                %button.next{ type: "button", class: "btn btn-primary", data: {current_block: "1", next_block: "2"} } Ok, lets do this!
 
         .multi-part-form.block2.hidden.text-center
           =f.input :charge_id, as: :hidden

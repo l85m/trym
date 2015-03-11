@@ -1,10 +1,9 @@
 %h2=@category.name
 
--if @category.charges.where(user: current_user).with_merchant.from_user.recurring.present? || @category.charges.where(user: current_user).recurring_likely_to_be.from_link.present?
+-if @category.charges.where(user: current_user).with_merchant.from_user.recurring.present? || @category.charges.where(user: current_user).recurring_or_likely_to_be_recurring.from_link.present?
 
   %p.lead
     Add or select the charges related to #{@category.name} that you want trym to track
-
   -if @category.charges.where(user: current_user).with_merchant.recurring.present?
     %p.text-center You've told us these charges are recurring:
     .row
@@ -103,7 +102,6 @@
   .col-xs-6
     =link_to "Back", wizard_path(@previous_step), class: "btn btn-default btn-responsive"
   .col-xs-6.text-right
-    =link_to "Skip to End", wizard_path(:select_uncategorized_charges), class: "btn btn-default btn-responsive"
     =link_to "Next", wizard_path(@next_step), class: "btn btn-primary btn-responsive"
 
 %div{style: "min-height: 20px;"}
@@ -124,7 +122,7 @@
     })
   });
   
-  $('[data-toggle="popover"]').popover({html: true, trigger: 'hover', title: "<i class='fa fa-calendar'></i> Charge History"});
+  $('[data-toggle="popover"]').popover({html: true, trigger: 'focus', title: "<i class='fa fa-calendar'></i> Charge History"});
   $('#recurring-charge-score-explanation').popover({
     html: 'true',
     trigger: 'focus',
