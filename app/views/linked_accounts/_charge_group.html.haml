@@ -4,8 +4,6 @@
       ="#{pluralize(grouped_charges.count, 'charge')}" 
       %b= grouping
       recurring
-      -if grouped_charges.select{ |c| c.new_transaction }.present?
-        ="(#{grouped_charges.select{ |c| c.new_transaction }.count} new)"
   .col-xs-12
     .collapse{id: "collapse-#{grouping.downcase.gsub(" ","-")}", class: ["likely to be", "confirmed by you as"].include?(grouped_charges.first.recurring_score_grouping) ? 'in' : ''}
       -if @grouping.present? || grouped_charges.first.recurring_score > 1  

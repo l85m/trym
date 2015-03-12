@@ -16,9 +16,14 @@
 						%span.lead=institution.name
 						.pull-right
 							-if current_user.linked_account_at?(institution.id).present?
-								%button.btn.btn-primary-o.btn-responsive.disabled
-									%i.fa.fa-check
-									Linked
+								-unless current_user.linked_account_at?(institution.id).first.error_message
+									%button.btn.btn-primary-o.btn-responsive.disabled
+										%i.fa.fa-check
+										Linked
+								-else
+									%a.btn.btn-primary-o.btn-responsive#link-account-error-popover-button{ tabindex: "0", data: { toggle: "popover", title: "Your #{institution.name} account is not responding", content: "<div class='text-center' style='width: 300px;'>" + current_user.linked_account_at?(institution.id).first.error_message + "</div>"} }
+										%i.fa.fa-exclamation-circle
+										Needs Attention
 							-else
 								=link_to "Link", new_linked_account_path(financial_institution_id: institution.id), remote: true, class: "btn btn-primary btn-responsive"
 
@@ -33,3 +38,10 @@
 		=link_to "Next", next_wizard_path, class: "btn btn-primary"
 
 %div{style: "min-height: 20px;"}
+
+:javascript
+	$('[data-toggle="popover"]').popover({
+		placement: 'bottom',
+		trigger: 'focus',
+		html: 'true'
+	});

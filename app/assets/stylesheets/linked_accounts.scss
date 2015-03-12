@@ -29,6 +29,24 @@ $brand-color: rgb(129, 202, 166);
 	border-color: $brand-color;
 	i{ color: white; }
 }
+.linked-account-index-item-with-error{
+	@extend .linked-account-index-item;
+	a{ color: #f0ad4e; }
+	border-color: #f0ad4e;
+}
+.linked-account-index-item-with-error:hover{
+	background-color: #f0ad4e;
+}
+#link-account-error-popover-button{
+	border-color: #f0ad4e;
+	color: #f0ad4e;
+	.fa-exclamation-circle{ color: #f0ad4e; }
+}
+#link-account-error-popover-button:hover{
+	background-color: #f0ad4e;
+	color: white;
+	.fa-exclamation-circle{ color: white; }
+}
 
 #error-container{
 	position: absolute;

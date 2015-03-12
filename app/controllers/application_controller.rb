@@ -7,4 +7,8 @@ class ApplicationController < ActionController::Base
     stored_location_for(resource) || charges_path
   end
 
+  def access_denied(args)
+  	redirect_to root_path, flash: {error: "You don't have permission to do that"}
+  end
+
 end
