@@ -47,6 +47,9 @@ gem 'select2-rails', github: 'demosophy/select2.trym'
 gem 'devise', github: 'demosophy/devise-3.4.1.usub'
 gem 'devise_invitable' #alpha invites
 
+#admin
+gem 'activeadmin', github: 'activeadmin'
+
 group :production, :staging do
   gem 'unicorn'
   gem 'mina'

@@ -10,4 +10,8 @@ class PlaidCategory < ActiveRecord::Base
 		end
 	end
 
+	def name
+		"#{plaid_type.titlecase}: #{hierarchy.join(" > ").titlecase}"
+	end
+
 end

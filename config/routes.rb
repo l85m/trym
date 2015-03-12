@@ -1,7 +1,6 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
-  
   resources :charge_wizards
 
   resources :invite_requests, only: [:new, :create]
@@ -21,6 +20,7 @@ Rails.application.routes.draw do
   resources :contact_preferences, only: :update, defaults: {format: 'js'}
 
   devise_for :users
+  ActiveAdmin.routes(self)
 
   authenticated :user do
     devise_scope :user do

@@ -15,12 +15,21 @@
               link new account    
 
     -current_user.linked_accounts.each do |link|
-      .linked-account-index-item.text-center
-        =link_to link, onclick: 'showLoader();' do 
-          .table-div{style: "width: 100%; height: 100%;"}
-            .vertical-center
-              %div=link.account_name
-              .linked-account-index-labels
-                %span.label.label-default{style: "margin: 0px 2px;"}="#{link.charges.recurring.count} recurring"
-                -if link.charges.new_transaction.count > 0
-                  %span.label.label-primary{style: "margin: 0px 2px;"}="#{link.charges.new_transaction.count} new!"
+      -unless link.error_message
+        .linked-account-index-item.text-center
+          =link_to link, onclick: 'showLoader();' do 
+            .table-div{style: "width: 100%; height: 100%;"}
+              .vertical-center
+                %div=link.account_name
+                .linked-account-index-labels
+                  %span.label.label-default{style: "margin: 0px 2px;"}="#{link.charges.recurring.count} recurring"
+      -else
+        .linked-account-index-item-with-error.text-center
+          =link_to link, onclick: 'showLoader();' do 
+            .table-div{style: "width: 100%; height: 100%;"}
+              .vertical-center
+                %div=link.account_name                
+                .linked-account-index-labels
+                  %span.label.label-warning{style: "margin: 0px 2px; color: white;"}
+                    %i.fa.fa-exclamation-circle{style: "color: white;"}
+                    needs attention

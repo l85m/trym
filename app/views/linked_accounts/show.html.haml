@@ -1,3 +1,11 @@
+-if @linked_account.error_message
+  #flash-container
+    .alert{role: 'alert', class: flash_alert_type("alert") }
+      %p.without-margin.lead.text-center
+        %i.fa.fa-exclamation-circle{ style: "color: #f0ad4e;"}
+        %span= @linked_account.error_message
+
+
 -unless @linked_account.charges.present?
   .row.text-center
     .col-xs-10.col-xs-offset-1
