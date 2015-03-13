@@ -16,6 +16,10 @@ class User < ActiveRecord::Base
 
  	default_scope { includes(:account_detail) }
 
+  def name
+    id.to_s + ": " + (first_and_last_name.present? ? first_and_last_name : email)
+  end
+
   def first_and_last_name
     account_detail.present? ? "#{account_detail.first_name} #{account_detail.last_name}" : nil
   end

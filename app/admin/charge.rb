@@ -38,4 +38,13 @@ ActiveAdmin.register Charge do
     actions
   end
 
+
+  filter :name
+  filter :description
+  filter :merchant
+  filter :user
+  filter :created_at
+  filter :updated_at
+
+
 end
