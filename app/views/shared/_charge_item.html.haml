@@ -1,4 +1,7 @@
 .well.charge-item{class: "merchant-#{charge.descriptor.downcase.gsub(/\W/, '')}", id: "charge-item-#{charge.id.present? ? charge.id : 'new'}" }
+  -if current_user.admin
+    .text-center{style: "position: absolute; width: 90%; top: -4px;"}
+      %small=link_to "admin feedback", admin_charge_path(charge)
   
   = simple_form_for charge, html: { class: "charge-info-container", method: "put" }, remote: true do |f|
     -if ( controller_name == "linked_accounts" || controller_name == "charge_wizards" || @update_from_account_scan )
@@ -34,7 +37,8 @@
               %i.fa.fa-calendar
               history
               
-    .charge-info.charge-description        
+    .charge-info.charge-description    
+    
       %p.lead.without-margin
         =charge_attribute_edit_link(charge, "merchant_id") do
           -if charge.merchant.present? && charge.merchant.name.present?
@@ -57,7 +61,6 @@
       %p.without-margin
         =charge_attribute_edit_link(charge, "description") do
           =charge.smart_description
-
     .charge-info.charge-buttons.text-center
       -if ( controller_name == "linked_accounts" ? @stop_order_charge_ids.include?(charge.id) : true ) && charge.has_stop_order_or_is_stopped?
         =render partial: "stop_orders/show", locals: {stop_order: charge.active_stop_order}
