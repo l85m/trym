@@ -48,6 +48,7 @@
 =render 'shared/charge_item_script'
 
 :javascript
+  $('[data-toggle="popover"]').popover({html: true, trigger: 'focus', title: "<i class='fa fa-calendar'></i> Charge History"});
 
   var thread = null;
 
@@ -65,8 +66,6 @@
     if( $(this).val().length > 0 ) { $("#charge-search-results-container").html("<p class='lead text-center'><i class='fa fa-cog fa-spin'></i> Searching ...</p>") }
     thread = setTimeout(function() { findMember(target.val()); }, 500); 
   });
-
-  $('[data-toggle="popover"]').popover({html: true, trigger: 'focus', title: "<i class='fa fa-calendar'></i> Charge History"});
 
   $("[name='track-switch']").bootstrapSwitch({
     onText: "Yes",

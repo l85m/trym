@@ -14,8 +14,9 @@ class ChargesController < ApplicationController
       @charges_outlook_chart_data = ChargesOutlookChartData.new(current_user, @charges)
       @linked_accounts = current_user.linked_accounts
     elsif request.format.js?
+      @trym_category_id = params[:trym_category_id]
       @query = params[:q]
-      @charges = current_user.charges.not_recurring.find_by_fuzzy_plaid_name(@query, limit: 4).select{ |r| r.plaid_name.similar(@query) >= 0.7 }
+      @charges = current_user.charges.not_recurring.find_by_fuzzy_plaid_name(@query, limit: params[:limit].present? ? params[:limit].to_i : 4).select{ |c| c.plaid_name.similar(@query) >= 0.7 }
     end
     respond_with(@charges)
   end

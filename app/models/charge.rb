@@ -22,10 +22,10 @@ class Charge < ActiveRecord::Base
   scope :recurring_or_likely_to_be_recurring, -> { where(Charge.arel_table[:recurring].eq(true).or(Charge.arel_table[:recurring_score].gt(3))) }
   scope :recurring, -> { where(recurring: true) }
   scope :not_recurring, -> { where(recurring: [false,nil]) }
-  scope :recurring_likely_to_be, -> {where('recurring_score > ?', 3).where.not(recurring_score: 99)}
-  scope :recurring_might_be, -> {where(recurring_score: 2..3)}
-  scope :recurring_unlikely_to_be, -> {where(recurring_score: 0..1)}
-  scope :recurring_very_unlikely_to_be, -> {where('recurring_score < ?', 0)}
+  scope :recurring_likely_to_be, -> {not_recurring.where('recurring_score > ?', 3)}
+  scope :recurring_might_be, -> {not_recurring.where(recurring_score: 2..3)}
+  scope :recurring_unlikely_to_be, -> {not_recurring.where(recurring_score: 0..1)}
+  scope :recurring_very_unlikely_to_be, -> {not_recurring.where('recurring_score < ?', 0)}
 
   scope :sort_by_recurring_score, -> { order(recurring_score: :desc) }
   scope :from_link, -> { where.not(transaction_request_id: nil) }
@@ -36,7 +36,7 @@ class Charge < ActiveRecord::Base
   fuzzily_searchable :plaid_name
 
   before_validation :add_user_if_linked_account_exists
-  before_validation :update_recurring_score_if_recurring_changed
+  # before_validation :update_recurring_score_if_recurring_changed
 
 
   def self.new_transaction(new_after = 30.days.ago.to_date)

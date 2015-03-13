@@ -14,10 +14,10 @@ class LinkedAccountsController < ApplicationController
       end
     
     else
-      charges = @linked_account.charges
+      @charges = @linked_account.charges.recurring
     
-      @stop_order_charge_ids = charges.includes(:stop_orders).pluck('stop_orders.id')
-      @charges = charges.with_merchant.sort_by_recurring_score.group_by(&:recurring_score_grouping)
+      @stop_order_charge_ids = @charges.includes(:stop_orders).pluck('stop_orders.id')
+      #@charges = charges.with_merchant.sort_by_recurring_score.group_by(&:recurring_score_grouping)
       
       respond_with(@linked_account)
     end

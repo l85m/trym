@@ -12,20 +12,20 @@ module LinkedAccountHelper
         style: "margin-bottom: 10px;"
       } 
     else
-      if grouped_charges.first.recurring_score > 3
-        {
-          class: "btn btn-primary-o btn-block collapse-expand-button in active",
-          href: "#collapse-#{grouping.downcase.gsub(" ","-")}",
-          aria_expanded:"true",
-          aria_controls:"collapse-#{grouping.downcase.gsub(" ","-")}", 
-          data: {toggle:"collapse"},
-          style: "margin-bottom: 10px;"
-        }
-      elsif grouped_charges.first.recurring_score > 1
+      if grouped_charges.first.recurring
         {
           class: "btn btn-primary-o btn-block collapse-expand-button",
           href: "#collapse-#{grouping.downcase.gsub(" ","-")}",
           aria_expanded:"false",
+          aria_controls:"collapse-#{grouping.downcase.gsub(" ","-")}", 
+          data: {toggle:"collapse"},
+          style: "margin-bottom: 10px;"
+        }      
+      elsif grouped_charges.first.recurring_score > 1
+        {
+          class: "btn btn-primary-o btn-block collapse-expand-button in active",
+          href: "#collapse-#{grouping.downcase.gsub(" ","-")}",
+          aria_expanded:"true",
           aria_controls:"collapse-#{grouping.downcase.gsub(" ","-")}", 
           data: {toggle:"collapse"},
           style: "margin-bottom: 10px;"

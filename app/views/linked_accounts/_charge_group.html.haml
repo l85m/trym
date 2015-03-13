@@ -5,12 +5,12 @@
       %b= grouping
       recurring
   .col-xs-12
-    .collapse{id: "collapse-#{grouping.downcase.gsub(" ","-")}", class: ["likely to be", "confirmed by you as"].include?(grouped_charges.first.recurring_score_grouping) ? 'in' : ''}
+    .collapse{id: "collapse-#{grouping.downcase.gsub(" ","-")}", class: ["likely to be", "might be"].include?(grouped_charges.first.recurring_score_grouping) ? 'in' : ''}
       -if @grouping.present? || grouped_charges.first.recurring_score > 1  
         -grouped_charges.in_groups_of(3,false) do |charges|
           -charges.each do |charge|
-            %div{ class: cols_for_grouped_charges(grouped_charges, charges, charge) }
-              =render partial: "shared/charge_item", locals: {charge: charge}
+            /.col-md-6{class: charges.size == 1 ? "col-md-offset-3" : ''}
+            =render partial: "shared/charge_item", locals: {charge: charge}
 
 :javascript
   $(".collapse").on('show.bs.collapse', function () {
