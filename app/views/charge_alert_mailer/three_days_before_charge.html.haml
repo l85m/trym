@@ -4,7 +4,7 @@
     %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
   %body
     %div{style: "font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:14px; line-height:1.428571429; margin:0"}
-      %div{style: "border:1px solid black; margin:20px auto; padding:5px; width:350px"}
+      %div{style: "margin:20px auto; padding:5px; width:350px"}
         %div{style: "min-height: 35px;"}
           %div{style: "float:left; min-height:1px; width:50%"}
             <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="30px" height="30px" viewBox="0 0 300 300" enable-background="new 0 0 300 300" xml:space="preserve">
@@ -14,7 +14,7 @@
             <path fill="#FFFFFF" d="M156.127,106.247h25.75v18.75h-25.75v80.25c0,9.75,2.75,11.5,16,11.5h9.75v18.75h-16.25c-22,0-30.75-4.5-30.75-28.25v-82.25h-22v-18.75h22v-38.75h21.25V106.247z"/>
             </g>
             </svg>
-            %span{style: "font-size:16px; font-weight:500;"}  Heads up!
+            %span{style: "font-size:16px; font-weight:500; vertical-align:super;"}  Heads up!
           %div{:align => "right", style: "float:right; min-height:1px; text-align:right; width:50%"}
             %a{:href => "https://trym.io/users/sign_in", style: "background: #81CAA6; color: #FFF; border-radius:4px; border:1px solid #81caa6; display:inline-block; font-size:14px; font-weight:normal; margin-bottom:0; padding:6px 12px; text-align:center; text-decoration: none;"} Log In
         %div      
@@ -24,7 +24,7 @@
             %p{style: "margin:0 0 10px"}
               We are writing to alert you that in 3 days you will be billed for the following recurring services
           -@charges.each do |charge|
-            %dl{style: "border-top-color:gray; border-top-style:solid; border-top-width:1px; margin-bottom:5px; margin-top:10px"}
+            %dl{style: "border-top-color:lightgray; border-top-style:solid; border-top-width:1px; margin-bottom:10px; margin-top:10px; padding-top:10px;"}
               %dt{style: "clear:left; float:left; font-weight:bold; margin-left:8px; overflow:hidden; text-align:left; text-overflow:ellipsis; white-space:nowrap; width:140px"} Charge:
               %dd{style: "margin-left:150px; text-align:left; width:200px"}=charge.merchant.present? ? charge.merchant_name : charge.description
               %dt{style: "clear:left; float:left; font-weight:bold; margin-left:8px; overflow:hidden; text-align:left; text-overflow:ellipsis; white-space:nowrap; width:140px"} Amount:
@@ -40,7 +40,7 @@
           %div{:align => "left", style: "margin-top:20px; text-align:left"}
             %p{style: "margin:0 0 10px"}
               Click
-              %a{:href => "https://trym.io/users/edit", style: "color: #81CAA6"} here
+              =link_to "here", edit_user_registration_path(user), style: "color: #81CAA6"
               to change how often and how we contact you or reply to this email if you have questions or feedback.
             %p{style: "margin:0 0 10px"}
               Thank you for your membership!
