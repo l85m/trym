@@ -43,15 +43,17 @@
 =render 'shared/charge_item_script'
 
 :javascript
-  $("[name='track-switch']").bootstrapSwitch({
-    onText: "Yes",
-    offText: "No",
-    size: "mini"
-  }).on('switchChange.bootstrapSwitch', function(event, state) {
+  $("[name='track-switch']").change( function() {
+    var state = $(this).is(":checked")
+    if( state ) {
+      var cat_id = "#{@category.id}";
+    } else {
+      var cat_id = "";
+    }
     $.ajax({
       type: "PUT",
       url: "/charges/" + $(this).data("charge-id"),
-      data: { charge: { recurring: state }, scan: "scan" },
+      data: { charge: { recurring: state, trym_category_id: cat_id }, scan: "scan" },
       dataType: "script"
     })
   });

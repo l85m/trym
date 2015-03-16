@@ -37,10 +37,16 @@
           Add a new charge
         .paragraph-spacer
       .col-md-6.text-center
+        =link_to list_all_charges_path(trym_category_id: @category.id), class: "btn btn-primary btn-block btn-lg", onclick: 'showLoader();' do
+          %i.fa.fa-list
+          List all linked account charges
+        .paragraph-spacer
+      .col-md-12.text-center
+
         .input-group
           .input-group-addon
             %i.fa.fa-search
-          %input.input-lg.form-control#search-charges-field{ placeholder: "Search your linked #{'account'.pluralize(current_user.linked_accounts.count)} ", type: "text" }
+          %input.input-lg.form-control#search-charges-field{ placeholder: "Search for charges        ", type: "text" }
         .paragraph-spacer
 
       #charge-search-results-container
@@ -53,29 +59,54 @@
   .paragraph-spacer
 
 -else
-  %p.lead
-    Add the charges related to #{@category.name} that you want trym to track.
+  -if current_user.linked_accounts.present?
+    %p.lead
+      We couldn't find any charges in your linked accounts that look recurring so feel free to look for yourself or add a new charge
+    .row
+      .col-md-6.text-center
+        =link_to new_charge_path, class: "btn btn-primary btn-block btn-lg", remote: true do
+          %i.fa.fa-plus
+          Add a new charge
+        .paragraph-spacer
+      .col-md-6.text-center
+        =link_to list_all_charges_path, class: "btn btn-primary btn-block btn-lg", onclick: 'showLoader();' do
+          %i.fa.fa-list
+          List all linked account charges
+        .paragraph-spacer
+      .col-md-12.text-center
 
-  .row
-    .col-md-8.col-md-offset-2.col-sm-12
-      %h4.text-center Add your first #{@category.name} charge
-      = simple_form_for current_user.charges.new, remote: true do |f|
-        %p.form-errors
-          = f.error_notification
-        .form-inputs
-          = f.input :recurring, as: :hidden, input_html: {value: true}
-          -if @category.present?
-            = f.input :trym_category_id, as: :hidden, input_html: {value: @category.id}
-          = f.input :merchant_id, as: :string, label: "Which company is the charge from?"
+        .input-group
+          .input-group-addon
+            %i.fa.fa-search
+          %input.input-lg.form-control#search-charges-field{ placeholder: "Search for charges        ", type: "text" }
+        .paragraph-spacer
 
-        .form-inputs
-          = f.input :amount, as: :currency, label: "How much is your average bill?"
-          = f.input :billing_day, as: :string, label: "When is your next charge?", placeholder: "estimate if you're not sure", input_html: {class: "text-left"}
-          = f.input :renewal_period_in_weeks, label: "How often are you charged?", input_html: { value: 4 }
+      #charge-search-results-container
+  -else
+    
+    %p.lead
+      Add the charges related to #{@category.name} that you want trym to track.
 
-        .form-actions.text-center
-          = f.button :submit, "Create and Track!", class: "btn btn-primary btn-lg"
-  
+    .row
+      .col-md-8.col-md-offset-2.col-sm-12
+        %h4.text-center Add your first #{@category.name} charge
+        = simple_form_for current_user.charges.new, remote: true do |f|
+          %p.form-errors
+            = f.error_notification
+          .form-inputs
+            = f.input :recurring, as: :hidden, input_html: {value: true}
+            -if @category.present?
+              = f.input :trym_category_id, as: :hidden, input_html: {value: @category.id}
+            = f.input :merchant_id, as: :string, label: "Which company is the charge from?"
+
+          .form-inputs
+            = f.input :amount, as: :currency, label: "How much is your average bill?"
+            = f.input :billing_day, as: :string, label: "When is your next charge?", placeholder: "estimate if you're not sure", input_html: {class: "text-left"}
+            = f.input :renewal_period_in_weeks, label: "How often are you charged?", input_html: { value: 4 }
+
+          .form-actions.text-center
+            = f.button :submit, "Create and Track!", class: "btn btn-primary btn-lg"
+    
   .paragraph-spacer
 
   :javascript
@@ -125,27 +156,6 @@
 =render 'shared/charge_item_script'
 
 :javascript
-  $("[name='track-switch']").bootstrapSwitch({
-    onText: "Yes",
-    offText: "No",
-    size: "mini"
-  }).on('switchChange.bootstrapSwitch', function(event, state) {
-    
-    if( state ) {
-      var cat_id = "#{@category.id}";
-    } else {
-      var cat_id = "";
-    }
-
-    $.ajax({
-      type: "PUT",
-      url: "/charges/" + $(this).data("charge-id"),
-      data: { charge: { recurring: state, trym_category_id: cat_id }, scan: "scan" },
-      dataType: "script"
-    })
-  });
-  
-  $('[data-toggle="popover"]').popover({html: true, trigger: 'focus', title: "<i class='fa fa-calendar'></i> Charge History"});
   
   $('#recurring-charge-score-explanation').popover({
     html: 'true',
@@ -159,7 +169,7 @@
 
   function findMember(str) {
     if( str.length > 0 ) {
-      $.get("#{charges_path}", "q="+str+"&trym_category_id="+"#{@category.id}", null, 'script');
+      $.get("#{search_charges_path}", "q="+str+"&trym_category_id="+"#{@category.id}", null, 'script');
     } else {
       $("#charge-search-results-container").empty();
     }

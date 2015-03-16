@@ -79,6 +79,22 @@ label[for=charge_renewal_period_in_words]{
 .charge-btn-responsive{ @extend .btn-lg; }
 #linked-account-heading{ margin: 20px 5px 5px auto; }
 
+.charge-item-action-buttons{ min-width: 70px; }
+
+#search-charges-field{  text-indent: -38px;  }
+#search-charges-field::-webkit-input-placeholder { /* WebKit browsers */
+  text-indent: 8px; 
+}
+#search-charges-field:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+   text-indent: 8px; 
+}
+#search-charges-field::-moz-placeholder { /* Mozilla Firefox 19+ */
+   text-indent: 8px; 
+}
+#search-charges-field:-ms-input-placeholder { /* Internet Explorer 10+ */
+   text-indent: 8px; 
+}
+
 @media (max-width: 1199px) { 
 	.charge-btn-responsive{ 
 		padding: 6px 12px;
@@ -86,10 +102,10 @@ label[for=charge_renewal_period_in_words]{
 		line-height: 1.428571429; 
 	}
 	.charge-buttons{
-		width: 80px;	
+		width: 90px;	
 		padding: 2px;
 	}
-	.charge-item-action-buttons{ min-width: 80px !important; }
+	.charge-item-action-buttons{ min-width: 90px !important; }
 }
 
 @media (min-width: 767px) {

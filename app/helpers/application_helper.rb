@@ -16,4 +16,12 @@ module ApplicationHelper
 		"rgb(129, 202, 166)"
 	end
 
+	def trym_referrer
+		if request.referrer.present? && request.referrer.split("/").include?(root_url.split("/").last)
+			URI(request.referrer).path
+		else
+			root_path
+		end
+	end
+
 end

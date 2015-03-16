@@ -1,6 +1,5 @@
 %h2 Link Accounts
 
-
 %p.lead 
 	First tell us which accounts you want us to link.  
 	%span.hidden-xs You can link as many as you want.
@@ -33,7 +32,7 @@
 
 .row.charge-wizard-actions
 	.col-xs-2
-		=link_to "Back", :back, class: "btn btn-default"
+		=link_to "Back", request.referrer.include?('charge_wizards') ? previous_wizard_path : trym_referrer, class: "btn btn-default"
 	.col-xs-10.text-right
 		=link_to "Next", next_wizard_path, class: "btn btn-primary"
 

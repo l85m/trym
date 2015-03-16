@@ -4,11 +4,11 @@ class PlaidFinancialInstitutionUpdater
   def perform
     Plaid.institution.each do |plaid_id, name, plaid_type, has_mfa, mfa|
       fin = FinancialInstitution.find_or_create_by(plaid_id: plaid_id)
-      fin.update( name: name, plaid_type: plaid_type, has_mfa: has_mfa, mfa: mfa, connect: connect_enabled?(plaid_type))
+      fin.update( name: name, plaid_type: plaid_type, has_mfa: has_mfa, mfa: mfa )
     end
   end
 
-
+  #TO-DO Re-Enable This
   def connect_enabled?(plaid_type)
     credentials = {username: "plaid_test", password: "plaid_good", type: plaid_type}
     credentials.merge!({pin: 1234}) if plaid_type == "usaa" 

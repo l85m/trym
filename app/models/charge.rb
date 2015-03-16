@@ -17,8 +17,8 @@ class Charge < ActiveRecord::Base
   scope :with_merchant, -> { includes(:merchant) }
   scope :with_stop_orders, -> { includes(:stop_orders) }
   scope :with_financial_institution, -> { includes(:financial_institution) }
-  scope :fully_loaded, -> {with_merchant.with_stop_orders.with_financial_institution}
-  
+  scope :with_trym_category, -> { includes(:trym_category) }
+
   scope :recurring_or_likely_to_be_recurring, -> { where(Charge.arel_table[:recurring].eq(true).or(Charge.arel_table[:recurring_score].gt(3))) }
   scope :recurring, -> { where(recurring: true) }
   scope :not_recurring, -> { where(recurring: [false,nil]) }
@@ -62,6 +62,14 @@ class Charge < ActiveRecord::Base
     end
   end
 
+  def reason_for_score
+    if transaction_request.present?
+      TransactionScorer.new(self, transaction_request).reason_for_score
+    else
+      nil
+    end
+  end
+
   def warnings
     warnings = {}
     warnings["We don't recognize the company name"] = "Make sure to tell trym which company charged you or we may won't be able to help you stop this charge" unless (merchant.present?)
@@ -79,6 +87,17 @@ class Charge < ActiveRecord::Base
     return "??" unless amount.present?
     amount.to_f / 100.0
   end
+
+  def amount_charged_in_month
+    case renewal_period_in_weeks
+    when 4 then 1
+    when 2 then 2
+    when 1 then 4
+    else
+      bills_since(Date.today.beginning_of_month.to_date)
+    end * amount
+  end
+
 
   def recurring_score_grouping
     case recurring_score
@@ -150,10 +169,10 @@ class Charge < ActiveRecord::Base
   def iterate_billing_date(bill_day = billing_day)
     return nil unless (bill_day.present? && renewal_period_in_weeks.present? && renewal_period_in_weeks > 0)
     if renewal_period_in_weeks%4 == 0
-      bill_day.to_time.advance(months: bills_since_first_reported_bill * renewal_period_in_months)
+      bill_day.to_time.advance(months: bills_since(bill_day) * renewal_period_in_months)
                       .advance(months: renewal_period_in_months).to_date
     else
-      bill_day.to_time.advance(weeks: bills_since_first_reported_bill * renewal_period_in_weeks)
+      bill_day.to_time.advance(weeks: bills_since(bill_day) * renewal_period_in_weeks)
                       .advance(weeks: renewal_period_in_weeks).to_date
     end
   end
@@ -177,12 +196,12 @@ class Charge < ActiveRecord::Base
     true
   end
 
-  def bills_since_first_reported_bill
-    return 0 if (renewal_period_in_weeks == 0 || billing_day.nil? || Date.today < billing_day)
+  def bills_since(bill_day)
+    return 0 if (renewal_period_in_weeks == 0 || bill_day.nil? || Date.today < bill_day)
     if renewal_period_in_weeks % 4 == 0
-      ( ( (Date.today - billing_day) / 30.43683 ).floor / renewal_period_in_months ).floor
+      ( ( (Date.today - bill_day) / 30.43683 ).to_i / renewal_period_in_months ).floor
     else
-      ( ( (Date.today - billing_day) / 7.0 ).floor / renewal_period_in_weeks ).floor
+      ( ( (Date.today - bill_day) / 7.0 ).to_i / renewal_period_in_weeks ).floor
     end
   end
 

@@ -1,17 +1,26 @@
 class TransactionScorer
+  attr_accessor :reason_for_score
 
   ## charge = a transaction object from plaid
   ## @dates = past transactions from this merchant/source (ie all transactions 
   ##          from the apple store) sorted in ascending order (newer dates last)
   ## @merchant_id = 
   def initialize(charge, transaction_request)
-    @charge = charge
-    @dates = charge[:date].sort
-    @name = charge[:name].downcase
-    @amounts = charge[:amount]
-    @merchant_id = charge[:merchant_id]
-    @category_id = charge[:category_id]
+    if charge.instance_of?(Charge)
+      @dates = charge.history.keys.sort.map(&:to_date)
+      @name = charge.plaid_name.downcase
+      @amounts = charge.history.values.map(&:to_f)
+      @merchant_id = charge.merchant.present? ? charge.merchant.id : nil
+      @category_id = charge.category_id
+    else
+      @dates = charge[:date].sort
+      @name = charge[:name].downcase
+      @amounts = charge[:amount]
+      @merchant_id = charge[:merchant_id]
+      @category_id = charge[:category_id]
+    end
 
+    @reason_for_score = {}
     @date_data_was_pulled = transaction_request.created_at
     calculate_recurring_score
   end
@@ -23,57 +32,78 @@ class TransactionScorer
 
     if @dates.size > 1
 
-      if ( uniform_distance_between_dates > 6 || dates_are_yearly? ) && interval_likely_recurring?
-        score += 6
-        score += 2 if amounts_are_similar?
+      if amounts_are_similar?
+        @reason_for_score[:amounts_are_similar] = 2
+        score += 2
       else
-        score += -1 if not (dates_are_weekly? || dates_are_monthly?)
+        @reason_for_score[:amounts_are_not_similar] = -2
+        score -= 1
+      end
+
+      if interval_likely_recurring?
+        @reason_for_score[:interval_likely_recurring] = 5
+        score += 5
+      else
+        @reason_for_score[:interval_not_likely_recurring] = -3
+        score -= 3
+      end
+
+    else
+
+      if (@date_data_was_pulled.to_date - @dates[0]).to_i > 32
+        @reason_for_score[:one_transaction_more_than_one_month_ago] = -2
+        score -= 2 
+      elsif (@date_data_was_pulled.to_date - @dates[0]).to_i > 370
+        @reason_for_score[:one_transaction_more_than_one_year_ago] = -20
+        score -= 20
+      else
+        @reason_for_score[:one_transaction] = -1
+        score -= 1
       end
 
     end
-    
-    score += 3 if likely_category?
-    score += 6 if very_likely_category?
-    
-    score += -1 if unlikely_category?
-    score += -2 if very_unlikely_category?
 
-    score += 3 if likely_description?
-    score -= 3 if unlikely_description?
+    if likely_category?
+      @reason_for_score[:likely_category] = 2
+      score += 2 
+    elsif very_likely_category?
+      @reason_for_score[:very_likely_category] = 4
+      score += 4 
+    elsif unlikely_category?
+      @reason_for_score[:unlikely_category] = -2
+      score -= 2
+    elsif very_unlikely_category?
+      @reason_for_score[:very_unlikely_category] = -4
+      score -= 4
+    end
+
+    if likely_description?
+      @reason_for_score[:likely_description] = 3
+      score += 3
+    elsif unlikely_description?
+      @reason_for_score[:unlikely_description] = -3
+      score -= 3
+    end
     
     if @merchant_id.present?
+      @reason_for_score[:merchant_recurring_score] = Merchant.find(@merchant_id).recurring_score
       score += Merchant.find(@merchant_id).recurring_score
     end
 
-    score -= 10 if last_charge_too_long_ago?
+    if last_charge_too_long_ago?
+      @reason_for_score[:last_charge_too_long_ago] = -10
+      score -= 10 
+    end
 
     score
   end
 
-  def last_charge_too_long_ago?    
-    if charge_looks_annual?
-      @dates.max < (@date_data_was_pulled - 1.year)
-    elsif charge_looks_quarterly?
-      @dates.max < (@date_data_was_pulled - 3.months)
+  def last_charge_too_long_ago?
+    if uniform_distance_between_dates > 1
+      uniform_distance_between_dates < ((@date_data_was_pulled.to_date - @dates.max).to_i * 1.1)
     else
-      @dates.max < (@date_data_was_pulled - 1.month)
+      false
     end
-  end
-
-  def charge_looks_annual?
-    dates_are_yearly? || @name.include?("annual") || annual_category?
-  end
-
-  def charge_looks_quarterly?
-    distance_between_last_two_dates.between?(84, 93)  || @name.include?("quarterly") || quarterly_category?
-  end
-
-  def annual_category?
-    ["10000000"].include?(@category_id)
-  end
-
-  def quarterly_category?
-    ["18030000"].include?(@category_id)
   end
 
   def interval_likely_recurring?
@@ -86,32 +116,9 @@ class TransactionScorer
     distance.between?(350, 370)     #annually
   end
 
-  def dates_are_weekly?
-    return false unless @dates.size > 1
-    weeks = @dates.collect{ |d| d.strftime("%U").to_i }
-    (weeks.sort[-1] - weeks.sort[0]) == (weeks.size - 1)
-  end
-
-  def dates_are_monthly?
-    return false unless @dates.size > 1
-    months = @dates.collect{ |d| d.strftime("%-m").to_i }
-    (months.sort[-1] - months.sort[0]) == (months.size - 1)
-  end
-
-  def dates_are_yearly?
-    return false unless @dates.size > 1
-    years = @dates.collect{ |d| d.strftime("%-y").to_i }
-    (years.sort[-1] - years.sort[0]) == (years.size - 1)
-  end
-
-  def distance_between_last_two_dates
-    return 0 unless @dates.size > 1
-    @dates[-2..-1].reverse.inject(:-).to_i
-  end
-
   def uniform_distance_between_dates
-    distances = @dates[-(@dates.size > 4 ? 4 : @dates.size)..-1].each_cons(2).collect{ |a,b| (b - a).to_i }.sort
-    if @dates.size > 2
+    distances = @dates[-(@dates.size >= 4 ? 4 : @dates.size)..-1].each_cons(2).collect{ |a,b| (b - a).to_i }.sort
+    if distances.size > 1
       variance = (distances.max - distances.min) / distances.max.to_f
       if variance < 0.1
         return distances[distances.size/2]  
@@ -119,12 +126,12 @@ class TransactionScorer
         return -1
       end
     else
-      (dates_are_yearly? && distances.first.between?(350, 370)) ? distances.first : -1
+      return -1
     end
   end
 
   def amounts_are_similar?
-    (@amounts.each_cons(2).map{ |a,b| (b-a).abs }.max / @amounts.min.to_f) < 0.1
+    (@amounts.min / @amounts.max) > 0.8
   end
 
   def unlikely_description?
@@ -132,15 +139,15 @@ class TransactionScorer
       "taxi", "yellow cab", "hotel", "bar", "restaurant", "lodging", "refund", "reward", "transfer", "foods", "pizza", "outlet",
       "airport", "toll", "beverage", "resort", "airlines", "fuel", "gas", "coffee", "market", "drive-thru", "limo", "cafe", "air lines",
       "drugs", "emergency", "halloween", "christmas", "tire", "toys", "breakfast", "lunch", "dinner", "donuts", "ice cream", "tacos",
-      "pub", "juice", "thai", "japanese", "mexican", "italian", "chinese", "kitchen", "hamburger", "grill", "sushi", "grocery",
+      "pub", "juice", "thai", "japanese", "mexican", "italian", "chinese", "kitchen", "hamburger", "grill", "sushi", "grocery", "chateau",
       "google checkout seller", "transaction processed by", "foreign transaction fee", "late payment fee", "interest charge", "adjustment"
-    ].select{ |d| @name.include?(d) }.present?
+    ].select{ |d| @name.downcase.include?(d) }.present?
   end
 
   def likely_description?
     [
       "membership", "recurring", "monthly", "annual", "periodic", "insurance", "renewal"
-    ].select{ |d| @name.include?(d) }.present?
+    ].select{ |d| @name.downcase.include?(d) }.present?
   end
 
   def very_unlikely_category?
@@ -154,7 +161,9 @@ class TransactionScorer
       "13005053","13005054","13005055","13005056","13005057","13005058","13005059","15000000","16000000","16001000","18003000",
       "18006001","18006002","21000000","21001000","21002000","21003000","21004000","21005000","21006000","21007000","21007001",
       "21007002","21008000","21009000","21009001","21010000","21010001","21010002","21010003","21010004","21010005","21010006",
-      "21010007","21011000","21012000","21012001","21012002"
+      "21010007","21011000","21012000","21012001","21012002","22009000","22002000","22003000","22004000","22005000","22006000",
+      "22007000","22008000","22010000","22011000","22012000","22012001","22012002","22012003","22012004","22012005","22012006",
+      "22015000","22016000","22018000"
     ].include?(@category_id)
   end
 
@@ -180,18 +189,18 @@ class TransactionScorer
       "19043000","19044000","19045000","19046000","19047000","19048000","19049000","19050000","19051000","19052000","19053000",
       "19054000","21000000","21001000","21002000","21003000","21004000","21005000","21006000","21007000","21007001","21007002",
       "21008000","21009000","21009001","21010000","21010001","21010002","21010003","21010004","21010005","21010006","21010007",
-      "21011000","21012000","21012001","21012002"
+      "21011000","21012000","21012001","21012002","22000000","22001000","18058000"
     ].include?(@category_id)
   end
 
   def likely_category?
     [
-      "10000000","12003000","12008000","12008001","12008002","12008003","12008004","12008005","12008006","12008007","12008008",
-      "12008009","12008010","12008011","12015000","12015001","12015002","12015003","12017000","12019000","12019001","14001000",
+      "12003000","12008000","12008001","12008002","12008003","12008004","12008005","12008006","12008007","12008008",
+      "12008009","12008010","12008011","12015000","12015001","12015002","12015003","12017000","12019000","12019001",
       "14001001","14001004","14001006","14001007","14001013","14001014","14001016","14001017","17009000","17011000","17012000",
       "17015000","17016000","17017000","17030000","17031000","17033000","17034000","17041000","17045000","18001000","18001002",
       "18001006","18001007","18001008","18008000","18011000","18020000","18020003","18020006","18020007","18020008","18024004",
-      "18045000","18050004","18060000","18071000","22006001","22013000","18031000"
+      "18045000","18050004","18060000","18071000","18031000"
     ].include?(@category_id)
   end
 

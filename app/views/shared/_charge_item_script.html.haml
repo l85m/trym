@@ -1,23 +1,24 @@
-#charge-list-script
+.charge-list-script
   :javascript
-    $(".charge-mini-edit-link").tooltip({html:'true', title:"<i class='fa fa-pencil'></i>", trigger: "manual"});
-
-    $(".charge-item").on("mouseenter", function () {
-      $(this).find(".charge-mini-edit-link").tooltip("show");
-    }).on("mouseleave", function () {
-      $(this).find(".charge-mini-edit-link").tooltip("hide");
+    $('[data-toggle="popover"]').popover({html: true, trigger: 'focus', title: "<i class='fa fa-calendar'></i> Charge History"});
+  
+    $("[name='track-switch']").change( function() {
+      
+      var state = $(this).is(":checked")
+      
+      if( state ) {
+        var cat_id = "#{@category.present? ? @category.id : ''}";
+        var charge_params = { charge: { recurring: state, trym_category_id: cat_id }, scan: "scan", view_all: "#{ @view_all ? 'true' : 'false' }" };
+      } else {
+        var charge_params = { charge: { recurring: state, trym_category_id: '' }, scan: "scan", view_all: "#{ @view_all ? 'true' : 'false' }" };
+      }
+      
+      $.ajax({
+        type: "PUT",
+        url: "/charges/" + $(this).data("charge-id"),
+        data: charge_params,
+        dataType: "script"
+      })
     });
-
-    function hideChargeSubmit(chargeContainer) {
-      chargeContainer.find(".charge-attribute-input").remove();
-      chargeContainer.find(".charge-item-form-buttons").addClass("hidden");
-      chargeContainer.find(".charge-item-action-buttons").removeClass("hidden");
-      chargeContainer.find(".charge-mini-edit-link").removeClass("hidden");
-    }
-
-    function editChargeSubmit(submitButton) {
-      var charge_container = submitButton.parents(".charge-item");
-      charge_container.find('.charge-attribute-input').each( function() {
-        $( "#" + $(this).data('sibling') ).val( $(this).val() );
-      });
-    }
+    
+    $('[data-toggle="popover"]').popover({html: true, trigger: 'focus', title: "<i class='fa fa-calendar'></i> Charge History"});

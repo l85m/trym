@@ -16,6 +16,16 @@
 
 
     .modal.fade#modal-container
+      %button.hidden-xs{ type: "button", class: "close", data: {dismiss: "modal"}, onClick: '$(".modal-dialog").remove()' }
+        %span.modal-close-x{ aria_hidden: "true"} &times;
+        %span.sr-only Close
 
     = link_to root_path, class: "navbar-brand" do
-      =image_tag "logo.svg", size: "25"
+      = image_tag "logo.svg", size: "25"
+
+:javascript
+  function showLoader() {
+    $(".modal-dialog").remove();
+    $("#modal-container").append("#{ j render 'shared/loading' }");
+    $("#modal-container").modal({backdrop: 'static'});
+  }

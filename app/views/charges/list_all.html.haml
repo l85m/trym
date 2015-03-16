@@ -1,0 +1,19 @@
+.container
+  .text-center 
+    %h2.modal-header-text
+      Listing all charges in your #{ @linked_account.present? ? @linked_account.financial_institution.name : 'linked accounts'}.
+    =link_to "save and continue", @linked_account.present? ? linked_account_path(@linked_account) : trym_referrer, class: 'btn btn-responsive btn-primary'
+    .lead.without-margin
+      =paginate @charges, remote: true
+  .row#list-all-page
+    -@charges.in_groups_of(2, false) do |charge_group|
+      -charge_group.each do |charge|
+        .col-md-6{ class: charge_group.size == 1 ? 'col-md-offset-3' : '' }
+          =render partial: "shared/charge_item", locals: {charge: charge}
+
+  .text-center
+    =link_to "save and continue", @linked_account.present? ? linked_account_path(@linked_account) : trym_referrer, class: 'btn btn-responsive btn-primary'
+    .lead
+      =paginate @charges, remote: true
+
+=render "shared/charge_item_script"

@@ -11,7 +11,7 @@ class PlaidTransactionParser
   def parse
     group_charges_by_description
     match_to_merchants
-    remove_old_charges
+    # remove_old_charges
     remove_zero_dollar_charges
     calculate_recurring_score
     create_attributes_for_charges
@@ -37,9 +37,9 @@ class PlaidTransactionParser
   def create_attributes_for_charges
     @charge_list.each do |charge|
       charge[:history] = charge[:date].zip(charge[:amount]).sort_by{ |d,v| d }.to_h
-      charge[:amount] = average_amount_of_recent_transactions(charge)
+      charge[:amount] = charge[:history][charge[:history].keys.max]
       charge[:billing_day] = charge[:date].max
-      charge[:renewal_period_in_weeks] = charge[:recurring_score] > 3 ? recurring_interval( avg_distance_between_last_four_dates(charge[:date]) ) : 0
+      charge[:renewal_period_in_weeks] = (charge[:date].size > 1 && charge[:date].sort[-1] - charge[:date].sort[-2] > 180) ? 52 : 4
     end
   end
 
@@ -104,35 +104,19 @@ class PlaidTransactionParser
     @charge_list = (no_merch + with_merch).uniq{ |c| c[:name] }
   end
 
-  def avg_distance_between_last_four_dates(dates)
-    return 0 if dates.size <= 1
-    floor = dates.size >= 4 ? 4 : dates.size
-    dates.sort[-floor..-1].each_cons(2).collect{ |a,b| (b - a).to_i }.inject(:+) / dates.sort[-floor..-1].each_cons(2).size rescue binding.pry
-  end
-
-  def recurring_interval(distance)
-    return 1 if distance <= 7     #weekly
-    return 2 if distance <= 16    #bi-weekly
-    return 4 if distance <= 35    #monthly
-    return 13 if distance <= 100  #quarterly
-    return 26 if distance <= 200  #bi-annually
-    52 #annually
-  end
-
   def match_to_merchants
     @charge_list.map do |c|
       match = Merchant.find_by_fuzzy_name_with_similar_threshold(c[:name])
       if ( !match.present? && c[:meta]["payment_processor"].present? )
         match = Merchant.find_by_fuzzy_name_with_similar_threshold(c[:meta]["payment_processor"]) if c[:meta]["payment_processor"].present?
-      elsif ( !match.present? && card_membership_fees.include?(c[:name].downcase) )
+      elsif ( !match.present? && card_membership_fees.select{ |n| c[:name].downcase.include?(n) }.present? && c[:category_id] == "10000000" )
         match = Merchant.find_by_fuzzy_name_with_similar_threshold(@link.financial_institution.name)
       end
       c[:merchant_id] = match.id if match.present?
     end
   end
 
-
   def card_membership_fees
-    ["annual membership fee"]
+    ["annual membership"]
   end
 end

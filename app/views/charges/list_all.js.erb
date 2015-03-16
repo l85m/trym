@@ -1,0 +1,2 @@
+$("#list-all-page").html("<%= j render 'charge_page' %>")
+$(".pagination").parent().html("<%= j paginate @charges, remote: true %>")

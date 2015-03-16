@@ -36,7 +36,7 @@
 
           } else if (json.last_api_response.response_code == "200") { 
             clearInterval(i);
-            $('#after-success-link').attr("href","/linked_accounts/" + json.id);
+                        
             submit_button.html("<i class='fa fa-check'></i>Linked</button>");
             form_container.fadeOut(1000, function(){
               $("#link-success-container").fadeIn();

@@ -1,5 +1,9 @@
 module ChargesHelper
 
+  def stop_order_charge_ids
+    current_user.charges.joins(:stop_orders).pluck(:id)
+  end
+
   def merchant_name_example_helper(trym_category_id)
     if trym_category_id.present?
       merchant_names = TrymCategory.find(trym_category_id).merchants.limit(2).pluck(:name)

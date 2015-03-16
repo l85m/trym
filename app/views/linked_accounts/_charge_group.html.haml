@@ -17,21 +17,19 @@
     $(this).parent().parent().find('.collapse-expand-button').addClass('active');
   });
 
-  $(".collapse").on('shown.bs.collapse', function () {
-    $(this).find("[name='track-switch']").bootstrapSwitch({
-      onText: "Yes",
-      offText: "No",
-      size: "mini"
-    }).on('switchChange.bootstrapSwitch', function(event, state) {
-      $.ajax({
-        type: "PUT",
-        url: "/charges/" + $(this).data("charge-id"),
-        data: { charge: { recurring: state }, scan: "scan" },
-        dataType: "script"
-      })
-    });
-  });
-
+  $("[name='track-switch']").change( function() {
+    var state = $(this).is(":checked")
+    if( state ) {
+      var cat_id = "#{@category.id}";
+    } else {
+      var cat_id = "";
+    }
+    $.ajax({
+      type: "PUT",
+      url: "/charges/" + $(this).data("charge-id"),
+      data: { charge: { recurring: state, trym_category_id: cat_id }, scan: "scan" },
+      dataType: "script"
+    })
   $(".collapse").on('hide.bs.collapse', function () {
     $(this).parent().parent().find('.collapse-expand-button').removeClass('active');
   });

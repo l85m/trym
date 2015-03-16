@@ -7,18 +7,32 @@ class ChargesController < ApplicationController
   respond_to :html, :js
 
   def index
+    @charges = current_user.charges.recurring.with_merchant
+    @title = "charges"
+    @charges_outlook_chart_data = ChargesOutlookChartData.new(current_user, @charges)
+    @linked_accounts = current_user.linked_accounts
+    @charges = @charges.sort_by{ |c| [c.next_billing_date ? 0 : 1, c.next_billing_date] }.reverse
     
-    if request.format.html?
-      @charges = current_user.charges.recurring.with_merchant
-      @title = "charges"
-      @charges_outlook_chart_data = ChargesOutlookChartData.new(current_user, @charges)
-      @linked_accounts = current_user.linked_accounts
-    elsif request.format.js?
-      @trym_category_id = params[:trym_category_id]
-      @query = params[:q]
-      @charges = current_user.charges.not_recurring.find_by_fuzzy_plaid_name(@query, limit: params[:limit].present? ? params[:limit].to_i : 4).select{ |c| c.plaid_name.similar(@query) >= 0.7 }
-    end
     respond_with(@charges)
+  end
+
+  def list_all
+    @view_all = true
+    @category = TrymCategory.find(params[:trym_category_id]) if params[:trym_category_id].present?
+    if params[:linked_account_id]
+      @linked_account = current_user.linked_accounts.find(params[:linked_account_id])
+      @charges = current_user.charges.where(linked_account: @linked_account).with_merchant.order(recurring_score: :desc).page(params[:page]).per(12)
+    else
+      @charges = current_user.charges.with_merchant.order(recurring_score: :desc).page(params[:page]).per(12)
+    end
+  end
+
+  def search
+    @category = TrymCategory.find(params[:trym_category_id]) if params[:trym_category_id].present?
+    @query = params[:q]
+    @charges = current_user.charges.not_recurring.with_merchant.
+                            find_by_fuzzy_plaid_name(@query, limit: params[:limit].present? ? params[:limit].to_i : 4).
+                            select{ |c| c.plaid_name.similar(@query) >= 0.7 }
   end
 
   def new
@@ -41,7 +55,7 @@ class ChargesController < ApplicationController
 
   def update
     @update_from_account_scan = ( charge_params["recurring"].present? || params["charge"]["account_scan"].present? )
-    @recurring_switch_update = charge_params["recurring"].present?
+    @update_from_view_all = params["view_all"] == 'true'
     @charge.update!(charge_params)
     respond_with(@charge)
   end

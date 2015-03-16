@@ -29,6 +29,7 @@ class Merchant < ActiveRecord::Base
 	end
 
 	def self.selection_search(query, category_id)
+		return nil unless query.present?
 		if category_id.present?
 			find_by_fuzzy_name(query, limit: 5).reject{ |m| m.trym_category_id != category_id.to_i }.select(&:validated)
 		else

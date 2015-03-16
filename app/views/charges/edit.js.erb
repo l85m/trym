@@ -1,37 +1,4 @@
-var attribute_link = $('a[href$="charges/<%= @charge.id %>/edit?attribute=<%= @attribute %>"]')
-var attribute_parent = $("#charge-item-<%= @charge.id %>")
-var input_width = attribute_link.parents(".charge-info").width()+"px";
-
-attribute_link.next().remove();
-attribute_link.parent().after("<%= j render 'charge_attribute_form' %>");
-attribute_link.addClass("hidden");
-
-attribute_parent.find(".charge-item-form-buttons").removeClass("hidden")
-attribute_parent.find(".charge-item-action-buttons").addClass("hidden")
-
-<% if @attribute == "merchant" %>
-	$("#s2id_charge_<%=@attribute%>").children().first().css("font-size","medium");
-<% elsif ["amount", "description"].include?(@attribute) %>
-	$("#<%=@charge.id%>-<%=@attribute%>-attribute-input").css("width", input_width);
-<% end %>
-
-<% if @charge.warnings.present? %>
-
-var charge_item = $("#charge-item-<%= @charge.id.present? ? @charge.id : 'new' %>");
-var popover_direction = "";
-
-if ( $(window).width() > 1000 ) { 
-	popover_direction = "auto right" 
-} else { 
-	popover_direction = "bottom" 
-}
-
-charge_item.popover({
-	placement: popover_direction, 
-	title: "Adding some details will help us do more for you", 
-	content: "<%= j render 'warnings' %>", 
-	html: "true",
-	container: 'body'
-}).popover("show");
-
-<% end %>
+$(".modal-dialog").remove()
+$("#modal-container").append("<%= j render 'edit_charge_form' %>")
+$("title").html("<%= j title_helper(@title) %>")
+$("#modal-container").modal({backdrop: 'static'})

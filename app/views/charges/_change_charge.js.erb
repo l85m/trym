@@ -1,33 +1,41 @@
-<% if request.format.js? %>
+<% if @update_from_view_all %>
+  ''
+<% elsif request.format.js? && !@update_from_view_all %>
 
   location.reload(true);
 
 <% else %>
 
+  
+
   var charge_item = $("#charge-item-<%= @charge.id.present? ? @charge.id : 'new' %>");
 
-  <% unless @recurring_switch_update %>
-    charge_item.replaceWith("<%= j render partial: 'shared/charge_item', locals: {charge: @charge} %>");
-    $("#charge-list-script").replaceWith("<%= j render 'shared/charge_item_script' %>");
+  charge_item.replaceWith("<%= j render partial: 'shared/charge_item', locals: {charge: @charge} %>");
+  $("#charge-list-script").replaceWith("<%= j render 'shared/charge_item_script' %>");
 
-      <% if @update_from_account_scan || request.referrer.include?("charge_wizards") %>
+  $("[name='track-switch']").change( function() {
+    
+    var state = $(this).is(":checked")
+    
+    <% if @category.present? %>
+      if( state ) {
+        var cat_id = "#{@category.present? ? @category.id : ''}";
+        var charge_params = { charge: { recurring: state, trym_category_id: cat_id }, scan: "scan", view_all: "<%= @update_from_view_all ? 'true' : 'false' %>" };
+      } else {
+        var cat_id = { charge: { recurring: state, trym_category_id: '' }, scan: "scan", view_all: "<%= @update_from_view_all ? 'true' : 'false' %>" };
+      }
+    <% else %>
+      var charge_params = { charge: { recurring: state }, scan: "scan", view_all: "<%= @update_from_view_all ? 'true' : 'false' %>" };
+    <% end %>
+    
+    $.ajax({
+      type: "PUT",
+      url: "/charges/" + $(this).data("charge-id"),
+      data: charge_params,
+      dataType: "script"
+    })
+  });
 
-        $("[name='track-switch']").bootstrapSwitch({
-          onText: "Yes",
-          offText: "No",
-          size: "mini"
-        }).on('switchChange.bootstrapSwitch', function(event, state) {
-          $.ajax({
-            type: "PUT",
-            url: "/charges/" + $(this).data("charge-id"),
-            data: { charge: { recurring: state }, scan: "scan" },
-            dataType: "script"
-          })
-        });
-
-      <% end %>
-
-  <% end %>
 
   <% if @charge.warnings.present? %>
 
@@ -48,5 +56,6 @@
     }).popover("show");
 
   <% end %>
+
   
 <% end %>

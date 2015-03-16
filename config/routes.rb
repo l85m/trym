@@ -13,6 +13,10 @@ Rails.application.routes.draw do
 
   resources :charges do
     resources :stop_orders, only: :new
+    collection do
+      get :search
+      get :list_all
+    end
   end
 
   resources :stop_orders, only: [:create, :show, :edit, :destroy, :index]

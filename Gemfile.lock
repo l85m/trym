@@ -402,6 +402,7 @@ DEPENDENCIES
   jquery-rails
   jquery-ui-rails
   json
+  kaminari
   mechanize
   meta_request
   mina

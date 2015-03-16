@@ -14,7 +14,7 @@
 
 	.row.charge-wizard-actions
 		.col-xs-2
-			=link_to "Back", :back, class: "btn btn-default"
+			=link_to "Back", wizard_path(:link_or_manual), class: "btn btn-default"
 		.col-xs-10.text-right
 			=f.submit "Next", class: "btn btn-primary"
 

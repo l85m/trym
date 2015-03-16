@@ -37,11 +37,25 @@
           Search for charges in your
           =@linked_account.financial_institution.name
           which you'd like us to track. You can edit any charge by clicking on the part of it that you want to change. 
-        .input-group
-          .input-group-addon
-            %i.fa.fa-search
-          %input.input-lg.form-control#search-charges-field{ placeholder: "Search your linked #{'account'.pluralize(current_user.linked_accounts.count)} ", type: "text" }
-    
+        
+        .col-md-6.text-center
+          =link_to new_charge_path, class: "btn btn-primary btn-block btn-lg", remote: true do
+            %i.fa.fa-plus
+            Add a new charge
+          .paragraph-spacer
+        .col-md-6.text-center
+          =link_to list_all_charges_path(linked_account_id: @linked_account.id), class: "btn btn-primary btn-block btn-lg", onclick: 'showLoader();' do
+            %i.fa.fa-list
+            List all linked account charges
+          .paragraph-spacer
+        
+        .col-md-12.text-center
+
+          .input-group
+            .input-group-addon
+              %i.fa.fa-search
+            %input.input-lg.form-control#search-charges-field{ placeholder: "Search for charges        ", type: "text" }
+
         .paragraph-spacer
 
         #charge-search-results-container
@@ -53,17 +67,14 @@
       button.parent().parent().parent().after("<p id='grouped-charge-button-loader' class='lead text-center'><i class='fa fa-cog fa-spin'></i> loading...</p>");
     };
 
-    $("[name='track-switch']:visible").bootstrapSwitch({
-      onText: "Yes",
-      offText: "No",
-      size: "mini"
-    }).on('switchChange.bootstrapSwitch', function(event, state) {
+    $("[name='track-switch']").change( function() {
+      var state = $(this).is(":checked")
       $.ajax({
         type: "PUT",
         url: "/charges/" + $(this).data("charge-id"),
         data: { charge: { recurring: state }, scan: "scan" },
         dataType: "script"
-      })
+      });
     });
 
     if( $('#modal-container').find('#loading-modal').size() > 0 ){
@@ -98,7 +109,7 @@
 
     function findMember(str) {
       if( str.length > 0 ) {
-        $.get("#{charges_path}", "q="+str+"&limit=25", null, 'script');
+        $.get("#{search_charges_path}", "q="+str+"&limit=25", null, 'script');
       } else {
         $("#charge-search-results-container").empty();
       }

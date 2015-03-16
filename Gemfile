@@ -17,6 +17,7 @@ gem 'fuzzily', github: 'demosophy/fuzzily', ref: "54739cf6e8ce7fc9528f2d4ac3d204
 gem 'active_model_serializers'
 gem 'whenever'
 gem 'wicked' #form wizard
+gem 'kaminari' #pagination
 
 #account linking gems
 gem 'similar_text'

@@ -36,12 +36,6 @@
     }
   });
 
-  function showLoader() {
-    $(".modal-dialog").remove();
-    $("#modal-container").append("#{ j render 'shared/loading' }");
-    $("#modal-container").modal({backdrop: 'static'});
-  }
-
   $(function () {
     $('[data-toggle="popover"]').popover({html: true, trigger: 'focus', title: "<i class='fa fa-calendar'></i> Charge History"});
   })

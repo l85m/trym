@@ -16,7 +16,7 @@ class ChargeBuilder
 						old_charge.update(sanitize_charge_params(charge))
 					else
 						#Do not add the charge if there's already a charge with the same description on that linked account
-						Charge.create(sanitize_charge_params(charge))
+						Charge.create!(sanitize_charge_params(charge))
 					end
 				end
 			end
@@ -37,7 +37,7 @@ class ChargeBuilder
 
 	def sanitize_charge_params(charge)
 		{
-			amount: charge[:amount],
+			amount: (charge[:amount] * 100).to_i,
 			billing_day: charge[:billing_day],
 			category_id: charge[:category_id],
 			recurring_score: charge[:recurring_score],

@@ -1,4 +1,4 @@
--@charges = User.first.charges.recurring.limit(5)
+-@charges = User.first.charges.recurring.select{ |c| c.amount_charged_in_month > 0 }
 -@user = User.first
 !!!
 %html
@@ -30,19 +30,22 @@
               =Date.today.strftime("%B %Y")
           
           %div{style: "border-top-color:lightgray; border-top-style:solid; border-top-width:1px; border-bottom-color:lightgray; border-bottom-style:solid; border-bottom-width:1px; margin-bottom:20px; margin-top:20px; padding-top:20px; padding-bottom:20px;"}
-            %p{style: "text-align:center;font-weight:200; margin-bottom: 20px; font-size: 110%;"}  You spent <span style="font-weight: 700;">$561.00</span> last month on recurring charges.
+            %p{style: "text-align:center;font-weight:200; margin-bottom: 20px; font-size: 110%;"}
+              You spent 
+              %span{style:"font-weight: 700;"}=number_to_currency( @charges.inject(0.0){ |s, c| s += c.amount_charged_in_month } / 100.0 )
+              last month on recurring charges.
             %p{style: "text-align:center; margin: 0 auto; font-weight:200; font-size: 110%;"}
               Thats <span style="font-weight: 700;">$34.51</span> less than in
               ="#{1.month.ago.strftime("%B")}, awesome!"
           
           %div{style: "text-align:center; margin: 20px auto;"}
             %strong Here's who charged you over the past month:
-          -@charges.all.each do |charge|
+          -@charges.each do |charge|
             %dl
               %dt{style: "clear:left; float:left; margin-left:8px; overflow:hidden; text-align:left; text-overflow:ellipsis; white-space:nowrap; font-weight:400; width: 250px; margin-left: 70px;"}
                 ="#{charge.descriptor}"
               %dd{style: "margin-left:280px; text-align:right; width:140px"}
-                =number_to_currency charge.amount / 100.0
+                =number_to_currency charge.amount_charged_in_month / 100.0
                 =link_to "stop", new_charge_stop_order_url(charge), style: "vertical-align: bottom; background: #81CAA6; color: #FFF; border-radius:4px; display:inline-block; font-size:11px; font-weight:normal; margin-bottom:0; padding: 2px 4px; text-align:center; text-decoration: none;"
 
           %div{:align => "left", style: "margin-top:20px; text-align:center; padding-top: 20px; border-top: solid lightgray 1px;"}

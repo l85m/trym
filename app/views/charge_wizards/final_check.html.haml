@@ -67,11 +67,8 @@
     thread = setTimeout(function() { findMember(target.val()); }, 500); 
   });
 
-  $("[name='track-switch']").bootstrapSwitch({
-    onText: "Yes",
-    offText: "No",
-    size: "mini"
-  }).on('switchChange.bootstrapSwitch', function(event, state) {
+  $("[name='track-switch']").change( function() {
+    var state = $(this).is(":checked")
     $.ajax({
       type: "PUT",
       url: "/charges/" + $(this).data("charge-id"),

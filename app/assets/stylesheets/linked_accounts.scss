@@ -68,20 +68,3 @@ $brand-color: rgb(129, 202, 166);
 	box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(129, 202, 166, 0.6) !important;
 }
 .select2-no-results{ text-align: center; }
-.charge-item-action-buttons{ min-width: 70px; }
-.charge-mini-edit-link{ color: black; }
-.charge-mini-edit-link:hover{ text-decoration: none; }
-.charge-mini-edit-link:hover + .tooltip.right .tooltip-inner{ 
-	border-color: $brand-color;
-	background-color: $brand-color; 
-	i{ color: white; }
-}
-.charge-mini-edit-link:hover + .tooltip.right .tooltip-arrow{ border-right-color: $brand-color; }
-.charge-mini-edit-link:hover + .tooltip.left .tooltip-inner{ 
-	border-color: $brand-color;
-	background-color: $brand-color; 
-	i{ color: white; }
-}
-.charge-mini-edit-link:hover + .tooltip.left .tooltip-arrow{ border-left-color: $brand-color; }
-.charge-item:hover{ .charge-mini-edit-link{ outline: 1px solid lightgray; } }
-.charge-toggle{ margin-top: -7px; }

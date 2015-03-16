@@ -47,7 +47,7 @@ class AccountLinker
     new_params[:type] = @link.financial_institution.plaid_type
     new_params[:username] = @params["username"]
     new_params[:password] = @params["password"]
-    new_params[:start_date] = 60.days.ago.to_date
+    new_params[:start_date] = "60 days ago"
     new_params[:pin] = @params["pin"] if @params["pin"].present?
     new_params
   end
