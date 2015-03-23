@@ -1,7 +1,7 @@
 .container
   .text-center 
     %h2.modal-header-text
-      Listing all charges in your #{ @linked_account.present? ? @linked_account.financial_institution.name : 'linked accounts'}.
+      Listing all charges in your #{ @linked_account.present? ? @linked_account.financial_institution.name : 'linked accounts'}
     =link_to "save and continue", @linked_account.present? ? linked_account_path(@linked_account) : trym_referrer, class: 'btn btn-responsive btn-primary'
     .lead.without-margin
       =paginate @charges, remote: true

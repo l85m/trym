@@ -13,7 +13,7 @@ class ChargeBuilder
 				unless is_not_charge?(charge)
 					old_charge = existing_charge(charge)
 					if old_charge.present?
-						old_charge.update(sanitize_charge_params(charge))
+						old_charge.update!(sanitize_charge_params(charge))
 					else
 						#Do not add the charge if there's already a charge with the same description on that linked account
 						Charge.create!(sanitize_charge_params(charge))

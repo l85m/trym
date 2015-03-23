@@ -5,7 +5,8 @@
   %p.lead
     Add or select the charges related to #{@category.name} that you want trym to track
   -if @category.charges.where(user: current_user).with_merchant.recurring.present?
-    %p.text-center You've told us these charges are recurring:
+    .paragraph-spacer
+    %p.text-center.strong You've told us these charges are recurring:
     .row
       -@category.charges.where(user: current_user).with_merchant.recurring.order(recurring_score: :desc).in_groups_of(2,false) do |charge_group|
         -charge_group.each do |charge|
@@ -14,7 +15,8 @@
         
 
   -if current_user.linked_accounts.present? && @category.charges.where(user: current_user).recurring_likely_to_be.from_link.present?
-    %p.text-center
+    .paragraph-spacer
+    %p.text-center.strong
       We found these
       %a#recurring-charge-score-explanation.icon-link{tabindex: "0"}
         potentially recurring
@@ -141,9 +143,9 @@
   -TrymCategory.where(id: @category_ids).each do |category|
     %span{ style: "margin: 8px;" }
       -if @category == category
-        %u= category.name.split(" ").first.gsub(/\W/,'')
+        %u= wizard_category_breadcrumb_names(category)
       -else
-        =link_to category.name.split(" ").first.gsub(/\W/,''), wizard_path("charge_category_#{category.id}")
+        =link_to wizard_category_breadcrumb_names(category), wizard_path("charge_category_#{category.id}")
 
 .row.charge-wizard-actions
   .col-xs-6

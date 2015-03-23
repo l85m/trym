@@ -12,7 +12,7 @@ ActiveAdmin.register Charge do
     end
     column :user
     column "Linked Account" do |charge|
-      if charge.transaction_request_id
+      if charge.transaction_request_id && charge.transaction_request.linked_account
         link_to charge.transaction_request.linked_account.account_name, admin_linked_account_path(charge.transaction_request.linked_account)
       else
         nil

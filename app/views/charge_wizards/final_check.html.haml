@@ -39,7 +39,7 @@
 
 .row.charge-wizard-actions
   .col-xs-6
-    =link_to "Back", :back, class: "btn btn-default btn-responsive"
+    =link_to "Back", wizard_path(:select_categories), class: "btn btn-default btn-responsive"
   .col-xs-6.text-right
     =link_to "Next", next_wizard_path, class: "btn btn-primary btn-responsive"
 

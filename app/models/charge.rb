@@ -56,6 +56,12 @@ class Charge < ActiveRecord::Base
     }
   end
 
+  def self.rescore
+    where.not(history: nil).each do |charge|
+      charge.update( recurring_score: TransactionScorer.new(charge).score )
+    end
+  end
+
   def new_transaction(new_after = 30.days.ago)
     if history.present?
       history.keys.max >= new_after
@@ -111,12 +117,14 @@ class Charge < ActiveRecord::Base
   end
 
   def smart_trym_category
-    if trym_category.present?
-      trym_category
+    if merchant.nil? && plaid_name.present?
+      plaid_name
+    elsif plaid_category.present?
+      plaid_category.hierarchy.last
+    elsif trym_category.present?
+      trym_category.name
     elsif merchant.present? && merchant.trym_category.present?
       merchant.trym_category
-    elsif plaid_category.present? && plaid_category.trym_category.present?
-      plaid_category.trym_category
     else
       nil
     end
@@ -125,10 +133,8 @@ class Charge < ActiveRecord::Base
   def smart_description
     if description.present?
       description
-    elsif merchant_id.nil? && plaid_name.present?
-      plaid_name
     elsif smart_trym_category.present?
-      smart_trym_category.name
+      smart_trym_category
     elsif plaid_name.present?
       plaid_name
     else

@@ -48,7 +48,7 @@ class LinkedAccountsController < ApplicationController
 
   def update
     #TODO: Handle Reauth / Account Destroy
-    if @linked_account.last_api_response["response_code"] == "201"
+    if ["201","402"].include? @linked_account.last_api_response["response_code"]
       @linked_account.update( last_api_response: nil )
       AccountLinker.perform_async( mfa_params, @linked_account.id )
     end

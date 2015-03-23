@@ -211,12 +211,6 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 	border-color: white; 
 	text-align: center;
 }
-.navbar-brand{
-	position: fixed;
-	top: 0;
-	left: 0;
-	z-index: 9999;
-}
 .active-header-link,
 .navbar-nav > li > a:hover{ 
 	color: $brand-color !important; 
@@ -249,42 +243,28 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 	text-align: center;
 	width: 100%;
 }
-.modal-backdrop{
-	background: white;
-	opacity: 1 !important;
-}
 .modal-close-x{ 
 	font-weight: 200;
 	font-size: 200%;
 	position: absolute;
 	right: 15px;
 }
-.modal-dialog{ 
-	height: 100%; 
-	margin: 0 auto;
-	display: table;
+
+@media (min-width: 769px) {
+	.lead-checkbox{ margin-top: 7px !important; }
 }
-.modal-md{ width: 400px; }
-.modal-content{
-	box-shadow: none;
-	border: none;
-}
-.modal-header-text{ margin-bottom: 20px; }
-.modal-footer{ border: none; }
+
 @media (max-width: 450px) {
 	.block-xxs{ display: block; }
   .hidden-xxs{ display: none !important; }
   .text-center-xxs{ text-align: center !important; }
   .vertical-middle-xxs{ vertical-align: middle; }
 }
-@media (max-width: 770px) {
+@media (max-width: 768px) {
 	.block-xs{ display: block; }
   .hidden-xs{ display: none !important; }
   .text-center-xs{ text-align: center !important; }
   .vertical-middle-xs{ vertical-align: middle; }
-}
-
-@media (max-width: 770px) {
   .btn-responsive {
     padding:6px 12px;
     font-size:90%;

@@ -122,12 +122,11 @@ GEM
       addressable
     currencies (0.4.2)
     debug_inspector (0.0.2)
+    descriptive_statistics (2.5.1)
     devise_invitable (1.4.0)
       actionmailer (>= 3.2.6, < 5)
       devise (>= 3.2.0)
     diff-lcs (1.2.5)
-    domain_name (0.5.23)
-      unf (>= 0.0.5, < 1.0.0)
     erubis (2.7.0)
     execjs (2.2.2)
     factory_girl (4.5.0)
@@ -162,8 +161,6 @@ GEM
       hpricot (~> 0.8.6)
       ruby_parser (~> 3.1.1)
     htmlentities (4.3.1)
-    http-cookie (1.0.2)
-      domain_name (~> 0.5)
     i18n (0.7.0)
     inherited_resources (1.6.0)
       actionpack (>= 3.2, < 5)
@@ -186,15 +183,6 @@ GEM
     kgio (2.9.2)
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
-    mechanize (2.7.3)
-      domain_name (~> 0.5, >= 0.5.1)
-      http-cookie (~> 1.0)
-      mime-types (~> 2.0)
-      net-http-digest_auth (~> 1.1, >= 1.1.1)
-      net-http-persistent (~> 2.5, >= 2.5.2)
-      nokogiri (~> 1.4)
-      ntlm-http (~> 0.1, >= 0.1.1)
-      webrobots (>= 0.0.9, < 0.2)
     meta_request (0.3.4)
       callsite (~> 0.0, >= 0.0.11)
       rack-contrib (~> 1.1)
@@ -210,11 +198,8 @@ GEM
     mini_portile (0.6.1)
     minitest (5.5.1)
     multi_json (1.10.1)
-    net-http-digest_auth (1.4)
-    net-http-persistent (2.9.4)
     nokogiri (1.6.5)
       mini_portile (~> 0.6.0)
-    ntlm-http (0.1.1)
     open4 (1.3.4)
     orm_adapter (0.5.0)
     pg (0.17.1)
@@ -362,16 +347,12 @@ GEM
     uglifier (2.6.0)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
-    unf (0.1.4)
-      unf_ext
-    unf_ext (0.0.6)
     unicorn (4.8.3)
       kgio (~> 2.6)
       rack
       raindrops (~> 0.7)
     warden (1.2.3)
       rack (>= 1.0)
-    webrobots (0.1.1)
     websocket (1.2.1)
     whenever (0.9.4)
       chronic (>= 0.6.3)
@@ -391,6 +372,7 @@ DEPENDENCIES
   bootstrap-sass
   childprocess
   coffee-rails (= 4.0.1)
+  descriptive_statistics
   devise!
   devise_invitable
   factory_girl_rails
@@ -403,7 +385,6 @@ DEPENDENCIES
   jquery-ui-rails
   json
   kaminari
-  mechanize
   meta_request
   mina
   mina-sidekiq

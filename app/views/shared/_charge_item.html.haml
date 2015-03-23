@@ -1,11 +1,11 @@
 .well.charge-item{class: "merchant-#{charge.descriptor.downcase.gsub(/\W/, '')}", id: "charge-item-#{charge.id.present? ? charge.id : 'new'}" }
   -if current_user.admin
-    .text-center{style: "margin-bottom: -10px; margin-top: -10px;"}
-      %small=link_to "admin feedback", admin_charge_path(charge)
+    .text-center{style: "margin-bottom: -8px; margin-top: -16px;"}
+      %small=link_to "admin panel", admin_charge_path(charge), class: "btn btn-xs btn-default"
   
   .charge-info-container
     .charge-info.charge-amount.text-center{style: "padding-right: 10px;"}
-      %p.lead.without-margin
+      %p.charge-lead
         -if charge.amount.present? && charge.amount > 0
           =number_to_currency(charge.amount_in_currency)
         -else 
@@ -25,7 +25,7 @@
               
     .charge-info.charge-description    
     
-      %p.lead.without-margin
+      %p.charge-lead
         -if charge.merchant.present? && charge.merchant.name.present?
           =charge.merchant.name
         -else
@@ -41,7 +41,7 @@
           -else
             %i.fa.fa-exclamation-circle
             ???
-      %p.without-margin
+      %p.charge-descriptor
         =charge.smart_description
     .charge-info.charge-buttons.text-center
       -if stop_order_charge_ids.include?(charge.id)
@@ -50,17 +50,18 @@
       -else        
         .inline-block.charge-item-action-buttons
           -unless controller_name == "charges" && request.format.html? && action_name != 'list_all'
-            .checkbox.without-margin
+            .checkbox.without-margin.lead
               %label
-                %input{ type: "checkbox", name: "track-switch", checked: charge.recurring, data: { charge_id: charge.id } }
-                  %small.strong{style: "margin-left: -3px;"} Track?
-            %small
-              =link_to "delete", {controller: "charges", action: "destroy", id: charge.id}, method: :delete, class: "btn btn-xs btn-default", style: "margin-top: 5px; color: gray;", data: {confirm: "Are you sure you want to delete this charge? This can't be undone."}, remote: true
+                %input.lead-checkbox{ type: "checkbox", name: "track-switch", checked: charge.recurring, data: { charge_id: charge.id } }
+                  %small.strong Track?
+            =link_to "edit info", edit_charge_path(charge), remote: true, class: "btn btn-default btn-xs", style: "margin-top: 5px;"
           -else
-            =link_to new_charge_stop_order_path(charge), remote: true, class: "btn btn-primary btn-xs" do
-              %small
-                .text-center
-                  MANAGE 
-                .text-center
-                  SUBSCRIPTION
-            =link_to "edit info", edit_charge_path(charge), class: "btn btn-xs btn-default", style: "margin-top: 5px; color: gray;", remote: true
+            .text-center
+              =link_to new_charge_stop_order_path(charge), remote: true, class: "btn btn-primary btn-xs", style: "margin-top: 5px;" do
+                %small
+                  .text-center
+                    MANAGE 
+                  .text-center
+                    PAYMENTS
+            .text-center
+              %small=link_to "edit info", edit_charge_path(charge), remote: true

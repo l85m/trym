@@ -15,14 +15,14 @@
 						%span.lead=institution.name
 						.pull-right
 							-if current_user.linked_account_at?(institution.id).present?
-								-unless current_user.linked_account_at?(institution.id).first.error_message
-									%button.btn.btn-primary-o.btn-responsive.disabled
-										%i.fa.fa-check
-										Linked
-								-else
-									%a.btn.btn-primary-o.btn-responsive#link-account-error-popover-button{ tabindex: "0", data: { toggle: "popover", title: "Your #{institution.name} account is not responding", content: "<div class='text-center' style='width: 300px;'>" + current_user.linked_account_at?(institution.id).first.error_message + "</div>"} }
+								-if current_user.linked_account_at?(institution.id).first.error_message
+									%a.btn.btn-primary-o.btn-responsive#link-account-error-popover-button{ tabindex: "0", data: { toggle: "popover", title: "Message from your account:", content: "<div class='text-center' style='width: 300px;'>" + current_user.linked_account_at?(institution.id).first.error_message + "<br><br>" + link_to("click here to retry the link", new_linked_account_path(financial_institution_id: institution.id), remote: true) + "</div>"} }
 										%i.fa.fa-exclamation-circle
 										Needs Attention
+								-else
+									=link_to current_user.linked_account_at?(institution.id).first, class: "btn btn-primary-o btn-responsive" do
+										%i.fa.fa-check
+										Linked
 							-else
 								=link_to "Link", new_linked_account_path(financial_institution_id: institution.id), remote: true, class: "btn btn-primary btn-responsive"
 
@@ -32,7 +32,7 @@
 
 .row.charge-wizard-actions
 	.col-xs-2
-		=link_to "Back", request.referrer.include?('charge_wizards') ? previous_wizard_path : trym_referrer, class: "btn btn-default"
+		=link_to "Back", (request.referrer.present? && request.referrer.include?('charge_wizards')) ? previous_wizard_path : trym_referrer, class: "btn btn-default"
 	.col-xs-10.text-right
 		=link_to "Next", next_wizard_path, class: "btn btn-primary"
 
@@ -42,5 +42,5 @@
 	$('[data-toggle="popover"]').popover({
 		placement: 'bottom',
 		trigger: 'focus',
-		html: 'true'
+		html: 'true',
 	});

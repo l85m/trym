@@ -77,7 +77,7 @@ label[for=charge_renewal_period_in_words]{
 	display: block;
 }
 .charge-btn-responsive{ @extend .btn-lg; }
-#linked-account-heading{ margin: 20px 5px 5px auto; }
+#linked-account-heading{ margin: 20px 5px 5px 5px; }
 
 .charge-item-action-buttons{ min-width: 70px; }
 
@@ -94,7 +94,11 @@ label[for=charge_renewal_period_in_words]{
 #search-charges-field:-ms-input-placeholder { /* Internet Explorer 10+ */
    text-indent: 8px; 
 }
-
+.charge-lead{ 
+	font-weight: 500; 
+	margin: 0 auto;
+}
+.charge-descriptor{ margin: 0 auto; }
 @media (max-width: 1199px) { 
 	.charge-btn-responsive{ 
 		padding: 6px 12px;
@@ -102,13 +106,14 @@ label[for=charge_renewal_period_in_words]{
 		line-height: 1.428571429; 
 	}
 	.charge-buttons{
-		width: 90px;	
+		width: 92px;	
 		padding: 2px;
 	}
 	.charge-item-action-buttons{ min-width: 90px !important; }
 }
 
-@media (min-width: 767px) {
+@media (min-width: 768px) {
+	.charge-lead{ font-size: 18px; }
 	#new-charge-links{ margin-top: 6px; }
 	#charges-outlook{ padding-left: 30px; }
 	#charge-side-list{
@@ -116,7 +121,9 @@ label[for=charge_renewal_period_in_words]{
 		border-right: lightgray 1px solid;
 	}
 }
-@media (max-width: 766px) {
+@media (max-width: 767px) {
+	.charge-descriptor{ font-size: 90%; }
+	.charge-lead{ font-size: 15px; }
 	#new-charge-links{ margin-top: 2px; }
 	#charges-outlook{ padding: 0px; }
 	#linked-account-heading{ 

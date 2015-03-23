@@ -4,24 +4,25 @@ ruby '2.1.5'
 
 #infra!
 gem 'rails', '4.1.7'
-gem 'turbolinks'
 gem 'pg'
 gem 'bcrypt-ruby', '3.1.2'
-gem 'mechanize'
-gem 'twilio-ruby'
 gem 'phony_rails'
 gem 'sidekiq'
 gem 'sinatra', require: false
 gem 'slim'
-gem 'fuzzily', github: 'demosophy/fuzzily', ref: "54739cf6e8ce7fc9528f2d4ac3d204279cfde2b5" #use fork commit for scoped searches (see: https://github.com/mezis/fuzzily/issues/37)
 gem 'active_model_serializers'
 gem 'whenever'
 gem 'wicked' #form wizard
 gem 'kaminari' #pagination
 
-#account linking gems
+#algos
+gem 'descriptive_statistics'
+gem 'fuzzily', github: 'demosophy/fuzzily', ref: "54739cf6e8ce7fc9528f2d4ac3d204279cfde2b5" #use fork commit for scoped searches (see: https://github.com/mezis/fuzzily/issues/37)
 gem 'similar_text'
+
+#apis
 gem 'plaid', github: 'demosophy/plaid-ruby', branch: "release_v_1.0"
+gem 'twilio-ruby'
 
 #langauge abstraction
 gem 'sass-rails'
@@ -43,6 +44,7 @@ gem 'jbuilder', '~> 2.0'
 gem 'uglifier', '>= 1.3.0'
 gem 'json'
 gem 'select2-rails', github: 'demosophy/select2.trym'
+gem 'turbolinks'
 
 #users
 gem 'devise', github: 'demosophy/devise-3.4.1.usub'

@@ -6,6 +6,15 @@ module ChargeWizardsHelper
 		check_box_tag(charge_category_name(category), true, checked) + charge_category_checkbox_label(category, charges)
 	end
 
+	def wizard_category_breadcrumb_names(category)
+		name = category.name.split(" ").first.gsub(/\W/,'')
+		if name == "TV"
+			"TV, Phone, & Internet"
+		else
+			name
+		end
+	end
+
 	private
 
 	def charge_category_name(category)

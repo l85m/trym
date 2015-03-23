@@ -7,6 +7,8 @@ class VerificationsController < ApplicationController
 
   def create
   	if @account_detail.confirmed?( confirmation_code )
+
+      #### Need to make this work again
       if session[:referring_charge_id].present?
   		  redirect_to controller: "stop_orders", action: "new", charge_id: session[:referring_charge_id]
       else
@@ -21,11 +23,12 @@ class VerificationsController < ApplicationController
           session.delete(:text_summary)
         end
         
-        render "shared/close_modal"
+        redirect_to root_path
       end
   	
     else
-  		render "error"
+      @errors = "confirmation code did not match - please try again"
+  		render :new
   	end
   end
 

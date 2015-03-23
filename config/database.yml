@@ -21,7 +21,7 @@ default: &default
 
 development:
   <<: *default
-  database: stopcharge_development
+  database: trym_development
   username: Landon
   password: hayrf9oNcXHpRuK%CT(2nr3EG(yBxu
 
@@ -48,5 +48,5 @@ development:
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: stopcharge_test
+  database: trym_test
   password: hayrf9oNcXHpRuK%CT(2nr3EG(yBxu

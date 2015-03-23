@@ -5,7 +5,8 @@ class AccountDetailsController < ApplicationController
   def new
   	@account_detail ||= AccountDetail.new
     if params[:enable_text_alert] || params[:enable_text_summary]
-      session.delete(:referring_charge_id) 
+      session.delete(:referring_charge_id)
+      
       if params[:enable_text_alert] 
         session[:text_alert] = true
       else

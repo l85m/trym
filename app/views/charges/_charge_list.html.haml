@@ -3,7 +3,7 @@
     %p.lead.without-margin
       %i.fa.fa-calculator
       active charges
-  =link_to new_charge_path, class: "btn btn-primary-o btn-lg btn-block", style: "margin:10px auto 15px auto;" do
+  =link_to new_charge_path, class: "btn btn-primary-o btn-lg btn-block", style: "margin:10px auto 15px auto;",remote: true do
     %i.fa.fa-plus-circle
     add charge
 

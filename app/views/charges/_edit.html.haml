@@ -1,35 +1,40 @@
-.modal-dialog.modal-md
-  .modal-content.vertical-center
-    = simple_form_for @charge, remote: request.format.js? do |f|
+.modal-dialog.modal-sm
+  .modal-content
+    = simple_form_for @charge, remote: request.format.js? do |f|      
       .modal-body.text-center
-        %h2.modal-header-text Edit Charge
+        %h3.modal-title 
+          %i.fa.fa-edit
+          edit charge
         %p.form-errors
           = f.error_notification
         .form-inputs
           -if @trym_category_id.present?
             = f.input :trym_category_id, as: :hidden, input_html: {value: @trym_category_id}
           = f.input :merchant_id, as: :string, label: "Which company is the charge from?"
+          = f.association :trym_category, label: "Charge Category", input_html: {class: "text-center"}
 
         .form-inputs
-          = f.input :amount, as: :currency, label: "How much is your average bill?", input_html: { value: @charge.amount / 100.0, style: "text-align: center; text-indent: -35px;" }
+          = f.input :amount, as: :currency, label: "How much is your average bill?", input_html: { value: @charge.amount / 100.0, style: "text-align: center; text-indent: -30px;" }
 
         .form-inputs
           = f.input :billing_day, as: :string, label: "When is your next charge?", placeholder: "estimate if you're not sure"
           = f.input :renewal_period_in_weeks, label: "How often are you charged?", input_html: { value: 4 }
 
         .form-inputs
-          .checkbox.lead
+          .checkbox.lead{ style: "margin: 15px auto 0px auto;"}
             %label
-              %input{ type: "checkbox", name: "track-switch", checked: @charge.recurring }
-                %b{style: "margin-left: -3px;"} Track this charge?
+              %input.lead-checkbox{ type: "checkbox", name: "track-switch", checked: @charge.recurring }
+                %b Track this charge?
 
-        .form-actions
-          = render partial: 'shared/cancel_button', locals: {btn_size: 'btn-md'}
-          = link_to "delete", {controller: "charges", action: "destroy", id: @charge.id}, method: :delete, class: "btn btn-danger btn-md", style: "width: 69px;", data: {confirm: "Are you sure you want to delete this charge? This can't be undone."}, remote: true
-          = f.button :submit, "Save", class: "btn btn-primary btn-md", style: "width: 69px;"
-        .paragraph-spacer
+        
+      .modal-footer{ style: "text-align: center;" }
+        = render partial: 'shared/cancel_button', locals: {btn_size: 'btn-md'}
+        = link_to "delete", {controller: "charges", action: "destroy", id: @charge.id}, method: :delete, class: "btn btn-danger btn-md", style: "width: 69px;", data: {confirm: "Are you sure you want to delete this charge? This can't be undone."}, remote: true
+        = f.button :submit, "Save", class: "btn btn-primary btn-md", style: "width: 69px;"
 
 :javascript
+  $('#charge_trym_category_id').select2();
+
   function format(item) { name: return item.name; };
 
   $('#charge_merchant_id').select2({

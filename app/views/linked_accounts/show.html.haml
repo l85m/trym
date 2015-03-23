@@ -29,9 +29,9 @@
         %h2{style: "margin-top:0px;"} 
           =@linked_account.financial_institution.name
           %br.visible-xs-block.visible-sm-block
-          =link_to "unlink account", {action: "destroy", id: @linked_account.id}, method: :delete, class: "btn btn-default btn-xs", data: {confirm: "Are you sure you want to unlink this account? This can't be undone and all non recurring charges will be deleted"}
+          =link_to "unlink account", {action: "destroy", id: @linked_account.id}, method: :delete, class: "btn btn-danger btn-sm", data: {confirm: "Are you sure you want to unlink this account? This can't be undone and all non recurring charges will be deleted"}
 
-          =link_to "save and continue", charges_path, class: "btn btn-primary btn-xs"
+          =link_to "save and continue", trym_referrer, class: "btn btn-primary btn-sm"
 
         %p.lead  
           Search for charges in your
@@ -56,9 +56,10 @@
               %i.fa.fa-search
             %input.input-lg.form-control#search-charges-field{ placeholder: "Search for charges        ", type: "text" }
 
-        .paragraph-spacer
 
-        #charge-search-results-container
+        .row
+          .col-md-12
+            #charge-search-results-container{style: "margin-top: 10px;"}
 
   =render "shared/charge_item_script"
 

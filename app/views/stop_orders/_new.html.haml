@@ -1,5 +1,5 @@
 .modal-dialog.modal-lg
-  .modal-content.vertical-center
+  .modal-content
     = simple_form_for @stop_order do |f|
       .modal-body
         .multi-part-form.block1.show
@@ -16,9 +16,10 @@
                 =link_to "change", edit_account_detail_path(current_user.account_detail), class: "btn btn-xs btn-default"
                 if we have any issues)
               
-              %span= render 'shared/cancel_button'
-              %span.pull-right
-                %button.next{ type: "button", class: "btn btn-primary", data: {current_block: "1", next_block: "2"} } Ok, lets do this!
+      .modal-footer  
+        %span= render 'shared/cancel_button'
+        %span.pull-right
+          %button.next{ type: "button", class: "btn btn-primary", data: {current_block: "1", next_block: "2"} } Ok, lets do this!
 
         .multi-part-form.block2.hidden.text-center
           =f.input :charge_id, as: :hidden

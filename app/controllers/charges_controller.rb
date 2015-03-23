@@ -7,6 +7,8 @@ class ChargesController < ApplicationController
   respond_to :html, :js
 
   def index
+    session.delete(:charge_wizard_categories)
+    
     @charges = current_user.charges.recurring.with_merchant
     @title = "charges"
     @charges_outlook_chart_data = ChargesOutlookChartData.new(current_user, @charges)

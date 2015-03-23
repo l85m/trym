@@ -14,9 +14,6 @@ class ChargeWizardsController < ApplicationController
       @next_step = next_charge_step
       @previous_step = previous_charge_step
       render "charge_category"
-    elsif step == :wizard_finished
-      session.delete(:charge_wizard_categories)
-      render_wizard
     else
       if step == :select_uncategorized_charges
         @uncategorized_charges = current_user.charges.from_link.recurring_likely_to_be.reject{ |x| x.smart_trym_category.present? } 

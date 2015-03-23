@@ -1,9 +1,9 @@
-.modal-dialog.modal-md
-  .modal-content.vertical-center.text-center
+.modal-dialog
+  .modal-content
     .modal-body
       #credentials-form-container  
         =render 'credentials_form'
-      #mfa-form-container
+      #mfa-form-container.text-center
       #link-success-container
         =render 'link_success'
 
@@ -38,6 +38,8 @@
             clearInterval(i);
                         
             submit_button.html("<i class='fa fa-check'></i>Linked</button>");
+            
+            $(".modal-content").animate({height: "142px"}, 1100);
             form_container.fadeOut(1000, function(){
               $("#link-success-container").fadeIn();
             });

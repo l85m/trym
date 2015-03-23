@@ -45,11 +45,7 @@
 :javascript
   $("[name='track-switch']").change( function() {
     var state = $(this).is(":checked")
-    if( state ) {
-      var cat_id = "#{@category.id}";
-    } else {
-      var cat_id = "";
-    }
+
     $.ajax({
       type: "PUT",
       url: "/charges/" + $(this).data("charge-id"),
