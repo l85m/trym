@@ -1,0 +1,12 @@
+.charge-header-container
+  .container.text-center
+    %h5
+      Managing your #{@charge.descriptor} Account
+      -if @charge.history.present?  
+        |
+        %a{tabindex: "0", data: {toggle: "popover", content: formatted_history(@charge.history)} } Payment History
+      |
+      =link_to "Back to My Charges", stop_order_path(@stop_order.id), method: :delete
+
+    :javascript
+      $('[data-toggle="popover"]').popover({html: true, trigger: 'focus', title: "<i class='fa fa-calendar'></i> Charge History"});

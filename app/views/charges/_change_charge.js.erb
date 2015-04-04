@@ -1,41 +1,10 @@
-<% if @update_from_view_all %>
-  ''
-<% elsif request.format.js? && !@update_from_view_all %>
+$("#modal-container").modal('hide');
+$(".modal-dialog").remove();
 
-  location.reload(true);
-
-<% else %>
-
-  
+<% if @update_from_charges_index %>
 
   var charge_item = $("#charge-item-<%= @charge.id.present? ? @charge.id : 'new' %>");
-
   charge_item.replaceWith("<%= j render partial: 'shared/charge_item', locals: {charge: @charge} %>");
-  $("#charge-list-script").replaceWith("<%= j render 'shared/charge_item_script' %>");
-
-  $("[name='track-switch']").change( function() {
-    
-    var state = $(this).is(":checked")
-    
-    <% if @category.present? %>
-      if( state ) {
-        var cat_id = "#{@category.present? ? @category.id : ''}";
-        var charge_params = { charge: { recurring: state, trym_category_id: cat_id }, scan: "scan", view_all: "<%= @update_from_view_all ? 'true' : 'false' %>" };
-      } else {
-        var cat_id = { charge: { recurring: state, trym_category_id: '' }, scan: "scan", view_all: "<%= @update_from_view_all ? 'true' : 'false' %>" };
-      }
-    <% else %>
-      var charge_params = { charge: { recurring: state }, scan: "scan", view_all: "<%= @update_from_view_all ? 'true' : 'false' %>" };
-    <% end %>
-    
-    $.ajax({
-      type: "PUT",
-      url: "/charges/" + $(this).data("charge-id"),
-      data: charge_params,
-      dataType: "script"
-    })
-  });
-
 
   <% if @charge.warnings.present? %>
 
@@ -57,5 +26,31 @@
 
   <% end %>
 
-  
+<% else %>
+
+  var charge_item = $("#charge-row-<%= @charge.id.present? ? @charge.id : 'new' %>");
+  charge_item.replaceWith("<%= j render partial: 'charges/table/row', locals: {charge: @charge} %>");
+
 <% end %>
+
+$("#charge-list-script").replaceWith("<%= j render 'shared/charge_item_script' %>");
+$("[name='track-switch']").change( function() {
+  
+  var state = $(this).is(":checked")
+  
+  <% if @category.present? %>
+    if( state ) {
+      var cat_id = "#{@category.present? ? @category.id : ''}";
+      var charge_params = { charge: { recurring: state, trym_category_id: cat_id }, scan: "scan" };
+    }
+  <% else %>
+    var charge_params = { charge: { recurring: state }, scan: "scan", view_all: "<%= @update_from_view_all ? 'true' : 'false' %>" };
+  <% end %>
+  
+  $.ajax({
+    type: "PUT",
+    url: "/charges/" + $(this).data("charge-id"),
+    data: charge_params,
+    dataType: "script"
+  })
+});

@@ -12,7 +12,7 @@ class PlaidTransactionParser
     group_charges_by_description
     match_to_merchants
     remove_zero_dollar_charges
-    calculate_recurring_score
+    calculate_recurring_score_and_renewal_period
     create_attributes_for_charges
   end
 
@@ -32,7 +32,7 @@ class PlaidTransactionParser
       charge[:history] = charge[:date].zip(charge[:amount]).sort_by{ |d,v| d }.to_h
       charge[:amount] = charge[:history][charge[:history].keys.max]
       charge[:billing_day] = charge[:date].max
-      charge[:renewal_period_in_weeks] = (charge[:date].size > 1 && charge[:date].sort[-1] - charge[:date].sort[-2] > 180) ? 52 : 4
+      charge[:renewal_period_in_weeks] = charge[:interval_in_days] < 10 ? 7 : charge[:interval_in_days] < 20 ? 2 : charge[:interval_in_days] < 40 ? 4 : charge[:interval_in_days] < 100 ? 13 : charge[:interval_in_days] < 200 ? 26 : 52
     end
   end
 
@@ -62,8 +62,12 @@ class PlaidTransactionParser
     @charge_list = grouped_list
   end
 
-  def calculate_recurring_score
-    @charge_list.map{ |c| c[:recurring_score] = TransactionScorer.new(c, @transaction_request).calculate_recurring_score }
+  def calculate_recurring_score_and_renewal_period
+    @charge_list.map do |c| 
+      scorer = TransactionScorer.new(c, @transaction_request)
+      c[:recurring_score] = scorer.score 
+      c[:interval_in_days] = scorer.interval
+    end
   end
 
   def match_to_merchants
@@ -73,6 +77,8 @@ class PlaidTransactionParser
         match = Merchant.find_by_fuzzy_name_with_similar_threshold(c[:meta]["payment_processor"]) if c[:meta]["payment_processor"].present?
       elsif ( !match.present? && card_membership_fees.select{ |n| c[:name].downcase.include?(n) }.present? && c[:category_id] == "10000000" )
         match = Merchant.find_by_fuzzy_name_with_similar_threshold(@link.financial_institution.name)
+      elsif !match.present?
+        match = Merchant.create( name: c[:name], validated: false )
       end
       c[:merchant_id] = match.id if match.present?
     end

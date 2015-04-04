@@ -1,0 +1,26 @@
+.row
+	.col-lg-8.col-lg-offset-2.col-md-10.col-md-offset-1
+
+		%h3.text-center 
+			How can we help you manage your #{@stop_order.charge.descriptor} account?
+			%br
+			%small as always trym is 100% free
+
+		.paragraph-spacer
+
+		.list-group
+			=link_to wizard_path(:manage_account, stop_order: {option: "cancel_all"} ), class: "list-group-item manage-account-list-group-item", method: :put do
+				%h4.list-group-item-heading Cancel my account / service
+				%p.list-group-item-text Give us a few details about your account and we will cancel it for you even if that means calling customer service and waiting on hold
+
+			=link_to wizard_path(:manage_account, stop_order: {option: "downgrade"} ), class: "list-group-item manage-account-list-group-item", method: :put do
+				%h4.list-group-item-heading Downgrade or cancel part of my service 
+				%p.list-group-item-text It's not all or nothing.  We can cancel part of your services for you, for instance, for a cable/internet package we could cancel your cable but keep your internet active
+
+			=link_to wizard_path(:manage_account, stop_order: {option: "upgrade"} ), class: "list-group-item manage-account-list-group-item", method: :put do
+				%h4.list-group-item-heading Upgrade or add services to my account
+				%p.list-group-item-text If you'd like to add services we can do that too.  Just let us know a few details about your account and what you'd like to add and we'll get it done - all with just a few clicks.
+
+			=link_to wizard_path(:manage_account, stop_order: {option: "find_deals"} ), class: "list-group-item manage-account-list-group-item", method: :put do
+				%h4.list-group-item-heading Find me a better deal
+				%p.list-group-item-text Have our team research better deals from #{@stop_order.charge.descriptor} and similar services and send you some reccomendations.  If you like what you see we will also help you make the change

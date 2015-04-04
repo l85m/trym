@@ -1,0 +1,14 @@
+#charge-table-container
+  =render 'charges/table/controls'
+  -if @charges.present?    
+    %table.table#charge-table
+      =render 'charges/table/header'
+      %tbody
+        -@charges.each do |charge|
+          =render partial: 'charges/table/row', locals: {charge: charge}
+    =render 'charges/table/footer'
+    
+  -else
+    %h3.text-center{style: "margin: 50px auto;"} 
+      No charges found, 
+      =link_to "add a new charge", new_charge_path, remote: true

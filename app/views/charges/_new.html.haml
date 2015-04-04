@@ -8,18 +8,17 @@
         %p.form-errors
           = f.error_notification
         .form-inputs
+          = f.input :recurring_score, as: :hidden, input_html: {value: 10}
           = f.input :recurring, as: :hidden, input_html: {value: true}
-          -if @trym_category_id.present?
-            = f.input :trym_category_id, as: :hidden, input_html: {value: @trym_category_id}
           = f.input :merchant_id, as: :string, label: "Which company is the charge from?"
           = f.association :trym_category, label: "Charge Category", input_html: {class: "text-center"}
-
+          
         .form-inputs
           = f.input :amount, as: :currency, label: "How much is your average bill?", input_html: { style: "text-align: center; text-indent: -30px;" }
 
         .form-inputs
           = f.input :billing_day, as: :string, label: "When is your next charge?", placeholder: "estimate if you're not sure"
-          = f.input :renewal_period_in_weeks, label: "How often are you charged?", input_html: { value: 4 }
+          = f.input :renewal_period_in_weeks, label: "How often are you charged?", collection: Charge.renewal_period_in_words.invert
 
       .modal-footer
         .pull-left
@@ -28,7 +27,7 @@
           = f.button :submit, "Save", class: "btn btn-primary btn-md"
 
 :javascript
-  $('#charge_trym_category_id').select2();
+  $('#charge_trym_category_id').select2({minimumResultsForSearch: Infinity, allowClear: true});
 
   function format(item) { name: return item.name; };
 
@@ -50,9 +49,4 @@
   
   $('#charge_billing_day').datepicker({dateFormat: 'yy-mm-dd'});
 
-  $('#charge_renewal_period_in_weeks').select2({
-    data:#{Charge.renewal_period_in_words.to_h.collect{ |id,text| {id: id, text: text} }.to_json},
-    initSelection : function (element, callback) {
-      callback({"text":"Monthly - once every month","id":4});
-    }
-  });
+  $('#charge_renewal_period_in_weeks').select2({minimumResultsForSearch: Infinity});

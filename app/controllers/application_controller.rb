@@ -11,4 +11,8 @@ class ApplicationController < ActionController::Base
   	redirect_to root_path, flash: {error: "You don't have permission to do that"}
   end
 
+	def not_found
+	  raise ActionController::RoutingError.new('Not Found')
+	end
+
 end

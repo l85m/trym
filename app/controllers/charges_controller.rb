@@ -18,29 +18,33 @@ class ChargesController < ApplicationController
     respond_with(@charges)
   end
 
-  def list_all
-    @view_all = true
-    @category = TrymCategory.find(params[:trym_category_id]) if params[:trym_category_id].present?
-    if params[:linked_account_id]
-      @linked_account = current_user.linked_accounts.find(params[:linked_account_id])
-      @charges = current_user.charges.where(linked_account: @linked_account).with_merchant.order(recurring_score: :desc).page(params[:page]).per(12)
-    else
-      @charges = current_user.charges.with_merchant.order(recurring_score: :desc).page(params[:page]).per(12)
-    end
-  end
-
   def search
     @category = TrymCategory.find(params[:trym_category_id]) if params[:trym_category_id].present?
     @query = params[:q]
-    @charges = current_user.charges.not_recurring.with_merchant.
-                            find_by_fuzzy_plaid_name(@query, limit: params[:limit].present? ? params[:limit].to_i : 4).
-                            select{ |c| c.plaid_name.similar(@query) >= 0.7 }
+
+    unless @category.present? && @query.blank?
+      merchant_ids = Merchant.where("name ILIKE ?", "%#{@query}%").pluck(:id)
+      merchant_name_query = merchant_ids.present? ? " OR merchant_id IN (#{merchant_ids.join(',')})" : ''
+      
+      @charges = current_user.charges.with_merchant.
+                                      where("plaid_name ILIKE ? OR description ILIKE ?#{merchant_name_query}", "%#{@query}%", "%#{@query}%").
+                                      sort_by_recurring_score.
+                                      page(params[:page])
+      if params[:linked_account_id].present?
+        @linked_account = LinkedAccount.find(params[:linked_account_id])
+        @charges = @charges.where(linked_account_id: params[:linked_account_id]) 
+      end
+    
+    else
+      @charges = @category.charges.where(user: current_user).with_merchant.sort_by_recurring_score.page(params[:page])
+    end
   end
 
   def new
     @title = "new charge"
-    @trym_category_id = params[:trym_category_id].to_i if params[:trym_category_id].present?
-    @charge = current_user.charges.build
+    @trym_category_id = TrymCategory.find(params[:trym_category_id]).id if params[:trym_category_id].present?
+    
+    @charge = current_user.charges.build( renewal_period_in_weeks: 4, trym_category_id: params[:trym_category_id])
   end
 
   def edit
@@ -56,8 +60,9 @@ class ChargesController < ApplicationController
   end
 
   def update
-    @update_from_account_scan = ( charge_params["recurring"].present? || params["charge"]["account_scan"].present? )
-    @update_from_view_all = params["view_all"] == 'true'
+    if params[:charge][:update_from].present? && ( params[:charge][:update_from] == "/" || params[:charge][:update_from].include?("charges") )
+      @update_from_charges_index = true
+    end
     @charge.update!(charge_params)
     respond_with(@charge)
   end
@@ -77,7 +82,7 @@ class ChargesController < ApplicationController
     end
 
     def convert_amount_to_number
-      unless (@charge.present? && params[:charge][:amount] == ( @charge.amount * 100 )) || params[:charge][:merchant_id].nil?
+      unless (@charge.present? && params[:charge][:amount] == ( @charge.amount * 100 ))
         if params[:charge][:amount].is_a?(String)
           params[:charge][:amount] = (params[:charge][:amount].gsub("$","").gsub(" ","").to_f * 100).to_i
         end

@@ -4,23 +4,10 @@ class LinkedAccountsController < ApplicationController
   respond_to :html, :js, :json
 
   def show
-    if params[:grouping].present?
-      @grouping = params[:grouping].downcase.gsub(" ", "_").strip
-      if ["likely_to_be", "might_be", "unlikely_to_be", "very_unlikely_to_be"].include?(@grouping)
-        charges = Charge.where(linked_account: @linked_account).send("recurring_#{@grouping}") 
-        @stop_order_charge_ids = charges.includes(:stop_orders).pluck('stop_orders.id')
-        @charges = charges.with_merchant.sort_by_recurring_score
-        @grouping = @grouping.gsub("_","-")
-      end
+    @charges = @linked_account.charges.sort_by_recurring_score.page(params[:page])
+    @stop_order_charge_ids = @charges.includes(:stop_orders).pluck('stop_orders.id')
     
-    else
-      @charges = @linked_account.charges.recurring
-    
-      @stop_order_charge_ids = @charges.includes(:stop_orders).pluck('stop_orders.id')
-      #@charges = charges.with_merchant.sort_by_recurring_score.group_by(&:recurring_score_grouping)
-      
-      respond_with(@linked_account)
-    end
+    respond_with(@linked_account)
   end
 
   def index

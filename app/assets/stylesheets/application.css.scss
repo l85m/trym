@@ -14,6 +14,7 @@
 @import "verifications";
 @import "arrows";
 @import "charge_wizards";
+@import "stop_orders/manage_wizard";
 
 @import "select2";
 @import "select2-bootstrap";
@@ -183,6 +184,17 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 .table-cell{ display: table-cell; }
 .vertical-center{ display: table-cell; vertical-align: middle; }
 .dashed-border{ border-style: dashed; }
+.pagination{ margin: 0 auto; }
+.vertical-center-container-outer{
+	display:table;
+	position: absolute;
+	height: 100%;
+	width: 100%;
+}
+.vertical-center-container-inner{
+	display: table-cell;
+	vertical-align: middle;
+}
 
 .ui-autocomplete { 
   z-index: 5000 !important; 
@@ -196,15 +208,6 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 	z-index: 99999;
 }
 #security-notice.popover{ max-width: 600px; }
-.tooltip.right .tooltip-inner,
-.tooltip.left .tooltip-inner{ 
-	text-align: center;
-	padding: 2px 4px;
-	background-color: white; 
-	border: solid 1px lightgray;
-}
-.tooltip.right .tooltip-arrow{ border-right-color: lightgray; }
-.tooltip.left .tooltip-arrow{ border-left-color: lightgray; }
 
 .navbar{ 
 	background-color: rgba(255,255,255,0.9);

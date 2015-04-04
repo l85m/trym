@@ -23,11 +23,10 @@
             %i.fa.fa-calendar
             history
               
-    .charge-info.charge-description    
-    
+    .charge-info.charge-description        
       %p.charge-lead
         -if charge.merchant.present? && charge.merchant.name.present?
-          =charge.merchant.name
+          =charge.merchant.name.titlecase
         -else
           Merchant Unknown
       %p.without-margin.small
@@ -43,25 +42,18 @@
             ???
       %p.charge-descriptor
         =charge.smart_description
-    .charge-info.charge-buttons.text-center
+    
+    .charge-info.charge-buttons.text-center      
       -if stop_order_charge_ids.include?(charge.id)
         =render partial: "stop_orders/show", locals: {stop_order: charge.active_stop_order}
-
       -else        
         .inline-block.charge-item-action-buttons
-          -unless controller_name == "charges" && request.format.html? && action_name != 'list_all'
-            .checkbox.without-margin.lead
-              %label
-                %input.lead-checkbox{ type: "checkbox", name: "track-switch", checked: charge.recurring, data: { charge_id: charge.id } }
-                  %small.strong Track?
-            =link_to "edit info", edit_charge_path(charge), remote: true, class: "btn btn-default btn-xs", style: "margin-top: 5px;"
-          -else
-            .text-center
-              =link_to new_charge_stop_order_path(charge), remote: true, class: "btn btn-primary btn-xs", style: "margin-top: 5px;" do
-                %small
-                  .text-center
-                    MANAGE 
-                  .text-center
-                    PAYMENTS
-            .text-center
-              %small=link_to "edit info", edit_charge_path(charge), remote: true
+          .text-center
+            =link_to stop_orders_path(charge_id: charge.id), method: :post, class: "btn btn-primary btn-xs", style: "margin-top: 5px;" do
+              %small
+                .text-center
+                  MANAGE 
+                .text-center
+                  PAYMENTS
+          .text-center
+            %small=link_to "edit info", edit_charge_path(charge), remote: true

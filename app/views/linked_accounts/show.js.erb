@@ -1,6 +1,1 @@
-$("#charge-group-<%= @grouping %>").html("<%= j render partial: 'charge_group', locals: {grouping: @grouping, grouped_charges: @charges} %>");
-
-$("#grouped-charge-button-loader").fadeOut( 400, function() {
-	$("#collapse-<%= @grouping %>").collapse('show');
-	$("#grouped-charge-button-loader").remove();
-});
+$("#charge-table-container").replaceWith("<%= j render 'charges/table/table' %>")

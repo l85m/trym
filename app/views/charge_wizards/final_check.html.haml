@@ -3,39 +3,24 @@
 .paragraph-spacer
 
 -if current_user.charges.recurring.present?
-  %p.lead Here are all the charges you've told us are recurring:
-  .row#recurring-charges-list
-    -current_user.charges.recurring.order(recurring_score: :desc).in_groups_of(2,false) do |charge_group|
-      -charge_group.each do |charge|
-        .col-md-6{class: charge_group.size == 1 ? "col-md-offset-3" : ''}
-          =render partial: "shared/charge_item", locals: {charge: charge}
+  %p.lead
+    Here are all your charges, we put the ones you told us to track at the top.  If we missed anything search for it or 
+    =link_to "add it now", new_charge_path, remote: true
   
-  .paragraph-spacer
-
-  %p.lead If there are any more charges you'd like to track we can help you do that now:
-
 -else
-  %p.lead#no-charges-message Whoops - it looks like you havn't told Trym to track any charges yet.  No worries - it's not too late to track some:
+  %p.lead#no-charges-message Whoops - it looks like you havn't told Trym to track any charges yet.  No worries - it's not too late to find some to track.
 
 .row
-  -if current_user.linked_accounts.present?
-    .col-md-6.text-center
+  -if @charges.present?
+    =render 'charges/table/table'
+    %h4.text-center
+      If you don't see any recurring charges listed above, 
+      =link_to "add some now", new_charge_path, remote: true
+  -else
+    .col-md-12.text-center
       =link_to new_charge_path, class: "btn btn-primary btn-block btn-lg", remote: true do
         %i.fa.fa-plus
         Add a new charge
-      .paragraph-spacer
-    .col-md-6.text-center
-      .input-group
-        .input-group-addon
-          %i.fa.fa-search
-        %input.input-lg.form-control#search-charges-field{ placeholder: "Search your linked #{'account'.pluralize(current_user.linked_accounts.count)} ", type: "text" }
-      .paragraph-spacer
-
-    #charge-search-results-container
-
-  -else
-    .col-md-6.col-md-offset-3.text-center
-      =link_to "Add a new charge", new_charge_path, class: "btn btn-primary btn-block btn-lg", remote: true
 
 .row.charge-wizard-actions
   .col-xs-6

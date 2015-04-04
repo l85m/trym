@@ -14,21 +14,12 @@
         =link_to "unlink account", {action: "destroy", id: @linked_account.id}, method: :delete, class: "btn btn-danger btn-md linked-account-charges-buttons", style: "z-index: 9999;", data: {confirm: "Are you sure you want to unlink this account? This can't be undone."}
 
 -else 
-  .container-fluid#edit-transaction-data-request-container.scrollable-with-offset
-    .row
-      .col-md-5.col-lg-4.col-sm-6.scrollable#linked-account-recurring-charges{style: "padding: 20px 20px 0px 20px; border-right: 1px solid lightgray;"}
-        %p.lead.text-center
-          You've told us these charges from your 
+  .container#scrollable-with-offset
+    .row      
+      .col-xs-12.scrollable
+        %h2
           =@linked_account.financial_institution.name
-          account are recurring:
-
-        -@charges.each do |charge|
-          =render partial: 'shared/charge_item', locals: {charge: charge}
-      
-      .col-md-7.col-lg-8.col-sm-6.scrollable#linked-account-search{style: "padding: 20px 20px 0px 20px;"}
-        %h2{style: "margin-top:0px;"} 
-          =@linked_account.financial_institution.name
-          %br.visible-xs-block.visible-sm-block
+          %br.visible-xs-block
           =link_to "unlink account", {action: "destroy", id: @linked_account.id}, method: :delete, class: "btn btn-danger btn-sm", data: {confirm: "Are you sure you want to unlink this account? This can't be undone and all non recurring charges will be deleted"}
 
           =link_to "save and continue", trym_referrer, class: "btn btn-primary btn-sm"
@@ -37,29 +28,8 @@
           Search for charges in your
           =@linked_account.financial_institution.name
           which you'd like us to track. You can edit any charge by clicking on the part of it that you want to change. 
-        
-        .col-md-6.text-center
-          =link_to new_charge_path, class: "btn btn-primary btn-block btn-lg", remote: true do
-            %i.fa.fa-plus
-            Add a new charge
-          .paragraph-spacer
-        .col-md-6.text-center
-          =link_to list_all_charges_path(linked_account_id: @linked_account.id), class: "btn btn-primary btn-block btn-lg", onclick: 'showLoader();' do
-            %i.fa.fa-list
-            List all linked account charges
-          .paragraph-spacer
-        
-        .col-md-12.text-center
 
-          .input-group
-            .input-group-addon
-              %i.fa.fa-search
-            %input.input-lg.form-control#search-charges-field{ placeholder: "Search for charges        ", type: "text" }
-
-
-        .row
-          .col-md-12
-            #charge-search-results-container{style: "margin-top: 10px;"}
+        =render 'charges/table/table'
 
   =render "shared/charge_item_script"
 
@@ -82,43 +52,3 @@
       $(".modal-dialog").remove();
       $("#modal-container").modal('hide');
     };
-
-    $(document).ready(function() {
-      if ($(window).width() >= 767) {
-
-        var h = $(window).height();
-        $('.scrollable').height((h-129)+'px');
-      } else {
-        $('#linked-account-search').insertBefore($('#linked-account-recurring-charges'));
-      }
-    });
-    $( window ).resize(function() {
-      if ($(window).width() >= 767) {
-        $('#linked-account-recurring-charges').insertBefore($('#linked-account-search'));
-
-        var h = $(window).height();
-        $('.scrollable').height((h-129)+'px');
-      } else {
-        $('#linked-account-search').insertBefore($('#linked-account-recurring-charges'));
-      
-        $('.scrollable').height('auto');
-        $('.scrollable-with-offset').height('auto');
-      }
-    });
-    
-    var thread = null;
-
-    function findMember(str) {
-      if( str.length > 0 ) {
-        $.get("#{search_charges_path}", "q="+str+"&limit=25", null, 'script');
-      } else {
-        $("#charge-search-results-container").empty();
-      }
-    } 
-
-    $("#search-charges-field").keyup(function() {
-      clearTimeout(thread);
-      var target = $(this);
-      if( $(this).val().length > 0 ) { $("#charge-search-results-container").html("<p class='lead text-center'><i class='fa fa-cog fa-spin'></i> Searching ...</p>") }
-      thread = setTimeout(function() { findMember(target.val()); }, 500); 
-    });

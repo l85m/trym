@@ -16,6 +16,7 @@ class Charge < ActiveRecord::Base
 
   scope :with_merchant, -> { includes(:merchant) }
   scope :with_stop_orders, -> { includes(:stop_orders) }
+  scope :with_active_stop_orders, -> {joins(:stop_orders).where('stop_orders.status' => ['requested', 'working'])}
   scope :with_financial_institution, -> { includes(:financial_institution) }
   scope :with_trym_category, -> { includes(:trym_category) }
 
@@ -27,7 +28,7 @@ class Charge < ActiveRecord::Base
   scope :recurring_unlikely_to_be, -> {not_recurring.where(recurring_score: 0..1)}
   scope :recurring_very_unlikely_to_be, -> {not_recurring.where('recurring_score < ?', 0)}
 
-  scope :sort_by_recurring_score, -> { order(recurring_score: :desc) }
+  scope :sort_by_recurring_score, -> { order("recurring desc NULLS LAST, recurring_score desc NULLS LAST") }
   scope :from_link, -> { where.not(transaction_request_id: nil) }
   scope :from_user, -> { where(transaction_request_id: nil) }
 
@@ -104,7 +105,6 @@ class Charge < ActiveRecord::Base
     end * amount
   end
 
-
   def recurring_score_grouping
     case recurring_score
     when -100..-1 then "very unlikely to be"
@@ -133,10 +133,10 @@ class Charge < ActiveRecord::Base
   def smart_description
     if description.present?
       description
+    elsif plaid_name.present? && merchant.nil? || merchant.name.blank?
+      plaid_name
     elsif smart_trym_category.present?
       smart_trym_category
-    elsif plaid_name.present?
-      plaid_name
     else
       "(no description)"
     end
@@ -147,7 +147,7 @@ class Charge < ActiveRecord::Base
       merchant.name
     else
       smart_description
-    end
+    end.titlecase
   end
  
   def merchant_name
@@ -159,11 +159,17 @@ class Charge < ActiveRecord::Base
   end
 
   def has_stop_order_or_is_stopped?
-    stop_orders.active_or_complete.present?
+    stop_orders.where(status: ["working", "succeeded", "requested"]).present?
   end
 
   def active_stop_order
     stop_orders.active
+  end
+
+  def last_billed_date
+    return nil unless billing_day.present?
+    return billing_day if billing_day < Time.now
+    billing_day - ( renewal_period_in_weeks * 7 )
   end
 
   def next_billing_date(bill_day = billing_day)

@@ -69,6 +69,7 @@ form#new_charge{
 }
 .charge-history-right{
 	width: 70px;
+	color: gray;
 	text-align: right;
 	display: inline-block;
 }
@@ -99,6 +100,19 @@ label[for=charge_renewal_period_in_words]{
 	margin: 0 auto;
 }
 .charge-descriptor{ margin: 0 auto; }
+
+.recurring-factor{
+	text-align: center;
+	font-size: 90%;
+	border-radius: 5px;
+	width: 23px; height: 23px;
+	padding: 5px 0px;
+	color: white !important;
+}
+.fa-building.recurring-factor{ padding-left: 1px; }
+.recurring-factor-good{ background-color: $brand-color; }
+.recurring-factor-bad{ background-color: #d9534f; }
+
 @media (max-width: 1199px) { 
 	.charge-btn-responsive{ 
 		padding: 6px 12px;
@@ -134,4 +148,84 @@ label[for=charge_renewal_period_in_words]{
 		padding: 20px 2px 2px 0px;
 		border-top: #e7e7e7 1px solid;
 	}
+}
+
+
+//TABLE STUFF
+#top-row{
+	margin-top: 20px;
+	padding: 0px 25px;
+}
+@media only screen and (min-width: 992px) {
+	#charge-table{ margin-top: 20px; }
+	.recurring-factor-cell{
+		padding:7px 8px;
+	}
+	.recurring-row{
+		font-weight: bold;
+		border-left: 5px solid $brand-color;
+	}	
+	.merchant-cell{
+	  max-width: 200px;
+	  overflow: hidden;
+  	text-overflow: ellipsis;
+  	white-space: nowrap;	
+  }
+}
+
+@media only screen and (max-width: 991px) {
+	.merchant-cell{
+  	background-color: #81CAA6;
+  	color: white;
+	}
+	/* Force table to not be like tables anymore */
+	#charge-table table, 
+	#charge-table thead, 
+	#charge-table tbody, 
+	#charge-table th, 
+	#charge-table td, 
+	#charge-table tr { 
+		display: block; 
+	}
+ 
+	/* Hide table headers (but not display: none;, for accessibility) */
+	#charge-table thead tr { 
+		position: absolute;
+		top: -9999px;
+		left: -9999px;
+	}
+ 
+	#charge-table tr { 
+		border: 1px solid lightgray; 
+		margin: 10px;
+	}
+ 
+	#charge-table td { 
+		/* Behave  like a "row" */
+		border: none;
+		border-bottom: 1px solid #eee; 
+		position: relative;
+		padding-left: 50%; 
+		white-space: normal;
+		text-align:left;
+		min-height: 37px;
+	}
+ 
+	#charge-table td:before { 
+		/* Now like a table header */
+		position: absolute;
+		/* Top/left values mimic padding */
+		left: 6px;
+		width: 45%; 
+		padding-right: 10px; 
+		white-space: nowrap;
+		text-align:left;
+		font-weight: bold;
+	}
+ 
+	/*
+	Label the data
+	*/
+
+	#charge-table td:before { content: attr(data-title); }
 }

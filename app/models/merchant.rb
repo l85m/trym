@@ -5,6 +5,8 @@ class Merchant < ActiveRecord::Base
 	belongs_to :trym_category
 
 	validates_uniqueness_of :name, conditions: -> { where( validated: true ) }
+	validates_presence_of :name
+
 	fuzzily_searchable :name
 
 	scope :validated, -> {where(validated: true)}

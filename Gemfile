@@ -11,7 +11,6 @@ gem 'sidekiq'
 gem 'sinatra', require: false
 gem 'slim'
 gem 'active_model_serializers'
-gem 'whenever'
 gem 'wicked' #form wizard
 gem 'kaminari' #pagination
 
@@ -58,6 +57,7 @@ group :production, :staging do
   gem 'mina'
   gem 'mina-sidekiq', require: false
   gem 'mina-unicorn', require: false
+  gem 'whenever', require: false
 end
 
 group :development, :test do

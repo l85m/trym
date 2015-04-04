@@ -1,7 +1,50 @@
 module ChargesHelper
 
+  def recurring_factors_for(charge)
+    return "<a data-toggle='tooltip' data-title='Trym thinks this charge is recurring because you created it'><i class='fa recurring-factor fa-user recurring-factor-good'></i></a>".html_safe unless charge.transaction_request.present?
+    interval_class = "fa-calendar"
+    amount_class = "fa-usd"
+    category_class = "fa-tags"
+    merchant_class = "fa-building"
+
+    factors = TransactionScorer.new(charge).reason_for_score.collect do |r, v|
+      {
+        dates_are_perfectly_recurring: [interval_class, v],
+        amounts_are_similar: [amount_class, v],
+        amounts_are_not_similar: [amount_class, v],
+        interval_likely_recurring: [interval_class, v],
+        interval_looks_recurring_with_limited_data: [interval_class, v],
+        interval_not_likely_recurring: [interval_class, v],
+        last_charge_too_long_ago: [interval_class, v],
+        one_transaction: [interval_class, v],
+        one_transaction_more_than_one_month_ago: [interval_class, v],
+        one_transaction_more_than_one_year_ago: [interval_class, v],
+        likely_category: [category_class, v],
+        very_likely_category: [category_class, v],
+        unlikely_category: [category_class, v],
+        very_unlikely_category: [category_class, v],
+        likely_description: [category_class, v],
+        unlikely_description: [category_class, v],
+        merchant_recurring_score: [merchant_class, v]
+      }[r]
+    end.sort_by{ |_,v| v }.inject({}){ |h,(k,v)| h[k].present? ? h[k] += v : h[k] = v ; h}.reject{ |_,v| v.between?(-1,1) }.
+        collect do |f, v| 
+          recurring_explanation = "Trym thinks this charge #{ v > 0 ? 'is' : 'is not' } recurring because " + {
+            "fa-calendar" => "of when you were charged",
+            "fa-usd" => "some past charges were #{v < 0 ? 'not' : nil} for similar amounts",
+            "fa-tags" => "of the merchant category provided by your bank",
+            "fa-building" => "it recognized the merchant name"
+          }[f]
+          "<a data-toggle='tooltip' data-title='#{recurring_explanation}'>" + 
+          "<i class='fa recurring-factor #{f} recurring-factor-#{v > 0 ? "good" : "bad"}'></i></a>"
+        end.
+        join(" ").html_safe
+
+    factors.present? ? factors : "<small>n/a</small>".html_safe
+  end
+
   def stop_order_charge_ids
-    current_user.charges.joins(:stop_orders).pluck(:id)
+    current_user.charges.with_active_stop_orders.pluck(:id)
   end
 
   def merchant_name_example_helper(trym_category_id)

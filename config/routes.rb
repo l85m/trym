@@ -1,6 +1,10 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
+  resources :stop_orders do
+    resources :manage_account, controller: 'stop_orders/manage_account',  only: [:show, :update]
+  end
+
   resources :charge_wizards
 
   resources :invite_requests, only: [:new, :create]

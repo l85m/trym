@@ -1,5 +1,5 @@
 class TransactionScorer
-  attr_accessor :reason_for_score, :score
+  attr_accessor :reason_for_score, :score, :interval
 
   ## charge = a transaction object from plaid
   ## @dates = past transactions from this merchant/source (ie all transactions 
@@ -24,7 +24,11 @@ class TransactionScorer
     @reason_for_score = {}
     @date_data_was_pulled = transaction_request.present? ? transaction_request.created_at : Time.now
     calculate_recurring_score
+    
+    @interval = @charge_pattern.present? ? @charge_pattern.interval : 30
   end
+  
+  private
 
   ## Returns integer score representing how likely a charge is to recur.  Higher
   ## score is better.
@@ -44,7 +48,7 @@ class TransactionScorer
         @score += 2
       else
         @reason_for_score[:amounts_are_not_similar] = -2
-        @score -= 1
+        @score -= 2
       end
 
       if @charge_pattern.interval_likely_recurring && @charge_pattern.recurring_date_count > 2
@@ -60,7 +64,7 @@ class TransactionScorer
 
       if last_charge_too_long_ago?
         @reason_for_score[:last_charge_too_long_ago] = -10
-        @score -= 10 
+        @score -= 10
       end
 
     else
@@ -112,7 +116,7 @@ class TransactionScorer
 
   def last_charge_too_long_ago?
     interval = @charge_pattern.interval.present? ? @charge_pattern.interval : 30
-    one_interval_before_data_pull_date = @date_data_was_pulled - (interval * 1.1).days
+    one_interval_before_data_pull_date = @date_data_was_pulled - (interval * 1.2).days
     
     @dates.last < one_interval_before_data_pull_date
   end

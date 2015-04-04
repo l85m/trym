@@ -1,0 +1,45 @@
+.row
+  .col-lg-8.col-lg-offset-2.col-md-10.col-md-offset-1
+    %h2.modal-header-text.text-center
+      Breaking up is hard to do
+    %p.lead.text-center
+      When you downgrade or cancel a service, the service provider will sometimes charge you fees or make you return equipment. <b>Trym will always try and avoid these for you</b>, but if we can't we need to know how you'd like us to proceed.
+    
+    .paragraph-spacer
+    
+    =form_for @stop_order, url: wizard_path, method: :put do |f|
+      
+      .row
+        .col-xs-8.text-right
+          %label Do you want us to proceed if you have to return equipment?
+        
+        .col-xs-4.text-left
+          %label.radio-inline
+            =f.radio_button :accept_equipment_return, "true", value: @stop_order.accept_equipment_return
+            %b Yes
+          %label.radio-inline
+            =f.radio_button :accept_equipment_return, "false", value: @stop_order.accept_equipment_return
+            %b No
+
+      .paragraph-spacer
+
+      .row
+        .col-xs-8.text-right
+          %b What is the maximum fee (up to $200) that you are willing to pay?
+          %br>
+          %small (leave as $0 for no fee)
+        .col-sm-2.col-xs-3.text-left
+          .input-group
+            %span.input-group-addon $
+            = f.number_field :fee_limit, class: "form-control", min: 0, max: 200
+
+      .paragraph-spacer
+        
+      .row.charge-wizard-actions
+        .col-xs-6
+          =link_to "Back", previous_wizard_path, class: "btn btn-default btn-responsive"
+        .col-xs-6.text-right
+          =f.submit "Continue", class: "btn btn-primary btn-responsive"
+
+      
+    %h5#error-reminder{style: "color: red;"}

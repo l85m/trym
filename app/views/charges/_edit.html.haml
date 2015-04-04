@@ -1,6 +1,7 @@
 .modal-dialog.modal-sm
   .modal-content
     = simple_form_for @charge, remote: request.format.js? do |f|      
+      = f.input :update_from, as: :hidden, input_html: {value: trym_referrer}
       .modal-body.text-center
         %h3.modal-title 
           %i.fa.fa-edit
@@ -18,22 +19,15 @@
 
         .form-inputs
           = f.input :billing_day, as: :string, label: "When is your next charge?", placeholder: "estimate if you're not sure"
-          = f.input :renewal_period_in_weeks, label: "How often are you charged?", input_html: { value: 4 }
+          = f.input :renewal_period_in_weeks, label: "How often are you charged?", collection: Charge.renewal_period_in_words.invert
 
-        .form-inputs
-          .checkbox.lead{ style: "margin: 15px auto 0px auto;"}
-            %label
-              %input.lead-checkbox{ type: "checkbox", name: "track-switch", checked: @charge.recurring }
-                %b Track this charge?
-
-        
       .modal-footer{ style: "text-align: center;" }
         = render partial: 'shared/cancel_button', locals: {btn_size: 'btn-md'}
         = link_to "delete", {controller: "charges", action: "destroy", id: @charge.id}, method: :delete, class: "btn btn-danger btn-md", style: "width: 69px;", data: {confirm: "Are you sure you want to delete this charge? This can't be undone."}, remote: true
         = f.button :submit, "Save", class: "btn btn-primary btn-md", style: "width: 69px;"
 
 :javascript
-  $('#charge_trym_category_id').select2();
+  $('#charge_trym_category_id').select2({minimumResultsForSearch: Infinity, allowClear: true});
 
   function format(item) { name: return item.name; };
 
@@ -57,9 +51,4 @@
   
   $('#charge_billing_day').datepicker({dateFormat: 'yy-mm-dd'});
 
-  $('#charge_renewal_period_in_weeks').select2({
-    data:#{Charge.renewal_period_in_words.to_h.collect{ |id,text| {id: id, text: text} }.to_json},
-    initSelection : function (element, callback) {
-      callback({"text":"Monthly - once every month","id":4});
-    }
-  });
+  $('#charge_renewal_period_in_weeks').select2({minimumResultsForSearch: Infinity});

@@ -1,4 +1,6 @@
 class StopOrdersController < ApplicationController
+  layout 'manage_account'
+
   before_action :authenticate_user!
   before_action :set_stop_order, only: [:show, :edit, :update, :destroy]
 
@@ -29,10 +31,14 @@ class StopOrdersController < ApplicationController
   end
 
   def create
-    if Charge.find(stop_order_params[:charge_id]).user == current_user
-      @stop_order = StopOrder.create( stop_order_params.merge({status: "requested"}) )
+    @charge = current_user.charges.find( params[:charge_id] )
+
+    if @charge.has_stop_order_or_is_stopped?
+      not_found
+    else
+      @stop_order = StopOrder.find_or_create_by( charge_id: @charge.id, status: "started" )
+      redirect_to stop_order_manage_account_path(:manage_account, stop_order_id: @stop_order.id)
     end
-    redirect_to root_path
   end
 
   def update

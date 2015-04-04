@@ -1,91 +1,33 @@
 %h2=@category.name
 
--if @category.charges.where(user: current_user).with_merchant.from_user.recurring.present? || @category.charges.where(user: current_user).recurring_or_likely_to_be_recurring.from_link.present?
+-if @charges.present?
 
-  %p.lead
+  %p.lead{style: "margin-bottom: 35px;"}
     Add or select the charges related to #{@category.name} that you want trym to track
-  -if @category.charges.where(user: current_user).with_merchant.recurring.present?
-    .paragraph-spacer
-    %p.text-center.strong You've told us these charges are recurring:
-    .row
-      -@category.charges.where(user: current_user).with_merchant.recurring.order(recurring_score: :desc).in_groups_of(2,false) do |charge_group|
-        -charge_group.each do |charge|
-          .col-md-6{class: charge_group.size == 1 ? "col-md-offset-3" : ''}
-            =render partial: "shared/charge_item", locals: {charge: charge}
-        
-
-  -if current_user.linked_accounts.present? && @category.charges.where(user: current_user).recurring_likely_to_be.from_link.present?
-    .paragraph-spacer
-    %p.text-center.strong
-      We found these
-      %a#recurring-charge-score-explanation.icon-link{tabindex: "0"}
-        potentially recurring
-        %i.fa.fa-question-circle
-      charges in your linked #{'account'.pluralize current_user.linked_accounts.count}:
-
-    .row
-      -@category.charges.where(user: current_user).with_merchant.recurring_likely_to_be.from_link.order(recurring_score: :desc).in_groups_of(2,false) do |charge_group|
-        -charge_group.each do |charge|
-          .col-md-6{class: charge_group.size == 1 ? "col-md-offset-3" : ''}
-            =render partial: "shared/charge_item", locals: {charge: charge}
+  
+  =render 'charges/table/table'        
+  
+  .paragraph-spacer
 
   .row
     %p.lead.text-center
       Can't find what you're looking for?
-    -if current_user.linked_accounts.present?
-      .col-md-6.text-center
-        =link_to new_charge_path, class: "btn btn-primary btn-block btn-lg", remote: true do
-          %i.fa.fa-plus
-          Add a new charge
-        .paragraph-spacer
-      .col-md-6.text-center
-        =link_to list_all_charges_path(trym_category_id: @category.id), class: "btn btn-primary btn-block btn-lg", onclick: 'showLoader();' do
-          %i.fa.fa-list
-          List all linked account charges
-        .paragraph-spacer
-      .col-md-12.text-center
-
-        .input-group
-          .input-group-addon
-            %i.fa.fa-search
-          %input.input-lg.form-control#search-charges-field{ placeholder: "Search for charges        ", type: "text" }
-        .paragraph-spacer
-
-      #charge-search-results-container
-
-    -else
-      .col-md-6.col-md-offset-3.text-center
-        =link_to "Add a new charge", new_charge_path, class: "btn btn-primary btn-block btn-lg", remote: true
+      =link_to "Add a new charge", new_charge_path(trym_category_id: @category.id), remote: true
 
 
   .paragraph-spacer
 
 -else
+  
   -if current_user.linked_accounts.present?
     %p.lead
-      We couldn't find any charges in your linked accounts that look recurring so feel free to look for yourself or add a new charge
-    .row
-      .col-md-6.text-center
-        =link_to new_charge_path, class: "btn btn-primary btn-block btn-lg", remote: true do
-          %i.fa.fa-plus
-          Add a new charge
-        .paragraph-spacer
-      .col-md-6.text-center
-        =link_to list_all_charges_path, class: "btn btn-primary btn-block btn-lg", onclick: 'showLoader();' do
-          %i.fa.fa-list
-          List all linked account charges
-        .paragraph-spacer
-      .col-md-12.text-center
-
-        .input-group
-          .input-group-addon
-            %i.fa.fa-search
-          %input.input-lg.form-control#search-charges-field{ placeholder: "Search for charges        ", type: "text" }
-        .paragraph-spacer
-
-      #charge-search-results-container
-  -else
+      We couldn't find any charges related to #{@category.name} in your linked accounts that look recurring. Feel free to look for yourself or 
+      =link_to "add a new charge", new_charge_path(trym_category_id: @category.id), remote: true
     
+    =render 'charges/table/table'
+    .paragraph-spacer
+  
+  -else
     %p.lead
       Add the charges related to #{@category.name} that you want trym to track.
 
@@ -109,35 +51,35 @@
           .form-actions.text-center
             = f.button :submit, "Create and Track!", class: "btn btn-primary btn-lg"
     
-  .paragraph-spacer
+    .paragraph-spacer
 
-  :javascript
-    function format(item) { name: return item.name; };
+    :javascript
+      function format(item) { name: return item.name; };
 
-    $('#charge_merchant_id').select2({
-      placeholder: "#{merchant_name_example_helper(@category.id)}",
-      minimumInputLength: 3,
-      data:{ text: "name" },
-      formatSelection: format,
-      formatResult: format,
-      ajax:{ 
-        url: "#{merchants_path(trym_category_id: @category.id)}",
-        dataType: 'json',
-        quietMillis: 250,
-        data: function (term, page) { return { q: term }; },
-        results: function (data, page) { return { results: data }; },
-        cache: true
-      }
-    });
-    
-    $('#charge_billing_day').datepicker({dateFormat: 'yy-mm-dd'});
+      $('#charge_merchant_id').select2({
+        placeholder: "#{merchant_name_example_helper(@category.id)}",
+        minimumInputLength: 3,
+        data:{ text: "name" },
+        formatSelection: format,
+        formatResult: format,
+        ajax:{ 
+          url: "#{merchants_path(trym_category_id: @category.id)}",
+          dataType: 'json',
+          quietMillis: 250,
+          data: function (term, page) { return { q: term }; },
+          results: function (data, page) { return { results: data }; },
+          cache: true
+        }
+      });
+      
+      $('#charge_billing_day').datepicker({dateFormat: 'yy-mm-dd'});
 
-    $('#charge_renewal_period_in_weeks').select2({
-      data:#{Charge.renewal_period_in_words.to_h.collect{ |id,text| {id: id, text: text} }.to_json},
-      initSelection : function (element, callback) {
-        callback({"text":"Monthly - once every month","id":4});
-      }
-    });
+      $('#charge_renewal_period_in_weeks').select2({
+        data:#{Charge.renewal_period_in_words.to_h.collect{ |id,text| {id: id, text: text} }.to_json},
+        initSelection : function (element, callback) {
+          callback({"text":"Monthly - once every month","id":4});
+        }
+      });
 
 .text-center.hidden-xs{style: "margin-bottom: -10px;"}
   -TrymCategory.where(id: @category_ids).each do |category|
@@ -165,21 +107,4 @@
     placement: 'bottom',
     title: "<div style='text-align: left;'>How do we determine what might be recurring?</div>",
     content: "We look at three things: <ul style='margin-top:5px;'><li>when and how frequent you're charged</li><li>category information from your bank and</li><li>the merchant name</li></ul>  We don't always get this right so if you see something that's clearly wrong please send us an email at <a href='mailto:ai@trym.io'>ai@trym.io</a>."
-  });
-
-  var thread = null;
-
-  function findMember(str) {
-    if( str.length > 0 ) {
-      $.get("#{search_charges_path}", "q="+str+"&trym_category_id="+"#{@category.id}", null, 'script');
-    } else {
-      $("#charge-search-results-container").empty();
-    }
-  } 
-
-  $("#search-charges-field").keyup(function() {
-    clearTimeout(thread);
-    var target = $(this);
-    if( $(this).val().length > 0 ) { $("#charge-search-results-container").html("<p class='lead text-center'><i class='fa fa-cog fa-spin'></i> Searching ...</p>") }
-    thread = setTimeout(function() { findMember(target.val()); }, 500); 
   });

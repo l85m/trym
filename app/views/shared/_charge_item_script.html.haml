@@ -1,6 +1,5 @@
-.charge-list-script
+#charge-list-script
   :javascript
-    $('[data-toggle="popover"]').popover({html: true, trigger: 'focus', title: "<i class='fa fa-calendar'></i> Charge History"});
   
     $("[name='track-switch']").change( function() {
       
@@ -10,7 +9,13 @@
         var cat_id = "#{@category.present? ? @category.id : ''}";
         var charge_params = { charge: { recurring: state, trym_category_id: cat_id }, scan: "scan", view_all: "#{ @view_all ? 'true' : 'false' }" };
       } else {
-        var charge_params = { charge: { recurring: state, trym_category_id: '' }, scan: "scan", view_all: "#{ @view_all ? 'true' : 'false' }" };
+        var charge_params = { recurring: state };
+        
+        if( $(this).data("from-link") ){
+          charge_params =  $.extend( charge_params, { trym_category_id: '' } );
+        }
+        
+        var charge_params = { charge: charge_params, scan: "scan", view_all: "#{ @view_all ? 'true' : 'false' }" };
       }
       
       $.ajax({
@@ -21,4 +26,5 @@
       })
     });
     
+    $('[data-toggle="tooltip"]').tooltip()
     $('[data-toggle="popover"]').popover({html: true, trigger: 'focus', title: "<i class='fa fa-calendar'></i> Charge History"});

@@ -9,14 +9,17 @@ class ChargeWizardsController < ApplicationController
 
   def show
     @category_ids = session[:charge_wizard_categories]
-    if step.to_s.include?("charge_category")      
+    if step.to_s.include?("charge_category")
       @category = TrymCategory.find(step.to_s.split("_").last.to_i)
+      @charges = @category.charges.where(user: current_user).with_merchant.sort_by_recurring_score.page(params[:page])
       @next_step = next_charge_step
       @previous_step = previous_charge_step
       render "charge_category"
     else
       if step == :select_uncategorized_charges
         @uncategorized_charges = current_user.charges.from_link.recurring_likely_to_be.reject{ |x| x.smart_trym_category.present? } 
+      elsif step == :final_check
+        @charges = current_user.charges.with_merchant.sort_by_recurring_score.page(params[:page])
       end
       render_wizard
     end

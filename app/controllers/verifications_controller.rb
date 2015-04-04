@@ -1,4 +1,5 @@
 class VerificationsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_account_detail, only: [:new, :create]
 
   def new
@@ -8,9 +9,10 @@ class VerificationsController < ApplicationController
   def create
   	if @account_detail.confirmed?( confirmation_code )
 
-      #### Need to make this work again
-      if session[:referring_charge_id].present?
-  		  redirect_to controller: "stop_orders", action: "new", charge_id: session[:referring_charge_id]
+      if session[:referring_stop_order_id].present?
+        stop_order_id = session[:referring_stop_order_id]
+        session.delete(:referring_stop_order_id)
+  		  redirect_to stop_order_manage_account_path stop_order_id: stop_order_id, id: "account_details"
       else
         
         if session[:text_alert]

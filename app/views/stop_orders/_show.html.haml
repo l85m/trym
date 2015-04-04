@@ -1,6 +1,6 @@
 -if stop_order.cancelable?
   %b cancelation:
-  %span.label.label-primary
+  =link_to stop_order, class: "label label-default" do
     %i.fa{class: "fa-#{stop_order.status == 'requested' ? 'send' : 'cog'}"}
     =stop_order.status
   %small

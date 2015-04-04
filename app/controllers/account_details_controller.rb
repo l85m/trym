@@ -5,7 +5,7 @@ class AccountDetailsController < ApplicationController
   def new
   	@account_detail ||= AccountDetail.new
     if params[:enable_text_alert] || params[:enable_text_summary]
-      session.delete(:referring_charge_id)
+      session.delete(:referring_stop_order_id)
       
       if params[:enable_text_alert] 
         session[:text_alert] = true
@@ -26,6 +26,9 @@ class AccountDetailsController < ApplicationController
   end
 
   def edit
+    if params[:referring_stop_order_id]
+      session[:referring_stop_order_id] = params[:referring_stop_order_id]
+    end
   end
 
   def update
