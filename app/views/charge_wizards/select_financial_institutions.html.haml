@@ -10,7 +10,6 @@
 %p.lead 
 	When you're done click next and we'll review the charges we found in your account that seem to be recurring.
 
-
 .row.charge-wizard-actions
 	.col-xs-2
 		=link_to "Back", (request.referrer.present? && request.referrer.include?('charge_wizards')) ? previous_wizard_path : trym_referrer, class: "btn btn-default"
@@ -25,3 +24,4 @@
 		trigger: 'focus',
 		html: 'true',
 	});
+

@@ -3,4 +3,13 @@
     Huzzah!
   %p.lead
     Your account was successfully linked.
-  %a#after-success-link.btn.btn-primary{href: "#", onclick: "location.reload(true)"} Click here to continue.
+  %a#after-success-link.btn.btn-primary{href: "#", onclick: "afterLinkLink()"} Click here to continue.
+
+:javascript
+	function afterLinkLink() {
+		if( $(location).attr('href').indexOf("charge_wizards") >= 0 ) {
+			location.reload(true);
+		} else {
+			window.location.href = #{charge_wizard_path("charge_category")};
+		}
+	}
