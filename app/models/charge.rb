@@ -28,6 +28,7 @@ class Charge < ActiveRecord::Base
   scope :recurring_unlikely_to_be, -> {not_recurring.where(recurring_score: 0..1)}
   scope :recurring_very_unlikely_to_be, -> {not_recurring.where('recurring_score < ?', 0)}
 
+  scope :uncategorized, -> { where(id: all.reject{ |x| x.smart_trym_category.present? }.collect(&:id) ) }
   scope :sort_by_recurring_score, -> { order("recurring desc NULLS LAST, recurring_score desc NULLS LAST") }
   scope :from_link, -> { where.not(transaction_request_id: nil) }
   scope :from_user, -> { where(transaction_request_id: nil) }
@@ -116,13 +117,23 @@ class Charge < ActiveRecord::Base
     end
   end
 
-  def smart_trym_category
-    if merchant.nil? && plaid_name.present?
-      plaid_name
-    elsif plaid_category.present?
+  def smart_category_name
+    if plaid_category.present?
       plaid_category.hierarchy.last
     elsif trym_category.present?
       trym_category.name
+    elsif merchant.present? && merchant.trym_category.present?
+      merchant.trym_category.name
+    else
+      nil
+    end
+  end
+
+  def smart_trym_category
+    if trym_category.present?
+      trym_category
+    elsif plaid_category.present? && plaid_category.trym_category.present?
+      plaid_category.trym_category
     elsif merchant.present? && merchant.trym_category.present?
       merchant.trym_category
     else
@@ -136,7 +147,7 @@ class Charge < ActiveRecord::Base
     elsif plaid_name.present? && merchant.nil? || merchant.name.blank?
       plaid_name
     elsif smart_trym_category.present?
-      smart_trym_category
+      smart_category_name
     else
       "(no description)"
     end

@@ -17,7 +17,7 @@ class ChargeWizardsController < ApplicationController
       render "charge_category"
     else
       if step == :select_uncategorized_charges
-        @uncategorized_charges = current_user.charges.from_link.recurring_likely_to_be.reject{ |x| x.smart_trym_category.present? } 
+        @charges = current_user.charges.from_link.recurring_or_likely_to_be_recurring.uncategorized.page(params[:page])
       elsif step == :final_check
         @charges = current_user.charges.with_merchant.sort_by_recurring_score.page(params[:page])
       end
@@ -42,6 +42,7 @@ class ChargeWizardsController < ApplicationController
   private
 
     def next_charge_step
+      return :select_categories unless session[:charge_wizard_categories]
       next_index = session[:charge_wizard_categories].index(@category.id) + 1
       if next_index < session[:charge_wizard_categories].size
         "charge_category_#{session[:charge_wizard_categories][next_index]}".to_sym
@@ -56,6 +57,7 @@ class ChargeWizardsController < ApplicationController
     end
 
     def previous_charge_step
+      return :select_categories unless session[:charge_wizard_categories]
       previous_index = session[:charge_wizard_categories].index(@category.id) - 1
       
       if previous_index >= 0

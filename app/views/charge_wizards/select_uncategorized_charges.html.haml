@@ -8,17 +8,6 @@
 
 .paragraph-spacer
 
--recurring_charges = current_user.charges.with_merchant.recurring.order(recurring_score: :desc).reject{ |c| c.smart_trym_category }
--if recurring_charges.present?
-  %p.text-center You've told us these charges are recurring:
-  .row
-    -recurring_charges.in_groups_of(2,false) do |charge_group|
-      -charge_group.each do |charge|
-        .col-md-6{class: charge_group.size == 1 ? "col-md-offset-3" : ''}
-          =render partial: "shared/charge_item", locals: {charge: charge}
-
-  .paragraph-spacer
-
 %p.text-center
   We found these
   %a#recurring-charge-score-explanation.icon-link{tabindex: "0"}
@@ -26,15 +15,13 @@
     %i.fa.fa-question-circle
   charges in your linked #{'account'.pluralize current_user.linked_accounts.count}:
 
-.row
-  -@uncategorized_charges.in_groups_of(2, false) do |charge_group|
-    -charge_group.each do |charge|
-      .col-md-6{class: charge_group.size == 1 ? "col-md-offset-3" : ''}
-        =render partial: "shared/charge_item", locals: {charge: charge}
+=render 'charges/table/table'  
+
+.paragraph-spacer
 
 .row.charge-wizard-actions
   .col-xs-6
-    =link_to "Back", :back, class: "btn btn-default btn-responsive"
+    =link_to "Back", previous_wizard_path, class: "btn btn-default btn-responsive"
   .col-xs-6.text-right
     =link_to "Next", next_wizard_path, class: "btn btn-primary btn-responsive"
 
