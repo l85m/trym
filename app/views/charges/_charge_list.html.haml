@@ -2,7 +2,7 @@
   %p.lead.without-margin
     %i.fa.fa-calculator
     active charges
-=link_to charge_wizard_path("link_or_manual"), class: "btn btn-primary-o btn-lg btn-block", style: "margin:10px auto 15px auto;" do
+=link_to charge_wizard_path(current_user.linked_accounts.present? ? "select_categories" : "link_or_manual"), class: "btn btn-primary-o btn-lg btn-block", style: "margin:10px auto 15px auto;" do
   %i.fa.fa-plus-circle
   add charge
 
