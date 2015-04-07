@@ -18,11 +18,18 @@ class ChargesController < ApplicationController
     respond_with(@charges)
   end
 
+  def outlook    
+    @charges_outlook_chart_data = ChargesOutlookChartData.new(current_user, current_user.charges.recurring.with_merchant)
+  end
+
   def search
     @category = TrymCategory.find(params[:trym_category_id]) if params[:trym_category_id].present?
     @query = params[:q]
 
-    unless @category.present? && @query.blank?
+    if @category.present? && @query.blank?
+      @charges = @category.charges.where(user: current_user).with_merchant.sort_by_recurring_score.page(params[:page])
+    elsif @query.present?
+  
       merchant_ids = Merchant.where("name ILIKE ?", "%#{@query}%").pluck(:id)
       merchant_name_query = merchant_ids.present? ? " OR merchant_id IN (#{merchant_ids.join(',')})" : ''
       
@@ -34,9 +41,9 @@ class ChargesController < ApplicationController
         @linked_account = LinkedAccount.find(params[:linked_account_id])
         @charges = @charges.where(linked_account_id: params[:linked_account_id]) 
       end
-    
+
     else
-      @charges = @category.charges.where(user: current_user).with_merchant.sort_by_recurring_score.page(params[:page])
+      @charges = current_user.charges.with_merchant.sort_by_recurring_score.page(params[:page]).per(15)
     end
   end
 

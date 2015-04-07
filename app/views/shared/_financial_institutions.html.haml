@@ -1,0 +1,19 @@
+.row
+	-FinancialInstitution.connect_enabled.in_groups_of(4, false) do |institution_group|		
+		.col-md-6
+			%ul.list-group.wizard-list-group
+				-institution_group.each do |institution|		
+					%li.list-group-item
+						%span.lead=institution.name
+						.pull-right
+							-if current_user.linked_account_at?(institution.id).present?
+								-if current_user.linked_account_at?(institution.id).first.error_message
+									%a.btn.btn-primary-o.btn-responsive#link-account-error-popover-button{ tabindex: "0", data: { toggle: "popover", title: "Message from your account:", content: "<div class='text-center' style='width: 300px;'>" + current_user.linked_account_at?(institution.id).first.error_message + "<br><br>" + link_to("click here to retry the link", new_linked_account_path(financial_institution_id: institution.id), remote: true) + "</div>"} }
+										%i.fa.fa-exclamation-circle
+										Needs Attention
+								-else
+									=link_to current_user.linked_account_at?(institution.id).first, class: "btn btn-primary-o btn-responsive" do
+										%i.fa.fa-check
+										Linked
+							-else
+								=link_to "Link", new_linked_account_path(financial_institution_id: institution.id), remote: true, class: "btn btn-primary btn-responsive"

@@ -1,4 +1,5 @@
 class ChargesOutlookChartData
+	attr_reader :charges
 	
 	def initialize(user, charges, outlook_period = 51)
 		@user = user

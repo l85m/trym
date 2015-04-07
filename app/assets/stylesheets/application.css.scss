@@ -195,6 +195,11 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 	display: table-cell;
 	vertical-align: middle;
 }
+.nav-pills > li.active > a, 
+.nav-pills > li.active > a:hover, 
+.nav-pills > li.active > a:focus{
+	background-color: $brand-color;
+}
 
 .ui-autocomplete { 
   z-index: 5000 !important; 

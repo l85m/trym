@@ -2,14 +2,16 @@
 
   .row{style: 'padding: 0px 20px;'}
     - if @charges.present?
-      =render 'charge_list'
-      .scrollable#charges-outlook{ class: (@charges.present? || @linked_accounts.present?) ? "col-md-8 col-sm-6" : "col-xs-12"}
-        =render 'linked_accounts/index'
-        =render 'twelve_month_outlook'
+      .col-sm-6.col-md-4.hidden-sm.hidden-xs#charge-side-list.scrollable
+        =render 'charge_list'
+      .scrollable#charges-outlook.col-md-8.col-sm-12
+        =render 'charge_index_tabs'
     - else
       .scrollable#charges-outlook.col-md-8.col-sm-6.col-md-offset-2.col-sm-offset-3
         =render 'new_user_prompt'
   
+=render "shared/charge_item_script"
+
 :javascript
   $(document).ready(function() {
     if ($(window).width() >= 767) {
@@ -21,6 +23,7 @@
       $('.scrollable').height((h-109)+'px');
     }
   });
+  
   $( window ).resize(function() {
     if ($(window).width() >= 767) {
       var h = $(window).height();

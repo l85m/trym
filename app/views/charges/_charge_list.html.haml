@@ -1,14 +1,10 @@
-.col-sm-6.col-md-4#charge-side-list.scrollable
-  .text-center{ style: "min-width: 200px;" }
-    %p.lead.without-margin
-      %i.fa.fa-calculator
-      active charges
-  =link_to new_charge_path, class: "btn btn-primary-o btn-lg btn-block", style: "margin:10px auto 15px auto;",remote: true do
-    %i.fa.fa-plus-circle
-    add charge
+.text-center{ style: "min-width: 200px;" }
+  %p.lead.without-margin
+    %i.fa.fa-calculator
+    active charges
+=link_to new_charge_path, class: "btn btn-primary-o btn-lg btn-block", style: "margin:10px auto 15px auto;",remote: true do
+  %i.fa.fa-plus-circle
+  add charge
 
-  -(@charges.select(&:next_billing_date).sort_by(&:next_billing_date) + @charges.reject(&:next_billing_date)).each do |charge|
-    =render partial: "shared/charge_item", locals: {charge: charge}
-
-
-=render "shared/charge_item_script"
+-(@charges.select(&:next_billing_date).sort_by(&:next_billing_date) + @charges.reject(&:next_billing_date)).each do |charge|
+  =render partial: "shared/charge_item", locals: {charge: charge}

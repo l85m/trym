@@ -1,0 +1,43 @@
+%div{role: "tabpanel"}
+  %ul.nav.nav-pills#charge-index-pills
+    %li.hidden-md.hidden-lg{role: "presentation"}
+      %a{ href: "#active-charges", role: "tab", data: {toggle: "tab", loaded: "true"} } Active Charges
+    %li.active{role: "presentation"}
+      %a{ href: "#twelve-month-outlook", role: "tab", data: {toggle: "tab", loaded: "true"} } Outlook
+    %li{role: "presentation"}
+      %a{ href: "#linked-accounts", role: "tab", data: {toggle: "tab", link_taget: financial_institutions_path, loaded: "false"} } Linked Accounts
+    %li{role: "presentation"}
+      %a{ href: "#all-charges", role: "tab", data: {toggle: "tab", link_taget: search_charges_path} } All Charges
+  
+  .tab-content
+    #active-charges.tab-pane.fade.hidden-md.hidden-lg{:role => "tabpanel"}
+      #active-charges-container
+        =render 'charge_list'
+    #twelve-month-outlook.tab-pane.in.active{:role => "tabpanel"}
+      #outlook-container
+        =render 'outlook'
+    #linked-accounts.tab-pane.fade{:role => "tabpanel"}
+      .paragraph-spacer
+      %p.lead We can <b>securely link</b> trym to some of your <b>credit and bank accounts</b> and automatically <b>scan them for recurring charges</b>.
+
+      %ul.wizard-list
+        %li
+          =render 'shared/security_notice'
+        %li
+          Trym scans linked accounts every day and alerts you if we find new charges which look recurring
+        %li You can always unlink any of your accounts at any time
+        %li 
+          <b>Linking accounts is optional</b>, if you choose not to link any accounts you can always just add charges manually
+      %p.strong{style: "margin-top: 25px;"} Below are the institutions we can link to.  Any you've already linked can be viewed or configured by clicking on them.
+      .paragraph-spacer
+      #financial-institution-list-container
+        =render 'shared/financial_institutions'
+    #all-charges.tab-pane.fade{:role => "tabpanel"}
+      #charge-table-container
+
+  :javascript
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+      if(typeof e.target.dataset.linkTaget != 'undefined') {
+        $.ajax({url: e.target.dataset.linkTaget, dataType: 'script'})
+      }
+    })

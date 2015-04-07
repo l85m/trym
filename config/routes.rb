@@ -19,7 +19,7 @@ Rails.application.routes.draw do
     resources :stop_orders, only: :new
     collection do
       get :search
-      get :list_all
+      get :outlook
     end
   end
 

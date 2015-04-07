@@ -1,21 +1,30 @@
-.hidden-xs
-  -if @charges.present?
-    .row
-      .col-lg-12
-        %p.lead.text-center{style: "margin: 0px 0px 20px 0px;"}
-          ="Over the next twelve months you will pay" 
-          %span.brand-color="#{number_to_currency @charges_outlook_chart_data.total_next_twelve_months}"
-          ="to #{pluralize @charges_outlook_chart_data.bar_categories.count, 'merchant'}."
-    .row
-      .col-lg-12
-        #charges-total-by-merchant-chart
-  -else
-    .row
-      .col-lg-12
-        %p.lead.text-center{style: "margin: 0px 0px 20px 0px;"}
-          Thanks for linking an account.  Add some charges to get started!
+-if @charges_outlook_chart_data
+  .row
+    .col-lg-12
+      %h3
+        Over the next twelve months you will pay
+        %b #{number_to_currency @charges_outlook_chart_data.total_next_twelve_months}
+        to #{pluralize @charges_outlook_chart_data.bar_categories.count, 'merchant'}
+      %p.lead{style: "margin-bottom: 10px;"}
+        Does that sound like too much?  Click 
+        %b Manage Payments 
+        on any charge to cancel or downgrade services you don't need or to let us help you find better deals on services you need.
+      %p 
+        It looks like you're paying the most to 
+        %b #{@charges_outlook_chart_data.bar_categories.first}.  
+        Why not
+        %b=link_to "start there?", stop_orders_path(charge_id: @charges_outlook_chart_data.charges.select{ |c| c.merchant_name == @charges_outlook_chart_data.bar_categories.first }.first), method: :post
 
--if @charges.present? && @charges_outlook_chart_data.any_charges_in_year?
+  .row
+    .col-lg-12
+      #charges-total-by-merchant-chart
+-else
+  .row
+    .col-lg-12
+      %p.lead.text-center{style: "margin: 0px 0px 20px 0px;"}
+        Add some charges to see how much you're paying!
+
+-if @charges_outlook_chart_data.any_charges_in_year?
   :javascript
     $(function () {
       $('#charges-total-by-merchant-chart').highcharts({

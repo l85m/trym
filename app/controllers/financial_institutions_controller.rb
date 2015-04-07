@@ -3,7 +3,11 @@ class FinancialInstitutionsController < ApplicationController
 	respond_to :json
 
 	def index
-		@financial_institutions = FinancialInstitution.find_by_fuzzy_name(params[:q], limit: 5).select{ |f| f.connect }
+		if params[:q]
+			@financial_institutions = FinancialInstitution.find_by_fuzzy_name(params[:q], limit: 5).select{ |f| f.connect }
+		else
+			@financial_institutions = FinancialInstitution.connect_enabled
+		end
 	end
 	
 end
