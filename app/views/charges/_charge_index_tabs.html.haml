@@ -1,16 +1,18 @@
 %div{role: "tabpanel"}
-  %ul.nav.nav-pills#charge-index-pills
-    %li.hidden-md.hidden-lg{role: "presentation"}
-      %a{ href: "#active-charges", role: "tab", data: {toggle: "tab", loaded: "true"} } Active Charges
-    %li.active{role: "presentation"}
-      %a{ href: "#twelve-month-outlook", role: "tab", data: {toggle: "tab", loaded: "true"} } Outlook
-    %li{role: "presentation"}
-      %a{ href: "#linked-accounts", role: "tab", data: {toggle: "tab", link_taget: financial_institutions_path, loaded: "false"} } Linked Accounts
-    %li{role: "presentation"}
-      %a{ href: "#all-charges", role: "tab", data: {toggle: "tab", link_taget: search_charges_path} } All Charges
+  #charge-index-pills-container
+    %ul.nav.nav-pills#charge-index-pills
+      %li.hidden-md.hidden-lg{role: "presentation"}
+        %a{ href: "#active-charges", role: "tab", data: {toggle: "tab", loaded: "true"} } Active Charges
+      %li.active{role: "presentation"}
+        %a{ href: "#twelve-month-outlook", role: "tab", data: {toggle: "tab", loaded: "true"} } Outlook
+      %li{role: "presentation"}
+        %a{ href: "#linked-accounts", role: "tab", data: {toggle: "tab", link_taget: financial_institutions_path, loaded: "false"} } Linked Accounts
+      %li{role: "presentation"}
+        %a{ href: "#all-charges", role: "tab", data: {toggle: "tab", link_taget: search_charges_path} } All Charges
   
   .tab-content
     #active-charges.tab-pane.fade.hidden-md.hidden-lg{:role => "tabpanel"}
+      .paragraph-spacer
       #active-charges-container
         =render 'charge_list'
     #twelve-month-outlook.tab-pane.in.active{:role => "tabpanel"}

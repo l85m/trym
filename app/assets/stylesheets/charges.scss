@@ -143,7 +143,10 @@ label[for=charge_renewal_period_in_words]{
 	.charge-descriptor{ font-size: 90%; }
 	.charge-lead{ font-size: 15px; }
 	#new-charge-links{ margin-top: 2px; }
-	#charges-outlook{ padding-left: 0px; }
+	#charges-outlook{ 
+		padding-left: 0px; 
+		padding-right: 0px; 
+	}
 	#linked-account-heading{ 
 		text-align: center; 
 		margin: 20px auto 5px auto;
@@ -152,6 +155,8 @@ label[for=charge_renewal_period_in_words]{
 		padding: 20px 2px 2px 0px;
 		border-top: #e7e7e7 1px solid;
 	}
+	#charge-index-pills-container{ text-align: center; }
+	#charge-index-pills{ display: inline-block; }
 	#charge-index-pills > li > a {
 	  padding: 5px 5px;
 	  font-size: smaller;
