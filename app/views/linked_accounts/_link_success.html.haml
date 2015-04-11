@@ -10,6 +10,6 @@
     if( $(location).attr('href').indexOf("charge_wizards") >= 0 ) {
       location.reload(true);
     } else {
-      window.location.href = #{charge_wizard_path("charge_category")};
+      window.location.href = "#{charge_wizard_path("charge_category")}";
     }
   }
