@@ -18,6 +18,7 @@ Rails.application.routes.draw do
   resources :charges do
     resources :stop_orders, only: :new
     collection do
+      post :create_then_manage
       get :search
       get :outlook
     end
@@ -42,6 +43,7 @@ Rails.application.routes.draw do
 
   get 'home', to: 'static_pages#home'
   get 'legal', to: 'static_pages#legal'
+  get 'about', to: 'static_pages#about'
   get 'test', to: 'static_pages#test'
 
   # The priority is based upon order of creation: first created -> highest priority.

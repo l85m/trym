@@ -10,7 +10,7 @@
     
     .collapse.navbar-collapse#navbar-collapse-menu
       %ul.nav.navbar-nav.navbar-right
-        %li=link_to "help", charges_path, class: class_header_link_formatting(charges_path)        
+        %li=link_to "help", about_path, class: class_header_link_formatting(about_path)        
         -if user_signed_in?
           -if current_user.admin?
             %li=link_to "admin", admin_root_path, class: class_header_link_formatting(admin_root_path)

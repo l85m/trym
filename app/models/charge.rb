@@ -144,7 +144,7 @@ class Charge < ActiveRecord::Base
   def smart_description
     if description.present?
       description
-    elsif plaid_name.present? && merchant.nil? || merchant.name.blank?
+    elsif plaid_name.present?
       plaid_name
     elsif smart_trym_category.present?
       smart_category_name

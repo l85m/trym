@@ -55,3 +55,66 @@ $brand-color: rgb(129, 202, 166);
 	.mobile-carousel-control{ display: none; }
 	.carousel-caption{ 	bottom: auto; }
 }
+
+// about page
+#about-banner{
+	h1 { color: white; }
+	p { color: white; }
+  text-shadow: 0 1px 0 rgba(0,0,0,.1);
+  background-color: $brand-color;
+}
+.anchorjs-link{
+  float: left;
+  width: 1em;
+  height: 1em;
+  margin-left: -1.2em;
+  opacity: 0;
+  color: inherit;
+  text-align: center;
+}
+.anchorjs-link:hover{
+  opacity: 1;
+}
+.about-sidebar {
+    padding-left: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.about-sidebar .nav>li>a {
+    color: #999;
+    border-left: 2px solid transparent;
+    padding: 4px 20px;
+    font-size: 13px;
+    font-weight: 400;
+}
+.about-sidebar .nav .nav>li>a {
+    padding-top: 1px;
+    padding-bottom: 1px;
+    padding-left: 30px;
+    font-size: 12px;
+}
+.about-sidebar .nav>.active>a, 
+.about-sidebar .nav>li>a:hover, 
+.about-sidebar .nav>li>a:focus {
+    color: $brand-color;                 
+    text-decoration: none;          
+    background-color: transparent;  
+    border-left-color: $brand-color; 
+}
+.about-sidebar .nav>.active>a, 
+.about-sidebar .nav>.active:hover>a,
+.about-sidebar .nav>.active:focus>a {
+    font-weight: 700;
+}
+.about-sidebar .nav .nav>.active>a, 
+.about-sidebar .nav .nav>.active:hover>a,
+.about-sidebar .nav .nav>.active:focus>a {
+    font-weight: 500;
+}
+.about-sidebar .nav ul.nav {
+    display: none;           
+}
+.about-sidebar .nav>.active>ul.nav {
+    display: block;           
+}
