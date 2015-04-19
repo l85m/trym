@@ -97,7 +97,7 @@ class ChargesController < ApplicationController
     end
 
     def convert_amount_to_number
-      unless (@charge.present? && params[:charge][:amount] == ( @charge.amount * 100 ))
+      unless (@charge.present? && @charge.amount.present? && params[:charge][:amount] == ( @charge.amount * 100 ))
         if params[:charge][:amount].is_a?(String)
           params[:charge][:amount] = (params[:charge][:amount].gsub("$","").gsub(" ","").to_f * 100).to_i
         end
