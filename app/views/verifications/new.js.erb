@@ -1,3 +1,26 @@
-$(".modal-dialog").remove()
-$("#modal-container").append("<%= j render 'new' %>")
-$("#modal-container").modal({backdrop: 'static'})
+$("#account-detail-form").append("<%= j render 'hidden_form' %>")
+
+$("#details-submit-button").text("Verify Phone Number").attr("value", "Verify Phone Number");
+$("#details-submit-button").click(function(e) {
+	e.preventDefault();
+	$("#account_detail_confirmation_code").val( $("#verification-code").val() );
+	$("#verification-form").submit()
+});
+
+$("#account_detail_phone").prop('disabled', true);
+$("#account_detail_phone").animate({width: "122px"},500);
+
+$("#account_detail_phone").after("<div class='form-group'><input placeholder='4 digit code' style='width:0px; margin-left: 5px' class='form-control' id='verification-code'></input></div>");
+$("#verification-code").animate({width: "100px"},500);
+$('#verification-code').formatter({ 'pattern': '{{9999}}' });
+$("#verification-code").focus();
+
+$("#account-detail-form").append("<a href='javascript:window.location.reload();'>Click here to change phone number or resend confirmation code</span>");
+
+$("#account_detail_first_name").animate({width: "0px", opacity: 0},500);
+$("#account_detail_first_name").css("padding-left", "0px").css("padding-right", "0px");
+
+$("#account_detail_last_name").animate({width: "0px", opacity: 0},500);
+$("#account_detail_last_name").css("padding-left", "0px").css("padding-right", "0px");
+
+$("#phone-verification-text").text("We sent you a text message, check your phone for the verification code to continue")

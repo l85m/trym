@@ -1,1 +1,55 @@
-=render "charge_form"
+.paragraph-spacer
+
+.row
+  .col-lg-4.col-lg-offset-4.col-md-6.col-md-offset-3.text-center
+    = simple_form_for @charge, remote: request.format.js? do |f|
+      %h3.modal-title
+        %i.fa.fa-plus-circle
+        add a charge
+      %p.form-errors
+        = f.error_notification
+      .form-inputs
+        = f.input :recurring_score, as: :hidden, input_html: {value: 10}
+        = f.input :recurring, as: :hidden, input_html: {value: true}
+        = f.input :merchant_id, as: :string, label: "Which company is the charge from?"
+        = f.association :trym_category, label: "Charge Category", input_html: {class: "text-center"}
+        
+      .form-inputs
+        = f.input :amount, as: :currency, label: "How much is your average bill?", input_html: { style: "text-align: center; text-indent: -30px;" }
+
+      .form-inputs
+        = f.input :billing_day, as: :string, label: "When is your next charge?", placeholder: "estimate if you're not sure"
+        = f.input :renewal_period_in_weeks, label: "How often are you charged?", collection: Charge.renewal_period_in_words.invert
+
+      .row
+        .col-xs-6.text-left
+          = render partial: 'shared/cancel_button', locals: {btn_size: 'btn-md'}
+        .col-xs-6.text-right
+          = f.button :submit, "Save", class: "btn btn-primary btn-md"
+
+.paragraph-spacer
+
+:javascript
+  $('#charge_trym_category_id').select2({minimumResultsForSearch: Infinity, allowClear: true});
+
+  function format(item) { name: return item.name; };
+
+  $('#charge_merchant_id').select2({
+    placeholder: "#{merchant_name_example_helper(@trym_category_id)}",
+    minimumInputLength: 3,
+    data:{ text: "name" },
+    formatSelection: format,
+    formatResult: format,
+    ajax:{ 
+      url: "#{merchants_path(trym_category_id: @trym_category_id)}",
+      dataType: 'json',
+      quietMillis: 250,
+      data: function (term, page) { return { q: term }; },
+      results: function (data, page) { return { results: data }; },
+      cache: true
+    }
+  });
+  
+  $('#charge_billing_day').datepicker({dateFormat: 'yy-mm-dd'});
+
+  $('#charge_renewal_period_in_weeks').select2({minimumResultsForSearch: Infinity});

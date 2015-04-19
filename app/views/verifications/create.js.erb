@@ -1,0 +1,8 @@
+$("#after-verification-thanks").hide().removeClass("hidden")
+$("#account-detail-form").fadeOut(500, function() {
+	$("#after-verification-thanks").fadeIn(500, function() {
+		setTimeout( function() { 
+			window.location.href = $("#after-verification-link").attr('href') 
+		}, 700)
+	})
+})

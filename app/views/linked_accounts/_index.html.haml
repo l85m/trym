@@ -1,35 +1,44 @@
-%p.lead#linked-account-heading
-  %i.fa.fa-credit-card
-  Linked Accounts
+-if false #current_user.linked_accounts.present?
+  %p.lead#linked-account-heading
+    %i.fa.fa-credit-card
+    Linked Accounts
+  .well{style: "width: 100%; overflow-x: scroll; height: 92px;"}
+    %div{style: "width: #{(current_user.linked_accounts.count+1) * 155}px; height: 60px;"}
+      .empty-linked-account-index-item.text-center
+        =link_to charge_wizard_path(:select_financial_institutions) do 
+          .table-div{style: "width: 100%; height: 100%;"}
+            .vertical-center
+              %div
+                %i.fa.fa-credit-card.fa-2x
+              %div
+                %i.fa.fa-plus
+                link new account    
 
-.well{style: "width: 100%; overflow-x: scroll; height: 92px;"}
-  %div{style: "width: #{(current_user.linked_accounts.count+1) * 155}px; height: 60px;"}
-    .empty-linked-account-index-item.text-center
-      =link_to charge_wizard_path(:select_financial_institutions) do 
-        .table-div{style: "width: 100%; height: 100%;"}
-          .vertical-center
-            %div
-              %i.fa.fa-credit-card.fa-2x
-            %div
-              %i.fa.fa-plus
-              link new account    
+      -current_user.linked_accounts.each do |link|
+        -unless link.error_message
+          .linked-account-index-item.text-center
+            =link_to link do 
+              .table-div{style: "width: 100%; height: 100%;"}
+                .vertical-center
+                  %div=link.account_name
+                  .linked-account-index-labels
+                    %span.label.label-default{style: "margin: 0px 2px;"}="#{link.charges.recurring.count} recurring"
+        -else
+          .linked-account-index-item-with-error.text-center
+            =link_to link do 
+              .table-div{style: "width: 100%; height: 100%;"}
+                .vertical-center
+                  %div=link.account_name
+                  .linked-account-index-labels
+                    %span.label.label-warning{style: "margin: 0px 2px; color: white;"}
+                      %i.fa.fa-exclamation-circle{style: "color: white;"}
+                      needs attention
 
-    -current_user.linked_accounts.each do |link|
-      -unless link.error_message
-        .linked-account-index-item.text-center
-          =link_to link, onclick: 'showLoader();' do 
-            .table-div{style: "width: 100%; height: 100%;"}
-              .vertical-center
-                %div=link.account_name
-                .linked-account-index-labels
-                  %span.label.label-default{style: "margin: 0px 2px;"}="#{link.charges.recurring.count} recurring"
-      -else
-        .linked-account-index-item-with-error.text-center
-          =link_to link do 
-            .table-div{style: "width: 100%; height: 100%;"}
-              .vertical-center
-                %div=link.account_name                
-                .linked-account-index-labels
-                  %span.label.label-warning{style: "margin: 0px 2px; color: white;"}
-                    %i.fa.fa-exclamation-circle{style: "color: white;"}
-                    needs attention
+-else 
+  %h4{style:"margin-top: 20px;"}
+    %strong
+      =link_to charge_wizard_path(:select_financial_institutions), class: "icon-link" do 
+        Link some of your 
+        %i.fa.fa-credit-card
+        accounts
+    and trym will find and track your recurring expenses for you.

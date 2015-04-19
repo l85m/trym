@@ -23,7 +23,11 @@ class User < ActiveRecord::Base
   end
 
   def first_and_last_name
-    account_detail.present? ? "#{account_detail.first_name} #{account_detail.last_name}" : nil
+    if account_detail.present? && account_detail.first_name.present? && account_detail.last_name.present?
+      "#{account_detail.first_name account_detail.last_name}"
+    else
+      nil
+    end
   end
 
   def first_name

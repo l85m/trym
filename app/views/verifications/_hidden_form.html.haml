@@ -1,0 +1,3 @@
+.hidden
+  = simple_form_for @account_detail, url: verifications_path, remote: true, method: 'post', html: {id: "verification-form"} do |f|
+    = f.input :confirmation_code, as: :hidden, input_html: { value: '' }

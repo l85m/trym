@@ -1,12 +1,26 @@
-function error_button_flash(button) {
-  //flash button red
-  button.css("background-color", "red");
-  button.css("border-color", "red");
-  button.css("color", "#fff");
-  button.css("outline", "none");
-  button.animate({ backgroundColor: "#088bff" }, {queue: false, duration: 1000});
-  button.animate({ borderColor: "#088bff" }, {queue: false, duration: 1000}); 
-};
+error_button_flash($('input[name="commit"]'));
+$("#error-text").remove();
 
-$("#error-text").text("something went wrong - please try again")
-error_button_flash($('input[name="commit"]'))
+<% if @account_detail.errors.present? %>
+	function error_button_flash(button) {
+	  //flash button red
+	  button.css("background-color", "red");
+	  button.css("border-color", "red");
+	  button.css("color", "#fff");
+	  button.css("outline", "none");
+	  button.animate({ backgroundColor: "##81caa6" }, {queue: false, duration: 1000});
+	  button.animate({ borderColor: "##81caa6" }, {queue: false, duration: 1000}); 
+		button.click(function() {
+			$("#error-text").remove();
+			$(".has-error").removeClass("has-error");
+		})
+	};
+
+	<% @account_detail.errors.each do |e,t| %>
+		$("#account_detail_<%= e.to_s %>").parent().addClass("has-error");
+	<% end %>
+
+	$("#account-detail-form").append("<small id='error-text' style='color:red'>we need your name and phone number to continue<small>");
+<% else %>
+	$("#account-detail-form").append("<small id='error-text' style='color:red'>something went wrong, please try again<small>");
+<% end %>

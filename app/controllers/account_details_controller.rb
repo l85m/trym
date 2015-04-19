@@ -1,6 +1,6 @@
 class AccountDetailsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_account_detail, only: [:new, :edit, :update, :destroy]
+  before_action :set_account_detail, only: [:new, :create, :edit, :update, :destroy]
 
   def new
   	@account_detail ||= AccountDetail.new

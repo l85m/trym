@@ -1,9 +1,59 @@
 %div{ style: "display: table; height: 100%; width: 100%;" }
   .row{ style: "display: table-row;" }
-    .col-lg-10.col-offset-lg-1.vertical-center.text-center{ style: "float: none;"}
-      %h2 
-        Welcome to Trym!
-        %br
-        %small To get started, take 5 minutes to help us collect information about your current recurring charges
-      =link_to charge_wizard_path(:link_or_manual), class: "btn btn-primary-o btn-lg" do
-        Let's Go!
+    .col-lg-10.col-offset-lg-1.vertical-center{ style: "float: none;"}
+      .row
+        .col-lg-5
+          %h1
+            Welcome to Trym!
+            
+          %p.lead 
+            %strong Start by giving us a service to manage.  
+            We can help you cancel, upgrade, or downgrade your service or we can find you a better deal on similar services.
+        .col-lg-7
+          .paragraph-spacer.visible-lg-block
+          .paragraph-spacer.visible-lg-block
+          =form_for current_user.charges.build, url: create_then_manage_charges_path do |f|
+            %h1#new-user-merchant-selection
+              =f.text_field :merchant_id
+              / %input#charge_merchant_id
+            .pull-right
+              %button.btn.btn-default#disabled-next-button{disabled: "disabled"}
+                enter a service provider to continue
+                %i.fa.fa-arrow-circle-right
+              =f.button class: "btn btn-primary", id: "enabled-next-button" do 
+                continue
+                %i.fa.fa-arrow-circle-right
+
+      %p.lead#new-user-link-text.text-center
+        You can also
+        %strong
+          =link_to charge_wizard_path(:select_financial_institutions), class: "icon-link" do 
+            link your 
+            %i.fa.fa-credit-card
+            accounts
+        and trym will find and track your recurring expenses for you!
+
+:javascript
+  function format(item) { name: return item.name; };
+
+  $('#charge_merchant_id').select2({
+    placeholder: "#{merchant_name_example_helper(@trym_category_id)}",
+    minimumInputLength: 3,
+    data:{ text: "name" },
+    formatSelection: format,
+    formatResult: format,
+    width: '100%',
+    dropdownCssClass: "new-user-select2-dropdown",
+    ajax:{ 
+      url: "#{merchants_path(trym_category_id: @trym_category_id)}",
+      dataType: 'json',
+      quietMillis: 250,
+      data: function (term, page) { return { q: term }; },
+      results: function (data, page) { return { results: data }; },
+      cache: true
+    }
+  });
+  $('#charge_merchant_id').on("change", function(e) {
+    $("#disabled-next-button").hide();
+    $("#enabled-next-button").css("display", "inline");
+  });

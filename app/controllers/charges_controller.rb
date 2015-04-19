@@ -1,6 +1,6 @@
 class ChargesController < ApplicationController
   before_action :set_charge, only: [:edit, :update, :destroy]
-  before_action :create_merchant_if_new, only: [:create, :update]
+  before_action :create_merchant_if_new, only: [:create, :create_then_manage, :update]
   before_action :convert_amount_to_number, only: [:create, :update]
   before_action :authenticate_user!
 
@@ -10,10 +10,10 @@ class ChargesController < ApplicationController
     session.delete(:charge_wizard_categories)
     
     @charges = current_user.charges.recurring.with_merchant
-    @title = "charges"
     @charges_outlook_chart_data = ChargesOutlookChartData.new(current_user, @charges)
     @linked_accounts = current_user.linked_accounts
     @charges = @charges.sort_by{ |c| [c.next_billing_date ? 0 : 1, c.next_billing_date] }.reverse
+    @stop_orders = current_user.stop_orders.where.not(option: :nil).order(created_at: :desc)
     
     respond_with(@charges)
   end
@@ -47,10 +47,18 @@ class ChargesController < ApplicationController
     end
   end
 
+  def create_then_manage
+    @charge = current_user.charges.create(charge_params.merge(recurring: true))
+    unless @charge.new_record?
+      @stop_order = StopOrder.find_or_create_by( charge_id: @charge.id, status: "started" )
+      redirect_to stop_order_manage_account_path(:manage_account, stop_order_id: @stop_order.id)    
+    end
+  end
+
   def new
     @title = "new charge"
     @trym_category_id = TrymCategory.find(params[:trym_category_id]).id if params[:trym_category_id].present?
-    
+
     @charge = current_user.charges.build( renewal_period_in_weeks: 4, trym_category_id: params[:trym_category_id])
   end
 

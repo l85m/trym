@@ -8,30 +8,31 @@
           Try and provide as much information as you can, the more we have the more likely we'll be able to help
       
       .paragraph-spacer
-      =simple_form_for @stop_order, url: wizard_path, method: :put do |f|
+
+      =simple_form_for @stop_order, url: wizard_path, method: :put, wrapper: :horizontal_form, html: {class: "form-horizontal"} do |f|
         =f.input :status, as: :hidden, input_html: { value: "requested" }
         
         .row
-          .col-lg-6.col-lg-offset-3.col-md-8.col-md-offset-2
-            .form-group.text-center 
-              =f.simple_fields_for :cancelation_data do |cancelation_datum|
+          .col-lg-10.col-lg-offset-1
+            =f.simple_fields_for :cancelation_data do |cancelation_datum|
 
-                -if @stop_order.option == "upgrade"
-                  =cancelation_datum.input :upgrade_description, as: :text, label: "Describe what services you want us to upgrade or change, please be specific", input_html: {value: @stop_order.cancelation_data.present? ? @stop_order.cancelation_data["comments"] : nil, class: "text-center" }
-                -elsif @stop_order.option == "downgrade"
-                  =cancelation_datum.input :downgrade_description, as: :text, label: "Describe what services you want us to downgrade or cancel, please be specific", input_html: {value: @stop_order.cancelation_data.present? ? @stop_order.cancelation_data["comments"] : nil, class: "text-center" }
-                -elsif @stop_order.option == "find_deals"
-                  =cancelation_datum.input :downgrade_description, as: :text, label: "Describe what sort of deal you'd like us to find for you", input_html: {value: @stop_order.cancelation_data.present? ? @stop_order.cancelation_data["comments"] : nil, class: "text-center" }
+              -if @stop_order.option == "upgrade"
+                =cancelation_datum.input :upgrade_description, as: :text, label: "Describe what services you want us to upgrade or change, please be specific", input_html: {value: @stop_order.cancelation_data.present? ? @stop_order.cancelation_data["comments"] : nil, class: "text-center" }
+              -elsif @stop_order.option == "downgrade"
+                =cancelation_datum.input :downgrade_description, as: :text, label: "Describe what services you want us to downgrade or cancel, please be specific", input_html: {value: @stop_order.cancelation_data.present? ? @stop_order.cancelation_data["comments"] : nil, class: "text-center" }
+              -elsif @stop_order.option == "find_deals"
+                =cancelation_datum.input :downgrade_description, as: :text, label: "Describe what sort of deal you'd like us to find for you", input_html: {value: @stop_order.cancelation_data.present? ? @stop_order.cancelation_data["comments"] : nil, class: "text-center" }
 
-                -@stop_order.cancelation_fields.each do |cancelation_field|
-                  =cancelation_datum.input cancelation_field.to_sym, input_html: {value: @stop_order.cancelation_data.present? ? @stop_order.cancelation_data[cancelation_field.to_s] : nil }
-                =cancelation_datum.input :comments, as: :text, label: "Anything else we should know?", input_html: {value: @stop_order.cancelation_data.present? ? @stop_order.cancelation_data["comments"] : nil, class: "text-center" }
-        .row
-          .form-group.text-center
-            %p=render 'shared/security_notice'
-            .paragraph-spacer
-            =link_to "Don't do anything", stop_order_path(@stop_order.id), method: :delete, class: "btn btn-default"
-            = f.button :submit, manage_account_first_person_action_statement(@stop_order), class: "btn btn-primary"
+              -@stop_order.cancelation_fields.each do |cancelation_field|
+                =cancelation_datum.input cancelation_field.to_sym, input_html: {value: @stop_order.cancelation_data.present? ? @stop_order.cancelation_data[cancelation_field.to_s] : nil }
+              
+              =cancelation_datum.input :comments, as: :text, label: "Anything else we should know?", input_html: {value: @stop_order.cancelation_data.present? ? @stop_order.cancelation_data["comments"] : nil, class: "text-center" }
+                          
+            .row
+              .col-md-9.col-md-offset-3
+                %p=render 'shared/security_notice'
+                =link_to "Go Back", previous_wizard_path, class: "btn btn-default"      
+                = f.button :submit, manage_account_first_person_action_statement(@stop_order), class: "btn btn-primary"
 
 
     -else
@@ -45,7 +46,7 @@
         once we know what we need from you to manage this account
       .paragraph-spacer
       .form-group.text-center
-        =link_to "Don't #{manage_account_first_person_action_statement(@stop_order)}", stop_order_path(@stop_order.id), method: :delete, class: "btn btn-default"
+        =link_to "Go Back", previous_wizard_path, class: "btn btn-default"
         =link_to "#{manage_account_first_person_action_statement(@stop_order)}", wizard_path(:account_details, stop_order: {status: "requested"} ), class: "btn btn-primary", method: :put
         
   %h5#error-reminder{style: "color: red;"}

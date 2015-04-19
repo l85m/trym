@@ -1,0 +1,6 @@
+.row
+  .col-lg-8.col-lg-offset-2.col-md-10.col-md-offset-1
+    =render "account_details/inline_form"
+
+  .hidden
+    =link_to "next", next_wizard_path, class: "hidden", id: "after-verification-link"

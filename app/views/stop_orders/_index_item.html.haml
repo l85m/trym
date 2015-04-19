@@ -1,0 +1,30 @@
+.panel-heading
+  .row
+    .col-xs-8
+      Request ID ##{stop_order.id} made on #{stop_order.created_at.strftime('%B %d, %Y')} for your 
+      %strong #{stop_order.charge.descriptor} Account
+
+    .col-xs-4.text-right
+      -if stop_order.cancelable?
+        =link_to "cancel", {controller: "stop_orders", action: "destroy", id: stop_order.id}, method: :delete, class: "btn btn-danger btn-xs", data: {confirm: "Are you sure you want to cancel this request? You may not be able to start it again before your next payment cycle begins."}
+      %a{href: "mailto:status@trym.io?subject=request id ##{stop_order.id}", class: "btn btn-default btn-xs"} contact us
+  
+.panel-body
+  %p.lead.text-center
+    You asked us to: 
+    %em #{stop_order.type_of_request}
+
+  .row.bs-wizard{:style => "border-bottom:0;"}
+
+    -manage_account_progress(stop_order).each do |step, status|
+      .col-xs-3.bs-wizard-step{class: status}
+        .text-center.bs-wizard-stepnum
+          .hidden-xs= step
+          %small.visible-xs-block= step
+        .progress
+          .progress-bar
+        %span.bs-wizard-dot
+        -if status == "active"
+          .bs-wizard-info.text-center
+            %p.hidden-xs=stop_order.status_message
+            %small.visible-xs-block=stop_order.status_message

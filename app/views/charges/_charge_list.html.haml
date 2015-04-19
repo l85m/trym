@@ -2,9 +2,17 @@
   %p.lead.without-margin
     %i.fa.fa-calculator
     active charges
-=link_to charge_wizard_path(current_user.linked_accounts.present? ? "select_categories" : "link_or_manual"), class: "btn btn-primary-o btn-lg btn-block", style: "margin:10px auto 15px auto;" do
+=link_to new_charge_path, class: "btn btn-primary-o btn-lg btn-block", style: "margin:10px auto 15px auto;", remote: true do
   %i.fa.fa-plus-circle
   add charge
 
 -(@charges.select(&:next_billing_date).sort_by(&:next_billing_date) + @charges.reject(&:next_billing_date)).each do |charge|
   =render partial: "shared/charge_item", locals: {charge: charge}
+
+%p.text-center
+  %strong
+    =link_to charge_wizard_path(:select_financial_institutions), class: "icon-link" do 
+      Link some of your 
+      %i.fa.fa-credit-card
+      accounts
+  and trym will find and track your recurring expenses for you

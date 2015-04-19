@@ -92,7 +92,7 @@ class Charge < ActiveRecord::Base
   end
 
   def amount_in_currency
-    return "??" unless amount.present?
+    return nil unless amount.present?
     amount.to_f / 100.0
   end
 
@@ -149,7 +149,7 @@ class Charge < ActiveRecord::Base
     elsif smart_trym_category.present?
       smart_category_name
     else
-      "(no description)"
+      nil
     end
   end
 

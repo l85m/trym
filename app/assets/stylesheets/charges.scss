@@ -116,6 +116,60 @@ label[for=charge_renewal_period_in_words]{
 	padding-top: 15px;
 }
 
+// customizing select2 input on new user prompt
+#new-user-merchant-selection{
+  font-size: 36px;
+	.select2-container .select2-choice{
+		height: 65px;
+		border-top: none;
+		border-right: none;
+		border-left: none;
+		box-shadow: none;
+		border-radius: 0px;
+		border-bottom: 1px solid black;
+		.select2-arrow{
+			background: white;
+			padding-left: 10px;
+			width: auto;
+			top: 18px;
+			b{
+				background: none;
+				font: normal normal normal 14px/1 FontAwesome;
+			}
+			b:before{
+				font-size: 2em;
+				content: "\f0d7";
+			}
+		}
+	}
+}
+.new-user-select2-dropdown{
+	border: none !important;
+	.select2-results .select2-no-results, 
+	.select2-results .select2-searching, 
+	.select2-results .select2-selection-limit{
+		background-color: white;
+		color: darkgray;
+	}
+}
+#enabled-next-button{
+	display: none;
+}
+
+#new-user-link-text{
+	width: 100%;
+	margin-top: 60px;
+}
+@media (min-width: 1200px) {
+	#new-user-merchant-selection{ margin-left: 20px; }
+}
+@media (min-width: 1200px) and (min-height: 600px) {
+	#new-user-link-text{
+		position: absolute;
+		bottom: 50px;
+		margin-top: 0px;
+	}
+}
 
 @media (max-width: 1199px) { 
 	.charge-btn-responsive{ 
@@ -140,6 +194,19 @@ label[for=charge_renewal_period_in_words]{
 	}
 }
 @media (max-width: 767px) {
+	#new-user-merchant-selection{
+	  font-size: 16px;
+		.select2-container .select2-choice{
+			height: 34px;
+			.select2-arrow{
+				padding-left: 2px;
+				top: 12px;
+				b:before{
+					font-size: 1em;
+				}
+			}
+		}
+	}
 	.charge-descriptor{ font-size: 90%; }
 	.charge-lead{ font-size: 15px; }
 	#new-charge-links{ margin-top: 2px; }

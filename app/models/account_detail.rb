@@ -10,7 +10,11 @@ class AccountDetail < ActiveRecord::Base
 	after_update :force_reverification, if: Proc.new { |detail| detail.phone_changed? } #################TODO
 
 	def formatted_phone
-		phone.phony_formatted(spaces: '-', normalize: 'US')[2..-1]
+		if phone.present?
+			"(#{phone.phony_formatted(spaces: '-', normalize: 'US')[2..4]}) #{phone.phony_formatted(spaces: '-', normalize: 'US')[6..-1]}"
+		else
+			nil
+		end
 	end
 
 	def send_confirmation_code
@@ -27,7 +31,7 @@ class AccountDetail < ActiveRecord::Base
 	end
 
 	def confirmed?( confirm_param )
-		if confirm_param == confirmation_code
+		if confirm_param == confirmation_code || phone_verified.present?
 			update(phone_verified: Time.now, confirmation_code: nil)
 		else
 			false

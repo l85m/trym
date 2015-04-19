@@ -4,31 +4,26 @@
       %small=link_to "admin panel", admin_charge_path(charge), class: "btn btn-xs btn-default"
   
   .charge-info-container
-    .charge-info.charge-amount.text-center{style: "padding-right: 10px;"}
-      %p.charge-lead
+    -if (charge.amount.present? && charge.amount > 0) || (charge.renewal_period_in_weeks.present? && charge.renewal_period_in_weeks > 0) || charge.history.present?
+      .charge-info.charge-amount.text-center{style: "padding-right: 10px;"}      
         -if charge.amount.present? && charge.amount > 0
-          =number_to_currency(charge.amount_in_currency)
-        -else 
-          %i.fa.fa-exclamation-circle
-          $
-      %p.without-margin
+          %p.charge-lead
+            =number_to_currency(charge.amount_in_currency)
+        
         -if charge.renewal_period_in_weeks.present? && charge.renewal_period_in_weeks > 0
-          =billing_interval_in_words(charge.renewal_period_in_weeks)
-        -else
-          %i.fa.fa-exclamation-circle
-          ???
-      -if charge.history.present?
-        .small
-          %a.icon-link{tabindex: "0", data: {toggle: "popover", content: formatted_history(charge.history)} }
-            %i.fa.fa-calendar
-            history
+          %p.without-margin
+            =billing_interval_in_words(charge.renewal_period_in_weeks)
+        -if charge.history.present?
+          .small
+            %a.icon-link{tabindex: "0", data: {toggle: "popover", content: formatted_history(charge.history)} }
+              %i.fa.fa-calendar
+              history
               
     .charge-info.charge-description        
-      %p.charge-lead
-        -if charge.merchant.present? && charge.merchant.name.present?
+      -if charge.merchant.present? && charge.merchant.name.present?
+        %p.charge-lead
           =charge.merchant.name.titlecase
-        -else
-          Merchant Unknown
+
       %p.without-margin.small
         %span.small-gray
           -if charge.next_billing_date.present?
@@ -37,23 +32,17 @@
           -elsif charge.billing_day.present?
             %i.fa.fa-clock-o.hidden-md
             ="last charge " + (distance_of_time_in_words charge.billing_day.to_time - Time.now) + " ago"
-          -else
-            %i.fa.fa-exclamation-circle
-            ???
       %p.charge-descriptor
         =charge.smart_description
     
     .charge-info.charge-buttons.text-center      
-      -if stop_order_charge_ids.include?(charge.id)
-        =render partial: "stop_orders/show", locals: {stop_order: charge.active_stop_order}
-      -else        
-        .inline-block.charge-item-action-buttons
-          .text-center
-            =link_to stop_orders_path(charge_id: charge.id), method: :post, class: "btn btn-primary btn-xs", style: "margin-top: 5px;" do
-              %small
-                .text-center
-                  MANAGE 
-                .text-center
-                  PAYMENTS
-          .text-center
-            %small=link_to "edit info", edit_charge_path(charge), remote: true
+      .inline-block.charge-item-action-buttons
+        .text-center
+          =link_to stop_orders_path(charge_id: charge.id), method: :post, class: "btn btn-primary btn-xs", style: "margin-top: 5px;" do
+            %small
+              .text-center
+                MANAGE 
+              .text-center
+                ACCOUNT
+        .text-center
+          %small=link_to "add/edit details", edit_charge_path(charge), remote: true

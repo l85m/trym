@@ -25,7 +25,7 @@ Rails.application.routes.draw do
   end
 
   resources :stop_orders, only: [:create, :show, :edit, :destroy, :index]
-  resources :verifications, only: [:new, :create]
+  resources :verifications, only: [:new, :create], defaults: {format: 'js'}
   resources :contact_preferences, only: :update, defaults: {format: 'js'}
 
   devise_for :users

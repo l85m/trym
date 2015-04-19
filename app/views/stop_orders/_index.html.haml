@@ -1,0 +1,4 @@
+.paragraph-spacer
+-@stop_orders.each do |s|
+	.panel.panel-default
+		=render partial: 'stop_orders/index_item', locals: {stop_order: s}

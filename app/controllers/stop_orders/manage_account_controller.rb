@@ -9,6 +9,10 @@ class StopOrders::ManageAccountController < ApplicationController
   before_action :setup_wizard
   
   def show
+    if step == :name_and_phone
+      @account_detail = current_user.account_detail
+      @account_detail ||= AccountDetail.new(user: current_user)
+    end
     render_wizard
   end
 
@@ -25,8 +29,11 @@ class StopOrders::ManageAccountController < ApplicationController
   end
 
   def set_steps
+    if params["id"] == "name_and_phone" && current_user.phone_verified?
+      params["id"] = "manage_account"
+    end
     option = stop_order_params.fetch(:option) rescue @stop_order.option
-    self.steps = [:manage_account, :accept_terms ] + all_steps.fetch(option) + [ :account_details ]
+    self.steps = [:manage_account] + (current_user.phone_verified? ? [] : [:name_and_phone]) + [:accept_terms] + all_steps.fetch(option) + [:account_details]
   end
 
   def stop_order_params
@@ -44,6 +51,6 @@ class StopOrders::ManageAccountController < ApplicationController
   end
 
   def finish_wizard_path
-    stop_order_path(@stop_order)
+    charges_path
   end
 end

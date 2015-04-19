@@ -1,26 +1,46 @@
 %div{role: "tabpanel"}
   #charge-index-pills-container
     %ul.nav.nav-pills#charge-index-pills
+      
       %li.hidden-md.hidden-lg{role: "presentation"}
         %a{ href: "#active-charges", role: "tab", data: {toggle: "tab", loaded: "true"} } Active Charges
-      %li.active{role: "presentation"}
-        %a{ href: "#twelve-month-outlook", role: "tab", data: {toggle: "tab", loaded: "true"} } Outlook
+      
+      -if @charges_outlook_chart_data.any_charges_in_year?
+        %li{role: "presentation", class: @stop_orders.present? ? "" : "active"}
+          %a{ href: "#twelve-month-outlook", role: "tab", data: {toggle: "tab", loaded: !@stop_orders.present?.to_s, link_taget: outlook_charges_path} } Outlook
+      
+      -if @stop_orders.present?
+        %li.active{role: "presentation"}
+          %a{ href: "#manage-account-status", role: "tab", data: {toggle: "tab", link_taget: stop_orders_path, loaded: "true"} } Account Management
+
+
       %li{role: "presentation"}
         %a{ href: "#linked-accounts", role: "tab", data: {toggle: "tab", link_taget: financial_institutions_path, loaded: "false"} } Linked Accounts
-      %li{role: "presentation"}
-        %a{ href: "#all-charges", role: "tab", data: {toggle: "tab", link_taget: search_charges_path} } All Charges
+      
+      -if current_user.charges.not_recurring.present?
+        %li{role: "presentation"}
+          %a{ href: "#all-charges", role: "tab", data: {toggle: "tab", link_taget: search_charges_path} } All Charges
   
   .tab-content
     #active-charges.tab-pane.fade.hidden-md.hidden-lg{:role => "tabpanel"}
       .paragraph-spacer
       #active-charges-container
         =render 'charge_list'
-    #twelve-month-outlook.tab-pane.in.active{:role => "tabpanel"}
-      #outlook-container
-        =render 'outlook'
+    
+    -if @charges_outlook_chart_data.any_charges_in_year?
+      #twelve-month-outlook.tab-pane.in{:role => "tabpanel", class: @stop_orders.present? ? "" : "active"}
+        #outlook-container
+          -unless @stop_orders.present?
+            =render 'outlook'
+    
+    -if @stop_orders.present?
+      #manage-account-status.tab-pane.in.active{:role => "tabpanel"}
+        #manage-account-container
+          =render 'stop_orders/index'
+
     #linked-accounts.tab-pane.fade{:role => "tabpanel"}
       .paragraph-spacer
-      %p.lead We can <b>securely link</b> trym to some of your <b>credit and bank accounts</b> and automatically <b>scan them for recurring charges</b>.
+      %p.lead Trym can <b>securely link</b> trym to some of your <b>credit and bank accounts</b> and automatically <b>scan them for recurring charges</b>.
 
       %ul.wizard-list
         %li
@@ -30,13 +50,13 @@
         %li You can always unlink any of your accounts at any time
         %li 
           <b>Linking accounts is optional</b>, if you choose not to link any accounts you can always just add charges manually
-      %p.strong{style: "margin-top: 25px;"} Below are the institutions we can link to.  Any you've already linked can be viewed or configured by clicking on them.
 
-      .paragraph-spacer
       #financial-institution-list-container
-        =render 'shared/financial_institutions'
-    #all-charges.tab-pane.fade{:role => "tabpanel"}
-      #charge-table-container
+        =render 'linked_accounts/index'
+
+    -if current_user.charges.not_recurring.present?
+      #all-charges.tab-pane.fade{:role => "tabpanel"}
+        #charge-table-container
 
   :javascript
     $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
