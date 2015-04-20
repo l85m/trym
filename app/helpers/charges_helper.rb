@@ -50,9 +50,9 @@ module ChargesHelper
   def merchant_name_example_helper(trym_category_id)
     if trym_category_id.present?
       merchant_names = TrymCategory.find(trym_category_id).merchants.limit(2).pluck(:name)
-      merchant_names.present? ? merchant_names.join(', ') + ', ect.' : "search for company"
+      merchant_names.present? ? merchant_names.join(', ') + ', etc.' : "search for company"
     else
-      "Comcast, Geico, Gold's Gym, ect."
+      "Comcast, Geico, Gold's Gym, etc."
     end
   end
 
