@@ -45,7 +45,6 @@ a.icon-link:hover{
 i.fa-stack-1x{
 	color: white;
 }
-input{ text-align: center; }
 input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 	background-color: white;
 }
@@ -239,11 +238,11 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 		background-color: $brand-color;
 	}
 }
-.select2-container .select2-choice > .select2-chosen {
+.centered-select2 .select2-container .select2-choice > .select2-chosen {
 	margin-right: 0px !important;
 }
-.select2-search input{ padding: 4px 5px; }
-.select2-results{ text-align: center; }
+.centered-select2 .select2-search input{ padding: 4px 5px; }
+.centered-select2 .select2-results{ text-align: center; }
 #loading-cover{
 	position: fixed;
 	top: 50%;

@@ -1,52 +1,65 @@
 .row
   .col-lg-8.col-lg-offset-2.col-md-10.col-md-offset-1
-    -if @stop_order.cancelation_fields.present?
-      %h2.text-center
-        Here's what we need to #{manage_account_second_person_action_statement(@stop_order).downcase}
-        %br
-        %small
-          Try and provide as much information as you can, the more we have the more likely we'll be able to help
-      
-      .paragraph-spacer
+    =simple_form_for @stop_order, url: wizard_path, method: :put, wrapper: :horizontal_form, html: {class: "form-horizontal"} do |f|
+      =f.input :status, as: :hidden, input_html: { value: "requested" }
+      =f.input :contact_preference, as: :hidden, input_html: { value: "call" }
 
-      =simple_form_for @stop_order, url: wizard_path, method: :put, wrapper: :horizontal_form, html: {class: "form-horizontal"} do |f|
-        =f.input :status, as: :hidden, input_html: { value: "requested" }
+      -if @stop_order.cancelation_fields.present?
+        %h2.text-center
+          We need a few details to #{manage_account_second_person_action_statement(@stop_order).downcase}
+          %br
+          %small
+            Try and provide as much information as you can, the more we have the more likely we'll be able to help.
+            =render 'shared/security_notice'
         
         .row
           .col-lg-10.col-lg-offset-1
             =f.simple_fields_for :cancelation_data do |cancelation_datum|
+                                      
+              .paragraph-spacer
 
               -if @stop_order.option == "upgrade"
-                =cancelation_datum.input :upgrade_description, as: :text, label: "Describe what services you want us to upgrade or change, please be specific", input_html: {value: @stop_order.cancelation_data.present? ? @stop_order.cancelation_data["comments"] : nil, class: "text-center" }
+                =cancelation_datum.input :upgrade_description, as: :text, required: true, label: "Describe what services you want us to upgrade or change, please be specific", input_html: {value: @stop_order.cancelation_data.present? ? @stop_order.cancelation_data["comments"] : nil, class: "text-center" }
               -elsif @stop_order.option == "downgrade"
-                =cancelation_datum.input :downgrade_description, as: :text, label: "Describe what services you want us to downgrade or cancel, please be specific", input_html: {value: @stop_order.cancelation_data.present? ? @stop_order.cancelation_data["comments"] : nil, class: "text-center" }
+                =cancelation_datum.input :downgrade_description, as: :text, required: true, label: "Describe what services you want us to downgrade or cancel, please be specific", input_html: {value: @stop_order.cancelation_data.present? ? @stop_order.cancelation_data["comments"] : nil, class: "text-center" }
               -elsif @stop_order.option == "find_deals"
-                =cancelation_datum.input :downgrade_description, as: :text, label: "Describe what sort of deal you'd like us to find for you", input_html: {value: @stop_order.cancelation_data.present? ? @stop_order.cancelation_data["comments"] : nil, class: "text-center" }
+                =cancelation_datum.input :downgrade_description, as: :text, required: true, label: "Describe what sort of deal you'd like us to find for you", input_html: {value: @stop_order.cancelation_data.present? ? @stop_order.cancelation_data["comments"] : nil, class: "text-center" }
 
               -@stop_order.cancelation_fields.each do |cancelation_field|
-                =cancelation_datum.input cancelation_field.to_sym, input_html: {value: @stop_order.cancelation_data.present? ? @stop_order.cancelation_data[cancelation_field.to_s] : nil }
+                =cancelation_datum.input cancelation_field.to_sym, required: @stop_order.merchant.required_cancelation_fileds.include?(cancelation_field.to_s), input_html: {value: @stop_order.cancelation_data.present? ? @stop_order.cancelation_data[cancelation_field.to_s] : current_user.account_detail.account_data[cancelation_field.to_s] }
               
-              =cancelation_datum.input :comments, as: :text, label: "Anything else we should know?", input_html: {value: @stop_order.cancelation_data.present? ? @stop_order.cancelation_data["comments"] : nil, class: "text-center" }
-                          
-            .row
-              .col-md-9.col-md-offset-3
-                %p=render 'shared/security_notice'
-                =link_to "Go Back", previous_wizard_path, class: "btn btn-default"      
-                = f.button :submit, manage_account_first_person_action_statement(@stop_order), class: "btn btn-primary"
+              =cancelation_datum.input :comments, as: :text, label: "Anything else we should know?", input_html: {value: @stop_order.cancelation_data.present? ? @stop_order.cancelation_data["comments"] : nil }
 
+              -if @stop_order.errors.present?
+                .row.has-error
+                  .col-sm-9.col-sm-offset-3.help-block
+                    %b Please correct the following before continuing:
+                    %ul
+                      -@stop_order.errors.messages.select{ |_,m| m.present? }.each do |attribute, message|
+                        %li #{attribute.to_s.humanize} #{message.join(", ")}
+                        :javascript      
+                          $(".form-group.stop_order_cancelation_data_#{attribute}").addClass("has-error")
+              -else
+                .paragraph-spacer
+      
+      -else
 
-    -else
-      %h2.text-center
-        We're still getting to know the account management process at #{@charge.descriptor}
-      %p.lead.text-center
-        We can still help you.  We just need to do a little research first and give you a call to collect the information we need to manage this for you.
-      %p.text-center
-        We'll call you in the next 24 hours at
-        =link_to current_user.phone, edit_account_detail_path(current_user.account_detail, referring_stop_order_id: @stop_order.id), class: "btn btn-xs btn-default"
-        once we know what we need from you to manage this account
-      .paragraph-spacer
-      .form-group.text-center
-        =link_to "Go Back", previous_wizard_path, class: "btn btn-default"
-        =link_to "#{manage_account_first_person_action_statement(@stop_order)}", wizard_path(:account_details, stop_order: {status: "requested"} ), class: "btn btn-primary", method: :put
-        
-  %h5#error-reminder{style: "color: red;"}
+        %h2.text-center
+          This is the first request we've gotten for #{@charge.descriptor}
+        .text-center
+          %span.lead Give us 24 hours to do some homework.  Tomorrow we'll
+          %span.lead#contact-verb call
+          %span.lead you at
+          
+          =render "shared/contact_options_button"
+
+          %span.lead to get the information we need form you to manage this account
+
+        .paragraph-spacer
+
+      .text-center           
+        %p.strong
+          By clicking "#{manage_account_first_person_action_statement(@stop_order)}", you hereby authorize Trym to act as your agent to manage this service on your behalf, including in substantially the same way you would do so yourself.      
+      
+        =link_to "Go Back", previous_wizard_path, class: "btn btn-default"     
+        = f.button :submit, manage_account_first_person_action_statement(@stop_order), class: "btn btn-primary"

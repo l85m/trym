@@ -32,22 +32,11 @@ class StopOrders::ManageAccountController < ApplicationController
     if params["id"] == "name_and_phone" && current_user.phone_verified?
       params["id"] = "manage_account"
     end
-    option = stop_order_params.fetch(:option) rescue @stop_order.option
-    self.steps = [:manage_account] + (current_user.phone_verified? ? [] : [:name_and_phone]) + [:accept_terms] + all_steps.fetch(option) + [:account_details]
+    self.steps = [:manage_account] + (current_user.phone_verified? ? [] : [:name_and_phone]) + [:account_details]
   end
 
   def stop_order_params
-    params.require(:stop_order).permit(:option, :accept_equipment_return, :fee_limit, :status, cancelation_data: @stop_order.cancelation_fields + [:comments])
-  end
-
-  def all_steps
-    {
-      "cancel_all" => [ :termination_details ],
-      "downgrade"  => [ :termination_details ],
-      "upgrade"    => [ ],
-      "find_deals" => [ ],
-      nil => []
-    }
+    params.require(:stop_order).permit(:option, :status, :contact_preference, cancelation_data: @stop_order.cancelation_fields + [:comments])
   end
 
   def finish_wizard_path

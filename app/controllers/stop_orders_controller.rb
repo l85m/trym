@@ -7,7 +7,7 @@ class StopOrdersController < ApplicationController
   respond_to :html, :js
 
   def index
-    @stop_orders = StopOrder.all
+    @stop_orders = current_user.stop_orders.all
     respond_with(@stop_orders)
   end
 
@@ -28,6 +28,7 @@ class StopOrdersController < ApplicationController
   end
 
   def edit
+    redirect_to stop_order_manage_account_path(:manage_account, stop_order_id: @stop_order.id)
   end
 
   def create

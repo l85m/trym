@@ -7,7 +7,7 @@ class Charge < ActiveRecord::Base
   belongs_to :trym_category
 
   has_one :financial_institution, through: :linked_account
-  has_many :stop_orders
+  has_many :stop_orders, dependent: :destroy
   
   has_many :notes, as: :noteable
 

@@ -14,7 +14,7 @@
           .paragraph-spacer.visible-lg-block
           =form_for current_user.charges.build, url: create_then_manage_charges_path do |f|
             %h1#new-user-merchant-selection
-              =f.text_field :merchant_id
+              =f.select :merchant_id, grouped_options_for_select( TrymCategory.merchant_select )
               / %input#charge_merchant_id
             .pull-right
               %button.btn.btn-default#disabled-next-button{disabled: "disabled"}
@@ -34,25 +34,13 @@
         and trym will find and track your recurring expenses for you!
 
 :javascript
-  function format(item) { name: return item.name; };
-
+  $('#charge_merchant_id').prepend("<option></option>").val(function(){return $('[selected]',this).val() ;})
   $('#charge_merchant_id').select2({
     placeholder: "#{merchant_name_example_helper(@trym_category_id)}",
-    minimumInputLength: 3,
-    data:{ text: "name" },
-    formatSelection: format,
-    formatResult: format,
     width: '100%',
-    dropdownCssClass: "new-user-select2-dropdown",
-    ajax:{ 
-      url: "#{merchants_path(trym_category_id: @trym_category_id)}",
-      dataType: 'json',
-      quietMillis: 250,
-      data: function (term, page) { return { q: term }; },
-      results: function (data, page) { return { results: data }; },
-      cache: true
-    }
+    dropdownCssClass: "new-user-select2-dropdown"
   });
+
   $('#charge_merchant_id').on("change", function(e) {
     $("#disabled-next-button").hide();
     $("#enabled-next-button").css("display", "inline");

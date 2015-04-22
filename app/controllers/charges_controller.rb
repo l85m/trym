@@ -13,7 +13,7 @@ class ChargesController < ApplicationController
     @charges_outlook_chart_data = ChargesOutlookChartData.new(current_user, @charges)
     @linked_accounts = current_user.linked_accounts
     @charges = @charges.sort_by{ |c| [c.next_billing_date ? 0 : 1, c.next_billing_date] }.reverse
-    @stop_orders = current_user.stop_orders.where.not(option: :nil).order(created_at: :desc)
+    @stop_orders = current_user.stop_orders.active_or_complete.order(created_at: :desc)
     
     respond_with(@charges)
   end
@@ -48,10 +48,10 @@ class ChargesController < ApplicationController
   end
 
   def create_then_manage
-    @charge = current_user.charges.create(charge_params.merge(recurring: true))
+    @charge = current_user.charges.find_or_create_by(charge_params)
     unless @charge.new_record?
       @stop_order = StopOrder.find_or_create_by( charge_id: @charge.id, status: "started" )
-      redirect_to stop_order_manage_account_path(:manage_account, stop_order_id: @stop_order.id)    
+      redirect_to stop_order_manage_account_path( :manage_account, stop_order_id: @stop_order.id)
     end
   end
 

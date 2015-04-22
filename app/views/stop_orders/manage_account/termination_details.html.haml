@@ -3,7 +3,7 @@
     %h2.modal-header-text.text-center
       Breaking up is hard to do
     %p.lead.text-center
-      When you downgrade or cancel a service, the service provider will sometimes charge you fees or make you return equipment. <b>Trym will always try and avoid these for you</b>, but if we can't we need to know how you'd like us to proceed.
+      When you downgrade or cancel a service, the service provider will sometimes charge you fees or make you return equipment. If this is required we need to know how you'd like us to proceed.
     
     .paragraph-spacer
     
@@ -11,8 +11,10 @@
       
       .row
         .col-xs-8.text-right
-          %label Do you want us to proceed if you have to return equipment?
-        
+          %b Do you want us to proceed if you have to return equipment?
+          %br>
+          %small we'll tell you if you need to
+
         .col-xs-4.text-left
           %label.radio-inline
             =f.radio_button :accept_equipment_return, "true", value: @stop_order.accept_equipment_return

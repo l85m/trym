@@ -39,4 +39,12 @@ class Merchant < ActiveRecord::Base
 		end + [OpenStruct.new(id: query, name: "New: " + query)]
 	end
 
+	def required_cancelation_fileds
+		cancelation_fields.select{ |_,a| a["required"] }.keys
+	end
+
+	def reusable_cancelation_fields
+		cancelation_fields.select{ |_,a| a["reusable"] }.keys
+	end
+
 end

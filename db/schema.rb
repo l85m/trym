@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150403184510) do
+ActiveRecord::Schema.define(version: 20150421155228) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,6 +26,7 @@ ActiveRecord::Schema.define(version: 20150403184510) do
     t.datetime "updated_at"
     t.datetime "phone_verified"
     t.text     "confirmation_code"
+    t.hstore   "account_data",      default: {}, null: false
   end
 
   add_index "account_details", ["user_id"], name: "index_account_details_on_user_id", using: :btree
@@ -124,9 +125,9 @@ ActiveRecord::Schema.define(version: 20150403184510) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "validated",          default: false, null: false
-    t.text     "cancelation_fields",                              array: true
     t.integer  "recurring_score",    default: 0,     null: false
     t.integer  "trym_category_id"
+    t.json     "cancelation_fields"
   end
 
   add_index "merchants", ["trym_category_id"], name: "index_merchants_on_trym_category_id", using: :btree
@@ -158,13 +159,14 @@ ActiveRecord::Schema.define(version: 20150403184510) do
   create_table "stop_orders", force: true do |t|
     t.integer  "charge_id"
     t.integer  "merchant_id"
-    t.text     "status",                  default: "requested"
+    t.text     "status",                  default: "started"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.hstore   "cancelation_data"
+    t.hstore   "cancelation_data",        default: {}
     t.string   "option"
-    t.boolean  "accept_equipment_return", default: false,       null: false
-    t.integer  "fee_limit",               default: 0,           null: false
+    t.boolean  "accept_equipment_return", default: false,     null: false
+    t.integer  "fee_limit",               default: 0,         null: false
+    t.text     "contact_preference"
   end
 
   add_index "stop_orders", ["charge_id"], name: "index_stop_orders_on_charge_id", using: :btree

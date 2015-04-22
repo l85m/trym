@@ -7,9 +7,15 @@ class StopOrder < ActiveRecord::Base
   validates_presence_of :charge, :status
   validates_inclusion_of :option, in: ["cancel_all", "downgrade", "upgrade", "find_deals", nil]
   validates :status, inclusion: { in: %w(started requested working succeeded failed canceled) }
+  validate :required_cancelation_fileds_must_be_present_on_requested_records
 
-  scope :active_or_complete, -> {where(status: ["requested", "working", "succeeded"]).first}
+  scope :active_or_complete, -> {where(status: ["requested", "working", "succeeded"])}
   scope :active, -> {where(status: ["requested", "working"]).first}
+
+  before_save :make_charge_recurring
+  before_save :update_account_details_if_reusable
+
+  after_destroy :destroy_temporary_charge
 
   def status_message
     case status
@@ -26,6 +32,14 @@ class StopOrder < ActiveRecord::Base
 
   def merchant
     charge.merchant
+  end
+
+  def user
+    charge.user
+  end
+
+  def account_details
+    user.present? ? user.account_detail : nil
   end
 
   def type_of_request
@@ -48,10 +62,49 @@ class StopOrder < ActiveRecord::Base
   end
 
   def cancelation_fields
-    if charge.merchant.present? && charge.merchant.cancelation_fields.present?
-      charge.merchant.cancelation_fields.map(&:to_sym)
+    if merchant.present? && merchant.cancelation_fields.present?
+      merchant.cancelation_fields.keys.map(&:to_sym)
     else
       []
     end
   end
+
+  def missing_required_fields
+    if merchant.present? && merchant.required_cancelation_fileds.present?
+      present_fields = ( cancelation_data.presence || {} ).select{ |_,v| v.present? }.keys.map(&:to_sym)
+      merchant.required_cancelation_fileds.map(&:to_sym) - present_fields
+    end
+  end
+
+  private
+
+  def update_account_details_if_reusable
+    if merchant.present? && merchant.reusable_cancelation_fields.present?
+      reusable_data = cancelation_data.select{ |k,_| merchant.reusable_cancelation_fields.include? k.to_s }
+      if reusable_data.present?
+        account_details.update( account_data: account_details.account_data.merge( reusable_data ) )
+      end
+    end
+  end
+
+  def required_cancelation_fileds_must_be_present_on_requested_records
+    if status != "started" && missing_required_fields.present?
+      missing_required_fields.each do |required_field|
+        errors.add( required_field , "can't be blank" )
+      end
+    end
+  end
+
+  def make_charge_recurring
+    if !charge.recurring && status == "requested"
+      charge.update( recurring: true )
+    end
+  end
+
+  def destroy_temporary_charge
+    if !charge.recurring && status == "started"
+      charge.delete
+    end
+  end
+
 end

@@ -9,12 +9,15 @@ $brand-color: rgb(129, 202, 166);
 	top: 50px; 
 	width: 100%;
 }
-
-.manage-account-list-group-item:hover{
-	background-color: $brand-color !important;
+.list-group-item > .radio, .checkbox{
+	margin: 0px;
 }
 
 .bs-wizard {margin-top: 40px;}
+
+#contact-options-button-dropdown{
+	li > a:hover, a.active{ background-color: $brand-color; color: white;}
+}
 
 /*Form Wizard*/
 .bs-wizard {border-bottom: solid 1px #e0e0e0; padding: 0 0 10px 0;}

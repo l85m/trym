@@ -1,0 +1,11 @@
+%span.btn-group{style: "vertical-align: bottom;"}
+  %a#contact-options-button{type: "button", class: "btn btn-default btn-sm dropdown-toggle", aria_expanded: false, data: {toggle: "dropdown"}}
+    %span.button-text #{current_user.phone}
+    %span.caret
+  %ul.dropdown-menu#contact-options-button-dropdown{role: "menu"}
+    %li
+      %a.contactButtonSwitch{href: "#", data: {medium: "email", where: current_user.email}} email me at #{current_user.email}
+    %li
+      %a.contactButtonSwitch.active{href: "#", data: {medium: "call", where: current_user.phone}} call me at #{current_user.phone}
+    %li
+      %a.contactButtonSwitch{href: "#", data: {medium: "text", where: current_user.phone}} text me at #{current_user.phone}
