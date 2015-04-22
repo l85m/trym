@@ -6,7 +6,7 @@
         How can we help you manage your #{@stop_order.charge.descriptor} account?
         %br
         %small as always trym is 100% free
-
+      .paragraph-spacer
       =form_for @stop_order, url: wizard_path, method: :put, html: {style: "width: 350px; margin: 0 auto;"} do |f|
 
         %h4
