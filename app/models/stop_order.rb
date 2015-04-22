@@ -72,7 +72,8 @@ class StopOrder < ActiveRecord::Base
   def missing_required_fields
     if merchant.present? && merchant.required_cancelation_fileds.present?
       present_fields = ( cancelation_data.presence || {} ).select{ |_,v| v.present? }.keys.map(&:to_sym)
-      merchant.required_cancelation_fileds.map(&:to_sym) - present_fields
+      required_fields = merchant.required_cancelation_fileds.map(&:to_sym) + (option == "cancel_all" ? [] : [:change_description])
+      required_fields - present_fields
     end
   end
 

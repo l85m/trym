@@ -36,7 +36,7 @@ class StopOrders::ManageAccountController < ApplicationController
   end
 
   def stop_order_params
-    params.require(:stop_order).permit(:option, :status, :contact_preference, cancelation_data: @stop_order.cancelation_fields + [:comments])
+    params.require(:stop_order).permit(:option, :status, :contact_preference, cancelation_data: @stop_order.cancelation_fields + [:comments] + [:change_description])
   end
 
   def finish_wizard_path

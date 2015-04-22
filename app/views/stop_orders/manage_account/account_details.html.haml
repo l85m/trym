@@ -19,11 +19,11 @@
               .paragraph-spacer
 
               -if @stop_order.option == "upgrade"
-                =cancelation_datum.input :upgrade_description, as: :text, required: true, label: "Describe what services you want us to upgrade or change, please be specific", input_html: {value: @stop_order.cancelation_data.present? ? @stop_order.cancelation_data["comments"] : nil, class: "text-center" }
+                =cancelation_datum.input :change_description, as: :text, required: true, label: "What services you want us to change or change?", input_html: {placeholder: "Please be specific", value: @stop_order.cancelation_data.present? ? @stop_order.cancelation_data["comments"] : nil }
               -elsif @stop_order.option == "downgrade"
-                =cancelation_datum.input :downgrade_description, as: :text, required: true, label: "Describe what services you want us to downgrade or cancel, please be specific", input_html: {value: @stop_order.cancelation_data.present? ? @stop_order.cancelation_data["comments"] : nil, class: "text-center" }
+                =cancelation_datum.input :change_description, as: :text, required: true, label: "What services do you want us to downgrade or cancel?", input_html: {placeholder: "Please be specific", value: @stop_order.cancelation_data.present? ? @stop_order.cancelation_data["comments"] : nil }
               -elsif @stop_order.option == "find_deals"
-                =cancelation_datum.input :downgrade_description, as: :text, required: true, label: "Describe what sort of deal you'd like us to find for you", input_html: {value: @stop_order.cancelation_data.present? ? @stop_order.cancelation_data["comments"] : nil, class: "text-center" }
+                =cancelation_datum.input :change_description, as: :text, required: true, label: "What sort of deal would you like us to find for you?", input_html: {placeholder: "Please be specific", value: @stop_order.cancelation_data.present? ? @stop_order.cancelation_data["comments"] : nil }
 
               -@stop_order.cancelation_fields.each do |cancelation_field|
                 =cancelation_datum.input cancelation_field.to_sym, required: @stop_order.merchant.required_cancelation_fileds.include?(cancelation_field.to_s), input_html: {value: @stop_order.cancelation_data.present? ? @stop_order.cancelation_data[cancelation_field.to_s] : current_user.account_detail.account_data[cancelation_field.to_s] }
