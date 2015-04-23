@@ -187,7 +187,7 @@ label[for=charge_renewal_period_in_words]{
 @media (min-width: 768px) {
 	.charge-lead{ font-size: 18px; }
 	#new-charge-links{ margin-top: 6px; }
-	#charges-outlook{ padding-left: 30px; }
+	#charges-outlook{ padding-left: 15px; }
 	#charge-side-list{
 		padding: 20px 30px 2px 2px;
 		border-right: lightgray 1px solid;
@@ -254,6 +254,7 @@ label[for=charge_renewal_period_in_words]{
 }
 
 @media only screen and (max-width: 991px) {
+	.charge-item{ padding: 5px 5px !important; }
 	.merchant-cell{
   	background-color: #81CAA6;
   	color: white;

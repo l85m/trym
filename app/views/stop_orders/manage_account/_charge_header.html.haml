@@ -6,7 +6,10 @@
         |
         %a{tabindex: "0", data: {toggle: "popover", content: formatted_history(@charge.history)} } Payment History
       |
-      =link_to "Back to My Charges", stop_order_path(@stop_order.id), method: :delete
+      -if @stop_order.status == "started"
+        =link_to "Back to My Charges", stop_order_path(@stop_order.id), method: :delete
+      -else
+        =link_to charges_path
 
     :javascript
       $('[data-toggle="popover"]').popover({html: true, trigger: 'focus', title: "<i class='fa fa-calendar'></i> Charge History"});

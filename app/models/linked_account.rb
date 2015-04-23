@@ -2,10 +2,12 @@ class LinkedAccount < ActiveRecord::Base
   belongs_to :user
   belongs_to :financial_institution
   validates_uniqueness_of :user_id, scope: [:financial_institution_id, :destroyed_at], if: Proc.new { |link| link.destroyed_at.nil? }
+  validates :status, inclusion: { in: %w(started mfa linked) }
 
   has_many :charges
   has_many :transaction_requests
 
+  scope :linked, -> {where( status: "linked" )}
   scope :not_destroyed, -> {where( destroyed_at: nil)}
   default_scope {not_destroyed}
 

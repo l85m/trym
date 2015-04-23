@@ -2,9 +2,9 @@
 
   .row{style: 'padding: 0px 20px;'}
     - if @charges.present?
-      .col-sm-6.col-md-4.hidden-sm.hidden-xs#charge-side-list.scrollable
+      .col-sm-6.col-md-4.hidden-sm.hidden-xs.scrollable
         =render 'charge_list'
-      .scrollable#charges-outlook.col-md-8.col-sm-12
+      .scrollable.col-md-8.col-sm-12
         =render 'charge_index_tabs'
     - else
       .scrollable

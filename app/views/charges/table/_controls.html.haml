@@ -2,10 +2,10 @@
 	%div{ class: "col-md-#{paginate(@charges) == '' ? '12' : '8' }" }
 		.row
 			=form_tag search_charges_path, method: :get, remote: true do
-				.input-group
-					
-					-if @linked_account.present?
-						=hidden_field_tag :linked_account_id, @linked_account.id
+				-if @linked_account.present?
+					=hidden_field_tag :linked_account_id, @linked_account.id
+
+				.input-group					
 					-if @category.present?
 						=hidden_field_tag :trym_category_id, @category.id
 

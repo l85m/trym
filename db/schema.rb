@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150421155228) do
+ActiveRecord::Schema.define(version: 20150423135738) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -104,8 +104,8 @@ ActiveRecord::Schema.define(version: 20150421155228) do
   end
 
   create_table "linked_accounts", force: true do |t|
-    t.integer  "user_id",                  null: false
-    t.integer  "financial_institution_id", null: false
+    t.integer  "user_id",                                      null: false
+    t.integer  "financial_institution_id",                     null: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "plaid_access_token"
@@ -114,6 +114,7 @@ ActiveRecord::Schema.define(version: 20150421155228) do
     t.text     "mfa_question"
     t.text     "mfa_type"
     t.datetime "destroyed_at"
+    t.text     "status",                   default: "started", null: false
   end
 
   add_index "linked_accounts", ["financial_institution_id"], name: "index_linked_accounts_on_financial_institution_id", using: :btree

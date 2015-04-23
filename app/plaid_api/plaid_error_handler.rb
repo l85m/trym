@@ -36,6 +36,9 @@ class PlaidErrorHandler
     if [1200,1201,1202,1203,1207,1209].include?(@error_code)
       require_reauth
       return "Invalid credentials - please check your account information and try again."
+    elsif @error_code == 1005
+      require_reauth
+      return "Please complete all fields before continueing"
     elsif @error_code == 1205
       require_reauth
       return "Your account appears to be locked.  Please visit your financial institution's website to unlock it."

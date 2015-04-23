@@ -1,4 +1,4 @@
-%div{role: "tabpanel"}
+#charges-outlook{role: "tabpanel"}
   #charge-index-pills-container
     %ul.nav.nav-pills#charge-index-pills
       
@@ -6,12 +6,11 @@
         %a{ href: "#active-charges", role: "tab", data: {toggle: "tab", loaded: "true"} } Active Charges
       
       -if @charges_outlook_chart_data.any_charges_in_year?
-        %li{role: "presentation", class: @stop_orders.present? ? "" : "active"}
-          %a{ href: "#twelve-month-outlook", role: "tab", data: {toggle: "tab", loaded: !@stop_orders.present?.to_s, link_taget: outlook_charges_path} } Outlook
+        %li{role: "presentation"}
+          %a{ href: "#twelve-month-outlook", role: "tab", data: {toggle: "tab", loaded: "false", link_taget: outlook_charges_path} } Outlook
       
-      -if @stop_orders.present?
-        %li.active{role: "presentation"}
-          %a{ href: "#manage-account-status", role: "tab", data: {toggle: "tab", link_taget: stop_orders_path, loaded: "true"} } Account Management
+      %li.active{role: "presentation"}
+        %a{ href: "#manage-account-status", role: "tab", data: {toggle: "tab", link_taget: stop_orders_path, loaded: "true"} } Account Management
 
 
       %li{role: "presentation"}
@@ -19,7 +18,7 @@
       
       -if current_user.charges.not_recurring.present?
         %li{role: "presentation"}
-          %a{ href: "#all-charges", role: "tab", data: {toggle: "tab", link_taget: search_charges_path} } All Charges
+          %a{ href: "#all-charges", role: "tab", data: {toggle: "tab", loaded: "false", link_taget: search_charges_path} } All Charges
   
   .tab-content
     #active-charges.tab-pane.fade.hidden-md.hidden-lg{:role => "tabpanel"}

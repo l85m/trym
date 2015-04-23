@@ -22,10 +22,11 @@ class LinkedAccountsController < ApplicationController
 
   def create
     @linked_account = LinkedAccount.find_or_create_by(linked_account_params)
-    unless @linked_account.present?
+    if @linked_account.errors.present?
       render 'error'
     else
       @linked_account.update( last_api_response: nil )
+      #AccountLinker.perform_async( account_linker_params, @linked_account.id )
       AccountLinker.perform_async( account_linker_params, @linked_account.id )
     end
   end

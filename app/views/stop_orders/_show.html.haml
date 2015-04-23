@@ -1,7 +1,6 @@
 -if stop_order.cancelable?
-  %b #{stop_order.option.gsub("_", " ")}:
-  =link_to stop_order, class: "label label-default" do
+  =link_to stop_order, class: "btn btn-xs btn-primary-o" do
     %i.fa{class: "fa-#{stop_order.status == 'requested' ? 'send' : 'cog'}"}
-    =stop_order.status
-  %small
-    =link_to "stop request", {controller: "stop_orders", action: "destroy", id: stop_order.id}, method: :delete, class: "gray red-on-hover", style: "width: 70px; margin-bottom: 3px;", data: {confirm: "Are you sure you want to keep this charge? You may not be able to cancel it again before your next bill."}
+    #{stop_order.status}
+    %br
+    %b #{stop_order.option.gsub("_"," ").gsub(" all",'')}

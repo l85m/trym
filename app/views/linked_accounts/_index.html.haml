@@ -14,7 +14,7 @@
                 %i.fa.fa-plus
                 link new account    
 
-      -current_user.linked_accounts.each do |link|
+      -current_user.linked_accounts.linked.each do |link|
         -unless link.error_message
           .linked-account-index-item.text-center
             =link_to link do 

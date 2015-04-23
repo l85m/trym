@@ -8,7 +8,7 @@ class TrymCategory < ActiveRecord::Base
 	scope :recurring, -> { where(recurring: true) }
 
 	def self.merchant_select
-		TrymCategory.all.collect{ |c| [c.name, c.merchants.pluck(:name, :id)] }.to_h
+		TrymCategory.all.collect{ |c| [c.name, c.merchants.order(:name).pluck(:name, :id)] }.to_h
 	end
 
 	def charges

@@ -47,7 +47,8 @@ class AccountLinker
     new_params[:type] = @link.financial_institution.plaid_type
     new_params[:username] = @params["username"]
     new_params[:password] = @params["password"]
-    new_params[:start_date] = "60 days ago"
+    new_params[:login_only] = "true"
+    #new_params[:start_date] = "60 days ago"
     new_params[:pin] = @params["pin"] if @params["pin"].present?
     new_params
   end
@@ -60,14 +61,15 @@ class AccountLinker
     if @user.api_res['response_code'] == 200
       {
         plaid_access_token: @user.access_token, 
-        last_successful_sync: Time.now,
+        status: "linked"
       }
     elsif @user.api_res['response_code'] == 201
       mfa = @user.pending_mfa_questions.first.to_a.flatten
       {
         plaid_access_token: @user.access_token,
         mfa_type: mfa.first,
-        mfa_question: mfa.last
+        mfa_question: mfa.last,
+        status: "mfa"
       }
     end
   end
