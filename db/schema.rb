@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150423135738) do
+ActiveRecord::Schema.define(version: 20150424235046) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -229,6 +229,7 @@ ActiveRecord::Schema.define(version: 20150423135738) do
     t.string   "invited_by_type"
     t.integer  "invitations_count",      default: 0
     t.string   "plaid_access_token"
+    t.text     "current_job_id"
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree

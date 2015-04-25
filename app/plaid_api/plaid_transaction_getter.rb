@@ -1,12 +1,13 @@
 class PlaidTransactionGetter
   include Sidekiq::Worker
+  include Sidekiq::Status::Worker
+
   sidekiq_options retry: false
 
   def perform(linked_account_id)
     @link = LinkedAccount.find(linked_account_id)
-    
     connect_to_plaid
-    
+        
     @link.update( prep_linked_account_params.merge({last_api_response: @user.api_res}) )
     ChargeBuilder.new( @link.transaction_requests.create(data: @user.transactions) ) if @user.transactions.present?
   end

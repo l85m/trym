@@ -22,11 +22,7 @@
         if json.last_api_response == null
         else if json.last_api_response.response_code == '200'
           clearInterval i
-          submit_button.html '<i class=\'fa fa-check\'></i>Linked</button>'
-          $('.modal-content').animate { height: '195px' }, 1100
-          form_container.fadeOut 1000, ->
-            $('#link-success-container').fadeIn()
-            return
+          location.reload(true);
         else if json.last_api_response.response_code == '201'
           clearInterval i
           form_container.fadeOut 500, ->

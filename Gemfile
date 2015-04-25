@@ -8,6 +8,7 @@ gem 'pg'
 gem 'bcrypt-ruby', '3.1.2'
 gem 'phony_rails'
 gem 'sidekiq'
+gem 'sidekiq-status'
 gem 'sinatra', require: false
 gem 'slim'
 gem 'active_model_serializers'

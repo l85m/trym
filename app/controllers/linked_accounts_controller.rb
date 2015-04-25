@@ -4,9 +4,10 @@ class LinkedAccountsController < ApplicationController
   respond_to :html, :js, :json
 
   def show
-    @charges = @linked_account.charges.sort_by_recurring_score.page(params[:page])
-    @stop_order_charge_ids = @charges.includes(:stop_orders).pluck('stop_orders.id')
-    
+    unless request_format == :json
+      @charges = @linked_account.charges.sort_by_recurring_score.page(params[:page])
+    end
+
     respond_with(@linked_account)
   end
 
@@ -26,8 +27,9 @@ class LinkedAccountsController < ApplicationController
       render 'error'
     else
       @linked_account.update( last_api_response: nil )
-      #AccountLinker.perform_async( account_linker_params, @linked_account.id )
-      AccountLinker.perform_async( account_linker_params, @linked_account.id )
+      
+      job_id = AccountLinker.perform_async( account_linker_params, @linked_account.id )
+      @link.user.update( current_job_id: job_id ) 
     end
   end
 
@@ -38,7 +40,9 @@ class LinkedAccountsController < ApplicationController
     #TODO: Handle Reauth / Account Destroy
     if ["201","402"].include? @linked_account.last_api_response["response_code"]
       @linked_account.update( last_api_response: nil )
-      AccountLinker.perform_async( mfa_params, @linked_account.id )
+      
+      job_id = AccountLinker.perform_async( mfa_params, @linked_account.id )
+      @link.user.update( current_job_id: job_id ) 
     end
   end
 
