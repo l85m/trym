@@ -17,4 +17,3 @@ $ ->
 
     #update request
     $("#stop_order_contact_preference").val $(this).data("medium") 
-

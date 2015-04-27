@@ -7,6 +7,7 @@ class AccountLinker
     @link = LinkedAccount.find(linked_account_id)
     
     connect_to_plaid
+    
     update_linked_account
   end
 
@@ -17,7 +18,6 @@ class AccountLinker
 
     if @user.api_res['response_code'].between?(200,201)
       linked_account_params.merge!(prep_linked_account_params)
-      ChargeBuilder.new( @link.transaction_requests.create(data: @user.transactions) ) if account_linked_and_transaction_data_present?
     end
     
     @link.update( linked_account_params )
@@ -38,8 +38,8 @@ class AccountLinker
     @user.permissions = ['connect']
   end
 
-  def account_linked_and_transaction_data_present?
-    @user.api_res['response_code'] == 200 && @user.transactions.present?
+  def account_linked?
+    @user.api_res['response_code'] == 200
   end
 
   def prep_plaid_params
@@ -47,10 +47,18 @@ class AccountLinker
     new_params[:type] = @link.financial_institution.plaid_type
     new_params[:username] = @params["username"]
     new_params[:password] = @params["password"]
-    new_params[:login_only] = "true"
+    new_params[:options] = JSON.generate({ "login_only" => "true", "webhook" => webhook_endpoint })
     #new_params[:start_date] = "60 days ago"
     new_params[:pin] = @params["pin"] if @params["pin"].present?
     new_params
+  end
+
+  def webhook_endpoint
+    if Rails.env.production?
+      Rails.application.routes.url_helpers.plaid_webhook_linked_accounts_url(host: "trym.io", protocol: "https://")
+    else
+      Rails.application.routes.url_helpers.plaid_webhook_linked_accounts_url(host: "trym.ngrok.io", protocol: "https://")
+    end
   end
 
   def prep_plaid_mfa_params
@@ -61,7 +69,7 @@ class AccountLinker
     if @user.api_res['response_code'] == 200
       {
         plaid_access_token: @user.access_token, 
-        status: "linked"
+        status: "syncing"
       }
     elsif @user.api_res['response_code'] == 201
       mfa = @user.pending_mfa_questions.first.to_a.flatten

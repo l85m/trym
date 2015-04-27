@@ -1,3 +1,6 @@
+-if current_user.present?
+  #whoami{ data: {user_id: current_user.id } }
+  
 %nav.navbar.navbar-default.navbar-fixed-top{role: "navigation", style: "border-bottom: 1px solid lightgray;"}
   .container-fluid 
     .navbar-header 
@@ -10,12 +13,13 @@
     
     .collapse.navbar-collapse#navbar-collapse-menu
       %ul.nav.navbar-nav.navbar-right
-        %li=link_to "help", about_path, class: class_header_link_formatting(about_path)        
+        %li=link_to "about", about_path, class: class_header_link_formatting(about_path)        
         -if user_signed_in?
           -if current_user.admin?
             %li=link_to "admin", admin_root_path, class: class_header_link_formatting(admin_root_path)
-          %li=link_to "my account", edit_user_registration_path, class: class_header_link_formatting(edit_user_registration_path)
-          %li=link_to "my charges", charges_path, class: class_header_link_formatting(charges_path)
+          %li=link_to "my settings", edit_user_registration_path, class: class_header_link_formatting(edit_user_registration_path)
+          %li=link_to "linked accounts", linked_accounts_path, class: class_header_link_formatting(linked_accounts_path)
+          %li=link_to "recurring expenses", charges_path, class: class_header_link_formatting(charges_path)
           %li=link_to "sign out", destroy_user_session_path, method: :delete, class: class_header_link_formatting(destroy_user_session_path)
         -else
           -unless current_page?(new_user_session_path)

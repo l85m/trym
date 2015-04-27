@@ -1,6 +1,8 @@
 class LinkedAccountsController < ApplicationController
-  before_action :authenticate_user!
+  before_action :authenticate_user!, except: :plaid_webhook
   before_action :set_linked_account, only: [:show, :edit, :update, :destroy]
+  skip_before_filter :verify_authenticity_token, only: :plaid_webhook
+
   respond_to :html, :js, :json
 
   def show
@@ -12,7 +14,8 @@ class LinkedAccountsController < ApplicationController
   end
 
   def index
-    @linked_accounts = current_user.linked_accounts.has_data.order(created_at: :desc)
+    @linked_accounts = current_user.linked_accounts
+    render layout: "manage_account"
   end
 
   def new
@@ -29,8 +32,20 @@ class LinkedAccountsController < ApplicationController
       @linked_account.update( last_api_response: nil )
       
       job_id = AccountLinker.perform_async( account_linker_params, @linked_account.id )
-      @link.user.update( current_job_id: job_id ) 
+      @linked_account.user.update( current_job_id: job_id ) 
     end
+  end
+
+  def plaid_webhook
+    @linked_account = LinkedAccount.find_by_plaid_access_token( params["access_token"] )
+    
+    if @linked_account.present?
+      @linked_account.plaid_webhook_handler(params)
+    else
+      Rails.logger.error "Trym Webhook For Orphaned Account!! linked_account=#{@linked_account.id}.  Response Body: #{params.inspect}"
+    end
+
+    head :ok, content_type: "text/html"
   end
 
   def edit

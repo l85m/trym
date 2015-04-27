@@ -2,7 +2,7 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
-@waitForPlaidToAddUser = (linked_account_path) ->
+@waitForPlaidToAddUser = (linkedAccountPath) ->
   if $('#new_linked_account').is(':visible')
     submit_button_text = 'Link Account'
     current_form = 'credentials'
@@ -16,7 +16,7 @@
   # this function will run each 1000 ms until stopped with clearInterval()
   i = setInterval((->
     $.ajax
-      url: linked_account_path
+      url: linkedAccountPath
       dataType: 'json'
       success: (json) ->
         if json.last_api_response == null
@@ -47,3 +47,38 @@
     return
   ), 1000)
 
+@updateLinkedAccountStatus = (data) ->
+  if data.message.flash != ''
+    $.jGrowl data.message.flash,
+      header: '<i class=\'fa fa-credit-card\'></i> ' + data.linked_account_name
+      sticky: true
+  
+  if $('#linked-accounts').is(":visible")
+    button = $("li[data-linked-account-id=" + data.linked_account_id + "]").find(".linked-account-button")
+
+    button.html( "<i class='fa fa fa-" + data.message.button_icon + "'></i> " + data.message.button_text )
+    button.attr('href',data.message.button_link)
+    
+    if data.message.button_disabled_state == "false"
+      button.removeAttr('disabled')
+    else
+      button.attr('disabled','disabled')
+
+    button.parent().tooltip('destroy')
+
+    if data.message.button_tooltip != ''
+      button.parent().tooltip({title:data.message.button_tooltip})
+
+
+$ ->
+  if $('#whoami').length
+    Pusher.log = (message) ->
+      if window.console and window.console.log
+        window.console.log message
+      return
+
+    pusher = new Pusher('98d6e8e3a6d1437792da', { encrypted: true })
+    channel = pusher.subscribe('private-user-' + $('#whoami').data("user-id") + '-channel')
+    channel.bind 'linked-account-notifications', (data) ->
+      updateLinkedAccountStatus(data)
+      return

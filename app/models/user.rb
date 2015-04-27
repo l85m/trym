@@ -43,6 +43,6 @@ class User < ActiveRecord::Base
   end
 
   def linked_account_at?(institution_id)
-    linked_accounts.where(financial_institution_id: institution_id)
+    linked_accounts.where(financial_institution_id: institution_id).limit(1).first
   end
 end

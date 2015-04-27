@@ -23,6 +23,7 @@ gem 'similar_text'
 #apis
 gem 'plaid', github: 'demosophy/plaid-ruby', branch: "release_v_1.0"
 gem 'twilio-ruby'
+gem 'pusher'
 
 #langauge abstraction
 gem 'sass-rails'
@@ -36,6 +37,7 @@ gem 'jquery-ui-rails'
 gem "font-awesome-rails"
 gem 'premailer-rails'
 gem 'nokogiri' #for premailer
+gem 'j_growl_rails'
 
 #javascript
 gem 'coffee-rails', '4.0.1'
@@ -71,6 +73,7 @@ group :development, :test do
   gem 'pry-rails'
   gem 'quiet_assets'
   gem 'ffaker'
+  gem 'ultrahook'
 end
 
 group :test do

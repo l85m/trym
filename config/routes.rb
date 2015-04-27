@@ -9,7 +9,14 @@ Rails.application.routes.draw do
 
   resources :invite_requests, only: [:new, :create]
 
-  resources :linked_accounts
+  resources :linked_accounts do
+    collection do
+      post :plaid_webhook
+    end
+  end
+
+  post '/pusher/auth' => 'pusher#auth'
+  
   resources :financial_institutions, only: :index
 
   resources :account_details, only: [:new, :create, :edit, :update]

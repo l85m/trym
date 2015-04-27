@@ -25,8 +25,11 @@ class PlaidErrorHandler
     elsif find_error_message.present?
       find_error_message
     else
-      Rails.logger.error "PLAID API ERROR #{@error_code} :: #{@error_message} - #{@error_resolve}"
-      "Sorry - it looks like there's a bug somewhere in our code.  We've been notified.  Please try again later."
+      if Rails.env.production? 
+        "Sorry - it looks like there's a bug somewhere in our code.  We've been notified.  Please try again later."
+      else
+        "PLAID API ERROR #{@error_code} :: #{@error_message} - #{@error_resolve}"
+      end
     end
   end
 

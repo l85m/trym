@@ -1,19 +1,39 @@
-.row
+.row#linked-account-index
 	-FinancialInstitution.connect_enabled.in_groups_of(4, false) do |institution_group|		
 		.col-md-6
 			%ul.list-group.wizard-list-group
-				-institution_group.each do |institution|		
-					%li.list-group-item
-						%span.lead=institution.name
-						.pull-right
-							-if current_user.linked_account_at?(institution.id).present? && current_user.linked_account_at?(institution.id).first.status == "linked"
-								-if current_user.linked_account_at?(institution.id).first.error_message
-									%a.btn.btn-primary-o.btn-responsive#link-account-error-popover-button{ tabindex: "0", data: { toggle: "popover", title: "Message from your account:", content: "<div class='text-center' style='width: 300px;'>" + current_user.linked_account_at?(institution.id).first.error_message + "<br><br>" + link_to("click here to retry the link", new_linked_account_path(financial_institution_id: institution.id), remote: true) + "</div>"} }
-										%i.fa.fa-exclamation-circle
-										Needs Attention
+				-institution_group.each do |institution|	
+					-linked_account = current_user.linked_account_at?(institution.id)					
+					%li.list-group-item{ data: { linked_account_id: linked_account.present? ? linked_account.id : nil } }
+						.row
+							.col-xs-7
+								%span.lead=institution.name
+							.col-xs-5.text-right
+								-if linked_account.present?
+										
+									-if linked_account.status == "linked"
+										
+										-if linked_account.error_message.blank?
+											.tooltip-container
+												=link_to current_user.linked_account_at?(institution.id), class: "btn btn-primary-o btn-responsive linked-account-button", data: {user_id: current_user.id} do
+													%i.fa.fa-check
+													Linked
+
+										-else
+											.tooltip-container{ data: {toggle: "tooltip", placement: "left", title: "Message from your account: #{linked_account.error_message}" }}
+												=link_to "click here to retry the link", new_linked_account_path(financial_institution_id: institution.id), remote: true, class: "btn btn-primary-o btn-responsive linked-account-button#link-account-error-popover-button" do
+													%i.fa.fa-warning
+													Needs Attention
+
+									-elsif linked_account.status == "mfa"
+										=link_to "Link", new_linked_account_path(financial_institution_id: institution.id), remote: true, class: "btn btn-primary btn-responsive"
+
+									-else
+										.tooltip-container{ data: {toggle: "tooltip", placement: "left", title: "Trym is #{linked_account.status} data from #{linked_account.account_name} to indentify potentially recurring charges.  This shouldn't take long." }}
+											%button.btn.btn-primary-o.btn-responsive.linked-account-button{disabled: "disabled"}
+												%i.fa.fa-circle-o-notch.fa-spin
+												=linked_account.status
+
 								-else
-									=link_to current_user.linked_account_at?(institution.id).first, class: "btn btn-primary-o btn-responsive" do
-										%i.fa.fa-check
-										Linked
-							-else
-								=link_to "Link", new_linked_account_path(financial_institution_id: institution.id), remote: true, class: "btn btn-primary btn-responsive"
+									.tooltip-container
+										=link_to "Link", new_linked_account_path(financial_institution_id: institution.id), remote: true, class: "btn btn-primary btn-responsive"
