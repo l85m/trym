@@ -64,6 +64,8 @@
     else
       button.attr('disabled','disabled')
 
+    button.removeData("toggle").removeData("title")
+    button.removeAttr("data-toggle").removeAttr("data-title")
     button.parent().tooltip('destroy')
 
     if data.message.button_tooltip != ''
