@@ -46,7 +46,7 @@ gem 'jbuilder', '~> 2.0'
 gem 'uglifier', '>= 1.3.0'
 gem 'json'
 gem 'select2-rails', github: 'demosophy/select2.trym'
-gem 'turbolinks'
+# gem 'turbolinks' Why do I keep letting you hurt me turbolinks?
 
 #users
 gem 'devise', github: 'demosophy/devise-3.4.1.usub'

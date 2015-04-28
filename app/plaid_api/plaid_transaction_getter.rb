@@ -8,9 +8,11 @@ class PlaidTransactionGetter
     @link = LinkedAccount.find(linked_account_id)
     @link.update( status: "analyzing" )
     connect_to_plaid
-        
+
     @link.update( prep_linked_account_params.merge({last_api_response: @user.api_res}) )
-    if @user.transactions.present? && has_new_transactions
+    @new_transactions = has_new_transactions?
+    
+    if @user.transactions.present? && @new_transactions
       ChargeBuilder.new @link.transaction_requests.create(data: @user.transactions)
     end
     @link.update( status: "linked" )
@@ -42,24 +44,24 @@ class PlaidTransactionGetter
     end
   end
 
-  def has_new_transactions
+  def has_new_transactions?
     return true unless @link.transaction_requests.present?
-    @link.transaction_requests.last.data != @user.transactions
+    last_ids = @link.transaction_requests.last.data.collect{ |x| x["_id"]} 
+    new_ids = @user.transactions.collect{ |x| x["_id"]} 
+    (new_ids - last_ids).present?
   end
 
   def notify_client
-    if has_new_transactions
-      flash_body = "New transactions found!"
-    else
-      flash_body = "No new transactions found."
-    end      
-    
     button_disabled_state = "false"
     button_icon = "check"
     button_text = "Linked"
     button_tooltip = ""
     button_link = '/linked_accounts/' + @link.id.to_s
-    flash = "Done syncing <a href='#{Rails.application.routes.url_helpers.linked_account_path(@link)}'>your account</a>. " + flash_body
+    if @new_transactions
+      flash = "Done syncing your account.  <a href='#{Rails.application.routes.url_helpers.linked_account_path(@link)}'>Click here</a> to see review your transactions."
+    else
+      flash = ""
+    end
     @link.push_update_to_client({
       button_icon: button_icon, 
       button_text: button_text, 

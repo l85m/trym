@@ -31,8 +31,7 @@ class LinkedAccountsController < ApplicationController
     else
       @linked_account.update( last_api_response: nil )
       
-      job_id = AccountLinker.perform_async( account_linker_params, @linked_account.id )
-      @linked_account.user.update( current_job_id: job_id ) 
+      AccountLinker.perform_async( account_linker_params, @linked_account.id )
     end
   end
 
@@ -56,8 +55,7 @@ class LinkedAccountsController < ApplicationController
     if ["201","402"].include? @linked_account.last_api_response["response_code"]
       @linked_account.update( last_api_response: nil )
       
-      job_id = AccountLinker.perform_async( mfa_params, @linked_account.id )
-      @link.user.update( current_job_id: job_id ) 
+      AccountLinker.perform_async( mfa_params, @linked_account.id )
     end
   end
 

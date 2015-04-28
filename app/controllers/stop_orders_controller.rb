@@ -7,7 +7,7 @@ class StopOrdersController < ApplicationController
   respond_to :html, :js
 
   def index
-    @stop_orders = current_user.stop_orders.all
+    @stop_orders = current_user.stop_orders.active_or_complete.order(created_at: :desc)
     respond_with(@stop_orders)
   end
 

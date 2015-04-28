@@ -46,7 +46,7 @@ ActiveAdmin.register Merchant do
       end
     end
     column :cancelation_fields, sortable: :cancelation_fields do |merchant|
-      merchant.cancelation_fields.present? ? merchant.cancelation_fields.join(", ") : nil
+      merchant.cancelation_fields.present? ? merchant.cancelation_fields.keys.join(", ") : nil
     end
     column :recurring_score
     column "# Charges" do |merchant|

@@ -1,18 +1,14 @@
 #charge-side-list
-  .text-center{ style: "min-width: 200px;" }
-    %p.lead.without-margin
-      %i.fa.fa-calculator
-      active charges
   =link_to new_charge_path, class: "btn btn-primary-o btn-lg btn-block", style: "margin:10px auto 15px auto;", remote: true do
     %i.fa.fa-plus-circle
-    add charge
+    track new recurring expense
 
   -(@charges.select(&:next_billing_date).sort_by(&:next_billing_date) + @charges.reject(&:next_billing_date)).each do |charge|
     =render partial: "shared/charge_item", locals: {charge: charge}
 
   %p.text-center
     %strong
-      =link_to charge_wizard_path(:select_financial_institutions), class: "icon-link" do 
+      =link_to linked_accounts_path, class: "icon-link" do 
         Link some of your 
         %i.fa.fa-credit-card
         accounts

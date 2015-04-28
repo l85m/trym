@@ -5,6 +5,7 @@
     button.parents().find(button.data('target')).remove()
     return
 
-$(document).on 'page:change', ->
+$(document).on 'ready page:load', ->
   $('[data-toggle="tooltip"]').tooltip()
-  attachCloseActionToButtons
+  attachCloseActionToButtons()
+  

@@ -13,13 +13,28 @@
     
     .collapse.navbar-collapse#navbar-collapse-menu
       %ul.nav.navbar-nav.navbar-right
-        %li=link_to "about", about_path, class: class_header_link_formatting(about_path)        
+        %li
+          =link_to about_path, class: class_header_link_formatting(about_path) do
+            %i.fa.fa-question-circle.header-icon
+            about
         -if user_signed_in?
           -if current_user.admin?
-            %li=link_to "admin", admin_root_path, class: class_header_link_formatting(admin_root_path)
-          %li=link_to "my settings", edit_user_registration_path, class: class_header_link_formatting(edit_user_registration_path)
-          %li=link_to "linked accounts", linked_accounts_path, class: class_header_link_formatting(linked_accounts_path)
-          %li=link_to "recurring expenses", charges_path, class: class_header_link_formatting(charges_path)
+            %li
+              =link_to admin_root_path, class: class_header_link_formatting(admin_root_path) do 
+                %i.fa.fa-fighter-jet.header-icon
+                admin
+          %li
+            =link_to edit_user_registration_path, class: class_header_link_formatting(edit_user_registration_path) do
+              %i.fa.fa-user.header-icon
+              my profile
+          %li
+            =link_to linked_accounts_path, class: class_header_link_formatting(linked_accounts_path) do
+              %i.fa.fa-credit-card.header-icon
+              linked accounts
+          %li
+            =link_to charges_path, class: class_header_link_formatting(charges_path, root_path) do
+              %i.fa.fa-home.header-icon
+              overview
           %li=link_to "sign out", destroy_user_session_path, method: :delete, class: class_header_link_formatting(destroy_user_session_path)
         -else
           -unless current_page?(new_user_session_path)

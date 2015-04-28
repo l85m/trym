@@ -8,8 +8,8 @@ module ApplicationHelper
 		{success: "alert-success", error: "alert-danger", alert: "alert-warning", notice: "alert-info", info: "alert-info"}[type.to_sym]
 	end
 
-	def class_header_link_formatting(link_path)
-		"active-header-link" if current_page?(link_path)
+	def class_header_link_formatting(link_path, second_link_path = link_path)
+		"active-header-link" if (current_page?(link_path) || current_page?(second_link_path))
 	end
 
 	def brand_color

@@ -31,7 +31,7 @@
 
   function format(item) { name: return item.name; };
 
-  $('#charge_merchant_id').select2({
+  $('.modal-dialog').find("#charge_merchant_id").select2({
     placeholder: "#{merchant_name_example_helper(@trym_category_id)}",
     minimumInputLength: 3,
     data:{ text: "name" },

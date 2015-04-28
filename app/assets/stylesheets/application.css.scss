@@ -220,9 +220,16 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 	border-color: white; 
 	text-align: center;
 }
+.navbar-nav > li > a > .header-icon{
+	color: inherit;
+}
+
 .active-header-link,
 .navbar-nav > li > a:hover{ 
-	color: $brand-color !important; 
+	color: $brand-color !important;
+	.header-icon{
+		color: $brand-color;
+	} 
 }
 .navbar-sign-up-btn{ margin-right: 5px; }
 .flash-container{
@@ -270,6 +277,7 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 .horizontal-form-group{
 	margin-bottom: 10px;
 }
+.footer-icon{ vertical-align: middle;}
 
 .jGrowl.top-right {
   top: 50px;

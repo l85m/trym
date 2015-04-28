@@ -33,8 +33,17 @@
     $("#enabled-next-button").css("display", "inline");
   });
 
-
 .paragraph-spacer
--@stop_orders.each do |s|
-  .panel.panel-default
-    =render partial: 'stop_orders/index_item', locals: {stop_order: s}
+-if @stop_orders.present?
+  %p.lead.text-center
+    Here are all the past service management requests you've asked us to work on:
+  -@stop_orders.each do |s|
+    .panel.panel-default
+      =render partial: 'stop_orders/index_item', locals: {stop_order: s}
+
+%p.text-center
+  Don't have anything you want to change right now?  No problem! 
+  =link_to "Add a recurring expense", new_charge_path, remote: true
+  for us to track or
+  =link_to "link your accounts", linked_accounts_path
+  and we'll find and track your recurring expenses, tell you if we notice a price increase, and find you deals on similar services!

@@ -22,7 +22,10 @@
         if json.last_api_response == null
         else if json.last_api_response.response_code == '200'
           clearInterval i
-          location.reload(true);
+          $('.modal-content').animate { height: '305px' }, 1100
+          form_container.fadeOut 1000, ->
+            $('#link-success-container').fadeIn()
+            return
         else if json.last_api_response.response_code == '201'
           clearInterval i
           form_container.fadeOut 500, ->
@@ -47,13 +50,15 @@
     return
   ), 1000)
 
+
+#update user for syncing/analyzing account
 @updateLinkedAccountStatus = (data) ->
   if data.message.flash != ''
     $.jGrowl data.message.flash,
       header: '<i class=\'fa fa-credit-card\'></i> ' + data.linked_account_name
       sticky: true
   
-  if $('#linked-accounts').is(":visible")
+  if $('#linked-accounts-index').is(":visible")
     button = $("li[data-linked-account-id=" + data.linked_account_id + "]").find(".linked-account-button")
 
     button.html( "<i class='fa fa fa-" + data.message.button_icon + "'></i> " + data.message.button_text )
@@ -71,13 +76,12 @@
     if data.message.button_tooltip != ''
       button.parent().tooltip({title:data.message.button_tooltip})
 
-
 $ ->
   if $('#whoami').length
-    Pusher.log = (message) ->
-      if window.console and window.console.log
-        window.console.log message
-      return
+    # Pusher.log = (message) ->
+    #   if window.console and window.console.log
+    #     window.console.log message
+    #   return
 
     pusher = new Pusher('98d6e8e3a6d1437792da', { encrypted: true })
     channel = pusher.subscribe('private-user-' + $('#whoami').data("user-id") + '-channel')

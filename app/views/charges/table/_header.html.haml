@@ -1,10 +1,11 @@
 %thead
   %tr
+    %th.strong.text-center Track?
     %th Merchant/Description
-    %th Cost
-    / %th Last Charge
+    %th Last Charge
+    %th Date of Last Charge
     %th Recurs
     %th History
-    %th Recurring Factors
-    %th.strong.text-center Track?
+    -unless request.xhr?
+      %th Recurring Factors
     %th.hidden-sm.hidden-xs
