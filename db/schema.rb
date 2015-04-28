@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150424235046) do
+ActiveRecord::Schema.define(version: 20150428160055) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -168,10 +168,12 @@ ActiveRecord::Schema.define(version: 20150424235046) do
     t.boolean  "accept_equipment_return", default: false,     null: false
     t.integer  "fee_limit",               default: 0,         null: false
     t.text     "contact_preference"
+    t.integer  "operator_id"
   end
 
   add_index "stop_orders", ["charge_id"], name: "index_stop_orders_on_charge_id", using: :btree
   add_index "stop_orders", ["merchant_id"], name: "index_stop_orders_on_merchant_id", using: :btree
+  add_index "stop_orders", ["operator_id"], name: "index_stop_orders_on_operator_id", using: :btree
 
   create_table "transaction_requests", force: true do |t|
     t.integer  "linked_account_id"

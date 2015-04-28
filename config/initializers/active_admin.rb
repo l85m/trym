@@ -6,6 +6,10 @@ ActiveAdmin.setup do |config|
   #
   config.site_title = "Trym"
 
+  #for hstore see:https://github.com/wild-r/activeadmin_hstore_editor
+  config.register_stylesheet 'active_admin/hstore_editor.css'
+  config.register_javascript 'active_admin/hstore_editor.js'
+
   # Set the link url for the title. For example, to take
   # users to your main site. Defaults to no link.
   #

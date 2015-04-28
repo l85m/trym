@@ -1,16 +1,19 @@
 class StopOrder < ActiveRecord::Base
   belongs_to :charge
   belongs_to :merchant
+  belongs_to :operator, class_name: "User"
 
   has_many :notes, as: :noteable
 
   validates_presence_of :charge, :status
   validates_inclusion_of :option, in: ["cancel_all", "downgrade", "upgrade", "find_deals", nil]
   validates :status, inclusion: { in: %w(started requested working succeeded failed canceled) }
+  validates :contact_preference, inclusion: { in: %w(call text email) }
   validate :required_cancelation_fileds_must_be_present_on_requested_records
 
   scope :active_or_complete, -> {where(status: ["requested", "working", "succeeded"])}
   scope :active, -> {where(status: ["requested", "working"]).first}
+  scope :with_charge, -> {joins(:charge)}
 
   before_save :make_charge_recurring
   before_save :update_account_details_if_reusable

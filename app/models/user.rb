@@ -15,6 +15,9 @@ class User < ActiveRecord::Base
 
  	has_many :notes, as: :noteable
  	has_one :account_detail
+  has_many :stop_order_jobs, foreign_key: 'operator_id', class_name: "StopOrder"
+
+  scope :admins, -> {where(admin: true)}
 
  	default_scope { includes(:account_detail) }
 

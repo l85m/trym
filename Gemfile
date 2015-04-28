@@ -54,6 +54,7 @@ gem 'devise_invitable' #alpha invites
 
 #admin
 gem 'activeadmin', github: 'activeadmin'
+gem 'activeadmin_hstore_editor'
 
 group :production, :staging do
   gem 'unicorn'
