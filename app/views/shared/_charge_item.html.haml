@@ -37,15 +37,16 @@
     
     .charge-info.charge-buttons.text-center      
       -if stop_order_charge_ids.include?(charge.id)
-        =render partial: "stop_orders/show", locals: {stop_order: charge.active_stop_order}
+        %div{style: "margin-top:7px"}
+          =render partial: "stop_orders/show", locals: {stop_order: charge.active_stop_order}
       -else        
         .inline-block.charge-item-action-buttons
           .text-center
             =link_to stop_orders_path(charge_id: charge.id), method: :post, class: "btn btn-primary btn-xs", style: "margin-top: 5px;" do
               %small
                 .text-center
-                  MANAGE 
+                  TRYM 
                 .text-center
                   ACCOUNT
-          .text-center
-            %small=link_to "add/edit details", edit_charge_path(charge), remote: true
+      .text-center
+        %small=link_to "add/edit details", edit_charge_path(charge), remote: true

@@ -20,6 +20,7 @@
 @import "select2-bootstrap";
 
 @import "j_growl_rails/jquery.jgrowl";
+@import "bootstro";
 
 $brand-color: rgb(129, 202, 166);
 
@@ -231,6 +232,7 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 		color: $brand-color;
 	} 
 }
+.navbar-brand{ padding: 13px 15px; }
 .navbar-sign-up-btn{ margin-right: 5px; }
 .flash-container{
 	position: relative;

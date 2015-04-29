@@ -19,7 +19,13 @@ Rails.application.routes.draw do
   
   resources :financial_institutions, only: :index
 
-  resources :account_details, only: [:new, :create, :edit, :update]
+  resources :account_details, only: [:new, :create, :edit, :update] do
+    collection do
+      get :turn_off_intro
+      get :turn_on_intro
+    end
+  end
+
   resources :merchants, only: :index
 
   resources :charges do

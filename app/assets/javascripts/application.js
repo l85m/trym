@@ -29,3 +29,4 @@
 //= require select2
 //= require jquery.form-validator
 //= require j_growl_rails/jquery.jgrowl
+//= require bootstro

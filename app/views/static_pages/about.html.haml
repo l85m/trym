@@ -16,6 +16,11 @@
           %i.fa.fa-rocket
       %p 
         Trym is an interface for all of the recurring services in your life.  It helps you manage them or cancel any service with just a few clicks.  It also helps you realize when things cost more than they should, or when you can get a better deal somewhere else by notifiying you when the price you're paying goes up, or by telling you when someone else is offering a better deal.  
+      -if current_user.present?
+        %p
+          =link_to "Click here", turn_on_intro_account_details_path
+          to revisit the site walkthrough you had when you first created your account.
+
       
       %h3 
         How much does Trym cost?

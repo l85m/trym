@@ -1,0 +1,43 @@
+{
+	"success":true,
+	"result":[
+		{
+			"selector":".charge-item:first",
+			"title":"Tracked Expenses",
+			"content":"<p>Tracked expenses are any expense you've told Trym to manage or track for you.  This list is where trym puts the expenses which you've told it to track.</p><p>Expenses with an active Trym Request will show the status of that request to the right.  Expenses without active trym requests will have a 'Trym Account' button which you can use to tell trym to stop, upgrade, downgrade, or find better deals on that account.</p></p>Adding details more to expenses in this list will allow trym alert you before future expenses and show you how much you're spending over time.</p>",
+			"html":"true",
+			"width":"400px",
+			"placement":"bottom",
+			"container":"body",
+			"step":0
+		},
+		{
+			"selector":".stop-order-item:first",
+			"title":"Trym Request History",
+			"content":"Time to write an intro!",
+			"width":"400px",
+			"placement":"top",
+			"container":"body",
+			"step":1
+		},
+		{
+			"selector":"#manage-account-container > .well:first",
+			"title":"New Trym Request",
+			"content":"More intro writing fun!",
+			"width":"400px",
+			"placement":"bottom",
+			"container":"body",
+			"step":2
+		},		
+		{
+			"selector":"#charge-index-pills",
+			"title":"Yay!!!",
+			"content":"Last step!",
+			"width":"400px",
+			"placement":"bottom",
+			"container":"body",
+			"step":3
+		}
+	]
+}
+

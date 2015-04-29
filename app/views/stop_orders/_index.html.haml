@@ -1,24 +1,25 @@
 .paragraph-spacer
 .row.well
-  .col-lg-4
-    %h3
-      What service do you want to manage?
-      
-    %p.lead 
-      We can cancel, upgrade, or downgrade your service or find you a better deal on similar services.
-  .col-lg-8
-    .paragraph-spacer.visible-lg-block
-    .paragraph-spacer.visible-lg-block
-    =form_for current_user.charges.build, url: create_then_manage_charges_path do |f|
-      %h1#new-user-merchant-selection
-        =f.select :merchant_id, grouped_options_for_select( TrymCategory.merchant_select )
-      .pull-right
-        %button.btn.btn-default#disabled-next-button{disabled: "disabled"}
-          enter a service provider above to continue
-          %i.fa.fa-arrow-circle-right
-        =f.button class: "btn btn-primary", id: "enabled-next-button" do 
-          continue
-          %i.fa.fa-arrow-circle-right
+  #new-trym-request
+    .col-lg-4
+      %h3
+        What service do you want to manage?
+        
+      %p.lead 
+        We can cancel, upgrade, or downgrade your service or find you a better deal on similar services.
+    .col-lg-8
+      .paragraph-spacer.visible-lg-block
+      .paragraph-spacer.visible-lg-block
+      =form_for current_user.charges.build, url: create_then_manage_charges_path do |f|
+        %h1#new-user-merchant-selection
+          =f.select :merchant_id, grouped_options_for_select( TrymCategory.merchant_select )
+        .pull-right
+          %button.btn.btn-default#disabled-next-button{disabled: "disabled"}
+            enter a service provider above to continue
+            %i.fa.fa-arrow-circle-right
+          =f.button class: "btn btn-primary", id: "enabled-next-button" do 
+            continue
+            %i.fa.fa-arrow-circle-right
 
 
 :javascript
@@ -39,7 +40,7 @@
   %p.lead.text-center
     Here are all the past service management requests you've asked us to work on:
   -@stop_orders.each do |s|
-    .panel.panel-default
+    .panel.panel-default.stop-order-item
       =render partial: 'stop_orders/index_item', locals: {stop_order: s}
 
 %p.text-center

@@ -25,6 +25,18 @@ class AccountDetailsController < ApplicationController
 		end
   end
 
+  def turn_off_intro
+    #TODO: quick and dirty - we should change this
+    current_user.update(show_intro: false)
+    head :ok, content_type: "text/html"
+  end
+
+  def turn_on_intro
+    #TODO: quick and dirty - we should change this
+    current_user.update(show_intro: true)
+    redirect_to root_path
+  end
+
   def edit
     if params[:referring_stop_order_id]
       session[:referring_stop_order_id] = params[:referring_stop_order_id]
