@@ -38,7 +38,7 @@
 .paragraph-spacer
 -if @stop_orders.present?
   %p.lead.text-center
-    Here are all the past service management requests you've asked us to work on:
+    Trym Request History
   -@stop_orders.each do |s|
     .panel.panel-default.stop-order-item
       =render partial: 'stop_orders/index_item', locals: {stop_order: s}
