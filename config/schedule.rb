@@ -26,7 +26,7 @@ every 1.hours do
 end
 
 every 1.minute do
-	command "echo 'test'"
+	runner "PlaidFinancialInstitutionUpdater.perform_async"
 end
 
 
