@@ -26,6 +26,16 @@ set :unicorn_pid, "#{deploy_to}/shared/pids/unicorn.pid"
 set :shared_paths, ['config/database.yml', 'log', 'config/secrets.yml']
 
 
+task :tail_logs do
+  queue 'echo "Contents of the log files in shared/log are as follows:"'
+  queue "tail $sidekiq.log $unicorn.stderr.log $unicorn.stdout.log $production.log".gsub("$","-f ~/trym/shared/log/")
+end
+
+task :unicorn_stderr_logs do
+  queue 'echo "Contents of the sidekick log file are as follows:"'
+  queue "tail -f ~/trym/shared/logs/unicorn.log"
+end
+
 # This task is the environment that is loaded for most commands, such as
 # `mina deploy` or `mina rake`.
 task :environment do

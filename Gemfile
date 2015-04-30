@@ -61,7 +61,7 @@ group :production, :staging do
   gem 'mina'
   gem 'mina-sidekiq', require: false
   gem 'mina-unicorn', require: false
-  gem 'whenever', require: false
+  gem 'whenever'
 end
 
 group :development, :test do

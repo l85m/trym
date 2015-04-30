@@ -5,6 +5,7 @@ ActiveAdmin.register LinkedAccount do
     column :id
     column :user
     column :financial_institution
+    column :status
     column :last_successful_sync
     column :last_api_response
     column :destroyed_at
