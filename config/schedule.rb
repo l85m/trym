@@ -26,7 +26,7 @@ every 1.hours do
 end
 
 every 1.minute do
-	runner "PlaidFinancialInstitutionUpdater.perform_async"
+	command "rbenv version"
 end
 
 
