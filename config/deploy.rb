@@ -28,7 +28,7 @@ set :shared_paths, ['config/database.yml', 'log', 'config/secrets.yml']
 
 task :tail_logs do
   queue 'echo "Contents of the log files in shared/log are as follows:"'
-  queue "tail $sidekiq.log $unicorn.stderr.log $unicorn.stdout.log $production.log".gsub("$","-f ~/trym/shared/log/")
+  queue "tail $sidekiq.log $unicorn.stderr.log $unicorn.stdout.log $production.log $cron_log.log".gsub("$","-f ~/trym/shared/log/")
 end
 
 task :unicorn_stderr_logs do

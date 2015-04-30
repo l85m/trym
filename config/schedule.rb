@@ -13,6 +13,9 @@
 #   rake "some:great:rake:task"
 # end
 #
+
+set :output, "~/trym/shared/log/cron_log.log"
+
 every 6.hours do
   runner "PlaidFinancialInstitutionUpdater.perform_async"
   runner "PlaidCategoryUpdater.perform_async"
@@ -21,5 +24,10 @@ end
 every 1.hours do
 	runner "PlaidLinkedAccountUpdater.new"
 end
+
+every 1.minute do
+	echo 'test'
+end
+
 
 # Learn more: http://github.com/javan/whenever
