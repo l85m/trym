@@ -30,7 +30,10 @@ $(".modal-dialog").remove();
 
   var charge_item = $("#charge-row-<%= @charge.id.present? ? @charge.id : 'new' %>");
   charge_item.replaceWith("<%= j render partial: 'charges/table/row', locals: {charge: @charge} %>");
-
+  if( $("#charge-side-list").is(":visible") ){
+    $(".recurring-factor-cell").remove()
+  }
+  
 <% end %>
 
 $("#charge-list-script").replaceWith("<%= j render 'shared/charge_item_script' %>");

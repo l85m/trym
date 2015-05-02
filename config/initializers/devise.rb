@@ -298,6 +298,7 @@ Devise.setup do |config|
 end
 
 Rails.application.config.to_prepare do
+  Devise::InvitationsController.layout "manage_account"
   Devise::SessionsController.layout "manage_account"
   Devise::RegistrationsController.layout "manage_account"
   Devise::ConfirmationsController.layout "manage_account"

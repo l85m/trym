@@ -6,9 +6,9 @@
         %br
         %small We'll send you a text message to verify your phone number
       
-    %a.icon-link#account-data-explain-tooltip{data: {toggle: "tooltip"}}
-      Why do we need this?
-    =render 'account_details/inline_form'
+      %a.icon-link#account-data-explain-tooltip{data: {toggle: "tooltip"}}
+        Why do we need this?
+      =render 'account_details/inline_form'
 
   .hidden
     =link_to "next", next_wizard_path, class: "hidden", id: "after-verification-link"

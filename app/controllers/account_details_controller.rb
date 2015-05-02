@@ -18,7 +18,7 @@ class AccountDetailsController < ApplicationController
   def create
   	@account_detail ||= AccountDetail.new( user_id: current_user.id )
   	@account_detail.assign_attributes account_detail_params
-		if @account_detail.save
+		if account_detail_params[:temp_phone].present? && @account_detail.save
 			redirect_to controller: "verifications", action: "new"
 		else
 			render "error"
@@ -44,7 +44,7 @@ class AccountDetailsController < ApplicationController
   end
 
   def update
-		if @account_detail.update( account_detail_params )
+		if account_detail_params[:temp_phone].present? && @account_detail.update( account_detail_params )
 			redirect_to controller: "verifications", action: "new"
 		else
 			render "error"

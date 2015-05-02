@@ -23,6 +23,10 @@
               =link_to admin_root_path, class: class_header_link_formatting(admin_root_path) do 
                 %i.fa.fa-fighter-jet.header-icon
                 admin
+            %li
+              =link_to new_user_invitation_path, class: class_header_link_formatting(new_user_invitation_path) do 
+                %i.fa.fa-space-shuttle.header-icon
+                invite
           %li
             =link_to edit_user_registration_path, class: class_header_link_formatting(edit_user_registration_path) do
               %i.fa.fa-user.header-icon

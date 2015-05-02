@@ -1,9 +1,12 @@
 class AccountDetail < ActiveRecord::Base
   belongs_to :user
 
-  validates_presence_of :user_id, :phone, :first_name, :last_name
+  validates_presence_of :user_id, :first_name, :last_name
+  validates_presence_of :temp_phone, on: :create
+  
   validates :confirmation_code, format: { with: /\A\d{4}\z/, message: "four numbers only" }, allow_blank: true
-
+	validate :presence_of_phone_or_temp_phone, on: :update
+	
   phony_normalize :phone, :default_country_code => 'US'
 	phony_normalize :temp_phone, :default_country_code => 'US'
 	
@@ -42,6 +45,12 @@ class AccountDetail < ActiveRecord::Base
 	end
 
 	private
+
+	def presence_of_phone_or_temp_phone
+		if phone.blank? && temp_phone.blank?
+			errors.add(:temp_phone, "Phone can't be blank")
+		end
+	end
 
 	def generate_confirmation_code
 		update( confirmation_code: rand(1000..9999) )

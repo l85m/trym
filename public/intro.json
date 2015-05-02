@@ -12,27 +12,27 @@
 			"step":0
 		},
 		{
+			"selector":"#link-account-side-list",
+			"title":"Linked Accounts",
+			"content":"<p>You can link trym to your credit and bank accounts and trym will analyze your expenses for possible recurring charges automatically - we might even find something you've forgotten about!</p><p>Linking accounts also allows us to keep your expenses current and notify you if we see any price increases.</p>",
+			"width":"400px",
+			"placement":"right",
+			"container":"body",
+			"step":1
+		},	
+		{
 			"selector":".stop-order-item:first",
 			"title":"Trym Request History",
-			"content":"<p>Trym Request History is the list showing all of your current and past Trym Requests.</p><p>Each Trym Request has a Request ID Number, Date of that Request, and the Account which you asked Trym to modify. The type of modification (Stop, Upgrade, Downgrade, Find Better Deals) will also appear in each Request.</p><p>At any time prior to the Trym Request’s completion, you can Cancel that Request with the ‘Cancel’ button. If you have any questions about the specific Request, the process, or its status, feel free to ‘Contact Us’.</p>",
+			"content":"<p>Trym Request History shows all of your current and past Trym Requests.</p><p>At any time prior to the Trym Request’s completion, you can Cancel that Request with the ‘Cancel’ button.</p>",
 			"width":"400px",
 			"placement":"top",
 			"container":"body",
-			"step":1
-		},
-		{
-			"selector":"#manage-account-container > .well:first",
-			"title":"New Trym Request",
-			"content":"<p>There are two ways to create a New Trym Request. The first is via the Tracked Expenses list on the left side of your Overview page. The second is through this management tab.</p><p>By clicking on the text box above (Comcast, Geico, Gold’s Gym, …) you can either type in the name of a merchant whose service you’d like Trym to modify or select a merchant from the drop down list.</p>",
-			"width":"400px",
-			"placement":"bottom",
-			"container":"body",
 			"step":2
-		},		
+		},
 		{
 			"selector":"#charge-index-pills",
 			"title":"Overview Tabs",
-			"content":"<p>At the top of the Overview page, you can choose from the Account Management, Linked Accounts, or All Charges tabs.</p><p>The Account Management tab allows you to create a New Trym Request and to see your Trym Request History.</p><p>The Linked Accounts tab shows you which, if any, of your financial accounts have been linked to your Trym Account. By linking accounts, Trym can suggest which of your charges may be recurring and worth tracking or even help you locate charges that you had forgotten about (you’d be surprised how common this is). Trym is always expanding its list of linkable accounts, so if your financial institution isn’t currently shown on this list, please check back soon.</p><p>All Charges will show you a comprehensive list of the charges that are associated with your Linked Accounts. This is one additional place that you can scan through your charges to locate any services that you’d like tracked or modified by Trym.</p>",
+			"content":"<p>You're viewing the manage account page now.</p><p>The <strong>Linked Accounts</strong> tab shows you which credit or bank accounts are linked to your Trym Account and lets you link new ones.</p><p><strong>All Charges</strong> is a list of the charges that are associated with your Linked Accounts, both those that you've added, and those that were synced from your linked acounts</p>",
 			"width":"400px",
 			"placement":"bottom",
 			"container":"body",
