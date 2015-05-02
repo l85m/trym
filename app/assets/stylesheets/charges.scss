@@ -158,7 +158,6 @@ label[for=charge_renewal_period_in_words]{
 
 #new-user-link-text{
 	width: 100%;
-	margin-top: 60px;
 }
 @media (min-width: 1200px) {
 	#new-user-merchant-selection{ margin-left: 20px; }
@@ -166,7 +165,7 @@ label[for=charge_renewal_period_in_words]{
 @media (min-width: 1200px) and (min-height: 600px) {
 	#new-user-link-text{
 		position: absolute;
-		bottom: 50px;
+		bottom: 100px;
 		margin-top: 0px;
 	}
 }

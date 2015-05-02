@@ -24,14 +24,17 @@
                 continue
                 %i.fa.fa-arrow-circle-right
 
-      %p.lead#new-user-link-text.text-center
-        You can also
-        %strong
-          =link_to charge_wizard_path(:select_financial_institutions), class: "icon-link" do 
-            link your 
-            %i.fa.fa-credit-card
-            accounts
-        and trym will find and track your recurring expenses for you!
+      
+      #new-user-link-text.text-center
+        %h3 No Services to Manage Right Now?
+        %p.lead
+          You can also
+          %strong
+            =link_to charge_wizard_path(:select_financial_institutions), class: "icon-link" do 
+              link your 
+              %i.fa.fa-credit-card
+              accounts
+          and trym will find and track your recurring expenses for you!
 
 :javascript
   $('#charge_merchant_id').prepend("<option></option>").val(function(){return $('[selected]',this).val() ;})
