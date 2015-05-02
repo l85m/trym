@@ -22,6 +22,10 @@ every 1.day, :at => '1:30 am' do
  	runner "AlertWorker.perform_async"
 end
 
+every 1.minute do 
+	runner "AlertWorker.perform_async"
+end
+
 every '30 0 1 * *' do
 	runner "SummaryWorker.perform_async"
 end
