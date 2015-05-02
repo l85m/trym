@@ -316,7 +316,7 @@ $(document).ready(function(){
         {
             selector = selector || '.bootstro';
 
-            $elements = $(selector);
+            $elements = $(selector).filter("[data-bootstro-step]");
             count  = $elements.size();
             if (count > 0 && $('div.bootstro-backdrop').length === 0)
             {

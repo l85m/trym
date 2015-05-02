@@ -6,10 +6,11 @@
   -(@charges.select(&:next_billing_date).sort_by(&:next_billing_date) + @charges.reject(&:next_billing_date)).each do |charge|
     =render partial: "shared/charge_item", locals: {charge: charge}
 
-  %p.text-center
-    %strong
-      =link_to linked_accounts_path, class: "icon-link", id: "link-account-side-list" do 
-        Link some of your 
-        %i.fa.fa-credit-card
-        accounts
-    and trym will find and track your recurring expenses for you
+  #link-account-link
+    %p.text-center
+      %strong
+        =link_to linked_accounts_path, class: "icon-link" do 
+          Link some of your 
+          %i.fa.fa-credit-card
+          accounts
+      and trym will find and track your recurring expenses for you
