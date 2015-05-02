@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150429125437) do
+ActiveRecord::Schema.define(version: 20150502012646) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,6 +27,7 @@ ActiveRecord::Schema.define(version: 20150429125437) do
     t.datetime "phone_verified"
     t.text     "confirmation_code"
     t.hstore   "account_data",      default: {}, null: false
+    t.text     "temp_phone"
   end
 
   add_index "account_details", ["user_id"], name: "index_account_details_on_user_id", using: :btree
@@ -167,7 +168,7 @@ ActiveRecord::Schema.define(version: 20150429125437) do
     t.string   "option"
     t.boolean  "accept_equipment_return", default: false,     null: false
     t.integer  "fee_limit",               default: 0,         null: false
-    t.text     "contact_preference"
+    t.text     "contact_preference",      default: "call"
     t.integer  "operator_id"
   end
 

@@ -1,18 +1,8 @@
--@charges = User.first.charges.recurring.select{ |c| c.amount_charged_in_month > 0 }
--@user = User.first
 !!!
 %html
   %head
-    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %meta{content: "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
   %body
-    .paragraph-spacer
-
-    %p.text-center
-      %i.fa.fa-tags.recurring-factor.recurring-factor-good
-      %i.fa.fa-shopping-cart.recurring-factor.recurring-factor-good
-      %i.fa.fa-calendar.recurring-factor.recurring-factor-bad
-      %i.fa.fa-usd.recurring-factor.recurring-factor-bad
-    
     %div{style: "font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:14px; line-height:1.428571429; margin:0"}
       %div{style: "margin:20px auto; padding:5px; width:500px"}
         %div{style: "min-height: 35px;"}
@@ -40,7 +30,7 @@
           %div{style: "border-top-color:lightgray; border-top-style:solid; border-top-width:1px; border-bottom-color:lightgray; border-bottom-style:solid; border-bottom-width:1px; margin-bottom:20px; margin-top:20px; padding-top:20px; padding-bottom:20px;"}
             %p{style: "text-align:center;font-weight:200; margin: 10px auto; font-size: 110%;"}
               You spent 
-              %span{style:"font-weight: 700;"}=number_to_currency( @charges.inject(0.0){ |s, c| s += c.amount_charged_in_month } / 100.0 )
+              %span{style:"font-weight: 700;"}=number_to_currency( @charges.inject(0.0){ |s, c| s += c.amount_charged_last_month } / 100.0 )
               last month on recurring expenses.
           %div{style: "text-align:center; margin: 20px auto;"}
             %strong Here's this month's recurring expenses:
@@ -49,12 +39,13 @@
               %dt{style: "clear:left; float:left; margin-left:8px; overflow:hidden; text-align:left; text-overflow:ellipsis; white-space:nowrap; font-weight:400; width: 250px; margin-left: 70px;"}
                 ="#{charge.descriptor}"
               %dd{style: "margin-left:280px; text-align:right; width:140px"}
-                =number_to_currency charge.amount_charged_in_month / 100.0
+                =number_to_currency charge.amount_charged_last_month / 100.0
                 =link_to "trym", stop_orders_url(charge_id: charge.id), method: :post, style: "vertical-align: bottom; background: #81CAA6; color: #FFF; border-radius:4px; display:inline-block; font-size:11px; font-weight:normal; margin-bottom:0; padding: 2px 4px; text-align:center; text-decoration: none;"
+
           %div{:align => "left", style: "margin-top:20px; text-align:center; padding-top: 20px; border-top: solid lightgray 1px;"}
             %p{style: "margin:0 0 10px"}
               Click
-              =link_to "here", edit_user_registration_path(@user), style: "color: #81CAA6"
+              =link_to "here", edit_user_registration_url(@user), style: "color: #81CAA6"
               to change how often and how we contact you or reply to this email if you have questions or feedback.
             %p
               Thank you for your membership!

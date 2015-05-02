@@ -16,9 +16,14 @@
 
 set :output, "~/trym/shared/log/cron_log.log"
 
-every 6.hours do
+every 1.day, :at => '1:30 am' do
   runner "PlaidFinancialInstitutionUpdater.perform_async"
   runner "PlaidCategoryUpdater.perform_async"
+ 	runner "AlertWorker.perform_async"
+end
+
+every '30 0 1 * *' do
+	runner "SummaryWorker.perform_async"
 end
 
 # Learn more: http://github.com/javan/whenever

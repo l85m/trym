@@ -61,6 +61,6 @@ class AccountDetailsController < ApplicationController
     end
 
     def account_detail_params
-      params.require(:account_detail).permit( :first_name, :last_name, :phone )
+      params.require(:account_detail).permit( :first_name, :last_name, :temp_phone )
     end
 end

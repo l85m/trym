@@ -2,9 +2,13 @@
   .row
     .col-md-10.col-md-offset-1
       =render 'contact_preferences'
+      #account-detail-form.text-center
+        =render 'account_details/inline_form'
+
+  .paragraph-spacer
+  
   .row
     .col-md-6.col-md-offset-3.text-center
-      %h2.modal-header-text Edit Profile
       = simple_form_for resource, as: resource_name, url: registration_path(resource_name), html: { method: :put } do |f|
         = f.error_notification
         .form-inputs

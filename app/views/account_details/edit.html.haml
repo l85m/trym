@@ -11,7 +11,7 @@
           we'll verify your phone number by sending you a text message so grab your phone before you hit submit
 
         .form-inputs
-          = f.input :phone, label: "Phone Number", as: :string, input_html: { value: @account_detail.formatted_phone }
+          = f.input :temp_phone, label: "Phone Number", as: :string, input_html: { value: @account_detail.formatted_phone }
 
         .form-actions{style: "margin-top: 10px;"}
           = render 'shared/cancel_button'
@@ -27,7 +27,7 @@
 
 :javascript
 
-  $('#account_detail_phone').formatter({
+  $('#account_detail_temp_phone').formatter({
     'pattern': '({{999}}) {{999}}-{{9999}}',
     'persistent': true
   });

@@ -5,7 +5,10 @@ class AccountDetail < ActiveRecord::Base
   validates :confirmation_code, format: { with: /\A\d{4}\z/, message: "four numbers only" }, allow_blank: true
 
   phony_normalize :phone, :default_country_code => 'US'
+	phony_normalize :temp_phone, :default_country_code => 'US'
+	
 	validates_plausible_phone :phone, :normalized_country_code => 'US'
+	validates_plausible_phone :temp_phone, :normalized_country_code => 'US'
 
 	after_update :force_reverification, if: Proc.new { |detail| detail.phone_changed? } #################TODO
 
@@ -21,7 +24,7 @@ class AccountDetail < ActiveRecord::Base
 		generate_confirmation_code
 		Twilio::REST::Client.new.account.sms.messages.create(
 			from: Rails.application.secrets.twilio_from_number,
-			to: phone,
+			to: temp_phone,
 			body: "Hi There! Here's your verification code from trym.io: #{confirmation_code}"
 		)
 	end
@@ -31,8 +34,8 @@ class AccountDetail < ActiveRecord::Base
 	end
 
 	def confirmed?( confirm_param )
-		if confirm_param == confirmation_code || phone_verified.present?
-			update(phone_verified: Time.now, confirmation_code: nil)
+		if confirm_param == confirmation_code
+			update(phone_verified: Time.now, confirmation_code: nil, phone: temp_phone, temp_phone: nil)
 		else
 			false
 		end
@@ -46,6 +49,8 @@ class AccountDetail < ActiveRecord::Base
 
 	def force_reverification
 		self.phone_verified = nil
+		self.temp_phone = phone
+		self.phone = nil
 	end
 
 end

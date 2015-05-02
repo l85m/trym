@@ -28,7 +28,7 @@
         -else
           %button.btn.btn-primary-o.btn-sm.contact-pref-button{ class: current_user.text_summary ? "active" : "", data: { enabled: current_user.text_summary.to_s, url: contact_preference_path(current_user.id, text_summary: "placeholder"), target: "text"}}
             = current_user.text_summary ? "text" : "do not text"
-
+  
 :javascript
   function update_pref_button(button) {
     if( button.hasClass('active') ) {

@@ -1,7 +1,7 @@
 !!!
 %html
   %head
-    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %meta{content: "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
   %body
     %div{style: "font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:14px; line-height:1.428571429; margin:0"}
       %div{style: "margin:20px auto; padding:5px; width:350px"}
@@ -15,8 +15,8 @@
             </g>
             </svg>
             %span{style: "font-size:16px; font-weight:500; vertical-align:super;"}  Heads up!
-          %div{:align => "right", style: "float:right; min-height:1px; text-align:right; width:50%"}
-            %a{:href => "https://trym.io/users/sign_in", style: "background: #81CAA6; color: #FFF; border-radius:4px; border:1px solid #81caa6; display:inline-block; font-size:14px; font-weight:normal; margin-bottom:0; padding:6px 12px; text-align:center; text-decoration: none;"} Log In
+          %div{align: "right", style: "float:right; min-height:1px; text-align:right; width:50%"}
+            =link_to "Log In", new_user_session_url, style: "background: #81CAA6; color: #FFF; border-radius:4px; border:1px solid #81caa6; display:inline-block; font-size:14px; font-weight:normal; margin-bottom:0; padding:6px 12px; text-align:center; text-decoration: none;"
         %div      
           %div{style: "text-align:center;"}
             %p{style: "font-size:300%; font-weight:400; line-height:1.4; margin:0 auto;"}
@@ -26,21 +26,20 @@
           -@charges.each do |charge|
             %dl{style: "border-top-color:lightgray; border-top-style:solid; border-top-width:1px; margin-bottom:10px; margin-top:10px; padding-top:10px;"}
               %dt{style: "clear:left; float:left; font-weight:bold; margin-left:8px; overflow:hidden; text-align:left; text-overflow:ellipsis; white-space:nowrap; width:140px"} Charge:
-              %dd{style: "margin-left:150px; text-align:left; width:200px"}=charge.merchant.present? ? charge.merchant_name : charge.description
-              %dt{style: "clear:left; float:left; font-weight:bold; margin-left:8px; overflow:hidden; text-align:left; text-overflow:ellipsis; white-space:nowrap; width:140px"} Amount:
-              %dd{style: "margin-left:150px; text-align:left; width:200px"}=number_to_currency charge.amount_in_currency
+              %dd{style: "margin-left:150px; text-align:left; width:200px"}=charge.descriptor
+              -if charge.amount_in_currency.present?
+                %dt{style: "clear:left; float:left; font-weight:bold; margin-left:8px; overflow:hidden; text-align:left; text-overflow:ellipsis; white-space:nowrap; width:140px"} Amount:
+                %dd{style: "margin-left:150px; text-align:left; width:200px"}=number_to_currency charge.amount_in_currency
               -if charge.linked_account.present?
                 %dt{style: "clear:left; float:left; font-weight:bold; margin-left:8px; overflow:hidden; text-align:left; text-overflow:ellipsis; white-space:nowrap; width:140px"} Account Charged:
                 %dd{style: "margin-left:150px; text-align:left; width:200px"}= charge.linked_account.account_name
-              %dt{style: "clear:left; float:left; font-weight:bold; margin-left:8px; overflow:hidden; text-align:left; text-overflow:ellipsis; white-space:nowrap; width:140px"} Date:
-              %dd{style: "margin-left:150px; text-align:left; width:200px"}= charge.next_billing_date.strftime
-            %div{:align => "center", style: "text-align:center"}
-              =link_to "stop this charge", new_charge_stop_order_url(charge), style: "background: #81CAA6; color: #FFF; border-radius:4px; border:1px solid #81caa6; display:inline-block; font-size:14px; font-weight:normal; margin-bottom:0; padding:6px 12px; text-align:center; text-decoration: none;"
+            %div{align: "center", style: "text-align:center"}
+              =link_to "cancel or downgrade this service", stop_orders_url(charge_id: charge.id), method: :post, style: "color: #81CAA6"
 
-          %div{:align => "left", style: "margin-top:20px; text-align:left"}
+          %div{align: "left", style: "margin-top:20px; text-align:left"}
             %p{style: "margin:0 0 10px"}
               Click
-              =link_to "here", edit_user_registration_path(user), style: "color: #81CAA6"
+              =link_to "here", edit_user_registration_url(@user), style: "color: #81CAA6"
               to change how often and how we contact you or reply to this email if you have questions or feedback.
             %p{style: "margin:0 0 10px"}
               Thank you for your membership!

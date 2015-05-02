@@ -7,10 +7,10 @@ $("#details-submit-button").click(function(e) {
 	$("#verification-form").submit()
 });
 
-$("#account_detail_phone").prop('disabled', true);
-$("#account_detail_phone").animate({width: "122px"},500);
+$("#account_detail_temp_phone").prop('disabled', true);
+$("#account_detail_temp_phone").animate({width: "122px"},500);
 
-$("#account_detail_phone").after("<div class='form-group'><input placeholder='4 digit code' style='width:0px; margin-left: 5px' class='form-control' id='verification-code'></input></div>");
+$("#account_detail_temp_phone").after("<div class='form-group'><input placeholder='4 digit code' style='width:0px; margin-left: 5px' class='form-control' id='verification-code'></input></div>");
 $("#verification-code").animate({width: "100px"},500);
 $('#verification-code').formatter({ 'pattern': '{{9999}}' });
 $("#verification-code").focus();

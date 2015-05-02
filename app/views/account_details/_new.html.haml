@@ -11,7 +11,7 @@
   = simple_form_for AccountDetail.new(user: current_user) , remote: true, html: {class: "form-inline"} do |f|
     = f.input :first_name, label: "First Name", required: true, as: :string, input_html: {placeholder: "first name", class: "text-left"}, label: false
     = f.input :last_name, label: "Last Name", required: true, as: :string, input_html: {placeholder: "last name", class: "text-left"}, label: false
-    = f.input :phone, label: "Mobile Phone", required: true, as: :string, input_html: {placeholder: "mobile phone", class: "text-left"}, label: false
+    = f.input :temp_phone, label: "Mobile Phone", required: true, as: :string, input_html: {placeholder: "mobile phone", class: "text-left"}, label: false
     = f.button :submit, "Continue", class: "btn-primary"
 
   %p
@@ -21,6 +21,6 @@
 :javascript
   $("#account-data-explain-tooltip").tooltip({'title':"We need to know your name to manage your account and your phone number so we can contact you if needed."});
 
-  $('#account_detail_phone').formatter({
+  $('#account_detail_temp_phone').formatter({
     'pattern': '({{999}}) {{999}}-{{9999}}'
   });

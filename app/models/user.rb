@@ -17,6 +17,14 @@ class User < ActiveRecord::Base
  	has_one :account_detail
   has_many :stop_order_jobs, foreign_key: 'operator_id', class_name: "StopOrder"
 
+  scope :alertable, -> {where("email_alert = ? or text_alert = ?", true, true)}
+  scope :text_alertable, -> {where(text_alert: true)}
+  scope :email_alertable, -> {where(email_alert: true)}
+  
+  scope :summarizable, -> {where('email_summary = ? or text_summary = ?', true, true)}
+  scope :text_summarizable, -> {where(text_summary: true)}
+  scope :email_summarizable, -> {where(email_summary: true)}
+
   scope :admins, -> {where(admin: true)}
 
  	default_scope { includes(:account_detail) }

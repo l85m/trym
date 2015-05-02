@@ -7,8 +7,21 @@ class StopOrdersController < ApplicationController
   respond_to :html, :js
 
   def index
-    @stop_orders = current_user.stop_orders.active_or_complete.order(created_at: :desc)
-    respond_with(@stop_orders)
+    if params["charge_id"] #handle mailer links
+      @charge = current_user.charges.find(params["charge_id"])
+      redirect_to root_path unless @charge.present?
+      
+      if @charge.has_active_stop_order?
+        redirect_to stop_order_path(@charge.stop_orders.active_stop_order), notice: "Trym is already working on a request for this service."
+      else
+        @stop_order = StopOrder.find_or_create_by( charge_id: @charge.id, status: "started" )
+        redirect_to stop_order_manage_account_path(:manage_account, stop_order_id: @stop_order.id)
+      end
+    else
+
+      @stop_orders = current_user.stop_orders.active_or_complete.order(created_at: :desc)
+      respond_with(@stop_orders)
+    end
   end
 
   def show
@@ -33,9 +46,10 @@ class StopOrdersController < ApplicationController
 
   def create
     @charge = current_user.charges.find( params[:charge_id] )
+    redirect_to root_path unless @charge.present?
 
-    if @charge.has_stop_order_or_is_stopped?
-      not_found
+    if @charge.has_active_stop_order?
+      redirect_to stop_order_path(@charge.stop_orders.active_stop_order), notice: "Trym is already working on a request for this service."
     else
       @stop_order = StopOrder.find_or_create_by( charge_id: @charge.id, status: "started" )
       redirect_to stop_order_manage_account_path(:manage_account, stop_order_id: @stop_order.id)

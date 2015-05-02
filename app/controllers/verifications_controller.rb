@@ -3,7 +3,7 @@ class VerificationsController < ApplicationController
   before_action :set_account_detail, only: [:new, :create]
 
   def new
-  	@account_detail.send_confirmation_code
+    @account_detail.send_confirmation_code
   end
 
   def create

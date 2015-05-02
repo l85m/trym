@@ -33,12 +33,27 @@ class Charge < ActiveRecord::Base
   scope :from_link, -> { where.not(transaction_request_id: nil) }
   scope :from_user, -> { where(transaction_request_id: nil) }
 
-  scope :chartable, -> { where('renewal_period_in_weeks > ?', 0).where('amount > 0').where.not(billing_day: nil) }
+  scope :has_recurring_period, -> { where('renewal_period_in_weeks > ?', 0).where.not( renewal_period_in_weeks: nil ) }
+  scope :has_billing_day, -> { where.not(billing_day: nil) }
+
+  scope :chartable, -> { has_recurring_period.has_billing_day.where('amount > 0') }
 
   fuzzily_searchable :plaid_name
 
   before_validation :add_user_if_linked_account_exists
   # before_validation :update_recurring_score_if_recurring_changed
+
+  def self.due_in_three_days
+    recurring.has_billing_day.has_recurring_period.select do |charge|      
+      charge.next_billing_date == 3.days.from_now.to_date
+    end
+  end
+
+  def self.charged_in_month
+    recurring.has_billing_day.has_recurring_period.select do |charge|      
+      charge.amount_charged_last_month > 0
+    end
+  end
 
 
   def self.new_transaction(new_after = 30.days.ago.to_date)
@@ -96,13 +111,13 @@ class Charge < ActiveRecord::Base
     amount.to_f / 100.0
   end
 
-  def amount_charged_in_month
+  def amount_charged_last_month
     case renewal_period_in_weeks
     when 4 then 1
     when 2 then 2
     when 1 then 4
     else
-      bills_since(Date.today.beginning_of_month.to_date)
+      bills_since(1.month.ago.beginning_of_month.to_date)
     end * amount
   end
 
@@ -169,8 +184,8 @@ class Charge < ActiveRecord::Base
     Charge.renewal_period_in_words[renewal_period_in_weeks]
   end
 
-  def has_stop_order_or_is_stopped?
-    stop_orders.where(status: ["working", "succeeded", "requested"]).present?
+  def has_active_stop_order?
+    stop_orders.where(status: ["working", "requested"]).present?
   end
 
   def active_stop_order
