@@ -25,6 +25,8 @@
 :javascript
   $('#charge_merchant_id').prepend("<option></option>").val(function(){return $('[selected]',this).val() ;})
   $('#charge_merchant_id').select2({
+    formatResult: repoFormat,
+    formatSelection: repoFormat,
     placeholder: "#{merchant_name_example_helper(@trym_category_id)}",
     width: '100%',
     dropdownCssClass: "new-user-select2-dropdown"
