@@ -38,12 +38,14 @@ class AccountDetailsController < ApplicationController
   end
 
   def edit
+    @account_detail ||= AccountDetail.new( user_id: current_user.id )
     if params[:referring_stop_order_id]
       session[:referring_stop_order_id] = params[:referring_stop_order_id]
     end
   end
 
   def update
+    @account_detail ||= AccountDetail.new( user_id: current_user.id )
 		if account_detail_params[:temp_phone].present? && @account_detail.update( account_detail_params )
 			redirect_to controller: "verifications", action: "new"
 		else

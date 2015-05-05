@@ -11,10 +11,7 @@
         %br.hidden-lg.hidden-md.hidden-sm
         %button.btn.btn-primary-o.btn-sm.contact-pref-button{ class: current_user.email_alert ? "active" : "", data: { enabled: current_user.email_alert.to_s, url: contact_preference_path(current_user.id, email_alert: "placeholder"), target: "email"}}
           = current_user.email_alert ? "email" : "do not email"
-        -unless current_user.phone_verified?
-          =link_to new_account_detail_path(enable_text_alert: true), class: "btn btn-primary-o btn-sm", remote: true do 
-            do not text
-        -else
+        -if current_user.phone_verified?
           %button.btn.btn-primary-o.btn-sm.contact-pref-button{ class: current_user.text_alert ? "active" : "", data: { enabled: current_user.text_alert.to_s, url: contact_preference_path(current_user.id, text_alert: "placeholder"), target: "text"}}
             = current_user.text_alert ? "text" : "do not text"
       %p.lead.without-margin{ style: 'margin-top: 10px;'}
@@ -22,10 +19,7 @@
         %br.hidden-lg.hidden-md.hidden-sm
         %button.btn.btn-primary-o.btn-sm.contact-pref-button{ class: current_user.email_summary ? "active" : "", data: { enabled: current_user.email_summary.to_s, url: contact_preference_path(current_user.id, email_summary: "placeholder"), target: "email"}}
           = current_user.email_summary ? "email" : "do not email"
-        -unless current_user.phone_verified?
-          =link_to new_account_detail_path(enable_text_summary: true), class: "btn btn-primary-o btn-sm", remote: true do 
-            do not text
-        -else
+        -if current_user.phone_verified?
           %button.btn.btn-primary-o.btn-sm.contact-pref-button{ class: current_user.text_summary ? "active" : "", data: { enabled: current_user.text_summary.to_s, url: contact_preference_path(current_user.id, text_summary: "placeholder"), target: "text"}}
             = current_user.text_summary ? "text" : "do not text"
 

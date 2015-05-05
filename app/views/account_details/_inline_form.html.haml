@@ -1,8 +1,9 @@
+-account = current_user.account_detail.presence || AccountDetail.new(user_id: current_user.id)
 .paragraph-spacer
-= simple_form_for current_user.account_detail, remote: true, html: {class: "form-inline"} do |f|
+= simple_form_for account, remote: true, html: {class: "form-inline"} do |f|
   = f.input :first_name, label: "First Name", required: true, as: :string, input_html: {placeholder: "first name", class: "text-left", required: true}, label: false
   = f.input :last_name, label: "Last Name", required: true, as: :string, input_html: {placeholder: "last name", class: "text-left"}, label: false
-  = f.input :temp_phone, label: "Mobile Phone", required: true, as: :string, input_html: {placeholder: "mobile phone", class: "text-left", value: current_user.account_detail.formatted_phone}, label: false
+  = f.input :temp_phone, label: "Mobile Phone", required: true, as: :string, input_html: {placeholder: "mobile phone", class: "text-left", value: account.formatted_phone}, label: false
   = f.button :submit, "Continue", class: "btn-primary", id: "details-submit-button"
 
 %p
