@@ -23,13 +23,13 @@ class StopOrder < ActiveRecord::Base
   def status_message
     case status
     when "requested"
-      "We've recieved your cancelation request for #{chage.descriptor} and will start working on it soon"
+      "We've recieved your cancelation request for #{charge.descriptor} and will start working on it soon"
     when "working"
-      "We're working on canceling your account with #{chage.descriptor}, we'll let you know if we have any issues"
+      "We're working on canceling your account with #{charge.descriptor}, we'll let you know if we have any issues"
     when "succeeded"
-      "We've succesfully canceled your account with #{chage.descriptor}! Please see below for details"
+      "We've succesfully canceled your account with #{charge.descriptor}! Please see below for details"
     when "failed"
-      "Unfortunately we were not able to cancel your account with #{chage.descriptor}. Please see below for details"
+      "Unfortunately we were not able to cancel your account with #{charge.descriptor}. Please see below for details"
     end
   end
 
