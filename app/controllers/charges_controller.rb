@@ -75,10 +75,7 @@ class ChargesController < ApplicationController
   end
 
   def update
-    if params[:charge][:update_from].present? && ( params[:charge][:update_from] == "/" || params[:charge][:update_from].include?("charges") )
-      @update_from_charges_index = true
-    end
-    @charge.update!(charge_params)
+    @charge.update(charge_params)
     respond_with(@charge)
   end
 

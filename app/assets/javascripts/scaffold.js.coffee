@@ -14,16 +14,6 @@
   	    $.get('/account_details/turn_off_intro')
   	    return
 
-@repoFormat = (repo) ->
-  if !repo.id 
-    window.catName = repo.text
-    "<strong><i class='fa fa-tag'></i> " + repo.text + "</strong>"
-  else
-    "<div class='row'><div class='col-sm-6'>" + repo.text + "</div><div class='col-sm-6 text-right'><small>" + window.catName + "</div></div>"
-
-repoFormatSelection = (repo) ->
-  repo.full_name
-
 @error_button_flash = (button) ->
   #flash button red
   button.css 'background-color', 'red'

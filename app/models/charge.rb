@@ -41,6 +41,7 @@ class Charge < ActiveRecord::Base
   fuzzily_searchable :plaid_name
 
   before_validation :add_user_if_linked_account_exists
+  before_validation :add_trym_category_if_merchant_has_one
   # before_validation :update_recurring_score_if_recurring_changed
 
   def self.due_in_three_days
@@ -216,6 +217,12 @@ class Charge < ActiveRecord::Base
   end
 
   private
+
+  def add_trym_category_if_merchant_has_one
+    if merchant.present? && merchant.trym_category_id.present?
+      self.trym_category_id = merchant.trym_category_id
+    end
+  end
 
   def add_user_if_linked_account_exists
     if user_id.nil? && linked_account_id.present?

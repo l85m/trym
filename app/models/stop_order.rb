@@ -73,7 +73,7 @@ class StopOrder < ActiveRecord::Base
   end
 
   def missing_required_fields
-    if merchant.present? && merchant.required_cancelation_fileds.present?
+    if merchant.present? && merchant.cancelation_fields.present? && merchant.required_cancelation_fileds.present?
       present_fields = ( cancelation_data.presence || {} ).select{ |_,v| v.present? }.keys.map(&:to_sym)
       required_fields = merchant.required_cancelation_fileds.map(&:to_sym) + (option == "cancel_all" ? [] : [:change_description])
       required_fields - present_fields
@@ -83,7 +83,7 @@ class StopOrder < ActiveRecord::Base
   private
 
   def update_account_details_if_reusable
-    if merchant.present? && merchant.reusable_cancelation_fields.present?
+    if merchant.present? && merchant.cancelation_fields.present? && merchant.reusable_cancelation_fields.present?
       reusable_data = cancelation_data.select{ |k,_| merchant.reusable_cancelation_fields.include? k.to_s }
       if reusable_data.present?
         account_details.update( account_data: account_details.account_data.merge( reusable_data ) )

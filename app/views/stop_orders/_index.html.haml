@@ -12,7 +12,7 @@
       .paragraph-spacer.visible-lg-block
       =form_for current_user.charges.build, url: create_then_manage_charges_path do |f|
         %h1#new-user-merchant-selection
-          =f.select :merchant_id, grouped_options_for_select( TrymCategory.merchant_select )
+          =f.text_field :merchant_id, data: { url: merchants_path, placeholder: merchant_name_example_helper(@trym_category_id) }
         .pull-right
           %button.btn.btn-default#disabled-next-button{disabled: "disabled"}
             enter a service provider above to continue
@@ -21,21 +21,6 @@
             continue
             %i.fa.fa-arrow-circle-right
 
-
-:javascript
-  $('#charge_merchant_id').prepend("<option></option>").val(function(){return $('[selected]',this).val() ;})
-  $('#charge_merchant_id').select2({
-    formatResult: repoFormat,
-    formatSelection: repoFormat,
-    placeholder: "#{merchant_name_example_helper(@trym_category_id)}",
-    width: '100%',
-    dropdownCssClass: "new-user-select2-dropdown"
-  });
-
-  $('#charge_merchant_id').on("change", function(e) {
-    $("#disabled-next-button").hide();
-    $("#enabled-next-button").css("display", "inline");
-  });
 
 .paragraph-spacer
 -if @stop_orders.present?

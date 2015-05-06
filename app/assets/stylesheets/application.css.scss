@@ -292,6 +292,9 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 	border-color: #C0E0D0;
 	a{ color: $brand-color; }
 }
+.ajax-opt-group{
+	margin-left: -7px;
+}
 
 @media (min-width: 768px) {
 	.form-horizontal .control-label{ padding-top: 0px; }

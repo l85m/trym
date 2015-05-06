@@ -10,7 +10,7 @@
         .form-inputs
           = f.input :recurring_score, as: :hidden, input_html: {value: 10, class: "text-center"}
           = f.input :recurring, as: :hidden, input_html: {value: true, class: "text-center"}
-          = f.input :merchant_id, as: :string, label: "Which company is the charge from?", input_html: {class: "text-center"}
+          = f.input :merchant_id, as: :string, label: "Which company is the charge from?", input_html: {class: "text-center", data: {placeholder: merchant_name_example_helper(@trym_category_id), url: merchants_path(trym_category_id: @trym_category_id)}}
           = f.association :trym_category, label: "Charge Category", input_html: {class: "text-center"}
           
         .form-inputs
@@ -28,24 +28,6 @@
 
 :javascript
   $('#charge_trym_category_id').select2({minimumResultsForSearch: Infinity, allowClear: true});
-
-  function format(item) { name: return item.name; };
-
-  $('.modal-dialog').find("#charge_merchant_id").select2({
-    placeholder: "#{merchant_name_example_helper(@trym_category_id)}",
-    minimumInputLength: 3,
-    data:{ text: "name" },
-    formatSelection: format,
-    formatResult: format,
-    ajax:{ 
-      url: "#{merchants_path(trym_category_id: @trym_category_id)}",
-      dataType: 'json',
-      quietMillis: 250,
-      data: function (term, page) { return { q: term }; },
-      results: function (data, page) { return { results: data }; },
-      cache: true
-    }
-  });
   
   $('#charge_billing_day').datepicker({dateFormat: 'yy-mm-dd'});
 

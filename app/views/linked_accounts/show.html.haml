@@ -38,16 +38,6 @@
       button.parent().parent().parent().after("<p id='grouped-charge-button-loader' class='lead text-center'><i class='fa fa-cog fa-spin'></i> loading...</p>");
     };
 
-    $("[name='track-switch']").change( function() {
-      var state = $(this).is(":checked")
-      $.ajax({
-        type: "PUT",
-        url: "/charges/" + $(this).data("charge-id"),
-        data: { charge: { recurring: state }, scan: "scan" },
-        dataType: "script"
-      });
-    });
-
     if( $('#modal-container').find('#loading-modal').size() > 0 ){
       $(".modal-dialog").remove();
       $("#modal-container").modal('hide');

@@ -11,7 +11,7 @@
         .form-inputs
           -if @trym_category_id.present?
             = f.input :trym_category_id, as: :hidden, input_html: {value: @trym_category_id}
-          = f.input :merchant_id, as: :string, label: "Which company is the charge from?"
+          = f.input :merchant_id, as: :string, label: "Which company is the charge from?", input_html: {class: "text-center", data: {placeholder: merchant_name_example_helper(@trym_category_id), url: merchants_path(trym_category_id: @trym_category_id), init: {text: "#{@charge.merchant_name}", id: "#{@charge.merchant.present? ? @charge.merchant.id : nil}" }.to_json }}
           = f.association :trym_category, label: "Charge Category", input_html: {class: "text-center"}
 
         .form-inputs
@@ -29,26 +29,6 @@
 :javascript
   $('#charge_trym_category_id').select2({minimumResultsForSearch: Infinity, allowClear: true});
 
-  function format(item) { name: return item.name; };
-
-  $('.modal-dialog').find("#charge_merchant_id").select2({
-    minimumInputLength: 3,
-    data:{ text: "name" },
-    initSelection : function (element, callback) {
-      callback({"name":"#{@charge.merchant_name}","id":"#{@charge.merchant.present? ? @charge.merchant.id : nil}"});
-    },
-    formatSelection: format,
-    formatResult: format,
-    ajax:{ 
-      url: "#{merchants_path}",
-      dataType: 'json',
-      quietMillis: 250,
-      data: function (term, page) { return { q: term }; },
-      results: function (data, page) { return { results: data }; },
-      cache: true
-    }
-  });
-  
   $('#charge_billing_day').datepicker({dateFormat: 'yy-mm-dd'});
 
   $('#charge_renewal_period_in_weeks').select2({minimumResultsForSearch: Infinity});

@@ -4,8 +4,9 @@
       <span class="brand-color">t</span>rym
     %p.lead{style: "font-size: 200%;"}
       manage recurring expenses and start saving
-    =link_to "Sign In", new_user_session_path, remote: true, class: "btn btn-lg btn-primary"
-    or
-    =link_to "Request an Invite", new_invite_request_path, remote: true, class: "btn btn-lg btn-primary"
+    -unless user_signed_in?
+      =link_to "Sign In", new_user_session_path, remote: true, class: "btn btn-lg btn-primary"
+      or
+      =link_to "Request an Invite", new_invite_request_path, remote: true, class: "btn btn-lg btn-primary"
 
 =render 'home_carousel'

@@ -30,13 +30,19 @@ class Merchant < ActiveRecord::Base
 		end
 	end
 
-	def self.selection_search(query, category_id)
-		return nil unless query.present?
+	def self.selection_search(query=nil, category_id=nil)
+		return TrymCategory.merchant_select unless query.present?
+
 		if category_id.present?
-			find_by_fuzzy_name(query, limit: 5).reject{ |m| m.trym_category_id != category_id.to_i }.select(&:validated)
+			r = find_by_fuzzy_name(query, limit: 5).
+					reject{ |m| m.trym_category_id != category_id.to_i }.
+					select(&:validated)
 		else
-			find_by_fuzzy_name(query, limit: 5).select(&:validated)
-		end + [OpenStruct.new(id: query, name: "New: " + query)]
+			r = find_by_fuzzy_name(query, limit: 5).
+					select(&:validated)
+		end 
+		r = r.present? ? r.collect{ |m| { id: m.id, text: m.name, category: m.trym_category_name } } : {}
+		(r + [{ id: query, text: "New Provider: " + query, category: nil }]).to_json
 	end
 
 	def required_cancelation_fileds
@@ -45,6 +51,10 @@ class Merchant < ActiveRecord::Base
 
 	def reusable_cancelation_fields
 		cancelation_fields.select{ |_,a| a["reusable"] }.keys
+	end
+
+	def trym_category_name
+		trym_category.present? ? trym_category.name : nil
 	end
 
 end

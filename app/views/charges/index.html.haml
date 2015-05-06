@@ -1,7 +1,7 @@
 .container-fluid.scrollable-with-offset
 
   .row{style: 'padding: 0px 20px;'}
-    - if @charges.present?
+    - if current_user.charges.present?
       .col-sm-6.col-md-4.hidden-sm.hidden-xs.scrollable
         =render 'charge_list'
       .scrollable.col-md-8.col-sm-12

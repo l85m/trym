@@ -1,1 +1,31 @@
-<%= render "change_charge" %>
+$("#modal-container").modal('hide');
+$(".modal-dialog").remove();
+
+var charge_item = $("#charge-item-<%= @charge.id %>");
+var charge_row = $("#charge-row-<%= @charge.id %>");
+
+if(charge_row.size() > 0){
+  charge_row.replaceWith("<%= j render partial: 'charges/table/row', locals: {charge: @charge} %>");
+  activateChargeRow("<%= @category.present? ? @category.id : '' %>");
+}
+
+if($("#charge-side-list").is(":visible")){
+  $(".recurring-factor-cell").remove()
+
+  <% if @charge.recurring %>
+
+  	var charge_item_contents = "<%= j render partial: 'shared/charge_item', locals: {charge: @charge} %>";
+
+  	if( charge_item.size() > 0 ){
+  		charge_item.replaceWith(charge_item_contents).show();	
+  	} else {
+  		$("#charge-side-list > a:first-child").after(charge_item_contents);
+  	}
+
+	<% else %>
+
+		charge_item.hide();
+
+	<% end %>
+	
+}
