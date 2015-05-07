@@ -13,7 +13,6 @@ $ ->
 
     #change button text
     $("#contact-options-button > span.button-text").text $(this).data("where")
-    $("#contact-verb").text $(this).data("medium")
 
     #update request
     $("#stop_order_contact_preference").val $(this).data("medium") 
