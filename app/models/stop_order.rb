@@ -27,9 +27,18 @@ class StopOrder < ActiveRecord::Base
     when "working"
       "We're working on your request for #{charge.descriptor}, we'll let you know if we have any issues"
     when "succeeded"
-      "We've finished canceling your account with #{charge.descriptor}! Please contact us if you have any questions."
+      case option
+      when "cancel_all"
+        "We've finished canceling your account with #{charge.descriptor}! Check your email for a confirmation."
+      when "downgrade"
+        "We've finished downgrading your account with #{charge.descriptor}! Check your email for a confirmation."
+      when "upgrade"
+        "We've finished upgrading your account with #{charge.descriptor}! Check your email for a confirmation."
+      when "find_deals"
+        "We sent you some reccomendations for better deals, feel free to start a new trym request if you want us to look for something else."
+      end
     when "failed"
-      "Unfortunately we were not able to cancel your account with #{charge.descriptor}. Please see below for details"
+      "Unfortunately we were not able to complete your trym request for #{charge.descriptor}. Please see below for details"
     end
   end
 
