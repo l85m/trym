@@ -52,7 +52,7 @@ module ChargesHelper
       merchant_names = TrymCategory.find(trym_category_id).merchants.limit(2).pluck(:name)
       merchant_names.present? ? merchant_names.join(', ') + ', etc.' : "search for company"
     else
-      "Comcast, Geico, Gold's Gym, etc."
+      "Cable/Internet, Cell Phone, Insurance, etc."
     end
   end
 

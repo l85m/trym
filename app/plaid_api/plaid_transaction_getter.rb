@@ -1,7 +1,6 @@
 class PlaidTransactionGetter
   include Sidekiq::Worker
-  include Sidekiq::Status::Worker
-
+  
   sidekiq_options retry: false
 
   def perform(linked_account_id)
@@ -57,11 +56,8 @@ class PlaidTransactionGetter
     button_text = "Linked"
     button_tooltip = ""
     button_link = '/linked_accounts/' + @link.id.to_s
-    if @new_transactions
-      flash = "Done syncing your account.  <a href='#{Rails.application.routes.url_helpers.linked_account_path(@link)}'>Click here</a> to see review your transactions."
-    else
-      flash = ""
-    end
+    flash = "Done syncing your account.  <a href='#{Rails.application.routes.url_helpers.linked_account_path(@link)}'>Click here</a> to see review your transactions."
+ 
     @link.push_update_to_client({
       button_icon: button_icon, 
       button_text: button_text, 

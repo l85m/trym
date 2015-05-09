@@ -12,7 +12,10 @@
 //
 //= require jquery
 //= require jquery_ujs
-// require turbolinks disabled
+//= require pusher.min
+//= require highcharts
+//= require jquery_support_transition
+//= require jquery.formatter.min
 //= require_tree .
 //= require bootstrap/tab
 //= require bootstrap/modal
@@ -27,6 +30,5 @@
 //= require jquery-ui/autocomplete
 //= require jquery-ui/effect
 //= require select2
-//= require jquery.form-validator
 //= require j_growl_rails/jquery.jgrowl
 //= require bootstro

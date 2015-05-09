@@ -5,40 +5,52 @@
         %i.fa.fa-exclamation-circle{ style: "color: #f0ad4e;"}
         %span= @linked_account.error_message
 
-
--unless @linked_account.charges.present?
-  .row.text-center
-    .col-xs-10.col-xs-offset-1
-      %h3{style: "margin: 100px;"} 
-        %p We haven't find any charges in this account yet.  Check back soon! 
-        =link_to "unlink account", {action: "destroy", id: @linked_account.id}, method: :delete, class: "btn btn-danger btn-md linked-account-charges-buttons", style: "z-index: 9999;", data: {confirm: "Are you sure you want to unlink this account? This can't be undone."}
-
 -else 
   .container#scrollable-with-offset
     .row      
       .col-xs-12.scrollable
-        %h2
-          =@linked_account.financial_institution.name
-          %br.visible-xs-block
-          =link_to "unlink account", {action: "destroy", id: @linked_account.id}, method: :delete, class: "btn btn-danger btn-sm", data: {confirm: "Are you sure you want to unlink this account? This can't be undone and all non recurring charges will be deleted"}
+        -unless @linked_account.status == "unlinked"
+          %h2
+            =@linked_account.financial_institution.name
+            %br.visible-xs-block
+            =link_to unlink_linked_accounts_path(id: @linked_account.id), method: :post, class: "btn btn-danger btn-sm linked-account-charges-buttons", data: {confirm: "Are you sure you want to unlink this account? To relink it you will need to re-enter your account credentials."} do
+              %i.fa.fa-unlink{style: "color: white"}
+              unlink account
 
-          =link_to "save and continue", trym_referrer, class: "btn btn-primary btn-sm"
+        -else
+          %h2
+            =@linked_account.financial_institution.name
+          .unlinked-info-box
+            %h3
+              %i.fa.fa-unlink{style: "color: #f0ad4e"}
+              Account Unlinked
+              =link_to new_linked_account_path(financial_institution_id: @linked_account.financial_institution_id), remote: true, class: "btn btn-primary btn-xs" do
+                %i.fa.fa-link
+                relink 
+                %span.hidden-xs this account
+            %p This account has been unlinked. Trym will no longer automatically search your account for new transactions or update you on changes to tracked recurring charges from this account.  You may relink this account at any time by re-entering your linked account credentials.
 
-        %p.lead  
-          Transactions on this account for at least the past two years are displayed below. 
-          %strong Trym puts expenses which look recurring at the top of the list.
-          Tell Trym to monitor or manage any expense by checking "track" next to it.  Trym will try to alert you before future charges and find you better deals on similar services.
+        -if @linked_account.charges.present?
+          %p.lead  
+            Transactions on this account for at least the past two years are displayed below. 
+            %strong Trym puts expenses which look recurring at the top of the list.
+            Tell Trym to monitor or manage any expense by checking "track" next to it.  Trym will try to alert you before future charges and find you better deals on similar services.
+        
+          =render 'charges/table/table'
 
-        =render 'charges/table/table'
+        -else
+          .unlinked-info-box
+            %h3 
+              %i.fa.fa-warning{style: "color: #f0ad4e"}
+              No transactions found
 
-  =render "shared/charge_item_script"
-
-  :javascript
-    function buttonLoader(button) {
-      button.parent().parent().parent().after("<p id='grouped-charge-button-loader' class='lead text-center'><i class='fa fa-cog fa-spin'></i> loading...</p>");
-    };
-
-    if( $('#modal-container').find('#loading-modal').size() > 0 ){
-      $(".modal-dialog").remove();
-      $("#modal-container").modal('hide');
-    };
+            %p.lead
+              We haven't foudn any transactions in this account yet.  If you can see transactions on your financial institution's website or think there should be charges on this account please email us at
+              =link_to "support@trym.io", "mailto:support@trym.io?subject=Issues with Linked Account ID:#{@linked_account.id}"
+          .paragraph-spacer
+          .paragraph-spacer
+          .paragraph-spacer
+          .paragraph-spacer
+          .paragraph-spacer
+          .paragraph-spacer
+          .paragraph-spacer

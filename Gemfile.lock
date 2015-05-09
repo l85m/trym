@@ -38,7 +38,7 @@ GIT
 
 GIT
   remote: git://github.com/demosophy/plaid-ruby.git
-  revision: 3a44d34f1a2bfb43c44605f217620ad7b4e9b776
+  revision: 905e457a00a922017492453b757e1b13acc02c79
   branch: release_v_1.0
   specs:
     plaid (1.0.1)

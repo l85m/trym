@@ -1,6 +1,6 @@
 $("#account-detail-form").append("<%= j render 'hidden_form' %>")
 
-$("#details-submit-button").text("Verify Phone Number").attr("value", "Verify Phone Number");
+$("#details-submit-button").text("Submit").attr("value", "Submit");
 $("#details-submit-button").click(function(e) {
 	e.preventDefault();
 	$("#account_detail_confirmation_code").val( $("#verification-code").val() );

@@ -22,6 +22,14 @@ $brand-color: rgb(129, 202, 166);
 		color: $brand-color;
 	}
 }
+.unlinked-info-box{
+	border: 1px solid lightgray;
+	padding: 10px;
+	border-radius: 3px;
+	margin: 20px auto 15px auto;
+	h3{ margin-top: 0px }
+	p{ margin-bottom: 0px }
+}
 .empty-linked-account-index-item{
 	@extend .linked-account-index-item;
 	border-color: lightgray;

@@ -58,9 +58,12 @@
       header: '<i class=\'fa fa-credit-card\'></i> ' + data.linked_account_name
       sticky: true
   
-  if $('#linked-accounts-index').is(":visible")
-    button = $("li[data-linked-account-id=" + data.linked_account_id + "]").find(".linked-account-button")
+  if $('#linked-account-index').is(":visible")
+    row = $("li[data-linked-account-id=" + data.linked_account_id + "]")
+    button = '<a class="btn btn-primary btn-responsive linked-account-button"></a>'
 
+    button = row.find(".linked-account-button").parent().html(button).find("a")
+    
     button.html( "<i class='fa fa fa-" + data.message.button_icon + "'></i> " + data.message.button_text )
     button.attr('href',data.message.button_link)
     

@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   resources :linked_accounts do
     collection do
       post :plaid_webhook
+      post :unlink
     end
   end
 

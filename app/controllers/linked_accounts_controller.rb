@@ -1,6 +1,6 @@
 class LinkedAccountsController < ApplicationController
   before_action :authenticate_user!, except: :plaid_webhook
-  before_action :set_linked_account, only: [:show, :edit, :update, :destroy]
+  before_action :set_linked_account, only: [:show, :edit, :update, :destroy, :unlink]
   skip_before_filter :verify_authenticity_token, only: :plaid_webhook
 
   respond_to :html, :js, :json
@@ -35,10 +35,20 @@ class LinkedAccountsController < ApplicationController
     end
   end
 
+  def unlink
+    if @linked_account.present?
+      @linked_account.update( status: "unlinked" )
+      PlaidAccountDelinker.perform_async( @linked_account.id )
+    else
+      flash[:error] = "Whoops.  Something went wrong."
+    end
+    redirect_to :back
+  end
+
   def plaid_webhook
     @linked_account = LinkedAccount.find_by_plaid_access_token( params["access_token"] )
     
-    if @linked_account.present?
+    if @linked_account.present? && @linked_account.status != "unlinked"
       @linked_account.plaid_webhook_handler(params)
     else
       Rails.logger.error "Trym Webhook For Orphaned Account!! linked_account=#{@linked_account.id}.  Response Body: #{params.inspect}"
