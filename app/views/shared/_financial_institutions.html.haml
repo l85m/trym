@@ -16,7 +16,7 @@
                     -if linked_account.error_message.blank?
                       =link_to linked_account, class: "btn btn-primary btn-responsive linked-account-button", data: {user_id: current_user.id} do
                         Linked
-                      =link_to unlink_linked_accounts_path(id: linked_account.id), method: :post, class: "btn btn-danger btn-responsive linked-account-button", data: {confirm: "Are you sure you want to unlink this account? To relink it you will need to re-enter your account credentials."} do
+                      =link_to unlink_linked_accounts_path(id: linked_account.id), method: :post, class: "btn btn-danger btn-responsive linked-account-button", style: "margin-left: 3px; box-shadow: 1px 1px 1px rgba(0,0,0,0.2)", data: {confirm: "Are you sure you want to unlink this account? To relink it you will need to re-enter your account credentials."} do
                         unlink
 
 
