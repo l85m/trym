@@ -80,6 +80,10 @@ class Charge < ActiveRecord::Base
     end
   end
 
+  def rescore!
+    update( recurring_score: TransactionScorer.new(self).score )
+  end
+
   def new_transaction(new_after = 30.days.ago)
     if history.present?
       history.keys.max >= new_after
