@@ -1,6 +1,6 @@
 ActiveAdmin.register StopOrder do
   permit_params :status, :cancelation_data, :option, :contact_preference, 
-                :accept_equipment_return, :fee_limit
+                :accept_equipment_return, :fee_limit, :operator_id
   controller do
     def scoped_collection
       StopOrder.with_charge

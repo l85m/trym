@@ -1,7 +1,3 @@
-# Place all the behaviors and hooks related to the matching controller here.
-# All this logic will automatically be available in application.js.
-# You can use CoffeeScript in this file: http://coffeescript.org/
-
 @waitForPlaidToAddUser = (linkedAccountPath) ->
   if $('#new_linked_account').is(':visible')
     submit_button_text = 'Link Account'

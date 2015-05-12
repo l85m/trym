@@ -13,7 +13,7 @@ class ChargeBuilder
 				unless is_not_charge?(charge)
 					old_charge = existing_charge(charge)
 					if old_charge.present?
-						old_charge.update!(sanitize_charge_params(charge))
+						old_charge.update!(sanitize_charge_params_for_update(charge, old_charge))
 					else
 						#Do not add the charge if there's already a charge with the same description on that linked account
 						Charge.create!(sanitize_charge_params(charge))
@@ -48,6 +48,16 @@ class ChargeBuilder
 			transaction_request_id: @transaction_request.id,
 			linked_account_id: @transaction_request.linked_account.id,
 			history: charge[:history]
+		}
+	end
+
+	def sanitize_charge_params_for_update(charge, old_charge)
+		{
+			amount: (charge[:amount] * 100).to_i,
+			billing_day: charge[:billing_day],
+			transaction_request_id: @transaction_request.id,
+			linked_account_id: @transaction_request.linked_account.id,
+			history: old_charge.history.merge(charge[:history])
 		}
 	end
 end
