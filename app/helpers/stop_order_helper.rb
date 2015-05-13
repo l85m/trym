@@ -16,7 +16,7 @@ module StopOrderHelper
 
 	def manage_account_progress(stop_order)
 		steps = ["started", "requested", "working", "finished"]
-		i = steps.index(stop_order.status)
+		i = steps.index(%w(succeeded failed canceled).include?(stop_order.status) ? "finished" : stop_order.status)
 		
 		steps.map(&:titlecase).zip( Array.new(4){ |x| x < i ? 'complete' : (x == i ? 'active' : 'disabled') } ).to_h
 	end
