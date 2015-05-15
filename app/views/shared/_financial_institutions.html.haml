@@ -9,7 +9,7 @@
               .col-xs-6
                 %span.lead=institution.name
               .col-xs-6.text-right
-                -if linked_account.present?
+                -if linked_account.present? && linked_account.status != "started"
                     
                   -if linked_account.status == "linked"
                     
@@ -34,7 +34,7 @@
                   -elsif linked_account.status == "mfa"
                     =link_to "Link", new_linked_account_path(financial_institution_id: institution.id), remote: true, class: "btn btn-primary btn-responsive"
 
-                  -elsif linked_account.status != "started"
+                  -else
                     .tooltip-container{ data: {toggle: "tooltip", placement: "left", title: "Trym is #{linked_account.status} data from #{linked_account.account_name} to indentify potentially recurring charges.  This shouldn't take long." }}
                       %a.btn.btn-primary-o.btn-responsive.linked-account-button{disabled: "disabled"}
                         %i.fa.fa-circle-o-notch.fa-spin
