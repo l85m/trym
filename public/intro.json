@@ -2,12 +2,12 @@
 	"success":true,
 	"result":[
 		{
-			"selector":".charge-item:first",
+			"selector":"#charge-side-list",
 			"title":"Tracked Expenses",
 			"content":"<p>Tracked expenses are any expenses you’ve told Trym to manage or track for you. This list shows all such expenses.</p><p>Expenses with an active Trym Request will show its status to the right. Expenses without active Trym Requests will show a ‘Trym Account’ button which you can use to tell Trym to Stop, Upgrade, Downgrade, or Find Better Deals on that account.</p><p>Adding more details to the expenses in this list will allow Trym to alert you before future expenses and due dates while showing you how much you’re spending over time.</p>",
 			"html":"true",
 			"width":"400px",
-			"placement":"bottom",
+			"placement":"right",
 			"container":"body",
 			"step":0
 		},

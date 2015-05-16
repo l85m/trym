@@ -159,6 +159,12 @@ label[for=charge_renewal_period_in_words]{
 #new-user-link-text{
 	width: 100%;
 }
+
+#charge-index-pills > li > a{ border: 1px solid transparent }
+#charge-index-pills > li > a:hover{ background-color: white; }
+#charge-index-pills > li.active > a{ border: 1px solid $brand-color }
+#charge-index-pills > li.active > a:hover{ color: $brand-color; border: 1px solid $brand-color }
+
 @media (min-width: 1200px) {
 	#new-user-merchant-selection{ margin-left: 20px; }
 }

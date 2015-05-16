@@ -1,6 +1,5 @@
 @import "bootstrap-sprockets";
 @import "bootstrap";
-@import "bootstrap-switch";
 @import "font-awesome";
 
 @import "jquery-ui/datepicker";
@@ -24,8 +23,18 @@
 
 $brand-color: rgb(129, 202, 166);
 
+button, a, .btn, a i, button a, .btn i {
+  -webkit-transition: all 0.3s ease;
+  -moz-transition:    all 0.3s ease;
+  -ms-transition:     all 0.3s ease;
+  -o-transition:      all 0.3s ease;
+}
+
 body, p, h1, h2, h3, h4, h5{
 	color: rgba(0,0,0,0.7);
+}
+nav, body, .navbar-default{
+	background-color: #F0F1F4;
 }
 a{ color: $brand-color; }
 a:hover{ 
@@ -78,8 +87,18 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 }
 .transparent{ opacity: 0; }
 .form-errors{ color: #a94442; }
+.form-control:focus{
+	border-color: $brand-color;
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(129, 202, 166, 0.6);
+}
+.select2-dropdown-open.select2-drop-above .select2-choice, .select2-dropdown-open.select2-drop-above .select2-choices,
+.select2-container-active .select2-choice, .select2-container-multi.select2-container-active .select2-choices,
+.select2-drop-auto-width, .select2-drop.select2-drop-above.select2-drop-active {
+  border-color: $brand-color;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(129, 202, 166, 0.6);
+ }
 .input-group-addon, .form-control{ 
-	box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+	box-shadow: none;
 }
 .red-on-hover:hover{ color: red; }
 .extra-small{ font-size: 75%; }
@@ -92,7 +111,7 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 .btn-primary{ 
 	background-color: $brand-color; 
 	border-color: $brand-color;
-	box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+	box-shadow: none;
 	i{ color: white; }
 }
 .label-primary{i{ color: white; }}
@@ -143,10 +162,10 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 	i{ color: $brand-color; }
 }
 .btn-primary-o{
-	background-color: transparent;
+	background-color: white;
 	border-color: $brand-color;
 	color: $brand-color;
-	box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+	box-shadow: none;
 }
 .btn-primary-o:focus{ color: $brand-color; }
 .btn-primary-o.active:focus{ color: white; }
@@ -160,15 +179,15 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 	border-color: white;
 	background-color: white; 
 	color: $brand-color;
-	box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+	box-shadow: none;
 }
 .btn-white:hover{
 	background-color: $brand-color;
 	color: white;
 	border-color: white;
-	box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+	box-shadow: none;
 }
-.btn-default{ box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1); }
+.btn-default{ box-shadow: none; }
 .btn:focus, .btn.focus, .btn:active:focus, 
 .btn:active.focus, .btn.active:focus, .btn.active.focus{ 
 	outline: none; 
@@ -179,8 +198,8 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 }
 .well{ 
 	padding: 15px 19px;
-	background: transparent; 
-	box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+	background: white; 
+	box-shadow: none;
 }
 .table-div{ display: table; }
 .table-cell{ display: table-cell; }
@@ -206,6 +225,10 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 .ui-autocomplete { 
   z-index: 5000 !important; 
 }
+abbr[title], abbr[data-original-title] {
+	cursor: default;
+	border-bottom: none
+}
 .ui-datepicker .ui-datepicker-next {
 	right: 14px;
 }
@@ -217,7 +240,6 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 #security-notice.popover{ max-width: 600px; }
 
 .navbar{ 
-	background-color: rgba(255,255,255,0.9);
 	border-color: white; 
 	text-align: center;
 }
@@ -267,6 +289,10 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 	text-align: center;
 	width: 100%;
 }
+.modal-content{ background: #F0F1F4 }
+.modal-backdrop.in {
+  opacity: 0.8;
+ }
 .modal-close-x{ 
 	font-weight: 200;
 	font-size: 200%;

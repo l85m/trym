@@ -1,4 +1,4 @@
-.modal-dialog.modal-md
+.modal-dialog.modal-sm
   .modal-content.vertical-center
     = simple_form_for(@invite_request) do |f|
       .modal-body.text-center
@@ -10,6 +10,8 @@
 
         .form-inputs
           = f.input :email, required: false, input_html: {class: "text-center"}
+
+        .paragraph-spacer
 
         .form-actions
           %button{ type: "button", class: "btn btn-default", data: {dismiss: "modal"} } Cancel

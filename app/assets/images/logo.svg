@@ -4,9 +4,9 @@
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 width="300px" height="300px" viewBox="0 0 300 300" enable-background="new 0 0 300 300" xml:space="preserve">
 <rect fill="#81CAA6" width="300" height="300"/>
-<rect x="-77.237" y="-77.238" transform="matrix(-0.7071 0.7071 -0.7071 -0.7071 -0.001 -7.150824e-005)" fill="#FFFFFF" width="154.473" height="154.475"/>
+<rect x="-77.237" y="-77.238" transform="matrix(-0.7071 0.7071 -0.7071 -0.7071 -0.001 -7.150824e-005)" fill="#F0F1F4" width="154.473" height="154.475"/>
 <g>
-	<path fill="#FFFFFF" d="M156.127,106.247h25.75v18.75h-25.75v80.25c0,9.75,2.75,11.5,16,11.5h9.75v18.75h-16.25
+	<path fill="#F0F1F4" d="M156.127,106.247h25.75v18.75h-25.75v80.25c0,9.75,2.75,11.5,16,11.5h9.75v18.75h-16.25
 		c-22,0-30.75-4.5-30.75-28.25v-82.25h-22v-18.75h22v-38.75h21.25V106.247z"/>
 </g>
 </svg>
