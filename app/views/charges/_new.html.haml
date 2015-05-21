@@ -18,17 +18,10 @@
 
         .form-inputs
           = f.input :billing_day, as: :string, label: "When is your next charge?", placeholder: "estimate if you're not sure", input_html: {class: "text-center"}
-          = f.input :renewal_period_in_weeks, label: "How often are you charged?", collection: Charge.renewal_period_in_words.invert, input_html: {class: "text-center"}
+          = f.input :renewal_period_in_weeks, label: "How often are you charged?", input_html: {class: "text-center"}
 
       .modal-footer
         .pull-left
           = render partial: 'shared/cancel_button', locals: {btn_size: 'btn-md'}
         .pull-right
           = f.button :submit, "Save", class: "btn btn-primary btn-md"
-
-:javascript
-  $('#charge_trym_category_id').select2({minimumResultsForSearch: Infinity, allowClear: true});
-  
-  $('#charge_billing_day').datepicker({dateFormat: 'yy-mm-dd'});
-
-  $('#charge_renewal_period_in_weeks').select2({minimumResultsForSearch: Infinity});

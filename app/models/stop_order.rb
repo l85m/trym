@@ -1,5 +1,7 @@
 class StopOrder < ActiveRecord::Base
   belongs_to :charge
+  accepts_nested_attributes_for :charge, update_only: true
+  
   belongs_to :merchant
   belongs_to :operator, class_name: "User"
 
@@ -10,7 +12,8 @@ class StopOrder < ActiveRecord::Base
   validates :status, inclusion: { in: %w(started requested working succeeded failed canceled) }
   validates :contact_preference, inclusion: { in: %w(call text email) }
   validate :required_cancelation_fileds_must_be_present_on_requested_records
-
+  validate :required_cancelation_data_must_be_valid_on_requested_records
+  
   scope :active_or_complete, -> {where(status: ["requested", "working", "succeeded"])}
   scope :active, -> {where(status: ["requested", "working"]).first}
   scope :with_charge, -> {joins(:charge)}
@@ -43,7 +46,11 @@ class StopOrder < ActiveRecord::Base
   end
 
   def merchant
-    charge.merchant
+    if charge.present? 
+      charge.merchant
+    else
+      nil
+    end
   end
 
   def user
@@ -89,6 +96,20 @@ class StopOrder < ActiveRecord::Base
     end
   end
 
+  def missing_charge_fields
+    return {} unless charge.present?
+    charge_fields.keys.reject{ |field| charge.send(field).present? }
+  end
+
+  def charge_fields
+    return {} unless charge.present?
+    {
+      amount: [:currency, "How much is your average bill?", "", charge.amount.present? ? charge.amount / 100.0 : nil ],
+      billing_day: [:string, "When is your next charge?", "Estimate if not sure", charge.billing_day ],
+      renewal_period_in_weeks: [:string, "How often are you charged?", "", charge.renewal_period_in_words]
+    }
+  end
+
   private
 
   def update_account_details_if_reusable
@@ -101,9 +122,26 @@ class StopOrder < ActiveRecord::Base
   end
 
   def required_cancelation_fileds_must_be_present_on_requested_records
-    if status != "started" && missing_required_fields.present?
-      missing_required_fields.each do |required_field|
+    missing_fields = missing_charge_fields + missing_required_fields
+    if status != "started" && missing_fields.present?
+      missing_fields.each do |required_field|
         errors.add( required_field , "can't be blank" )
+      end
+    end
+  end
+
+  def required_cancelation_data_must_be_valid_on_requested_records
+    if status != "started" && cancelation_data.present?
+      cancelation_data.each do |field, value|
+        if field.include?("phone_number") && value.phony_formatted(strict: true, normalize: :US).nil?
+          errors.add( field , "must be a valid US phone number" )
+        elsif field.include?("last_4_digits_of_social_security_number") 
+          if value.size != 4
+            errors.add( field, "must be complete")
+          elsif value.match(/\D/)
+            errors.add( field, "must be a number")
+          end
+        end
       end
     end
   end

@@ -1,6 +1,8 @@
+#addressValidator{ data: { key: Rails.env.production? ? "2574746841015992238" : "2574746841608301956" } }
+
 .row
   .col-lg-8.col-lg-offset-2.col-md-10.col-md-offset-1
-    =simple_form_for @stop_order, url: wizard_path, method: :put, wrapper: :horizontal_form, html: {class: "form-horizontal"} do |f|
+    =simple_form_for @stop_order, url: wizard_path, method: :put, wrapper: :horizontal_form, wrapper_mappings: {currency: :horizontal_form}, html: {class: "form-horizontal"} do |f|
       =f.input :status, as: :hidden, input_html: { value: "requested" }
       =f.input :contact_preference, as: :hidden, input_html: { value: "call" }
 
@@ -14,33 +16,52 @@
         
         .row
           .col-lg-10.col-lg-offset-1
+            .paragraph-spacer
+            %p.text-center fields marked with * are required
+
             =f.simple_fields_for :cancelation_data do |cancelation_datum|
-                                      
-              .paragraph-spacer
 
-              -if @stop_order.option == "upgrade"
-                =cancelation_datum.input :change_description, as: :text, required: true, label: "What services you want us to change or change?", input_html: {placeholder: "Please be specific", value: @stop_order.cancelation_data.present? ? @stop_order.cancelation_data["change_description"] : nil }
-              -elsif @stop_order.option == "downgrade"
-                =cancelation_datum.input :change_description, as: :text, required: true, label: "What services do you want us to downgrade or cancel?", input_html: {placeholder: "Please be specific", value: @stop_order.cancelation_data.present? ? @stop_order.cancelation_data["change_description"] : nil }
-              -elsif @stop_order.option == "find_deals"
-                =cancelation_datum.input :change_description, as: :text, required: true, label: "What sort of deal would you like us to find for you?", input_html: {placeholder: "Please be specific", value: @stop_order.cancelation_data.present? ? @stop_order.cancelation_data["change_description"] : nil }
+              -unless @stop_order.option == "cancel_all"
+                .unlinked-info-box
+                  %h4.text-center what can we help with?
+                  .paragraph-spacer
+                
+                  -if @stop_order.option == "upgrade"
+                    =cancelation_datum.input :change_description, as: :text, required: true, label: "What services you want us to change or change?", input_html: {placeholder: "Please be specific", value: @stop_order.cancelation_data.present? ? @stop_order.cancelation_data["change_description"] : nil }
+                  -elsif @stop_order.option == "downgrade"
+                    =cancelation_datum.input :change_description, as: :text, required: true, label: "What services do you want us to downgrade or cancel?", input_html: {placeholder: "Please be specific", value: @stop_order.cancelation_data.present? ? @stop_order.cancelation_data["change_description"] : nil }
+                  -elsif @stop_order.option == "find_deals"
+                    =cancelation_datum.input :change_description, as: :text, required: true, label: "What sort of deal would you like us to find for you?", input_html: {placeholder: "Please be specific", value: @stop_order.cancelation_data.present? ? @stop_order.cancelation_data["change_description"] : nil }
 
-              -@stop_order.cancelation_fields.each do |cancelation_field|
-                =cancelation_datum.input cancelation_field.to_sym, required: @stop_order.merchant.required_cancelation_fileds.include?(cancelation_field.to_s), input_html: {value: @stop_order.cancelation_data.present? ? @stop_order.cancelation_data[cancelation_field.to_s] : ( cancelation_field == :phone_number_on_account ? current_user.phone : current_user.account_detail.account_data[cancelation_field.to_s] ) }
-              
-              =cancelation_datum.input :comments, as: :text, label: "Anything else we should know?", input_html: {value: @stop_order.cancelation_data.present? ? @stop_order.cancelation_data["comments"] : nil }
-
-              -if @stop_order.errors.present?
-                .row.has-error
-                  .col-sm-9.col-sm-offset-3.help-block
-                    %b Please correct the following before continuing:
-                    %ul
-                      -@stop_order.errors.messages.select{ |_,m| m.present? }.each do |attribute, message|
-                        %li #{attribute.to_s.humanize} #{message.join(", ")}
-                        :javascript      
-                          $(".form-group.stop_order_cancelation_data_#{attribute}").addClass("has-error")
-              -else
+              .unlinked-info-box
+                %h4.text-center account details
                 .paragraph-spacer
+
+                -@stop_order.cancelation_fields.each do |cancelation_field|
+                  =cancelation_datum.input cancelation_field.to_sym, required: @stop_order.merchant.required_cancelation_fileds.include?(cancelation_field.to_s), input_html: {value: @stop_order.cancelation_data.present? ? @stop_order.cancelation_data[cancelation_field.to_s] : ( cancelation_field == :phone_number_on_account ? current_user.phone : current_user.account_detail.account_data[cancelation_field.to_s] ) }
+                
+                =cancelation_datum.input :comments, as: :text, label: "Anything else we should know?", input_html: {value: @stop_order.cancelation_data.present? ? @stop_order.cancelation_data["comments"] : nil }
+
+            -if @stop_order.charge_fields.present?
+              .unlinked-info-box
+                %h4.text-center how much are you paying?
+                .paragraph-spacer
+                =f.simple_fields_for :charge_attributes do |charge_field|
+                  -@stop_order.charge_fields.each do |field, (type, label, placeholder, value)|
+                    =charge_field.input field, as: type, required: true, label: label, input_html: {placeholder: placeholder, value: value}
+
+
+            -if @stop_order.errors.present?
+              .row.has-error
+                .col-sm-9.col-sm-offset-3.help-block
+                  %b Please correct the following before continuing:
+                  %ul
+                    -@stop_order.errors.messages.select{ |_,m| m.present? }.each do |attribute, message|
+                      %li #{attribute.to_s.humanize} #{message.join(", ")}
+                      :javascript      
+                        $(".form-group.stop_order_cancelation_data_#{attribute}").addClass("has-error")
+            -else
+              .paragraph-spacer
       
       -else
 
@@ -61,8 +82,3 @@
       
         =link_to "Go Back", previous_wizard_path, class: "btn btn-default"     
         = f.button :submit, manage_account_first_person_action_statement(@stop_order), class: "btn btn-primary"
-
-:javascript
-  $('#stop_order_cancelation_data_phone_number_on_account').formatter({
-    'pattern': '({{999}}) {{999}}-{{9999}}'
-  });

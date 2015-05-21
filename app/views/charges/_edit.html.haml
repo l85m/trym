@@ -19,16 +19,9 @@
 
         .form-inputs
           = f.input :billing_day, as: :string, label: "When is your next charge?", placeholder: "estimate if you're not sure", input_html: {class: "text-center"}
-          = f.input :renewal_period_in_weeks, label: "How often are you charged?", collection: Charge.renewal_period_in_words.invert
+          = f.input :renewal_period_in_weeks, label: "How often are you charged?"
 
       .modal-footer{ style: "text-align: center;" }
         = render partial: 'shared/cancel_button', locals: {btn_size: 'btn-md'}
         = link_to "delete", {controller: "charges", action: "destroy", id: @charge.id}, method: :delete, class: "btn btn-danger btn-md", style: "width: 69px;", data: {confirm: "Are you sure you want to delete this charge? Deleting a charge also deletes all associated account management requests. This can't be undone."}, remote: true
         = f.button :submit, "Save", class: "btn btn-primary btn-md", style: "width: 69px;"
-
-:javascript
-  $('#charge_trym_category_id').select2({minimumResultsForSearch: Infinity, allowClear: true});
-
-  $('#charge_billing_day').datepicker({dateFormat: 'yy-mm-dd'});
-
-  $('#charge_renewal_period_in_weeks').select2({minimumResultsForSearch: Infinity});

@@ -4,6 +4,16 @@
 
 $brand-color: rgb(129, 202, 166);
 
+#addressValidator{
+	display: hidden;
+	position: absolute;
+}
+
+#stop_order_charge_attributes_billing_day{
+	position: relative;
+	z-index: 2;
+}
+
 .charge-header-container{
 	position: absolute; 
 	top: 50px; 

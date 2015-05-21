@@ -32,3 +32,4 @@
 //= require select2
 //= require j_growl_rails/jquery.jgrowl
 //= require bootstro
+//= require smartystreets.min

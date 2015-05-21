@@ -1,3 +1,28 @@
+@intitializeFieldHelpers = () ->
+  console.log "test"
+  $('#charge_trym_category_id').select2({minimumResultsForSearch: Infinity, allowClear: true});
+
+  $("input[id*='billing_day']").datepicker
+    dateFormat: 'yy-mm-dd'
+
+  $("*[id*='renewal_period_in_weeks']").select2
+    minimumResultsForSearch: Infinity
+    data:[
+      {id: 1, text: "Weekly - every week"},
+      {id: 2, text: "Bi-Weekly - every other week"},
+      {id: 4, text: "Monthly - once every month"},
+      {id: 8, text: "Bi-Monthly - every other month"},
+      {id: 12, text: "Quarterly - once every three months"},
+      {id: 16, text: "4-Monthly - once every four months"},
+      {id: 26, text: "Bi-Annually - twice a year"},
+      {id: 52, text: "Annually - once a year"}
+    ]
+
+  amountField = $('#charge_amount')
+  if amountField.size() > 0
+    numericOnly(amountField)
+
+
 @activateChargeRow = (cat_id) ->
   $('[name="track-switch"]').off("change").change ->
     state = $(this).is(':checked')
@@ -23,5 +48,11 @@
     title: '<i class="fa fa-calendar"></i> Charge History'
   return
 
-$(document).on 'ready page:load', ->
+$ ->
+  intitializeFieldHelpers()
   activateChargeRow('')
+  $("#modal-container").on 'shown.bs.modal', ->
+    initMerchantSelect2( $('.modal-dialog').find('#charge_merchant_id') )
+    intitializeFieldHelpers()
+    $('#charge_merchant_name').focus()
+    return

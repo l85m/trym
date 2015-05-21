@@ -32,6 +32,24 @@
     return
   return
 
+@numericOnly = (input) ->
+  pastValue = undefined
+  pastSelectionStart = undefined
+  pastSelectionEnd = undefined
+  input.on('keydown', ->
+    pastValue = @value
+    pastSelectionStart = @selectionStart
+    pastSelectionEnd = @selectionEnd
+    return
+  ).on 'input propertychange', ->
+    regex = /^[0-9]+\.?[0-9]*$/
+    if @value.length > 0 and !regex.test(@value)
+      @value = pastValue
+      @selectionStart = pastSelectionStart
+      @selectionEnd = pastSelectionEnd
+    return
+  return
+
 $(document).on 'ready page:load', ->
   $('[data-toggle="tooltip"]').tooltip()
   attachCloseActionToButtons()

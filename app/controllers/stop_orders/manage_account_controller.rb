@@ -7,6 +7,8 @@ class StopOrders::ManageAccountController < ApplicationController
 
   before_action :set_steps
   before_action :setup_wizard
+
+  before_action :convert_charge_amount_to_number, only: [:update]
   
   def show
     if step == :name_and_phone
@@ -36,7 +38,20 @@ class StopOrders::ManageAccountController < ApplicationController
   end
 
   def stop_order_params
-    params.require(:stop_order).permit(:option, :status, :contact_preference, cancelation_data: @stop_order.cancelation_fields + [:comments] + [:change_description])
+    params.require(:stop_order).permit(
+      :option, :status, :contact_preference, 
+      cancelation_data: @stop_order.cancelation_fields + [:comments] + [:change_description],
+      charge_attributes: [:amount, :billing_day, :renewal_period_in_weeks]
+    )
+  end
+
+  def convert_charge_amount_to_number
+    if params["stop_order"]["charge_attributes"].present? && params["stop_order"]["charge_attributes"]["amount"].present?
+      amount = params["stop_order"]["charge_attributes"]["amount"]
+      if amount.is_a?(String) && amount.gsub(/\D/,"").present?
+        params["stop_order"]["charge_attributes"]["amount"] = (amount.gsub("$","").gsub(" ","").to_f * 100).to_i
+      end
+    end
   end
 
   def finish_wizard_path
