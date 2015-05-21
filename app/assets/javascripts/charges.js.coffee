@@ -1,5 +1,4 @@
 @intitializeFieldHelpers = () ->
-  console.log "test"
   $('#charge_trym_category_id').select2({minimumResultsForSearch: Infinity, allowClear: true});
 
   $("input[id*='billing_day']").datepicker

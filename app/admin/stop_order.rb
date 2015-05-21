@@ -1,6 +1,4 @@
 ActiveAdmin.register StopOrder do
-  permit_params :status, :cancelation_data, :option, :contact_preference, 
-                :accept_equipment_return, :fee_limit, :operator_id
   controller do
     def scoped_collection
       StopOrder.with_charge
@@ -8,13 +6,24 @@ ActiveAdmin.register StopOrder do
     def edit
       @page_title = "#{resource.option.titleize} request for #{resource.charge.descriptor} from #{resource.user.name}"
     end
+
+    def update(options={}, &block)
+      resource.update! permitted_params
+      update!
+    end
+
+    def permitted_params
+      p = params.require(:stop_order).permit!
+      p["cancelation_data"] = JSON.parse p["cancelation_data"] if p["cancelation_data"].is_a?(String)
+      p
+    end
   end
   
   config.sort_order = "created_at.desc"
 
   index do
     selectable_column
-    column :id do |order|
+    column :id, sortable: :id do |order|
       link_to order.id, admin_stop_order_path(order) 
     end
     column :status
@@ -24,9 +33,11 @@ ActiveAdmin.register StopOrder do
     end
     column :operator
     column :charge do |order|
-      link_to order.charge.descriptor, admin_charge_path(order.charge.id) if order.charge.present?
+      link_to "#{order.charge.id}: #{order.charge.descriptor}", admin_charge_path(order.charge.id) if order.charge.present?
     end
-    column :created_at
+    column :request_age, sortable: :created_at do |order|
+      content_tag :span, time_ago_in_words(order.created_at), class: order_age_class(order)
+    end
   end
 
   filter :status
@@ -49,7 +60,7 @@ ActiveAdmin.register StopOrder do
       input :fee_limit, label: "Fee limit in US CENTS"
     end
     f.inputs  "Request data" do 
-      input :cancelation_data
+      input :cancelation_data, as: :hstore
     end
     actions
   end

@@ -11,7 +11,7 @@ class StopOrder < ActiveRecord::Base
   validates_inclusion_of :option, in: ["cancel_all", "downgrade", "upgrade", "find_deals", nil]
   validates :status, inclusion: { in: %w(started requested working succeeded failed canceled) }
   validates :contact_preference, inclusion: { in: %w(call text email) }
-  validate :required_cancelation_fileds_must_be_present_on_requested_records
+  validate :required_cancelation_fields_must_be_present_on_requested_records
   validate :required_cancelation_data_must_be_valid_on_requested_records
   
   scope :active_or_complete, -> {where(status: ["requested", "working", "succeeded"])}
@@ -121,7 +121,7 @@ class StopOrder < ActiveRecord::Base
     end
   end
 
-  def required_cancelation_fileds_must_be_present_on_requested_records
+  def required_cancelation_fields_must_be_present_on_requested_records
     missing_fields = missing_charge_fields + missing_required_fields
     if status != "started" && missing_fields.present?
       missing_fields.each do |required_field|
