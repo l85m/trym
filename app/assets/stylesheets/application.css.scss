@@ -271,6 +271,7 @@ abbr[title], abbr[data-original-title] {
 .flash-container{
 	position: relative;
 	width: 100%;
+	z-index: 1031;
 	display: block;
 	.alert{
 		width: 100%;
