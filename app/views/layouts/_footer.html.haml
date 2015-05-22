@@ -2,10 +2,11 @@
 	.row
 		.col-xs-12.text-left{style: "margin-top: 4px;"}
 			%i.fa.fa-copyright
-			="2015 Trym.io |"
-			=link_to "Legal & Privacy |", legal_path
+			2015 Trym.io &#x007C;
+			=link_to "Legal & Privacy", legal_path
+			%span &#x007C;
 			=link_to "About", about_path
-			%span{style: "color: darkgray" }= "|"
+			%span &#x007C;
 			%a{href: "mailto:team@trym.io"}
 				%i.fa.fa-2x.fa-envelope-square.footer-icon
 			%a{href: "https://www.facebook.com/trym.io", target: "_blank"}

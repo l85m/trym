@@ -4,19 +4,47 @@
 
 $brand-color: rgb(129, 202, 166);
 
-
 #home-banner{ 
-	background-color: $brand-color;
+	background-image: image-url("px_by_Gre3g.png");
 	color: white;
+	padding-top: 70px;
+	padding-bottom: 50px;
 	h1{ font-size: 300%; }
 	p{ 
 		font-size: 200%; 
 		color: whitesmoke;
 	}
 }
+#home-header{
+	.navbar-brand{
+		display: none;
+	}
+	nav{
+	  border-bottom: none;
+  	background-color: transparent;
+	}
+}
+@media (min-width: 768px) {
+  #home-header{
+	  .navbar .navbar-nav {
+	      display: inline-block;
+	      float: none !important;
+	      vertical-align: top;
+	  }
+
+	  .navbar .navbar-collapse {
+	      text-align: center;
+	  }
+	}
+}
+@media (max-width: 768px) {
+	#home-header{
+		.navbar-collapse.collapse.in, .navbar-collapse.collapsing{
+			background-color: #F0F1F4;
+		}
+	}
+}
 #home-carousel-controls{	
-	border-top: lightgray 1px solid;
-	margin-top: 20px;
 	div.row > div{ padding: 10px 15px 0px 15px; }
 }
 .home-carousel-control:hover{

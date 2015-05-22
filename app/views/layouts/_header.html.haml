@@ -1,7 +1,7 @@
 -if current_user.present?
   #whoami{ data: {user_id: current_user.id, intro: "#{current_user.show_intro}" } }
   
-%nav.navbar.navbar-default.navbar-fixed-top{role: "navigation", style: "border-bottom: 1px solid lightgray;"}
+%nav.navbar.navbar-default.navbar-fixed-top{role: "navigation"}
   .container-fluid 
     .navbar-header 
       %button.navbar-toggle.collapsed{type: "button", data: { toggle: "collapse", target: "#navbar-collapse-menu" } }
@@ -44,7 +44,5 @@
           -unless current_page?(new_user_session_path)
             %li=link_to "sign in", new_user_session_path, remote: true
           -unless user_signed_in? && current_page?(new_user_session_path)
-            %li
-              %span.hidden-xs
-                =link_to "request invite", new_invite_request_path, remote: true, class: "btn btn-primary navbar-btn navbar-sign-up-btn"
-              =link_to "request invite", new_invite_request_path, remote: true, class: "visible-xs-block"
+            %li          
+              =link_to "request invite", new_invite_request_path, remote: true

@@ -12,7 +12,7 @@
       .paragraph-spacer.visible-lg-block
       .paragraph-spacer.visible-lg-block
       =form_for current_user.charges.build, url: create_then_manage_charges_path do |f|
-        %h1#new-user-merchant-selection
+        %h3#new-user-merchant-selection
           =f.text_field :merchant_id, data: { url: merchants_path, placeholder: merchant_name_example_helper(@trym_category_id) }
         .pull-right
           %button.btn.btn-default#disabled-next-button{disabled: "disabled"}

@@ -91,11 +91,16 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 	border-color: $brand-color;
 	box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(129, 202, 166, 0.6);
 }
-.select2-dropdown-open.select2-drop-above .select2-choice, .select2-dropdown-open.select2-drop-above .select2-choices,
+.select2-dropdown-open{
+  background-color: white;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+.select2-dropdown-open.select2-drop-above .select2-choices,
 .select2-container-active .select2-choice, .select2-container-multi.select2-container-active .select2-choices,
 .select2-drop-auto-width, .select2-drop.select2-drop-above.select2-drop-active {
-  border-color: $brand-color;
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(129, 202, 166, 0.6);
+  border: none;
+  box-shadow: none;
  }
 .input-group-addon, .form-control{ 
 	box-shadow: none;
@@ -149,6 +154,13 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 		margin-left: 150px;
 	}
 }
+.panel{ 
+	background-color: transparent;
+	border-color: lightgray;
+	.panel-heading{
+		background-color: transparent;
+	}
+}
 .btn-primary:focus, .btn-primary.focus, .btn-primary:active, 
 .btn-primary.active, .open > .btn-primary.dropdown-toggle{
 	background-color: $brand-color;
@@ -198,7 +210,8 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 }
 .well{ 
 	padding: 15px 19px;
-	background: white; 
+	border-color: lightgray;
+	background: transparent; 
 	box-shadow: none;
 }
 .table-div{ display: table; }
@@ -240,13 +253,12 @@ abbr[title], abbr[data-original-title] {
 #security-notice.popover{ max-width: 600px; }
 
 .navbar{ 
-	border-color: white; 
+	border-bottom: 1px solid lightgray;
 	text-align: center;
 }
 .navbar-nav > li > a > .header-icon{
 	color: inherit;
 }
-
 .active-header-link,
 .navbar-nav > li > a:hover{ 
 	color: $brand-color !important;

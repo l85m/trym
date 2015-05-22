@@ -1,5 +1,19 @@
 $brand-color: rgb(129, 202, 166);
 
+#merchant-disclaimer{
+  position: absolute;
+  padding-top: 15px;
+  padding-bottom: 5px;
+  background: rgba(0, 0, 0, 0.8);
+  width: 100%;
+  z-index: 9999;
+  opacity: 0;
+  p{
+	  color: white;
+	  text-align: center;
+	}
+}
+
 .charge-item{ 
 	height: 95px; 
 	width: 100%;
@@ -118,20 +132,21 @@ label[for=charge_renewal_period_in_words]{
 
 // customizing select2 input on new user prompt
 #new-user-merchant-selection{
-  font-size: 36px;
+	margin-top: 30px;
 	.select2-container .select2-choice{
-		height: 65px;
+		height: 45px;
 		border-top: none;
 		border-right: none;
 		border-left: none;
 		box-shadow: none;
 		border-radius: 0px;
 		border-bottom: 1px solid black;
+		background-color: transparent;
 		.select2-arrow{
-			background: white;
+			background: transparent;
 			padding-left: 10px;
 			width: auto;
-			top: 18px;
+			top: 12px;
 			b{
 				background: none;
 				font: normal normal normal 14px/1 FontAwesome;

@@ -51,9 +51,18 @@ mercFormatNarrow = (merc) ->
     target.on 'change', (e) ->
       $('#disabled-next-button').hide()
       $('#enabled-next-button').css 'display', 'inline'
+      return
 
     target.on "select2-loaded", (e) ->
       $(".ajax-opt-group").parent().parent().removeClass("select2-result select2-result-selectable select2-highlighted").addClass("select2-result-label")
+      $("nav").after("<div id='merchant-disclaimer'><p>Trym is not affiliated with any service provider whose name, logo or other trademark may appear on this website.</p></div>")
+      $('#merchant-disclaimer').animate({opacity: 1}, 500)
+      return
+
+    target.on "select2-close", (e) ->
+      $('#merchant-disclaimer').animate {opacity: 0}, 500, ->
+        $('#merchant-disclaimer').remove()
+        return
       return
 
 $(document).on 'ready page:load', ->

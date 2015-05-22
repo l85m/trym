@@ -1,0 +1,15 @@
+!!!
+%html
+  %head
+    =render 'layouts/head'
+  
+  %body.scrollable
+    #home-header
+      = render 'layouts/header'
+    .header-padding
+      = render 'layouts/flash'
+      = yield
+      = render 'layouts/footer'
+
+
+    =render 'layouts/modal_and_brand'

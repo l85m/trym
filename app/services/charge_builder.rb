@@ -53,12 +53,13 @@ class ChargeBuilder
 	end
 
 	def sanitize_charge_params_for_update(charge, old_charge)
+		merged_history = old_charge.history.merge(charge[:history])
 		{
 			amount: (charge[:amount] * 100).to_i,
-			billing_day: charge[:billing_day],
+			billing_day: merged_history.keys.sort.last,
 			transaction_request_id: @transaction_request.id,
 			linked_account_id: @transaction_request.linked_account.id,
-			history: old_charge.history.merge(charge[:history])
+			history: merged_history
 		}
 	end
 end
