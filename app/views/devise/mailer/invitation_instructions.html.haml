@@ -8,7 +8,7 @@
         %p{style: "margin: 0px auto 20px auto; text-align:center;"}
           %span{style: "color: gray"} nice to meet you
         %p
-          Dear Friend,
+          Hi there,
         %p
           We are very pleased to announce that Trym.io has finally launched and you have been selected to join our private beta test as one of our first users.
         %p
@@ -18,13 +18,17 @@
         %p
           During the private beta, we are going to be working hard to improve the service and implment new features. Your feedback is crucial to this process, so please share it!
         %p
-          You can reply to this email or email me directly at #{User.find(@resource.invited_by_id).email}.
+          You can reply to this email or email me directly at 
+          %a{href: "mailto:#{User.find(@resource.invited_by_id).email}", style: "color: #81CAA6; text-decoration: none;"}
+            #{User.find(@resource.invited_by_id).email}
         %p
           %br
           Thanks and enjoy!
           %br
           #{User.find(@resource.invited_by_id).first_and_last_name}
           %br
-          %small 
-            %a{href: "mailto:#{User.find(@resource.invited_by_id).email}", style: "color: #81CAA6"}
+          Co-Founder, Trym.io
+          %br
+          %small
+            %a{href: "mailto:#{User.find(@resource.invited_by_id).email}", style: "color: #81CAA6, text-decoration: none;"}
               #{User.find(@resource.invited_by_id).email}
