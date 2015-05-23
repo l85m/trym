@@ -27,8 +27,8 @@
           %br
           #{User.find(@resource.invited_by_id).first_and_last_name}
           %br
-          Co-Founder, Trym.io
-          %br
           %small
+            Co-Founder, Trym.io
+            %span &#x007C;
             %a{href: "mailto:#{User.find(@resource.invited_by_id).email}", style: "color: #81CAA6, text-decoration: none;"}
               #{User.find(@resource.invited_by_id).email}
