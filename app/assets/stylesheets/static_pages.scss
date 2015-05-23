@@ -4,21 +4,18 @@
 
 $brand-color: rgb(129, 202, 166);
 
-#particles-js{ 
-  height: 425px;
+#home-banner{ 
+	color: white;
+	padding-top: 70px;
+	padding-bottom: 50px;
 	background-image: image-url("px_by_Gre3g.png");
-	#home-banner{
-	  position: absolute;
-  	width: 100%;
-  	top: 70px;
-		color: white;
-		h1{ font-size: 300%; }
-		p{ 
-			font-size: 200%; 
-			color: whitesmoke;
-		}
+	h1{ font-size: 300%; }
+	p{ 
+		font-size: 200%; 
+		color: whitesmoke;
 	}
 }
+
 #home-header{
 	.navbar-brand{
 		display: none;
