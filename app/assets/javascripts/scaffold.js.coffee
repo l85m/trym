@@ -49,7 +49,14 @@
     return
   return
 
+@sprayParticles = () ->
+  if $("#particles-js").length > 0
+    particlesJS.load 'particles-js', './particlesjs-config.json', ->
+      console.log 'callback - particles.js config loaded'
+    return
+
 $(document).on 'ready page:load', ->
   $('[data-toggle="tooltip"]').tooltip()
   attachCloseActionToButtons()
   introRunner()
+  sprayParticles()

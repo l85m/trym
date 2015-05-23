@@ -33,3 +33,4 @@
 //= require j_growl_rails/jquery.jgrowl
 //= require bootstro
 //= require smartystreets.min
+//= require particles
