@@ -1,82 +1,32 @@
-%canvas#c
+-@resource = User.last
 
-:javascript
-  var requestAnimationFrame =  
-          window.requestAnimationFrame ||
-          window.webkitRequestAnimationFrame ||
-          window.mozRequestAnimationFrame ||
-          window.msRequestAnimationFrame ||
-          window.oRequestAnimationFrame ||
-          function(callback) {
-            return setTimeout(callback, 1);
-          };
-
-  function makeHighRes(c) {
-      var ctx = c.getContext('2d');
-      // finally query the various pixel ratios
-      var devicePixelRatio = window.devicePixelRatio || 1;
-      var backingStoreRatio = ctx.webkitBackingStorePixelRatio ||
-          ctx.mozBackingStorePixelRatio ||
-          ctx.msBackingStorePixelRatio ||
-          ctx.oBackingStorePixelRatio ||
-          ctx.backingStorePixelRatio || 1;
-      var ratio = devicePixelRatio / backingStoreRatio;
-      // upscale canvas if the two ratios don't match
-      if (devicePixelRatio !== backingStoreRatio) {
-      
-          var oldWidth = c.width;
-          var oldHeight = c.height;
-          c.width = Math.round(oldWidth * ratio);
-          c.height = Math.round(oldHeight * ratio);
-          c.style.width = oldWidth + 'px';
-          c.style.height = oldHeight + 'px';
-          // now scale the context to counter
-          // the fact that we've manually scaled
-          // our canvas element
-          ctx.scale(ratio, ratio);
-      }
-  }
-
-
-  //initalize the canvas
-  var c_canvas = document.getElementById("c");
-  var context = c_canvas.getContext("2d");
-  var colors = ["#3a3a3a", "#3c3c3c", "#3f3f3f", "#3b3b3b", "#383838", "#323232", "#323232", "#323232"];
-  var randomGridColor = function() {
-      return colors[Math.floor(Math.random()*colors.length)];
-  }
-
-  makeHighRes(c_canvas);
-  context.fillStyle = "#272727";
-  context.fillRect(0,0,c_canvas.width,c_canvas.height);
-
-  //draw inital grid
-  for (var x = 0.5; x < c_canvas.width; x += 4) {
-      for (var y = 0.5; y < c_canvas.height; y += 4) {
-        context.fillStyle = randomGridColor();
-        context.fillRect(x,y,3,3);
-      }
-  }
-
-  var highlightCell = function(){
-      var currentColor = "#81caa6";
-      var x = (3 * Math.round(Math.random() * c_canvas.width / 3))
-      var y = (3 * Math.round(Math.random() * c_canvas.height / 3))
-      var t = 0
-      function blink() {
-          if (t < 5){
-              t++;
-              if(currentColor === "#81caa6"){
-                  currentColor = randomGridColor();
-              } else {
-                  currentColor = "#81caa6";
-              }
-              context.fillStyle = currentColor;
-              context.fillRect(x,y,3,3);
-              window.setTimeout(blink(), 1000);
-          }
-      }
-      blink();
-  }
-
-  highlightCell();
+%div{style: "font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:14px; line-height:1.428571429; margin:0"}
+  %div{style: "margin:20px auto; padding:5px; width:450px"}
+    %div      
+      %div
+        %p{style: "margin: 0px auto; text-align:center;"}
+          %a{style: "font-size:200%; font-weight:400; line-height:1.4; text-decoration: none; color: black", href: "www.trym.io"}
+            <span style="color: #81CAA6;">t</span>rym.io
+        %p{style: "margin: 0px auto 20px auto; text-align:center;"}
+          %span{style: "color: gray"} nice to meet you
+        %p
+          Dear Friend,
+        %p
+          We are very pleased to announce that Trym.io has finally launched and you have been selected to join our private beta test as one of our first users.
+        %p
+          Trym.io manages all the recurring payments in your life and let's you easily cancel any services you don't use and pay  less for the services you do.  Want to git rid of your cable or land line services but hate talking to customer service?  We'll do it for you.  <b>All for free.</b>
+        %p{style: "text-align:center;"}
+          =link_to "To activate your account, click here.", accept_invitation_url(@resource, :invitation_token => @token), style: "color: #81CAA6; border-radius:4px;font-size:115%;"
+        %p
+          During the private beta, we are going to be working hard to improve the service and implment new features. Your feedback is crucial to this process, so please share it!
+        %p
+          You can reply to this email or email me directly at #{User.find(@resource.invited_by_id).email}.
+        %p
+          %br
+          Thanks and enjoy!
+          %br
+          #{User.find(@resource.invited_by_id).first_and_last_name}
+          %br
+          %small 
+            %a{href: "mailto:#{User.find(@resource.invited_by_id).email}", style: "color: #81CAA6"}
+              #{User.find(@resource.invited_by_id).email}
