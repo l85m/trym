@@ -25,10 +25,12 @@
           %br
           Thanks and enjoy!
           %br
-          #{User.find(@resource.invited_by_id).first_and_last_name}
-          %br
+          #{User.find(@resource.invited_by_id).first_name}
+        %p{style: "text-align:center; margin-top: 40px;"}
           %small
-            Co-Founder, Trym.io
+            #{User.find(@resource.invited_by_id).first_and_last_name}
+            %span &#x007C;
+            Co-Founder, Trym LLC
             %span &#x007C;
             %a{href: "mailto:#{User.find(@resource.invited_by_id).email}", style: "color: #81CAA6, text-decoration: none;"}
               #{User.find(@resource.invited_by_id).email}
