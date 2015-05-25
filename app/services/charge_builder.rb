@@ -53,7 +53,8 @@ class ChargeBuilder
 	end
 
 	def sanitize_charge_params_for_update(charge, old_charge)
-		merged_history = old_charge.history.merge(charge[:history])
+		h = old_charge.history.presence || {}
+		merged_history = h.merge(charge[:history])
 		{
 			amount: (charge[:amount] * 100).to_i,
 			billing_day: merged_history.keys.last,
