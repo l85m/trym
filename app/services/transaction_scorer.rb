@@ -15,7 +15,7 @@ class TransactionScorer
       transaction_request = charge.transaction_request
     else
       @dates = charge[:date].sort
-      @name = charge[:name].downcase
+      @name = (charge[:name].presence || "").downcase
       @merchant_id = charge[:merchant_id]
       @category_id = charge[:category_id]
       @history = charge[:date].zip(charge[:amount])
