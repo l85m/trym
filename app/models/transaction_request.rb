@@ -10,4 +10,8 @@ class TransactionRequest < ActiveRecord::Base
   	end.flatten
   end
 
+  def transaction_count
+  	data.present? ? data.count : 0
+  end
+
 end

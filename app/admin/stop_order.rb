@@ -48,6 +48,30 @@ ActiveAdmin.register StopOrder do
   filter :created_at
   filter :updated_at
 
+  show do
+    attributes_table do
+      row :id
+      row :request_age do |order|
+        content_tag :span, time_ago_in_words(order.created_at), class: order_age_class(order)
+      end
+      row :user do |order|
+        link_to order.user.name, admin_user_path(order.user.id) if order.charge.present?
+      end
+      row :operator
+      row :status
+      row :option
+      row :charge do |order|
+        link_to "#{order.charge.id}: #{order.charge.descriptor}", admin_charge_path(order.charge.id) if order.charge.present?
+      end
+      row :cancelation_data do |order|
+        if order.cancelation_data.present?
+          content_tag :div, order.cancelation_data, class: 'pretty-json', data: { json: order.cancelation_data.to_json }
+        end
+      end
+    end
+    active_admin_comments
+  end
+
   form do |f|
     f.inputs "Request Info" do 
       input :operator, as: :select, collection: User.admins

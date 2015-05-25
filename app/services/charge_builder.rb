@@ -26,7 +26,7 @@ class ChargeBuilder
 
 	def existing_charge(charge)
 		if charge[:merchant_id].present?
-			Charge.where( merchant_id: charge[:merchant_id], linked_account_id: @transaction_request.linked_account.id ).first
+			Charge.find_by_merchant_id( charge[:merchant_id] )
 		else
 			Charge.where( plaid_name: charge[:name], linked_account_id: @transaction_request.linked_account.id ).first
 		end
@@ -56,7 +56,7 @@ class ChargeBuilder
 		merged_history = old_charge.history.merge(charge[:history])
 		{
 			amount: (charge[:amount] * 100).to_i,
-			billing_day: merged_history.keys.sort.last,
+			billing_day: merged_history.keys.last,
 			transaction_request_id: @transaction_request.id,
 			linked_account_id: @transaction_request.linked_account.id,
 			history: merged_history

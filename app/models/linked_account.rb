@@ -81,6 +81,11 @@ class LinkedAccount < ActiveRecord::Base
     financial_institution.name
   end
 
+  def name
+    financial_institution.name
+  end
+
+
   #stub functions for forms
   def username
   end

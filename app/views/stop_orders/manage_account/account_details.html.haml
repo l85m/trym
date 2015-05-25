@@ -42,7 +42,6 @@
                 
                 =cancelation_datum.input :comments, as: :text, label: "Anything else we should know?", input_html: {value: @stop_order.cancelation_data.present? ? @stop_order.cancelation_data["comments"] : nil }
 
-            -if @stop_order.charge_fields.present?
               .unlinked-info-box
                 %h4.text-center how much are you paying?
                 .paragraph-spacer

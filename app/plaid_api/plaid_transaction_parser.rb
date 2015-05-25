@@ -96,11 +96,11 @@ class PlaidTransactionParser
     end
   end
 
-  def find_by_fuzzy_name_with_similar_threshold(query, threshold = 80)
+  def find_by_fuzzy_name_with_similar_threshold(query, threshold = 90)
     if query.present?
       query = query.downcase.gsub(/[^0-9a-z ]/i, '')
       @merchs.each.each do |name, id|
-        if ( name.similar(query) >= threshold || ( [query.size,name.size].min > 4 && ( query.include?(name) || name.include?(query) ) ) )
+        if ( name.similar(query) >= threshold || ( [query.size,name.size].min > 10 && ( query.include?(name) || name.include?(query) ) ) )
           return Merchant.find(id)
         end
       end

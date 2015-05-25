@@ -7,6 +7,13 @@ ActiveAdmin.register Merchant do
   scope :categorized
   scope :not_categorized
 
+  batch_action :append_to_name, form: {
+    append_this: :text
+  } do |ids, inputs|
+    Merchant.where(id: ids).each{ |m| m.update!( name: m.name + inputs[:append_this] )}
+    redirect_to collection_path, notice: [ids, inputs].to_s
+  end
+
   config.sort_order = "validated_desc"
   
   controller do
@@ -64,5 +71,31 @@ ActiveAdmin.register Merchant do
   filter :recurring_score
   filter :created_at
   filter :updated_at
+
+  show do
+    attributes_table do
+      row :name
+      row :validated
+      row :recurring_score
+      row :trym_category
+      row :cancelation_fields do |merc|
+        if merc.cancelation_fields.present?
+          content_tag :div, merc.cancelation_fields, class: 'pretty-json', data: { json: merc.cancelation_fields.to_json }
+        end
+      end
+    end
+    active_admin_comments
+  end
+
+  form do |f|
+    f.inputs "Merc Info" do 
+      input :name, as: :string
+      input :validated
+      input :recurring_score
+      input :trym_category
+      input :cancelation_fields, as: :hstore
+    end
+    actions
+  end
 
 end
