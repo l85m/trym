@@ -66,7 +66,11 @@ ActiveAdmin.register Charge do
       row :plaid_category
       row :history
       row :recurring_score
-      row :reason_for_score
+      row :reason_for_score do |charge|
+        if charge.reason_for_score.present?
+          content_tag :div, charge.reason_for_score, class: 'pretty-json', data: { json: charge.reason_for_score.to_json }
+        end
+      end
     end
     active_admin_comments
   end
