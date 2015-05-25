@@ -28,7 +28,7 @@ ActiveAdmin.register TransactionRequest do
       row :transaction_count
       row :data do |req|
         if req.data.present?
-          content_tag :div, req.data, class: 'pretty-json', data: { json: req.data.to_json }
+          content_tag :div, req.data, class: 'pretty-json', data: { json: req.data.to_json, controls: true }
         end
       end
     end

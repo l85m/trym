@@ -5,6 +5,25 @@ ActiveAdmin.register Charge do
 
   config.sort_order = "recurring_score_desc"
 
+  batch_action :clear_merchant do |ids|
+    Charge.find(ids).each { |c| c.update( merchant: nil ) }
+    redirect_to collection_path, notice: "merchant on #{ids} cleared"
+  end
+
+  batch_action :change_category, form: {
+    new_trym_category_id: :text
+  } do |ids, inputs|
+    Charge.find(ids).each { |c| c.update( trym_category_id: inputs[:new_trym_category_id] ) }
+    redirect_to collection_path, notice: [ids, inputs].to_s
+  end
+
+  batch_action :change_score, form: {
+    new_score: :text
+  } do |ids, inputs|
+    Charge.find(ids).each { |c| c.update( recurring_score: inputs[:new_score] ) }
+    redirect_to collection_path, notice: [ids, inputs].to_s
+  end
+
   index do
     selectable_column
     column :id do |charge|
@@ -50,21 +69,35 @@ ActiveAdmin.register Charge do
   filter :created_at
   filter :updated_at
 
-
   show do
     attributes_table do
       row :name
       row :description
-      row :user
-      row :transaction_request
-      row :plaid_name
-      row :merchant
-      row :user
-      row :created_at
-      row :updated_at
+      row :merchant do |charge|
+        if charge.merchant.present?
+          link_to charge.merchant.name, admin_merchant_path(charge.merchant.id)
+        end
+      end
       row :trym_category
       row :plaid_category
-      row :history
+      row :user do |charge|
+        if charge.user.present?
+          link_to charge.user.name, admin_user_path(charge.user.id)
+        end
+      end
+      row :transaction_request do |charge|
+        if charge.transaction_request.present?
+          link_to "#{charge.transaction_request.name} > #{charge.transaction_request.id}", admin_transaction_request_path(charge.transaction_request.id)
+        end
+      end
+      row :plaid_name
+      row :created_at
+      row :updated_at
+      row :history do |charge|
+        if charge.history.present?
+          content_tag :div, charge.history, class: 'pretty-json', data: { json: charge.history.to_json }
+        end
+      end
       row :recurring_score
       row :reason_for_score do |charge|
         if charge.reason_for_score.present?
@@ -73,6 +106,24 @@ ActiveAdmin.register Charge do
       end
     end
     active_admin_comments
+  end
+
+  form do |f|
+    f.inputs "Charge Info" do 
+      input :name, as: :string
+      input :description, as: :string
+      input :user
+      input :option, as: :select, collection: ["cancel_all", "downgrade", "upgrade", "find_deals", nil]
+    end
+    f.inputs "User Preferences" do 
+      input :contact_preference, as: :select, collection: %w(call text email)
+      input :accept_equipment_return
+      input :fee_limit, label: "Fee limit in US CENTS"
+    end
+    f.inputs  "Request data" do 
+      input :cancelation_data, as: :hstore
+    end
+    actions
   end
 
 end

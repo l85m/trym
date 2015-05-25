@@ -3,23 +3,31 @@
 
 jsonify = () ->
 	$('.pretty-json').each (index) ->
-		$( this ).JSONView($( this ).data("json"),{ collapsed: true })
+		data = $( this ).data("json")
+		$( this ).JSONView( data, { collapsed: true } )
 		$( this ).parent().find('.pretty-json').JSONView('expand', 1)
-
-		$expandButton = $("<button class='json-expand'>expand</button>")
-		$collapseButton = $("<button class='json-collapse'>collpase</button>")
-
-		$( this ).parent().prepend($collapseButton)
-		$( this ).parent().prepend($expandButton)
-
-		$expandButton.click (e) -> 
-			$( this ).parent().find('.pretty-json').JSONView('expand')
-			return
 		
-		$collapseButton.click (e) ->
-			$( this ).parent().find('.pretty-json').JSONView('collapse')
+		if $( this ).data("controls") == true
+			$expandButton = $("<button class='json-expand'>expand</button>")
+			$collapseButton = $("<button class='json-collapse'>collpase</button>")
+
+			$( this ).parent().parent().find("th").append("<br>")	
+			$( this ).parent().parent().find("th").append($expandButton)
+			$( this ).parent().parent().find("th").append("<br>")
+			$( this ).parent().parent().find("th").append($collapseButton)
+
+			$expandButton.click (e) -> 
+				$( this ).parent().parent().find("td").find('.pretty-json').JSONView('expand')
+				return
+			
+			$collapseButton.click (e) ->
+				$( this ).parent().parent().find("td").find('.pretty-json').JSONView('collapse')
+				return
 			return
 		return
+	return
+
+
 $ -> 
 	jsonify()
 	return

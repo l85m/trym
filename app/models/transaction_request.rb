@@ -14,4 +14,8 @@ class TransactionRequest < ActiveRecord::Base
   	data.present? ? data.count : 0
   end
 
+  def name
+    linked_account.present? ? linked_account.name : nil
+  end
+
 end
