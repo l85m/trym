@@ -14,6 +14,7 @@ gem 'slim'
 gem 'active_model_serializers'
 gem 'wicked' #form wizard
 gem 'kaminari' #pagination
+gem 'newrelic_rpm'
 
 #algos
 gem 'descriptive_statistics'
