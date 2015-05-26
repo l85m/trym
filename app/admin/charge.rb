@@ -110,18 +110,14 @@ ActiveAdmin.register Charge do
 
   form do |f|
     f.inputs "Charge Info" do 
-      input :name, as: :string
-      input :description, as: :string
+      input :merchant
+      input :plaid_name
+      input :trym_category
       input :user
-      input :option, as: :select, collection: ["cancel_all", "downgrade", "upgrade", "find_deals", nil]
-    end
-    f.inputs "User Preferences" do 
-      input :contact_preference, as: :select, collection: %w(call text email)
-      input :accept_equipment_return
-      input :fee_limit, label: "Fee limit in US CENTS"
-    end
-    f.inputs  "Request data" do 
-      input :cancelation_data, as: :hstore
+      input :recurring_score
+      input :amount
+      input :billing_day
+      input :renewal_period_in_weeks
     end
     actions
   end
