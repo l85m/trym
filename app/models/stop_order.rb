@@ -11,6 +11,7 @@ class StopOrder < ActiveRecord::Base
   validates_inclusion_of :option, in: ["cancel_all", "downgrade", "upgrade", "find_deals", nil]
   validates :status, inclusion: { in: %w(started requested working succeeded failed canceled) }
   validates :contact_preference, inclusion: { in: %w(call text email) }
+  
   validate :required_cancelation_fields_must_be_present_on_requested_records
   validate :required_cancelation_data_must_be_valid_on_requested_records
   
@@ -93,11 +94,13 @@ class StopOrder < ActiveRecord::Base
       present_fields = ( cancelation_data.presence || {} ).select{ |_,v| v.present? }.keys.map(&:to_sym)
       required_fields = merchant.required_cancelation_fileds.map(&:to_sym) + (option == "cancel_all" ? [] : [:change_description])
       required_fields - present_fields
+    else
+      []
     end
   end
 
   def missing_charge_fields
-    return {} unless charge.present?
+    return [] unless charge.present?
     charge_fields.keys.reject{ |field| charge.send(field).present? }
   end
 
@@ -122,8 +125,8 @@ class StopOrder < ActiveRecord::Base
   end
 
   def required_cancelation_fields_must_be_present_on_requested_records
-    missing_fields = missing_charge_fields + missing_required_fields
-    if status != "started" && missing_fields.present?
+    if status != "started"
+      missing_fields = missing_charge_fields + missing_required_fields
       missing_fields.each do |required_field|
         errors.add( required_field , "can't be blank" )
       end
