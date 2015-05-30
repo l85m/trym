@@ -5,8 +5,38 @@ attachValidators = () ->
     phoneField = $('input[id*="phone_number"]')
     
     if $('input[id*="address"]').size() > 0
-      jQuery.LiveAddress({key: $("#addressValidator").data("key"), autoVerify: true})
-    
+      $('input[id*="address"]').parents('form').find("input[type='submit']").click (e) ->
+        valid = true
+        if $("#street").val() == "" || $("#street").val() == null
+          $("#street").parent().addClass("has-error")
+          valid = false
+
+        if $("#zip").val() == "" || $("#zip").val() == null
+          $("#zip").parent().addClass("has-error")
+          valid = false
+
+        if valid
+          $('input[id*="address"]').val( $("#street").val() + " " + $("#zip").val() )
+        else
+          $("#error-row").removeClass("hidden")
+          if $("#address-error-msg").length == 0
+            $("#error-row").find(".help-block").append("<li id='address-error-msg'>Please complete both street address and zipcode fields</li>")
+          e.preventDefault
+        return valid
+
+      liveaddress = jQuery.LiveAddress(
+        key: $("#addressValidator").data("key")
+        autoVerify: true
+        autocomplete: false
+        submitVerify: false
+        addresses: [{
+          street: "#street"
+          zipcode: "#zip"
+        }]
+      )
+
+      return
+
     if socialField.size() > 0
       socialField.formatter({'pattern': '{{9999}}'});
     

@@ -109,7 +109,7 @@ class StopOrder < ActiveRecord::Base
     {
       amount: [:currency, "How much is your average bill?", "", charge.amount.present? ? charge.amount / 100.0 : nil ],
       billing_day: [:string, "When is your next charge?", "Estimate if not sure", charge.billing_day ],
-      renewal_period_in_weeks: [:string, "How often are you charged?", "", charge.renewal_period_in_words]
+      renewal_period_in_weeks: [:string, "How often are you charged?", "", charge.renewal_period_in_weeks]
     }
   end
 

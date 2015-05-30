@@ -38,7 +38,22 @@
                 .paragraph-spacer
 
                 -@stop_order.cancelation_fields.each do |cancelation_field|
-                  =cancelation_datum.input cancelation_field.to_sym, required: @stop_order.merchant.required_cancelation_fileds.include?(cancelation_field.to_s), input_html: {value: @stop_order.cancelation_data.present? ? @stop_order.cancelation_data[cancelation_field.to_s] : ( cancelation_field == :phone_number_on_account ? current_user.phone : current_user.account_detail.account_data[cancelation_field.to_s] ) }
+                  -if cancelation_field.to_sym == :address
+                    =cancelation_datum.input cancelation_field.to_sym, as: :hidden, required: @stop_order.merchant.required_cancelation_fileds.include?(cancelation_field.to_s), input_html: {value: @stop_order.cancelation_data.present? ? @stop_order.cancelation_data[cancelation_field.to_s] : ( cancelation_field == :phone_number_on_account ? current_user.phone : current_user.account_detail.account_data[cancelation_field.to_s] ) }
+
+                    .form-group.horizontal-form-group.string.required
+                      %label.string.required.col-sm-3.control-label.text-right
+                        %abbr{title: "required"}*
+                        Address on Account
+                      .col-sm-9
+                        .row
+                          .col-xs-8
+                            %input.form-control.text-left#street{placeholder: "street address", value: split_address(@stop_order, "street") }
+                          .col-xs-4
+                            %input.form-control.text-left#zip{placeholder: "zip", value: split_address(@stop_order, "zip")}
+
+                  -else
+                    =cancelation_datum.input cancelation_field.to_sym, required: @stop_order.merchant.required_cancelation_fileds.include?(cancelation_field.to_s), input_html: {value: @stop_order.cancelation_data.present? ? @stop_order.cancelation_data[cancelation_field.to_s] : ( cancelation_field == :phone_number_on_account ? current_user.phone : current_user.account_detail.account_data[cancelation_field.to_s] ) }
                 
                 =cancelation_datum.input :comments, as: :text, label: "Anything else we should know?", input_html: {value: @stop_order.cancelation_data.present? ? @stop_order.cancelation_data["comments"] : nil }
 
@@ -49,29 +64,24 @@
                   -@stop_order.charge_fields.each do |field, (type, label, placeholder, value)|
                     =charge_field.input field, as: type, required: true, label: label, input_html: {placeholder: placeholder, value: value}
 
-
-            -if @stop_order.errors.present?
-              .row.has-error
-                .col-sm-9.col-sm-offset-3.help-block
-                  %b Please correct the following before continuing:
-                  %ul
-                    -@stop_order.errors.messages.select{ |_,m| m.present? }.each do |attribute, message|
-                      %li #{attribute.to_s.humanize} #{message.join(", ")}
-                      :javascript      
-                        $(".form-group.stop_order_cancelation_data_#{attribute}").addClass("has-error")
-            -else
-              .paragraph-spacer
+        .row.has-error#error-row{class: @stop_order.errors.present? ? "" : "hidden"}
+          .col-sm-9.col-sm-offset-3.help-block
+            %b Please correct the following before continuing:
+            %ul
+              -if @stop_order.errors.present?
+                -@stop_order.errors.messages.select{ |_,m| m.present? }.each do |attribute, message|
+                  %li #{attribute.to_s.humanize} #{message.join(", ")}
+                  :javascript      
+                    $(".form-group.stop_order_cancelation_data_#{attribute}").addClass("has-error")
+            
+          .paragraph-spacer
       
       -else
 
         %h2.text-center
           This is the first request we've gotten for #{@charge.descriptor}
         .text-center
-          %span.lead Give us 24 hours to do some homework.  Tomorrow we'll contact you at
-
-          =render "shared/contact_options_button"
-
-          %span.lead to get the information we need from you to manage this account
+          %span.lead Give us 24 hours to do some homework.  Tomorrow we'll send you an email to get the information we need from you to manage this account
 
         .paragraph-spacer
 

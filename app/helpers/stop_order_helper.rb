@@ -21,4 +21,26 @@ module StopOrderHelper
 		steps.map(&:titlecase).zip( Array.new(4){ |x| x < i ? 'complete' : (x == i ? 'active' : 'disabled') } ).to_h
 	end
 
+	def split_address(stop_order, type)
+		if stop_order.cancelation_data.present?
+			addr = stop_order.cancelation_data[:address]
+		end
+
+		if addr.nil? && current_user.account_detail.present? && current_user.account_detail.account_data.present?
+			addr = current_user.account_detail.account_data[:address].presence || current_user.account_detail.account_data["address"]
+		end
+		
+		return nil unless addr.present?
+		zip_regex = /^\d{5}(?:[-\s]\d{4})?$/
+
+		zip = addr.split(" ").last
+		zip = "" unless zip_regex.match(zip).to_s == zip
+		
+		if type == "street"
+			return addr.gsub(zip,'')
+		else
+			return zip
+		end
+	end
+
 end
