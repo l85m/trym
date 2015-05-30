@@ -8,7 +8,7 @@ class TransactionScorer
     @charge = charge
     if charge.instance_of?(Charge)
       @dates = charge.history.present? ? charge.history.keys.sort.map(&:to_date) : []
-      @name = charge.plaid_name.present? ? downcase : ''
+      @name = charge.plaid_name.present? ? charge.plaid_name.downcase : ''
       @merchant_id = charge.merchant.present? ? charge.merchant.id : nil
       @category_id = charge.category_id
       @history = charge.history
