@@ -46,12 +46,14 @@ class LinkedAccountsController < ApplicationController
   end
 
   def plaid_webhook
-    @linked_account = LinkedAccount.find_by_plaid_access_token( params["access_token"] )
-    
+    if params["access_token"]
+      @linked_account = LinkedAccount.find_by_plaid_access_token( params["access_token"] )
+    end
+
     if @linked_account.present? && @linked_account.status != "unlinked"
       @linked_account.plaid_webhook_handler(params)
     else
-      Rails.logger.error "Trym Webhook For Orphaned Account!! linked_account=#{@linked_account.id}.  Response Body: #{params.inspect}"
+      Rails.logger.error "Trym Webhook For Orphaned Account!! Response Body: #{params.inspect}"
     end
 
     head :ok, content_type: "text/html"
