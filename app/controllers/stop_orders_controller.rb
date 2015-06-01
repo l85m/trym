@@ -14,7 +14,7 @@ class StopOrdersController < ApplicationController
       if @charge.has_active_stop_order?
         redirect_to stop_order_path(@charge.stop_orders.active_stop_order), notice: "Trym is already working on a request for this service."
       else
-        @stop_order = current_user.stop_orders.find_or_create_by( charge_id: @charge.id, status: "started" )
+        @stop_order = StopOrder.find_or_create_by( charge_id: @charge.id, status: "started" )
         redirect_to stop_order_manage_account_path(:manage_account, stop_order_id: @stop_order.id)
       end
     else
@@ -51,7 +51,7 @@ class StopOrdersController < ApplicationController
     if @charge.has_active_stop_order?
       redirect_to stop_order_path(@charge.stop_orders.active_stop_order), notice: "Trym is already working on a request for this service."
     else
-      @stop_order = current_user.stop_orders.find_or_create_by( charge_id: @charge.id, status: "started" )
+      @stop_order = StopOrder.find_or_create_by( charge_id: @charge.id, status: "started" )
       redirect_to stop_order_manage_account_path(:manage_account, stop_order_id: @stop_order.id)
     end
   end
@@ -68,7 +68,10 @@ class StopOrdersController < ApplicationController
 
   private
     def set_stop_order
-      @stop_order = current_user.stop_orders.find(params[:id])
+      @stop_order = StopOrder.find(params[:id])
+      if @stop_order.charge.present? && @stop_order.charge.user != current_user
+        redirect_to root_path
+      end
     end
 
     def cancelation_params
