@@ -1,4 +1,6 @@
 class StopOrders::ManageAccountController < ApplicationController
+  before_action :authenticate_user!
+
   layout 'manage_account'
 
   include Wicked::Wizard
