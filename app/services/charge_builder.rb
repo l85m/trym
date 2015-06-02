@@ -26,9 +26,9 @@ class ChargeBuilder
 
 	def existing_charge(charge)
 		if charge[:merchant_id].present?
-			Charge.where( merchant_id: charge[:merchant_id], user_id: @user_id )
+			Charge.where( merchant_id: charge[:merchant_id], user_id: @user_id ).limit(1).first
 		else
-			Charge.where( plaid_name: charge[:name], user_id: @user_id ).first
+			Charge.where( plaid_name: charge[:name], user_id: @user_id ).limit(1).first
 		end
 	end
 
