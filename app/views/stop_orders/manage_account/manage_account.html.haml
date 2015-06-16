@@ -24,13 +24,13 @@
             %label
               =f.radio_button :option, "upgrade"
               Upgrade or add services to my account
-        %h4
-          .radio
-            %label
-              =f.radio_button :option, "find_deals"
-              Find me a better deal
-              %a#deals-tooltip{href: "#", data: {toggle: "tooltip", title: "Have our team research better deals from #{@stop_order.charge.descriptor} and similar services and send you some reccomendations.  If you like what you see we will also help you make the change"}} 
-                %i.fa.fa-question-circle
+        / %h4
+        /   .radio
+        /     %label
+        /       =f.radio_button :option, "find_deals"
+        /       Find me a better deal
+        /       %a#deals-tooltip{href: "#", data: {toggle: "tooltip", title: "Have our team research better deals from #{@stop_order.charge.descriptor} and similar services and send you some reccomendations.  If you like what you see we will also help you make the change"}} 
+        /         %i.fa.fa-question-circle
 
 
         .paragraph-spacer
