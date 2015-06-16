@@ -13,7 +13,7 @@ class TrymCategory < ActiveRecord::Base
 				TrymCategory.order("id=2 DESC, id=5 DESC, id=1 DESC, name DESC").collect do |c| 
 				if c.merchants.validated.present?
 					[ { id: nil, text: nil, category: c.name} ] +
-					c.merchants.valided.order(:name).pluck(:name, :id).collect{ |name, id| {id: id, text: name, category: c.name} }
+					c.merchants.validated.order(:name).pluck(:name, :id).collect{ |name, id| {id: id, text: name, category: c.name} }
 				else
 					nil
 				end
