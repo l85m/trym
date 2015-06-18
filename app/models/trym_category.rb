@@ -11,9 +11,9 @@ class TrymCategory < ActiveRecord::Base
 		#put TV, Magazines, and Gyms in front
 		Rails.cache.fetch("merchant_select", expires_in: 12.hours) do
 				TrymCategory.order("id=2 DESC, id=5 DESC, id=1 DESC, name DESC").collect do |c| 
-				if c.merchants.present?
+				if c.merchants.validated.present?
 					[ { id: nil, text: nil, category: c.name} ] +
-					c.merchants.order(:name).pluck(:name, :id).collect{ |name, id| {id: id, text: name, category: c.name} }
+					c.merchants.validated.order(:name).pluck(:name, :id).collect{ |name, id| {id: id, text: name, category: c.name} }
 				else
 					nil
 				end
