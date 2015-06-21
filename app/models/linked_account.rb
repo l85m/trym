@@ -29,7 +29,24 @@ class LinkedAccount < ActiveRecord::Base
 
   def plaid_webhook_handler(params)
     case params["code"].to_i
-    when 0..2
+    when 0
+      button_icon = "circle-o-notch fa-spin"
+      button_text = "gathering"
+      button_tooltip = "Trym is pulling history from #{account_name} to indentify potentially recurring charges.  This might take a couple minutes."
+      button_link = '#'
+      flash = ''
+      button_disabled_state = "disabled"
+      PlaidTransactionGetter.perform_async(id)
+      push_update_to_client({
+        button_icon: button_icon,
+        button_text: button_text,
+        button_tooltip: button_tooltip,
+        button_link: button_link,
+        button_disabled_state: button_disabled_state,
+        flash: flash
+      })
+
+    when 1..2
       button_icon = "circle-o-notch fa-spin"
       button_text = "analyzing"
       button_tooltip = "Trym is searching through your transactions from #{account_name} to indentify potentially recurring charges.  This should only take a few seconds."
@@ -38,13 +55,14 @@ class LinkedAccount < ActiveRecord::Base
       button_disabled_state = "disabled"
       PlaidTransactionGetter.perform_async(id)
       push_update_to_client({
-        button_icon: button_icon, 
-        button_text: button_text, 
-        button_tooltip: button_tooltip, 
-        button_link: button_link, 
+        button_icon: button_icon,
+        button_text: button_text,
+        button_tooltip: button_tooltip,
+        button_link: button_link,
         button_disabled_state: button_disabled_state,
         flash: flash
       })
+
     when 3..4
       true
     when 1205
@@ -55,13 +73,13 @@ class LinkedAccount < ActiveRecord::Base
       button_disabled_state = "false"
       flash = "It appears your account is locked.  Please visit #{account_name}'s website to unlock it."
       push_update_to_client({
-        button_icon: button_icon, 
-        button_text: button_text, 
-        button_tooltip: button_tooltip, 
-        button_link: button_link, 
-        button_disabled_state: button_disabled_state, 
+        button_icon: button_icon,
+        button_text: button_text,
+        button_tooltip: button_tooltip,
+        button_link: button_link,
+        button_disabled_state: button_disabled_state,
         flash: flash
-      })    
+      })
     else
       Rails.logger.error "Trym Webhook Unhandled Response for linked_account=#{id}.  Response Body: #{params.inspect}"
     end
