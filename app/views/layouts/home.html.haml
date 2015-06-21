@@ -1,15 +1,20 @@
 !!!
-%html
+%html{id: "#{controller_name.gsub("_","-")}-#{action_name.gsub("_","-")}"}
   %head
     =render 'layouts/head'
-  
-  %body.scrollable
-    #home-header
-      = render 'layouts/header'
+
+  %body
+    = render 'layouts/header'
     .header-padding
-      = render 'layouts/flash'
-      = yield
-      = render 'layouts/footer'
+      .flash-offset
+        = render 'layouts/flash'
+      .container-fluid
+        = yield
+      .footer-container
+        = render 'layouts/footer'
 
 
-    =render 'layouts/modal_and_brand'
+    .modal.fade#modal-container
+      %button.hidden-xs{ type: "button", class: "close", data: {dismiss: "modal"}, onClick: '$(".modal-dialog").remove()' }
+        %span.modal-close-x{ aria_hidden: "true"} &times;
+        %span.sr-only Close

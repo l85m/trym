@@ -56,4 +56,11 @@ class User < ActiveRecord::Base
   def linked_account_at?(institution_id)
     linked_accounts.where(financial_institution_id: institution_id).limit(1).first
   end
+
+  def charges_due_in_next_seven_days
+    charges.recurring.has_billing_day.has_recurring_period.select do |charge|      
+      charge.next_billing_date.between? Date.today, 7.days.from_now.to_date
+    end
+  end
+
 end

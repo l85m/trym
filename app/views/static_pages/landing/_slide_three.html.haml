@@ -1,0 +1,32 @@
+.item#slide-three
+  .flex-center
+    .sm-full-height.text-center
+      .trym-talking
+        %p.opener.trym-fade-in
+          you tell me which charges to cancel or change.
+      .row
+        .col-xs-10.col-xs-offset-1
+          .paragraph-spacer
+          .text-center.trym-fade-in
+            %p.lead.trym-subtext
+              i can upgrade, downgrade or cancel any expense.  i'll even call customer service for you.
+      .row
+        .col-xs-12
+          .row.trym-fade-in
+            -demos = demo_charges
+            -demos.in_groups_of(3,false) do |charge_group|
+              -charge_group.each do |charge|
+                .col-lg-3.col-md-4.col-sm-6
+                  =render partial: "static_pages/landing/demo_charge_item", locals: {charge: charge}
+
+      .row.bs-wizard{:style => "border-bottom:0;"}
+        -order = StopOrder.new(charge: demos[1], status: "working", option: "cancel_all")
+        -manage_account_progress(order).each do |step, status|
+          .col-xs-4.bs-wizard-step{class: status}
+            .text-center.bs-wizard-stepnum= step
+            .progress
+              .progress-bar
+            %span.bs-wizard-dot
+            -if status == "active"
+              .bs-wizard-info.text-center
+                %p=order.status_message

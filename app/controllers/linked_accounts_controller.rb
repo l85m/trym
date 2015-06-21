@@ -15,7 +15,6 @@ class LinkedAccountsController < ApplicationController
 
   def index
     @linked_accounts = current_user.linked_accounts
-    render layout: "manage_account"
   end
 
   def new

@@ -9,7 +9,7 @@
   .row.bs-wizard{:style => "border-bottom:0;"}
 
     -manage_account_progress(@stop_order).each do |step, status|
-      .col-xs-3.bs-wizard-step{class: status}
+      .col-xs-4.bs-wizard-step{class: status}
         .text-center.bs-wizard-stepnum= step
         .progress
           .progress-bar
