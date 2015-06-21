@@ -27,8 +27,8 @@ attachValidators = () ->
       liveaddress = jQuery.LiveAddress(
         key: $("#addressValidator").data("key")
         autoVerify: true
-        autocomplete: false
-        submitVerify: false
+        autocomplete: true
+        submitVerify: true
         addresses: [{
           street: "#street"
           zipcode: "#zip"

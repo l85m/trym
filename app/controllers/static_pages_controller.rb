@@ -1,6 +1,8 @@
 class StaticPagesController < ApplicationController
-  def home
-  	render layout: "home"
+  def landing
+  end
+
+  def t
   end
 
   def legal

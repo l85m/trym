@@ -1,0 +1,16 @@
+.text-center
+  .trym-talking
+    %p.opener.trym-fade-in
+      welcome back#{ current_user.first_name.present? ? ", #{current_user.first_name}" : '' }
+.trym-fade-in
+  =greeting_text(current_user)
+
+  #trym-body.scroll-pane
+    %p.lead how can i help you today?
+    =link_to "track new recurring charges", new_charge_path, class: "btn btn-primary-o btn-wide"
+    -if current_user.charges.present?
+      =link_to "show me my tracked charges", charges_path, class: "btn btn-primary-o btn-wide"
+    =link_to "cancel or modify a charge", new_stop_order_path, class: "btn btn-primary-o btn-wide"
+    =link_to "view/add linked accounts", linked_accounts_path, class: "btn btn-primary-o btn-wide"
+    =link_to "view account history", stop_orders_path, class: "btn btn-primary-o btn-wide"
+    =link_to "edit my preferences", edit_user_registration_path, class: "btn btn-primary-o btn-wide"

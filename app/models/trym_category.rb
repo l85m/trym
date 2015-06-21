@@ -6,6 +6,7 @@ class TrymCategory < ActiveRecord::Base
 	has_many :merchants
 
 	scope :recurring, -> { where(recurring: true) }
+	scope :other_last, -> { where.not(name: "Other") + [find_by_name("Other")] }
 
 	def self.merchant_select
 		#put TV, Magazines, and Gyms in front

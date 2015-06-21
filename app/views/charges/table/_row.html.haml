@@ -1,6 +1,6 @@
 %tr{class: charge.recurring ? "recurring-row" : "", id: "charge-row-#{charge.id}"}
   %td.text-center{data: {title: "Track this charge?"}}
-    %input.lead{ type: "checkbox", name: "track-switch", checked: charge.recurring, data: { charge_id: charge.id, from_link: charge.transaction_request.present? } } 
+    %input.lead{ type: "checkbox", name: "track-switch", checked: charge.recurring, data: { charge_id: charge.id, from_link: charge.transaction_request.present? } }
   %td.merchant-cell{data: {title: "Merchant"}}
     =charge.descriptor
     =link_to "edit", edit_charge_path(charge), remote: true, class: "btn btn-default btn-xs hidden-md hidden-lg"

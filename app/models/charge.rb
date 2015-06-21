@@ -37,6 +37,7 @@ class Charge < ActiveRecord::Base
   scope :has_billing_day, -> { where.not(billing_day: nil) }
 
   scope :chartable, -> { has_recurring_period.has_billing_day.where('amount > 0') }
+  scope :complete, -> { chartable.where.not(merchant_id: nil).where.not(history: nil) }
 
   fuzzily_searchable :plaid_name
 
@@ -178,7 +179,7 @@ class Charge < ActiveRecord::Base
       merchant.name
     else
       smart_description
-    end.titlecase
+    end
   end
  
   def merchant_name

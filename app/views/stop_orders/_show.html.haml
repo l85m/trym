@@ -1,6 +1,8 @@
 -if stop_order.cancelable?
-  =link_to stop_order, class: "btn btn-xs btn-primary-o" do
-    %i.fa{class: "fa-#{stop_order.status == 'requested' ? 'send' : 'cog'}"}
-    #{stop_order.status}
-    %br
-    %b #{stop_order.option.gsub("_"," ").gsub(" all",'')}
+  =link_to stop_order, class: "btn btn-charge-status" do
+    %div
+      %i.fa{class: "fa-#{stop_order.option.gsub("_"," ").gsub(" all",'')}"}
+    %div
+      #{stop_order.option.gsub("_"," ").gsub(" all",'')}
+    %div
+      in progress

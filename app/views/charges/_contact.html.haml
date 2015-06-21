@@ -1,0 +1,34 @@
+.heading
+  %h5
+    %i.fa.fa-envelope-o
+    Contact Preferences
+.body
+  .item.row
+    .col-sm-12.item-label
+      %span=current_user.phone_verified? ? current_user.phone : 'No verified phone'
+      %span.text-right
+        =link_to edit_user_registration_path, class: "btn btn-xs btn-default" do
+          %i.fa.fa-mobile
+          ="#{current_user.phone_verified? ? 'edit' : 'add'} phone"
+  .item.row
+    .col-sm-12
+      %h5 Send Email:
+    .col-sm-12.prefs
+      %span 3 Days Before Charge
+      .pull-right
+        %input.bootstrap-switch{type: "checkbox", checked: current_user.email_alert, data: {size: "mini", on_text: "Yes", off_text: "No", url: contact_preference_path(current_user.id, email_alert: "placeholder") }}
+    .col-sm-12.prefs
+      %span Monthly Summary
+      .pull-right
+        %input.bootstrap-switch{type: "checkbox", checked: current_user.email_summary, data: {size: "mini", on_text: "Yes", off_text: "No", url: contact_preference_path(current_user.id, email_summary: "placeholder") }}
+  .item.row
+    .col-sm-12
+      %h5 Send Text Message:
+    .col-sm-12.prefs
+      %span 3 Days Before Charge
+      .pull-right
+        %input.bootstrap-switch{type: "checkbox", disabled: !current_user.phone_verified?, checked: current_user.text_alert, data: {size: "mini", on_text: "Yes", off_text: "No", url: contact_preference_path(current_user.id, text_alert: "placeholder") }}
+    .col-sm-12.prefs
+      %span Monthly Summary
+      .pull-right
+        %input.bootstrap-switch{type: "checkbox", disabled: !current_user.phone_verified?, checked: current_user.text_summary, data: {size: "mini", on_text: "Yes", off_text: "No", url: contact_preference_path(current_user.id, text_summary: "placeholder") }}

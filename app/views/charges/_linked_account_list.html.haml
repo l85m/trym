@@ -1,0 +1,36 @@
+.heading
+  %h5
+    %i.fa.fa-credit-card
+    Linked Accounts
+    .pull-right.visible-lg-inline-block
+      =link_to linked_accounts_path, class: "btn btn-xs btn-default" do
+        %i.fa.fa-plus-circle
+        link new account
+=link_to linked_accounts_path, class: "btn btn-xs btn-block sub-heading-link hidden-lg" do
+  %i.fa.fa-plus-circle
+  link new account
+.body
+  -if current_user.linked_accounts.linked.present?
+    -current_user.linked_accounts.linked.each do |fin|
+      .item.row
+        .col-sm-7.item-label{style: "padding-right:0px"}
+          %span=fin.name
+        .col-sm-5.col-sm-5.item-stats
+          %small
+            %a
+              view account
+            %ul.list-inline
+              %li
+                #{fin.charges.count}
+                %i.fa.fa-credit-card
+              %li
+                #{fin.charges.recurring.count}
+                %i.fa.fa-refresh
+  -else
+    .item.row
+      .col-sm-12
+        %h5
+          No Accounts Linked
+        %p.small
+          =link_to "Link your financial accounts", linked_accounts_path 
+          to automatically identify recurring expenses and alert you when prices change or new recurring expenses pop up

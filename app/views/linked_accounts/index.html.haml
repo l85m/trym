@@ -1,14 +1,21 @@
-#linked-accounts
-  %h1{style: "margin-top:0px"} Linked Accounts
-  %p.lead
-    Trym can link to the accounts below and find recurring charges for you. Link all your accounts and we'll alert you when we find new recurring charges or if your recurring charges change in price.
-  %ul
-    %li
-      =render 'shared/security_notice'
-    %li
-      Trym scans linked accounts every day and alerts you if we find new charges which look recurring
-    %li
-      You can unlink an account at any time by clicking on the "unlink" button next to to any linked account.  When you unlink an account Trym will delete its connection to your account and will stop scanning it for recurring charges.
+.row
+  .col-md-10.col-md-offset-1
+    %h1 Linked Accounts
+    %p.lead
+      Trym can link to the acounts below and find recurring charges for you. Link all your accounts and we'll alert you when we find new recurring charges or if your recurring charges change in price.
+    %ul
+      %li
+        =render 'shared/security_notice'
+      %li
+        Trym scans linked accounts every day and alerts you if we find new charges which look recurring
+      %li You can always unlink an account at any time by clicking on the "unlink" button next to to any linked account.  When you unlink an account Trym will delete its connection to your account and will stop scanning it for recurring charges.
 
-  .paragraph-spacer
-  =render 'shared/financial_institutions'
+    .paragraph-spacer
+
+    %p.lead.text-center
+      =link_to "click here to see all your charges across your linked accounts", search_charges_path
+    =render 'shared/financial_institutions'
+
+    .text-center
+      %small
+        Any accounts that you've linked will show as "Linked".  If your account is being updated, I will show as "syncing" or "analyzing" until the update is complete.  This usually takes less than two minutes.

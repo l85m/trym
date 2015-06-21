@@ -9,10 +9,10 @@ class ChargesController < ApplicationController
   def index
     session.delete(:charge_wizard_categories)
     
-    @charges = current_user.charges.recurring.with_merchant
+    @charges = current_user.charges.recurring.page(params[:page]).per(15)
     @charges_outlook_chart_data = ChargesOutlookChartData.new(current_user, @charges)
     @linked_accounts = current_user.linked_accounts
-    @charges = @charges.sort_by{ |c| [c.next_billing_date ? 0 : 1, c.next_billing_date] }.reverse
+    #@charges = @charges.sort_by{ |c| [c.next_billing_date ? 0 : 1, c.next_billing_date] }.reverse
     @stop_orders = current_user.stop_orders.active_or_complete.order(created_at: :desc)
     
     respond_with(@charges)

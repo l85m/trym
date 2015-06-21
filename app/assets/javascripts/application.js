@@ -26,6 +26,7 @@
 //= require bootstrap/popover
 //= require bootstrap/carousel
 //= require bootstrap/dropdown
+//= require bootstrap-switch
 //= require jquery-ui/datepicker
 //= require jquery-ui/autocomplete
 //= require jquery-ui/effect
@@ -33,3 +34,4 @@
 //= require j_growl_rails/jquery.jgrowl
 //= require bootstro
 //= require smartystreets.min
+//= require jScrollPane

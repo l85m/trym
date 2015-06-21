@@ -1,0 +1,28 @@
+.paragraph-spacer
+.row.trym-fade-in
+  .col-sm-12.text-center
+    .trym-talking
+      %p.lead.without-margin
+        hello#{current_user.first_name.present? ? ' ' + current_user.first_name : ''}, here's what i'm tracking for you    
+    -if @charges_outlook_chart_data
+      %p.lead
+        you're on track to spend 
+        %b #{number_to_currency @charges_outlook_chart_data.total_next_twelve_months}
+        on recurring expenses over the next year
+    -else
+      %p.lead
+        tell me more about a recurring expenses by clicking modify > edit expense info
+
+.row.trym-fade-in
+  -(@charges.select(&:next_billing_date).sort_by(&:next_billing_date) + @charges.reject(&:next_billing_date)).each do |charge|
+    .col-md-6
+      =render partial: "shared/charge_item", locals: {charge: charge}
+
+-if @charges_outlook_chart_data
+  .row.trym-fade-in
+    .col-sm-12.text-center
+      %p.lead.without-margin    
+        it looks like you're paying a lot for 
+        #{@charges_outlook_chart_data.bar_categories.first},
+        =link_to "click here", stop_orders_path(charge_id: @charges_outlook_chart_data.charges.select{ |c| c.merchant_name == @charges_outlook_chart_data.bar_categories.first }.first), method: :post
+        if you'd like me to cancel this service.

@@ -2,56 +2,82 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-$brand-color: rgb(129, 202, 166);
+$brand-color: #5dc38e;
 
-#home-banner{ 
-	color: white;
-	padding-top: 70px;
-	padding-bottom: 50px;
-	background-image: image-url("grid.png");
-	h1{ font-size: 300%; }
-	p{ 
-		font-size: 200%; 
-		color: whitesmoke;
+html#static-pages-landing, html#invitations-edit, html#invitations-update{
+	#demo-touch{
+	  width: 30px;
+	  height: 30px;
+	  display: inline-block;
+	  background-color: white;
+	  border-radius: 100%;
+	  position: absolute;
+	  z-index: 9;
+	  border: 2px solid black;
+	  transition: all 0.5s;
 	}
+	#demo-touch.pop{
+		width: 100px;
+		height: 100px;
+		opacity: 0;
+	}
+  .container-fluid{
+  	padding: 0px;
+  }
+  .carousel-inner{
+  	height: 100%;
+  }
+  .item{ height: 100%; }
+  .flex-center{
+	  display: flex;
+	  align-items: center;
+	  height: 100%;
+	  overflow-y: scroll;
+  }
+  .bs-wizard{
+  	opacity: 0;
+  }
+  .alert-email{
+  	margin: 10px;
+  	border-radius: 6px;
+  	box-shadow: 0px 1px 5px 1px rgba(0, 0, 0, 0.22);
+  }
+  @media (max-width: 992px) {
+  	.sm-full-height{
+  		height: 100%;
+  	}
+  }
+  @media (max-height: 700px) {
+  	.sm-full-height{
+  		height: 100%;
+  	}
+  }
 }
 
-#home-header{
-	.navbar-brand{
-		display: none;
+#home-carousel{
+	.left.carousel-control{
+  	background: linear-gradient(to right, white , transparent);
 	}
-	nav{
-		position: absolute;
-	  border-bottom: none;
-  	background-color: transparent;
-	.navbar-right{
-		margin-right: 0px;
+	.right.carousel-control{
+  	background: linear-gradient(to left, white, transparent);
 	}
+	.carousel-control{
+		width: 5%;
+		opacity: 1;
+		color: rgba(0,0,0,0.4);
+		background-image: none;
+		span{ font-family: "FontAwesome" }
+		.glyphicon-chevron-left:before{ content: "\f137" }
+		.glyphicon-chevron-right:before{ content: "\f138" }
 	}
-}
-@media (min-width: 768px) {
-  #home-header{
-	  .navbar .navbar-nav {
-	      display: inline-block;
-	      float: none !important;
-	      vertical-align: top;
-	  }
-
-	  .navbar .navbar-collapse {
-	      text-align: center;
-	  }
-	}
-}
-@media (max-width: 768px) {
-	#home-header{
-		.navbar-collapse.collapse.in, .navbar-collapse.collapsing{
-			background-color: #F0F1F4;
-		}
+	.carousel-control:hover{
+		color: $brand-color;
 	}
 }
 #home-carousel-controls{	
 	div.row > div{ padding: 10px 15px 0px 15px; }
 }
+
 .home-carousel-control:hover{
 	cursor: pointer;
 	p{ color: $brand-color; }
@@ -64,30 +90,41 @@ $brand-color: rgb(129, 202, 166);
 	top: 35px;
 	z-index: 1;
 }
-.carousel-caption {
-	top: 0;
-	width: 100%;
-	background: rgba(0,0,0,0.5);
-	padding-top: 20px;
-	padding-bottom: 20px;
-	text-align: center;
-	text-shadow: none;
-	left: 0;
-	right: 0;
-	p {color: white;}
-}
 
-@media (max-width: 992px) {
-	#home-carousel-controls{ display: none; }
-	.carousel-caption{ 	
-		padding-top: 10px;
-		bottom: 0; 
+.trym-talking{
+	margin: 10px auto;
+	display: inline-block;
+	border-bottom: 1px solid $brand-color;
+	padding: 0px 20px;
+	p.opener{
+		margin: 0px;
+		font-weight: 300; 
+		font-size: 250%;
 	}
 }
-@media (min-width: 992px) {
-	.mobile-carousel-control{ display: none; }
-	.carousel-caption{ 	bottom: auto; }
+#trym-body{
+	margin: 0 auto;
+	margin-top: 30px;
+	text-align: center;
+	overflow-y: scroll;
+	.trym-grid-row{
+		margin: 2px 0px;
+	}
 }
+.trym-fade-in{
+	opacity: 0;
+}
+.trym-from-bottom{
+	position: relative;
+}
+.trym-subtext{
+	margin-bottom: 30px;
+}
+@media (max-width: 767px) {
+	.trym-talking p.opener{ font-size: 170%; }
+	#trym-body{ margin-top: 10px; }
+}
+
 
 // about page
 #about-banner{
