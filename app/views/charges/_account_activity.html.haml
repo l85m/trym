@@ -1,0 +1,37 @@
+.heading
+  %h5
+    %i.fa.fa-history
+    Expense Activity
+    .pull-right.visible-lg-inline-block
+      =link_to new_charge_path, class: "btn btn-xs btn-default", remote: true do
+        %i.fa.fa-plus-circle
+        track new expense
+        
+=link_to new_charge_path, class: "btn btn-xs btn-block sub-heading-link hidden-lg", remote: true do
+  %i.fa.fa-plus-circle
+  track new expense
+.body
+  -if @stop_orders.present?
+    -@stop_orders.each do |s|
+      .item.row
+        .col-lg-5.col-sm-7.item-label{style: "padding-right:0px"}
+          %span
+            =s.charge.descriptor
+            %br
+            %small
+              =link_to s.type_of_request, stop_order_path(s)
+        .col-lg-7.col-sm-5.text-center
+          .progress
+            .progress-bar{ style: "width: #{s.progress_perc}", class: "progress-bar-#{s.progress_class}" }
+          -if s.status == "succeeded"
+            %i.fa.fa-circle-check
+          %small=s.status
+
+  -else
+    .item.row
+      .col-sm-12
+        %h5
+          No Expense History
+        %p.small
+          Did you know that you can <b>schedule a cancelation or change</b> for any expense? Just click cancel or modify on any recurring expense and select a future date.  
+        %p.small No more forgetting to cancel those pesky annual fees!

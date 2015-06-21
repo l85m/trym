@@ -1,6 +1,8 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
+  get 'main_page/home'
+
   resources :stop_orders do
     resources :manage_account, controller: 'stop_orders/manage_account',  only: [:show, :update]
   end
@@ -47,7 +49,7 @@ Rails.application.routes.draw do
 
   authenticated :user do
     devise_scope :user do
-      root to: "charges#index", :as => "my-charges"
+      root to: "charges#index", :as => "home"
     end
   end
 
@@ -55,16 +57,17 @@ Rails.application.routes.draw do
     mount Sidekiq::Web => '/sidekiq'
   end
 
-  get 'home', to: 'static_pages#home'
+  get 'landing', to: 'static_pages#landing'
   get 'legal', to: 'static_pages#legal'
   get 'about', to: 'static_pages#about'
   get 'test', to: 'static_pages#test'
+  get 't', to: 'static_pages#t'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  root 'static_pages#home'
+  root 'static_pages#landing'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

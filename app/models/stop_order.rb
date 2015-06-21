@@ -65,16 +65,24 @@ class StopOrder < ActiveRecord::Base
   def type_of_request
     case option
     when "cancel_all"
-      "Cancel Your Entire Account / Service"
+      "Cancel All Services"
     when "downgrade"
-      "Downgrade or Cancel Part of Your Service"
+      "Downgrade Services"
     when "upgrade"
-      "Upgrade or Add New Services"
+      "Upgrade Services"
     when "find_deals"
       "Search for Better Deal"
     else
       nil
     end
+  end
+
+  def progress_perc
+    {started: "5%", requested: "40%", working: "60%", succeeded: "100%", failed: "100%"}[status.to_sym]
+  end
+
+  def progress_class
+    {started: "default", requested: "default", working: "default", succeeded: "default", failed: "danger"}[status.to_sym]
   end
 
   def cancelable?

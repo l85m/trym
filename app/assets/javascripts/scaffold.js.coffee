@@ -4,6 +4,48 @@
     button.parents().find(button.data('target')).remove()
     return
 
+fitToPage = ->
+  $('.scrollable').each (i, el) ->
+    scrollable = $(this)
+    
+    if scrollable.length > 0
+      if $(window).width() >= 767
+        h = $(window).height()
+        scrollable.height h - 50 + 'px'
+      else
+        scrollable.height 'auto'
+
+    if scrollable.hasClass("scroll-pane")
+      if scrollable.data("jsp") == undefined
+        scrollable.bind 'jsp-initialised', (event, isScrollable) ->
+          if isScrollable
+            scrollable.css({"border-right":"none"})
+          return
+        
+        scrollable.bind 'jsp-scroll-x', (event, scrollPositionX, isAtLeft, isAtRight) ->
+          #prevent horizontal scrolling
+          scrollable.find(".jspPane").css("left":"0px")
+
+        if scrollable[0].scrollHeight > ($(window).height() - 50)
+          scrollable.jScrollPane()
+          scrollable.find(".jspPane").width(scrollable.width()+"px")
+      
+      else
+        if scrollable[0].scrollHeight > ($(window).height() - 50)
+          scrollable.width(scrollable.parent().width()+"px")
+        else
+          scrollable.data("jsp").destroy()
+          scrollable.width("auto")
+    
+    return
+  return
+
+navbarCollapseFormatting = ->
+  $('#navbar-collapse-menu').on 'show.bs.collapse', ->
+    $(".navbar-header").css({"background-color":"#F0F1F4"})
+  $('#navbar-collapse-menu').on 'hidden.bs.collapse', ->
+    $(".navbar-header").css({"background-color":"transparent"})
+
 @introRunner = ->
 	if( $("#charge-side-list").is(":visible") && $("#whoami").data("intro") )
 		bootstro.start '',
@@ -49,14 +91,24 @@
     return
   return
 
-# @sprayParticles = () ->
-#   if $("#particles-js").length > 0
-#     particlesJS.load 'particles-js', './particlesjs-config.json', ->
-#       console.log 'callback - particles.js config loaded'
-#     return
+makeSwitches = () ->
+  if $(".bootstrap-switch").length > 0
+    $(".bootstrap-switch").each (i, el) ->
+      $(this).bootstrapSwitch()
+      if $(this).data("url") != undefined
+        $(this).on 'switchChange.bootstrapSwitch', (event, state) ->
+          $.ajax
+            url: $(this).data('url').replace('placeholder', state.toString())
+            type: 'PUT'
+          return
 
-$(document).on 'ready page:load', ->
+$ ->
   $('[data-toggle="tooltip"]').tooltip()
   attachCloseActionToButtons()
-  introRunner()
-  # sprayParticles()
+  navbarCollapseFormatting()
+  fitToPage()
+  makeSwitches()
+
+  $(window).resize ->
+    fitToPage()
+    return

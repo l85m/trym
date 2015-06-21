@@ -1,49 +1,11 @@
-.container-fluid.scrollable-with-offset
-
-  .row{style: 'padding: 0px 20px;'}
-    - if current_user.charges.present?
-      .col-sm-6.col-md-4.hidden-sm.hidden-xs.scrollable
-        =render 'charge_list'
-      .scrollable.col-md-8.col-sm-12
-        =render 'charge_index_tabs'
-    - else
-      .scrollable
-        =render 'new_user_prompt'
-  
-=render "shared/charge_item_script"
-
-:javascript
-  $(document).ready(function() {
-    if ($(window).width() >= 767) {
-      var h = $(window).height();
-      if ($('#charges-total-by-merchant-chart').size() > 0 ) {
-        var chart = $('#charges-total-by-merchant-chart');
-        chart.highcharts().setSize( chart.width() , h - chart.offset().top - 60 );
-      }
-      $('.scrollable').height((h-95)+'px');
-    } else {
-      $('#charge-index-pills a:first').tab('show');
-    }
-  });
-  
-  $( window ).resize(function() {
-    if ($(window).width() >= 767) {
-      var h = $(window).height();
-      if ($('#charges-total-by-merchant-chart').size() > 0 ) {
-        var chart = $('#charges-total-by-merchant-chart');
-        chart.highcharts().setSize( chart.width() , h - chart.offset().top - 60 );
-      }
-      $('.scrollable').height((h-95)+'px');
-      if( $('#charge-index-pills a:first').parent().hasClass('active') ) {
-        $("#charge-index-pills a[href='#twelve-month-outlook']").tab('show');
-      }
-    } else {
-      $('.scrollable').height('auto');
-      $('.scrollable-with-offset').height('auto');
-      if ($('#charges-total-by-merchant-chart').size() > 0 ) { $('#charges-total-by-merchant-chart').height('auto'); }
-    }
-  });
-
-  $(function () {
-    $('[data-toggle="popover"]').popover({html: true, trigger: 'focus', title: "<i class='fa fa-calendar'></i> Charge History"});
-  })
+.row
+  .col-md-3.col-sm-4.hidden-xs{style: "padding: 0px"}
+    #side-list.scroll-pane.scrollable
+      = render 'linked_account_list'
+      = render 'contact'
+      = render 'account_activity'
+  .col-md-9.col-sm-8.scrollable
+    -if @charges.present?
+      =render 'content'
+    -else
+      =render 'no_charges_content'

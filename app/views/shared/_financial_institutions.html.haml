@@ -14,15 +14,13 @@
                   -if linked_account.status == "linked"
                     
                     -if linked_account.error_message.blank?
-                      =link_to linked_account, class: "btn btn-primary btn-responsive linked-account-button", data: {user_id: current_user.id} do
-                        Linked
-                      =link_to unlink_linked_accounts_path(id: linked_account.id), method: :post, class: "btn btn-danger btn-responsive linked-account-button", style: "margin-left: 3px; box-shadow: 1px 1px 1px rgba(0,0,0,0.2)", data: {confirm: "Leaving your account linked to trym allows us to keep track of your recurring payments for you.  Please unlink your account only if you no longer want trym to track this account. To relink it you will need to re-enter your account credentials."} do
-                        unlink
-
+                      =link_to linked_account, class: "btn btn-primary-o btn-responsive linked-account-button", data: {user_id: current_user.id} do
+                        view account
 
                     -else
                       .tooltip-container{ data: {toggle: "tooltip", placement: "left", title: "Message from your account: #{linked_account.error_message}" }}
-                        =link_to "click here to retry the Link", new_linked_account_path(financial_institution_id: institution.id), remote: true, class: "btn btn-primary-o btn-responsive linked-account-button" do
+                        
+                        =link_to new_linked_account_path(financial_institution_id: institution.id), remote: true, class: "btn btn-primary-o btn-responsive linked-account-button" do
                           Needs Attention
 
                   -elsif linked_account.status == "unlinked"

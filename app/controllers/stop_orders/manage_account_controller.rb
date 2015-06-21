@@ -34,7 +34,7 @@ class StopOrders::ManageAccountController < ApplicationController
 
   def set_steps
     if params["id"] == "name_and_phone" && current_user.phone_verified?
-      params["id"] = "manage_account"
+      params["id"] = "account_details"
     end
     self.steps = [:manage_account] + (current_user.phone_verified? ? [] : [:name_and_phone]) + [:account_details]
   end

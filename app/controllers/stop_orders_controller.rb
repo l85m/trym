@@ -50,8 +50,11 @@ class StopOrdersController < ApplicationController
 
     if @charge.has_active_stop_order?
       redirect_to stop_order_path(@charge.stop_orders.active_stop_order), notice: "Trym is already working on a request for this service."
+    elsif params["option"]
+      @stop_order = StopOrder.find_or_create_by( charge_id: @charge.id, status: "started", option: params["option"] )
+      redirect_to stop_order_manage_account_path(:name_and_phone, stop_order_id: @stop_order.id)
     else
-      @stop_order = StopOrder.find_or_create_by( charge_id: @charge.id, status: "started" )
+      @stop_order = StopOrder.find_or_create_by( charge_id: @charge.id, status: "started", option: params["option"] )
       redirect_to stop_order_manage_account_path(:manage_account, stop_order_id: @stop_order.id)
     end
   end

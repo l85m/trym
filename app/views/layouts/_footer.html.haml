@@ -1,15 +1,15 @@
-.container-fluid{style: "border-top: 1px solid lightgray; padding-top: 5px; padding-bottom: 5px;"}
+.container-fluid.footer-container
 	.row
-		.col-xs-12.text-left{style: "margin-top: 4px;"}
+		.col-xs-12.text-center
 			%i.fa.fa-copyright
-			2015 Trym.io &#x007C;
-			=link_to "Legal & Privacy", legal_path
+			2015 trym.io &#x007C;
+			=link_to "legal & privacy", legal_path
 			%span &#x007C;
-			=link_to "About", about_path
+			=link_to "about", about_path
 			%span &#x007C;
 			%a{href: "mailto:team@trym.io"}
-				%i.fa.fa-2x.fa-envelope-square.footer-icon
+				%i.fa.fa-envelope-square
 			%a{href: "https://www.facebook.com/trym.io", target: "_blank"}
-				%i.fa.fa-2x.fa-facebook-square.footer-icon
+				%i.fa.fa-facebook-square
 			%a{href: "https://twitter.com/trym_io", target: "_blank"}
-				%i.fa.fa-2x.fa-twitter-square.footer-icon
+				%i.fa.fa-twitter-square

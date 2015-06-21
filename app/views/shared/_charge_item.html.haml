@@ -1,14 +1,10 @@
 .well.charge-item{class: "merchant-#{charge.descriptor.downcase.gsub(/\W/, '')}", id: "charge-item-#{charge.id.present? ? charge.id : 'new'}" }
-  -if current_user.admin
-    .text-center{style: "margin-bottom: -8px; margin-top: -16px;"}
-      %small=link_to "admin panel", admin_charge_path(charge), class: "btn btn-xs btn-default"
-  
   .charge-info-container
     -if (charge.amount.present? && charge.amount > 0) || (charge.renewal_period_in_weeks.present? && charge.renewal_period_in_weeks > 0) || charge.history.present?
       .charge-info.charge-amount.text-center{style: "padding-right: 10px;"}      
         -if charge.amount.present? && charge.amount > 0
-          %p.charge-lead
-            =number_to_currency(charge.amount_in_currency)
+          .charge-lead
+            %p=number_to_currency(charge.amount_in_currency)
         
         -if charge.renewal_period_in_weeks.present? && charge.renewal_period_in_weeks > 0
           %p.without-margin
@@ -19,10 +15,10 @@
               %i.fa.fa-calendar
               history
               
-    .charge-info.charge-description        
+    .charge-info.charge-description.text-left
       -if charge.merchant.present? && charge.merchant.name.present?
-        %p.charge-lead
-          =charge.merchant.name.titlecase
+        .charge-lead
+          %p=charge.merchant.name.titlecase
 
       %p.without-margin.small
         %span.small-gray
@@ -37,16 +33,27 @@
     
     .charge-info.charge-buttons.text-center      
       -if stop_order_charge_ids.include?(charge.id)
-        %div{style: "margin-top:7px"}
-          =render partial: "stop_orders/show", locals: {stop_order: charge.active_stop_order}
+        =render partial: "stop_orders/show", locals: {stop_order: charge.active_stop_order}
       -else        
-        .inline-block.charge-item-action-buttons
-          .text-center
-            =link_to stop_orders_path(charge_id: charge.id), method: :post, class: "btn btn-primary btn-xs", style: "margin-top: 5px;" do
-              %small
-                .text-center
-                  TRYM 
-                .text-center
-                  ACCOUNT
-      .text-center
-        %small=link_to "add/edit details", edit_charge_path(charge), remote: true
+        .btn-group-vertical.text-center{role: "group", style: "width: 100%"}
+          // Oh dear god this is so ugly
+          =link_to stop_orders_path(charge_id: charge.id, option: "cancel_all"), method: :post, class: "btn btn-charge", style: "border-top-right-radius: 3px;" do
+            %i.fa.fa-stop
+            cancel
+          .btn-group
+            %button.btn.btn-charge{style: "border-bottom-right-radius: 3px; border-top: 1px solid rgb(231, 231, 231);", data: {toggle: "dropdown"}} 
+              modify
+              %span.caret
+            %ul.dropdown-menu
+              %li              
+                =link_to stop_orders_path(charge_id: charge.id, option: "upgrade"), method: :post do
+                  %i.fa.fa-upgrade
+                  upgrade
+              %li
+                =link_to stop_orders_path(charge_id: charge.id, option: "downgrade"), method: :post do
+                  %i.fa.fa-downgrade
+                  downgrade
+              %li
+                =link_to edit_charge_path(charge), remote: true do
+                  %i.fa.fa-edit
+                  edit expense info
