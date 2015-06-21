@@ -1,8 +1,8 @@
 .row#linked-account-index
-  -FinancialInstitution.connect_enabled.in_groups_of(4, false) do |institution_group|   
+  -FinancialInstitution.connect_enabled.in_groups_of(4, false) do |institution_group|
     .col-md-6
       %ul.list-group.wizard-list-group
-        -institution_group.each do |institution|  
+        -institution_group.each do |institution|
           -linked_account = current_user.linked_account_at?(institution.id).presence || @linked_account
           %li.list-group-item{ data: { linked_account_id: linked_account.present? ? linked_account.id : nil } }
             .row
@@ -10,9 +10,9 @@
                 %span.lead=institution.name
               .col-xs-6.text-right
                 -if linked_account.present? && linked_account.status != "started"
-                    
+
                   -if linked_account.status == "linked"
-                    
+
                     -if linked_account.error_message.blank?
                       =link_to linked_account, class: "btn btn-primary btn-responsive linked-account-button", data: {user_id: current_user.id} do
                         Linked
@@ -26,7 +26,7 @@
                           Needs Attention
 
                   -elsif linked_account.status == "unlinked"
-                    =link_to linked_account, class: "btn btn-warning btn-responsive linked-account-button" do 
+                    =link_to linked_account, class: "btn btn-warning btn-responsive linked-account-button" do
                       unlinked
                     =link_to "Link", new_linked_account_path(financial_institution_id: institution.id), remote: true, class: "btn btn-primary btn-responsive linked-account-button"
 
