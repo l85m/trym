@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150621124813) do
+ActiveRecord::Schema.define(version: 20150622063608) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -48,11 +48,11 @@ ActiveRecord::Schema.define(version: 20150621124813) do
   add_index "active_admin_comments", ["resource_type", "resource_id"], name: "index_active_admin_comments_on_resource_type_and_resource_id", using: :btree
 
   create_table "charge_wizards", force: true do |t|
+    t.integer  "user_id"
     t.json     "progress"
     t.boolean  "in_progress"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "user_id"
   end
 
   add_index "charge_wizards", ["user_id"], name: "index_charge_wizards_on_user_id", using: :btree
@@ -96,6 +96,7 @@ ActiveRecord::Schema.define(version: 20150621124813) do
     t.string   "mfa",        array: true
     t.string   "plaid_id"
     t.boolean  "connect"
+    t.string   "logo"
   end
 
   create_table "invite_requests", force: true do |t|
@@ -213,15 +214,15 @@ ActiveRecord::Schema.define(version: 20150621124813) do
     t.datetime "last_sign_in_at"
     t.inet     "current_sign_in_ip"
     t.inet     "last_sign_in_ip"
+    t.string   "confirmation_token"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "email_summary",          default: false, null: false
     t.boolean  "email_alert",            default: false, null: false
     t.boolean  "text_summary",           default: false, null: false
     t.boolean  "text_alert",             default: false, null: false
-    t.string   "confirmation_token"
-    t.datetime "confirmed_at"
-    t.datetime "confirmation_sent_at"
     t.boolean  "admin"
     t.string   "invitation_token"
     t.datetime "invitation_created_at"
