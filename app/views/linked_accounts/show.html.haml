@@ -28,13 +28,13 @@
                 %i.fa.fa-link
                 relink 
                 %span.hidden-xs this account
-            %p This account has been unlinked. Trym will no longer automatically search your account for new transactions or update you on changes to tracked recurring charges from this account.  You may relink this account at any time by re-entering your linked account credentials.
+            %p This account has been unlinked. Trym will no longer automatically search your account for new transactions or update you on changes to recurring expenses from this account.  You may relink this account at any time by re-entering your linked account credentials.
 
         -if @linked_account.charges.present?
           %p.lead  
             Transactions on this account for up to the past two years are displayed below. 
             %strong Trym puts expenses which look recurring at the top of the list.
-            Tell Trym to monitor or manage any expense by checking "track" next to it. Based on your transaction history, Trym will notify you when you are likely to be re-charged for any tracked expense. 
+            Tell Trym to monitor or manage any expense by checking "recurring" next to it. Based on your transaction history, Trym will notify you when you are likely to be re-charged for any recurring expense. 
         
           =render 'charges/table/table'
 
@@ -45,7 +45,7 @@
               No transactions found
 
             %p.lead
-              We haven't foudn any transactions in this account yet.  If you can see transactions on your financial institution's website or think there should be charges on this account please email us at
+              We haven't foudn any transactions in this account yet.  If you can see transactions on your financial institution's website or think there should be transactions on this account please email us at
               =link_to "support@trym.io", "mailto:support@trym.io?subject=Issues with Linked Account ID:#{@linked_account.id}"
           .paragraph-spacer
           .paragraph-spacer

@@ -6,26 +6,20 @@
         %a.anchorjs-link#what-is-trym{href: "#what-is-trym", style: "margin-top: -50px; padding-top: 50px;"}
           %i.fa.fa-rocket
       %p 
-        Trym is an interface for all of the recurring services in your life.  It helps you manage them or cancel any service with just a few clicks.  It also helps you realize when things cost more than they should, or when you can get a better deal somewhere else by notifiying you when the price you're paying goes up, or by telling you when someone else is offering a better deal.  
-      -if current_user.present?
-        %p
-          =link_to "Click here", turn_on_intro_account_details_path
-          to revisit the site walkthrough you had when you first created your account.
-
+        Trym helps you manage them or cancel any service with just a few clicks.  It also helps you realize when things cost more than they should, or when you can get a better deal somewhere else by notifiying you when the price you're paying goes up, or by telling you when someone else is offering a better deal.  
       
       %h3 
         How much does Trym cost?
         %a.anchorjs-link#whats-it-cost{href: "#whats-it-cost", style: "margin-top: -50px; padding-top: 50px;"}
           %i.fa.fa-rocket      
-      %p Trym is and always will be 100% free.
+      %p Trym is 100% free.
 
       %h3 
         How does Trym make money?
         %a.anchorjs-link#show-me-the-money{href: "#show-me-the-money", style: "margin-top: -50px; padding-top: 50px;"}
           %i.fa.fa-rocket
       %p 
-        We partner with service providers to offer you better deals on services than you already use, or by giving services a chance to lower their prices to you before you cancel or downgrade them.  Trym will never partner with service providers in ways that prevent you from learning about better deals with other providers, or to make it harder for you to manage or cancel a service.
-
+        Trym partners with service providers to offer you better deals on services than you already use, or gives providers a chance to lower their prices to you before you cancel or downgrade them. Trym will never partner with service providers in ways that prevent you from learning about better deals with other providers or make it more difficult for you to manage or cancel a service.
       %h3 
         What information does Trym require to cancel or modify my services?
         %a.anchorjs-link#info-requirements{href: "#info-requirements", style: "margin-top: -50px; padding-top: 50px;"}
@@ -51,16 +45,16 @@
         %a.anchorjs-link#recurring-score{href: "#recurring-score", style: "margin-top: -50px; padding-top: 50px;"}
           %i.fa.fa-rocket
       %p 
-        Trym factors in the merchant name, timing and amount of the payments to each merchant, and how long ago the last charge occurred. We show you these factors on the All expenses tab of My expenses. 
+        Trym uses factors such as merchant name, timing and amount of the payments to each merchant, and how long ago the last charge occurred to generate a likeliness of recurring score. We show you which factors are contributing to each charge on the Charges page of Linked Accounts.
 
       %h3 
         How can I link my accounts to Trym?
         %a.anchorjs-link#link-accounts{href: "#link-accounts", style: "margin-top: -50px; padding-top: 50px;"}
           %i.fa.fa-rocket
       %p 
-        Under the My expenses page, simply click Linked Accounts to see a list of the financial institutions that can currently be linked. Once you click link, you’ll be asked to provide your username and password for the financial institution.
+        At the top of the main page, click on "Linked Accounts," where you'll see a list of the financial institutions that can currently be linked with Trym. Once you click link, you’ll be asked to provide the username and password that you use to access the financial institution online.
       %p 
-        This list is always growing, so be sure to check back regularly if your bank isn’t currently listed. In the meantime, you can manually input any known recurring expenses from the My expenses page.
+        This list is always growing, so be sure to check back regularly if your bank isn’t currently listed. In the meantime, you can manually input any known recurring expenses from the left bar of the main page by clicking "Track New Expense."
 
       %h3 
         What if I forgot my login information?
@@ -68,7 +62,7 @@
           %i.fa.fa-rocket
 
       %p 
-        We’ve all been there. Just click sign in at the top of the page, and you’ll see a prompt with a forgot password link at the bottom. You’ll be asked for your email address, and we’ll send you instructions on how to reset your password. 
+        We’ve all been there. Just click sign in at the top of the page, and you’ll see a prompt with a forgot password link at the bottom. You’ll be asked for your email address, and we’ll send you instructions on how to reset your password.
 
       %h3 
         How do I contact you?
@@ -85,11 +79,6 @@
       %ul#sidebar.nav.nav-stacked.fixed
         %li
           %a{:href => "#what-is-trym"} What is Trym?
-          / %ul.nav.nav-stacked
-          /   %li
-          /     %a{:href => "#GroupASub1"} Sub-Group 1
-          /   %li
-          /     %a{:href => "#GroupASub2"} Sub-Group 2
         %li
           %a{:href => "#whats-it-cost"} How much does Trym cost?
         %li

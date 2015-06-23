@@ -44,7 +44,7 @@
             %button.btn.btn-charge{style: "border-bottom-right-radius: 3px; border-top: 1px solid rgb(231, 231, 231);", data: {toggle: "dropdown"}} 
               modify
               %span.caret
-            %ul.dropdown-menu
+            %ul.dropdown-menu.dropdown-menu-right
               %li              
                 =link_to stop_orders_path(charge_id: charge.id, option: "upgrade"), method: :post do
                   %i.fa.fa-upgrade

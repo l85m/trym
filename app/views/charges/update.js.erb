@@ -9,8 +9,7 @@ if(charge_row.size() > 0){
   activateChargeRow("<%= @category.present? ? @category.id : '' %>");
 }
 
-if($("#charge-side-list").is(":visible")){
-  $(".recurring-factor-cell").remove()
+if($("#charge-list").is(":visible")){
 
   <% if @charge.recurring %>
 

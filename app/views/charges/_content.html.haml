@@ -13,7 +13,7 @@
       %p.lead
         tell me more about a recurring expenses by clicking modify > edit expense info
 
-.row.trym-fade-in
+.row.trym-fade-in#charge-list
   -(@charges.select(&:next_billing_date).sort_by(&:next_billing_date) + @charges.reject(&:next_billing_date)).each do |charge|
     .col-md-6
       =render partial: "shared/charge_item", locals: {charge: charge}
