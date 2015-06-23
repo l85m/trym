@@ -56,10 +56,10 @@ html#static-pages-landing, html#invitations-edit, html#invitations-update{
 
 #home-carousel{
 	.left.carousel-control{
-  	background: linear-gradient(to right, white , transparent) !important;
+  	background-image: linear-gradient(left, rgba(255,255,255,1), rgba(255,255,255,0)) !important;
 	}
 	.right.carousel-control{
-  	background: linear-gradient(to left, white, transparent) !important;
+  	background-image: linear-gradient(right, rgba(255,255,255,1), rgba(255,255,255,0)) !important;
 	}
 	.carousel-control{
 		width: 5%;
