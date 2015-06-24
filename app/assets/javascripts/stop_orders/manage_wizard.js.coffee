@@ -1,6 +1,6 @@
 attachValidators = () ->
   if $("#addressValidator").size() > 0
-    amountField = $('input[id$="charge_attributes_amount"')
+    amountField = $('input[id$="charge_attributes_amount"]')
     socialField = $('input[id$="last_4_digits_of_social_security_number"]')
     phoneField = $('input[id*="phone_number"]')
     
