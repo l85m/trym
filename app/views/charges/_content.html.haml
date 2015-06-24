@@ -26,3 +26,5 @@
         #{@charges_outlook_chart_data.bar_categories.first},
         =link_to "click here", stop_orders_path(charge_id: @charges_outlook_chart_data.charges.select{ |c| c.merchant_name == @charges_outlook_chart_data.bar_categories.first }.first), method: :post
         if you'd like me to cancel this service.
+
+.paragraph-spacer
