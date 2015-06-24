@@ -29,7 +29,9 @@ class LinkedAccount < ActiveRecord::Base
 
   def plaid_webhook_handler(params)
     case params["code"].to_i
-    when 0..2
+    when 0
+      true
+    when 1..2
       button_icon = "circle-o-notch fa-spin"
       button_text = "analyzing"
       button_tooltip = "Trym is searching through your transactions from #{account_name} to indentify potentially recurring charges.  This should only take a few seconds."
