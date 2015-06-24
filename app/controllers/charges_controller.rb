@@ -27,23 +27,33 @@ class ChargesController < ApplicationController
     @query = params[:q]
 
     if @category.present? && @query.blank?
-      @charges = @category.charges.where(user: current_user).with_merchant.sort_by_recurring_score.page(params[:page])
+      @charges = @category.charges.where(user: current_user).with_merchant.sort_by_recurring_score.page(params[:page]).per(15)
+  
     elsif @query.present?
   
       merchant_ids = Merchant.where("name ILIKE ?", "%#{@query}%").pluck(:id)
       merchant_name_query = merchant_ids.present? ? " OR merchant_id IN (#{merchant_ids.join(',')})" : ''
       
-      @charges = current_user.charges.with_merchant.
-                                      where("plaid_name ILIKE ? OR description ILIKE ?#{merchant_name_query}", "%#{@query}%", "%#{@query}%").
-                                      sort_by_recurring_score.
-                                      page(params[:page])
       if params[:linked_account_id].present?
         @linked_account = LinkedAccount.find(params[:linked_account_id])
-        @charges = @charges.where(linked_account_id: params[:linked_account_id]) 
+        @charges = @linked_account.charges.where("plaid_name ILIKE ? OR description ILIKE ?#{merchant_name_query}", "%#{@query}%", "%#{@query}%").
+                                          sort_by_recurring_score.
+                                          page(params[:page]).per(15)
+      else
+        @charges = current_user.charges.with_merchant.
+                                      where("plaid_name ILIKE ? OR description ILIKE ?#{merchant_name_query}", "%#{@query}%", "%#{@query}%").
+                                      sort_by_recurring_score.
+                                      page(params[:page]).per(15)
       end
 
     else
-      @charges = current_user.charges.with_merchant.sort_by_recurring_score.page(params[:page]).per(15)
+  
+      if params[:linked_account_id].present?
+        @charges = @linked_account.charges.with_merchant.sort_by_recurring_score.page(params[:page]).per(15)
+   
+      else
+        @charges = current_user.charges.with_merchant.sort_by_recurring_score.page(params[:page]).per(15)
+      end
     end
   end
 
