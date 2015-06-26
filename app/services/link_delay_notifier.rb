@@ -1,16 +1,16 @@
 class LinkDelayNotifier
-  
+
   def perform
-    LinkedAccount.where(status: "syncing").where("updated_at < ?", 5.minutes.ago).each do |link|
-      notify_of_delay(link)
+    LinkedAccount.where(status: "syncing").where("updated_at < ?", 5.minutes.ago).each do |linked_account|
+      notify_of_delay(linked_account)
     end
   end
 
   private
 
-  def notify_of_delay(link)
+  def notify_of_delay(linked_account)
     return true unless link.reload.status == "syncing"
-    link.update( status: "delayed" )
+    linked_account.update( status: "delayed" )
     push = {
       button_icon: "clock-o",
       button_text: "delayed",
@@ -19,7 +19,8 @@ class LinkDelayNotifier
       button_link: '#',
       flash: "#{account_name} is taking longer than normal to respond.  Don't worry, this happens sometimes.  We'll send you an email when the process is complete."
     }
-    link.push_update_to_client(push)
+    linked_account.push_update_to_client(push)
+    # ApplicationMailer.send('delayed_account_linking', linked_account) //?
   end
 
 end
