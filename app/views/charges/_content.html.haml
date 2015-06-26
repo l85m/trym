@@ -18,11 +18,11 @@
     .col-md-6
       =render partial: "shared/charge_item", locals: {charge: charge}
 
--if @charges_outlook_chart_data
+-if @charges_outlook_chart_data && @charges.size > 1
   .row.trym-fade-in
     .col-sm-12.text-center
       %p.lead.without-margin    
-        it looks like you're paying a lot for 
+        it looks like you're paying the most for 
         #{@charges_outlook_chart_data.bar_categories.first},
         =link_to "click here", stop_orders_path(charge_id: @charges_outlook_chart_data.charges.select{ |c| c.merchant_name == @charges_outlook_chart_data.bar_categories.first }.first), method: :post
         if you'd like me to cancel this service.
