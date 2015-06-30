@@ -1,7 +1,0 @@
-$(".modal-dialog").remove()
-<% if @account_detail.names_present? %>
-	$("#modal-container").append("<%= j render 'edit' %>")
-<% else %>
-	$("#modal-container").append("<%= j render 'new' %>")
-<% end %>
-$("#modal-container").modal({backdrop: 'static'})

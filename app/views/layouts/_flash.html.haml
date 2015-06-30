@@ -1,7 +1,0 @@
--flash.each do |type, message|
-  .flash-container
-    .alert{role: 'alert', class: flash_alert_type(type) }
-      %button.close{ data: { target: ".flash-container" } }
-        %span.close-icon &times;
-        %span.sr-only Close
-      .text-center= message
