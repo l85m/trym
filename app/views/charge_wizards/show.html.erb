@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Progress:</strong>
+  <%= @charge_wizard.progress %>
+</p>
+
+<p>
+  <strong>In progress:</strong>
+  <%= @charge_wizard.in_progress %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @charge_wizard.user %>
+</p>
+
+<%= link_to 'Edit', edit_charge_wizard_path(@charge_wizard) %> |
+<%= link_to 'Back', charge_wizards_path %>

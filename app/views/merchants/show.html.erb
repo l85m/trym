@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @merchant.name %>
+</p>
+
+<p>
+  <strong>Type:</strong>
+  <%= @merchant.type %>
+</p>
+
+<p>
+  <strong>Validated:</strong>
+  <%= @merchant.validated %>
+</p>
+
+<p>
+  <strong>Recurring score:</strong>
+  <%= @merchant.recurring_score %>
+</p>
+
+<p>
+  <strong>Trym category:</strong>
+  <%= @merchant.trym_category %>
+</p>
+
+<p>
+  <strong>Cancellation fields:</strong>
+  <%= @merchant.cancellation_fields %>
+</p>
+
+<%= link_to 'Edit', edit_merchant_path(@merchant) %> |
+<%= link_to 'Back', merchants_path %>

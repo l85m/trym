@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @trym_category.name %>
+</p>
+
+<p>
+  <strong>Recurring:</strong>
+  <%= @trym_category.recurring %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @trym_category.description %>
+</p>
+
+<%= link_to 'Edit', edit_trym_category_path(@trym_category) %> |
+<%= link_to 'Back', trym_categories_path %>

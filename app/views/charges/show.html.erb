@@ -1,0 +1,94 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @charge.description %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @charge.user %>
+</p>
+
+<p>
+  <strong>Amount:</strong>
+  <%= @charge.amount %>
+</p>
+
+<p>
+  <strong>Start date:</strong>
+  <%= @charge.start_date %>
+</p>
+
+<p>
+  <strong>End date:</strong>
+  <%= @charge.end_date %>
+</p>
+
+<p>
+  <strong>Renewal period in weeks:</strong>
+  <%= @charge.renewal_period_in_weeks %>
+</p>
+
+<p>
+  <strong>Billing day:</strong>
+  <%= @charge.billing_day %>
+</p>
+
+<p>
+  <strong>Wizard complete:</strong>
+  <%= @charge.wizard_complete %>
+</p>
+
+<p>
+  <strong>Last date billed:</strong>
+  <%= @charge.last_date_billed %>
+</p>
+
+<p>
+  <strong>Merchant:</strong>
+  <%= @charge.merchant %>
+</p>
+
+<p>
+  <strong>Recurring:</strong>
+  <%= @charge.recurring %>
+</p>
+
+<p>
+  <strong>Billed to date:</strong>
+  <%= @charge.billed_to_date %>
+</p>
+
+<p>
+  <strong>Recurring score:</strong>
+  <%= @charge.recurring_score %>
+</p>
+
+<p>
+  <strong>Transaction request:</strong>
+  <%= @charge.transaction_request %>
+</p>
+
+<p>
+  <strong>Linked account:</strong>
+  <%= @charge.linked_account %>
+</p>
+
+<p>
+  <strong>Trym category:</strong>
+  <%= @charge.trym_category %>
+</p>
+
+<p>
+  <strong>History:</strong>
+  <%= @charge.history %>
+</p>
+
+<p>
+  <strong>Plaid name:</strong>
+  <%= @charge.plaid_name %>
+</p>
+
+<%= link_to 'Edit', edit_charge_path(@charge) %> |
+<%= link_to 'Back', charges_path %>

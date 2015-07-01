@@ -1,0 +1,89 @@
+<%= form_for(@charge) do |f| %>
+  <% if @charge.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@charge.errors.count, "error") %> prohibited this charge from being saved:</h2>
+
+      <ul>
+      <% @charge.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :description %><br>
+    <%= f.text_area :description %>
+  </div>
+  <div class="field">
+    <%= f.label :user_id %><br>
+    <%= f.text_field :user_id %>
+  </div>
+  <div class="field">
+    <%= f.label :amount %><br>
+    <%= f.number_field :amount %>
+  </div>
+  <div class="field">
+    <%= f.label :start_date %><br>
+    <%= f.date_select :start_date %>
+  </div>
+  <div class="field">
+    <%= f.label :end_date %><br>
+    <%= f.date_select :end_date %>
+  </div>
+  <div class="field">
+    <%= f.label :renewal_period_in_weeks %><br>
+    <%= f.number_field :renewal_period_in_weeks %>
+  </div>
+  <div class="field">
+    <%= f.label :billing_day %><br>
+    <%= f.date_select :billing_day %>
+  </div>
+  <div class="field">
+    <%= f.label :wizard_complete %><br>
+    <%= f.check_box :wizard_complete %>
+  </div>
+  <div class="field">
+    <%= f.label :last_date_billed %><br>
+    <%= f.date_select :last_date_billed %>
+  </div>
+  <div class="field">
+    <%= f.label :merchant_id %><br>
+    <%= f.text_field :merchant_id %>
+  </div>
+  <div class="field">
+    <%= f.label :recurring %><br>
+    <%= f.check_box :recurring %>
+  </div>
+  <div class="field">
+    <%= f.label :billed_to_date %><br>
+    <%= f.number_field :billed_to_date %>
+  </div>
+  <div class="field">
+    <%= f.label :recurring_score %><br>
+    <%= f.number_field :recurring_score %>
+  </div>
+  <div class="field">
+    <%= f.label :transaction_request_id %><br>
+    <%= f.text_field :transaction_request_id %>
+  </div>
+  <div class="field">
+    <%= f.label :linked_account_id %><br>
+    <%= f.text_field :linked_account_id %>
+  </div>
+  <div class="field">
+    <%= f.label :trym_category_id %><br>
+    <%= f.text_field :trym_category_id %>
+  </div>
+  <div class="field">
+    <%= f.label :history %><br>
+    <%= f.text_field :history %>
+  </div>
+  <div class="field">
+    <%= f.label :plaid_name %><br>
+    <%= f.text_field :plaid_name %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

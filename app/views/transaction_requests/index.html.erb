@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Transaction Requests</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Linked account</th>
+      <th>Data</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @transaction_requests.each do |transaction_request| %>
+      <tr>
+        <td><%= transaction_request.linked_account %></td>
+        <td><%= transaction_request.data %></td>
+        <td><%= link_to 'Show', transaction_request %></td>
+        <td><%= link_to 'Edit', edit_transaction_request_path(transaction_request) %></td>
+        <td><%= link_to 'Destroy', transaction_request, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Transaction request', new_transaction_request_path %>

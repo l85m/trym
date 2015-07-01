@@ -1,0 +1,33 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Plaid Categories</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Plaid type</th>
+      <th>Hierarchy</th>
+      <th>Plaid</th>
+      <th>Trym category</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @plaid_categories.each do |plaid_category| %>
+      <tr>
+        <td><%= plaid_category.plaid_type %></td>
+        <td><%= plaid_category.hierarchy %></td>
+        <td><%= plaid_category.plaid_id %></td>
+        <td><%= plaid_category.trym_category %></td>
+        <td><%= link_to 'Show', plaid_category %></td>
+        <td><%= link_to 'Edit', edit_plaid_category_path(plaid_category) %></td>
+        <td><%= link_to 'Destroy', plaid_category, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Plaid category', new_plaid_category_path %>

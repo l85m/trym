@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  plaid_type: MyString
+  hierarchy: MyString
+  plaid_id: MyString
+  trym_category_id: 
+
+two:
+  plaid_type: MyString
+  hierarchy: MyString
+  plaid_id: MyString
+  trym_category_id: 

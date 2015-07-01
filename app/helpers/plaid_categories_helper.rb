@@ -1,0 +1,2 @@
+module PlaidCategoriesHelper
+end

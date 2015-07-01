@@ -1,0 +1,43 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Linked Accounts</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>User</th>
+      <th>Financial institution</th>
+      <th>Plaid access token</th>
+      <th>Last successful sync</th>
+      <th>Last api response</th>
+      <th>Mfa question</th>
+      <th>Mfa type</th>
+      <th>Destroyed at</th>
+      <th>Status</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @linked_accounts.each do |linked_account| %>
+      <tr>
+        <td><%= linked_account.user %></td>
+        <td><%= linked_account.financial_institution %></td>
+        <td><%= linked_account.plaid_access_token %></td>
+        <td><%= linked_account.last_successful_sync %></td>
+        <td><%= linked_account.last_api_response %></td>
+        <td><%= linked_account.mfa_question %></td>
+        <td><%= linked_account.mfa_type %></td>
+        <td><%= linked_account.destroyed_at %></td>
+        <td><%= linked_account.status %></td>
+        <td><%= link_to 'Show', linked_account %></td>
+        <td><%= link_to 'Edit', edit_linked_account_path(linked_account) %></td>
+        <td><%= link_to 'Destroy', linked_account, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Linked account', new_linked_account_path %>

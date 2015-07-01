@@ -1,0 +1,49 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>User:</strong>
+  <%= @linked_account.user %>
+</p>
+
+<p>
+  <strong>Financial institution:</strong>
+  <%= @linked_account.financial_institution %>
+</p>
+
+<p>
+  <strong>Plaid access token:</strong>
+  <%= @linked_account.plaid_access_token %>
+</p>
+
+<p>
+  <strong>Last successful sync:</strong>
+  <%= @linked_account.last_successful_sync %>
+</p>
+
+<p>
+  <strong>Last api response:</strong>
+  <%= @linked_account.last_api_response %>
+</p>
+
+<p>
+  <strong>Mfa question:</strong>
+  <%= @linked_account.mfa_question %>
+</p>
+
+<p>
+  <strong>Mfa type:</strong>
+  <%= @linked_account.mfa_type %>
+</p>
+
+<p>
+  <strong>Destroyed at:</strong>
+  <%= @linked_account.destroyed_at %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @linked_account.status %>
+</p>
+
+<%= link_to 'Edit', edit_linked_account_path(@linked_account) %> |
+<%= link_to 'Back', linked_accounts_path %>

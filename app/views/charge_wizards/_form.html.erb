@@ -1,0 +1,29 @@
+<%= form_for(@charge_wizard) do |f| %>
+  <% if @charge_wizard.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@charge_wizard.errors.count, "error") %> prohibited this charge_wizard from being saved:</h2>
+
+      <ul>
+      <% @charge_wizard.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :progress %><br>
+    <%= f.text_field :progress %>
+  </div>
+  <div class="field">
+    <%= f.label :in_progress %><br>
+    <%= f.check_box :in_progress %>
+  </div>
+  <div class="field">
+    <%= f.label :user_id %><br>
+    <%= f.text_field :user_id %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

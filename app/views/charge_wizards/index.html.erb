@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Charge Wizards</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Progress</th>
+      <th>In progress</th>
+      <th>User</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @charge_wizards.each do |charge_wizard| %>
+      <tr>
+        <td><%= charge_wizard.progress %></td>
+        <td><%= charge_wizard.in_progress %></td>
+        <td><%= charge_wizard.user %></td>
+        <td><%= link_to 'Show', charge_wizard %></td>
+        <td><%= link_to 'Edit', edit_charge_wizard_path(charge_wizard) %></td>
+        <td><%= link_to 'Destroy', charge_wizard, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Charge wizard', new_charge_wizard_path %>

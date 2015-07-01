@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Trym Categories</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Recurring</th>
+      <th>Description</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @trym_categories.each do |trym_category| %>
+      <tr>
+        <td><%= trym_category.name %></td>
+        <td><%= trym_category.recurring %></td>
+        <td><%= trym_category.description %></td>
+        <td><%= link_to 'Show', trym_category %></td>
+        <td><%= link_to 'Edit', edit_trym_category_path(trym_category) %></td>
+        <td><%= link_to 'Destroy', trym_category, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Trym category', new_trym_category_path %>

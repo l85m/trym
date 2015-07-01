@@ -1,0 +1,41 @@
+<%= form_for(@financial_institution) do |f| %>
+  <% if @financial_institution.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@financial_institution.errors.count, "error") %> prohibited this financial_institution from being saved:</h2>
+
+      <ul>
+      <% @financial_institution.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %><br>
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :plaid_type %><br>
+    <%= f.text_field :plaid_type %>
+  </div>
+  <div class="field">
+    <%= f.label :has_mfa %><br>
+    <%= f.check_box :has_mfa %>
+  </div>
+  <div class="field">
+    <%= f.label :mfa %><br>
+    <%= f.text_field :mfa %>
+  </div>
+  <div class="field">
+    <%= f.label :plaid_id %><br>
+    <%= f.text_field :plaid_id %>
+  </div>
+  <div class="field">
+    <%= f.label :connect %><br>
+    <%= f.check_box :connect %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

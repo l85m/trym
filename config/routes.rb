@@ -1,10 +1,21 @@
 Rails.application.routes.draw do
+  resources :account_details
+  resources :charge_wizards
+  resources :charges
+  resources :transaction_requests
+  resources :plaid_categories
+  resources :notes
+  resources :merchants
+  resources :linked_accounts
+  resources :invite_requests
+  resources :financial_institutions
+  resources :trym_categories
   devise_for :users
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  root 'welcome#index'
+  root 'charges#index'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Account Details</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>User</th>
+      <th>First name</th>
+      <th>Last name</th>
+      <th>Phone</th>
+      <th>Phone verified at</th>
+      <th>Confirmation code</th>
+      <th>Account data</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @account_details.each do |account_detail| %>
+      <tr>
+        <td><%= account_detail.user %></td>
+        <td><%= account_detail.first_name %></td>
+        <td><%= account_detail.last_name %></td>
+        <td><%= account_detail.phone %></td>
+        <td><%= account_detail.phone_verified_at %></td>
+        <td><%= account_detail.confirmation_code %></td>
+        <td><%= account_detail.account_data %></td>
+        <td><%= link_to 'Show', account_detail %></td>
+        <td><%= link_to 'Edit', edit_account_detail_path(account_detail) %></td>
+        <td><%= link_to 'Destroy', account_detail, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Account detail', new_account_detail_path %>

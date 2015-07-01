@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  type: 
+  validated: false
+  recurring_score: 1
+  trym_category_id: 
+  cancellation_fields: 
+
+two:
+  name: MyString
+  type: 
+  validated: false
+  recurring_score: 1
+  trym_category_id: 
+  cancellation_fields: 

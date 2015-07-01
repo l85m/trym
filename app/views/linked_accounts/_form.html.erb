@@ -1,0 +1,53 @@
+<%= form_for(@linked_account) do |f| %>
+  <% if @linked_account.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@linked_account.errors.count, "error") %> prohibited this linked_account from being saved:</h2>
+
+      <ul>
+      <% @linked_account.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :user_id %><br>
+    <%= f.text_field :user_id %>
+  </div>
+  <div class="field">
+    <%= f.label :financial_institution_id %><br>
+    <%= f.text_field :financial_institution_id %>
+  </div>
+  <div class="field">
+    <%= f.label :plaid_access_token %><br>
+    <%= f.text_field :plaid_access_token %>
+  </div>
+  <div class="field">
+    <%= f.label :last_successful_sync %><br>
+    <%= f.datetime_select :last_successful_sync %>
+  </div>
+  <div class="field">
+    <%= f.label :last_api_response %><br>
+    <%= f.text_field :last_api_response %>
+  </div>
+  <div class="field">
+    <%= f.label :mfa_question %><br>
+    <%= f.text_area :mfa_question %>
+  </div>
+  <div class="field">
+    <%= f.label :mfa_type %><br>
+    <%= f.text_area :mfa_type %>
+  </div>
+  <div class="field">
+    <%= f.label :destroyed_at %><br>
+    <%= f.datetime_select :destroyed_at %>
+  </div>
+  <div class="field">
+    <%= f.label :status %><br>
+    <%= f.text_area :status %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

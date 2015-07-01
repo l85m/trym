@@ -1,0 +1,41 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  description: MyText
+  user_id: 
+  amount: 1
+  start_date: 2015-06-30
+  end_date: 2015-06-30
+  renewal_period_in_weeks: 1
+  billing_day: 2015-06-30
+  wizard_complete: false
+  last_date_billed: 2015-06-30
+  merchant_id: 
+  recurring: false
+  billed_to_date: 1
+  recurring_score: 1
+  transaction_request_id: 
+  linked_account_id: 
+  trym_category_id: 
+  history: 
+  plaid_name: MyString
+
+two:
+  description: MyText
+  user_id: 
+  amount: 1
+  start_date: 2015-06-30
+  end_date: 2015-06-30
+  renewal_period_in_weeks: 1
+  billing_day: 2015-06-30
+  wizard_complete: false
+  last_date_billed: 2015-06-30
+  merchant_id: 
+  recurring: false
+  billed_to_date: 1
+  recurring_score: 1
+  transaction_request_id: 
+  linked_account_id: 
+  trym_category_id: 
+  history: 
+  plaid_name: MyString

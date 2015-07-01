@@ -1,0 +1,33 @@
+<%= form_for(@plaid_category) do |f| %>
+  <% if @plaid_category.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@plaid_category.errors.count, "error") %> prohibited this plaid_category from being saved:</h2>
+
+      <ul>
+      <% @plaid_category.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :plaid_type %><br>
+    <%= f.text_field :plaid_type %>
+  </div>
+  <div class="field">
+    <%= f.label :hierarchy %><br>
+    <%= f.text_field :hierarchy %>
+  </div>
+  <div class="field">
+    <%= f.label :plaid_id %><br>
+    <%= f.text_field :plaid_id %>
+  </div>
+  <div class="field">
+    <%= f.label :trym_category_id %><br>
+    <%= f.text_field :trym_category_id %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

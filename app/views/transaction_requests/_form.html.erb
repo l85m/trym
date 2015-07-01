@@ -1,0 +1,25 @@
+<%= form_for(@transaction_request) do |f| %>
+  <% if @transaction_request.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@transaction_request.errors.count, "error") %> prohibited this transaction_request from being saved:</h2>
+
+      <ul>
+      <% @transaction_request.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :linked_account_id %><br>
+    <%= f.text_field :linked_account_id %>
+  </div>
+  <div class="field">
+    <%= f.label :data %><br>
+    <%= f.text_field :data %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

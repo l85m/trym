@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @financial_institution.name %>
+</p>
+
+<p>
+  <strong>Plaid type:</strong>
+  <%= @financial_institution.plaid_type %>
+</p>
+
+<p>
+  <strong>Has mfa:</strong>
+  <%= @financial_institution.has_mfa %>
+</p>
+
+<p>
+  <strong>Mfa:</strong>
+  <%= @financial_institution.mfa %>
+</p>
+
+<p>
+  <strong>Plaid:</strong>
+  <%= @financial_institution.plaid_id %>
+</p>
+
+<p>
+  <strong>Connect:</strong>
+  <%= @financial_institution.connect %>
+</p>
+
+<%= link_to 'Edit', edit_financial_institution_path(@financial_institution) %> |
+<%= link_to 'Back', financial_institutions_path %>

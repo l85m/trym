@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Plaid type:</strong>
+  <%= @plaid_category.plaid_type %>
+</p>
+
+<p>
+  <strong>Hierarchy:</strong>
+  <%= @plaid_category.hierarchy %>
+</p>
+
+<p>
+  <strong>Plaid:</strong>
+  <%= @plaid_category.plaid_id %>
+</p>
+
+<p>
+  <strong>Trym category:</strong>
+  <%= @plaid_category.trym_category %>
+</p>
+
+<%= link_to 'Edit', edit_plaid_category_path(@plaid_category) %> |
+<%= link_to 'Back', plaid_categories_path %>

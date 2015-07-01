@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Linked account:</strong>
+  <%= @transaction_request.linked_account %>
+</p>
+
+<p>
+  <strong>Data:</strong>
+  <%= @transaction_request.data %>
+</p>
+
+<%= link_to 'Edit', edit_transaction_request_path(@transaction_request) %> |
+<%= link_to 'Back', transaction_requests_path %>

@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user_id: 
+  financial_institution_id: 
+  plaid_access_token: MyString
+  last_successful_sync: 2015-06-30 22:04:45
+  last_api_response: 
+  mfa_question: MyText
+  mfa_type: MyText
+  destroyed_at: 2015-06-30 22:04:45
+  status: MyText
+
+two:
+  user_id: 
+  financial_institution_id: 
+  plaid_access_token: MyString
+  last_successful_sync: 2015-06-30 22:04:45
+  last_api_response: 
+  mfa_question: MyText
+  mfa_type: MyText
+  destroyed_at: 2015-06-30 22:04:45
+  status: MyText

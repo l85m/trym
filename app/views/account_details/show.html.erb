@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>User:</strong>
+  <%= @account_detail.user %>
+</p>
+
+<p>
+  <strong>First name:</strong>
+  <%= @account_detail.first_name %>
+</p>
+
+<p>
+  <strong>Last name:</strong>
+  <%= @account_detail.last_name %>
+</p>
+
+<p>
+  <strong>Phone:</strong>
+  <%= @account_detail.phone %>
+</p>
+
+<p>
+  <strong>Phone verified at:</strong>
+  <%= @account_detail.phone_verified_at %>
+</p>
+
+<p>
+  <strong>Confirmation code:</strong>
+  <%= @account_detail.confirmation_code %>
+</p>
+
+<p>
+  <strong>Account data:</strong>
+  <%= @account_detail.account_data %>
+</p>
+
+<%= link_to 'Edit', edit_account_detail_path(@account_detail) %> |
+<%= link_to 'Back', account_details_path %>
