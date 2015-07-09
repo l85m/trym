@@ -1,0 +1,27 @@
+%div{style: "font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:14px; line-height:1.428571429; margin:0"}
+  %div{style: "margin:20px auto; padding:5px; width:350px"}
+    %div      
+      %div
+        %p{style: "margin: 0px auto; text-align:center;"}
+          %a{style: "font-size:200%; font-weight:400; line-height:1.4; text-decoration: none; color: black", href: "www.trym.io"}
+            <span style="color: #81CAA6;">t</span>rym.io
+        %p{style: "margin: 0px auto 20px auto; text-align:center;"}
+          %span{style: "color: gray"} Account Linking Complete
+        %p
+          Hello again!
+        %p
+          It took a bit longer than usual, but I've finished linking to your #{@linked_account.name} account.  
+        %p
+          Please click the button below and confirm which charges in the account are recurring so I can track them for you.
+        %br
+        %p{style: "text-align:center;"}
+          =link_to "View your #{@linked_account.name} account", linked_account_url(@linked_account), style: "background: #81CAA6; color: #FFF; border-radius:4px; border:1px solid #81caa6; display:inline-block; font-size:14px; font-weight:normal; margin-bottom:0; padding:6px 12px; text-align:center; text-decoration: none; width: 80%;"
+        %br
+        %p
+          If you see any issues with the account please let me know by replying to this email.
+        %p
+          %br
+          See you soon!
+          %br
+          %span{style: "font-size:120%; font-weight:400; line-height:1.4; text-decoration: none; color: black"}
+            <span style="color: #81CAA6;">t</span>rym

@@ -26,4 +26,8 @@ every '30 0 1 * *' do
 	runner "puts 'running PlaidCategoryUpdater.perform_async @ #{Time.now}'; SummaryWorker.perform_async"
 end
 
+every 5.minutes do
+	rake "periodic:delayed_link_notifier"
+end
+
 # Learn more: http://github.com/javan/whenever
