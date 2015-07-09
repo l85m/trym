@@ -5,6 +5,8 @@ class PlaidTransactionGetter
 
   def perform(linked_account_id)
     @link = LinkedAccount.find(linked_account_id)
+    was_delayed = @link.status == "delayed"
+
     @link.update( status: "analyzing" )
     connect_to_plaid
 
@@ -15,6 +17,8 @@ class PlaidTransactionGetter
       ChargeBuilder.new @link.transaction_requests.create(data: @user.transactions)
     end
     @link.update( status: "linked" )
+    
+    LinkedAccountMailer.send('delayed_account_linking', linked_account).deliver if was_delayed
     notify_client
   end
 

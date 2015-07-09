@@ -21,7 +21,6 @@ class LinkDelayNotifier
       flash: "#{linked_account.name} is taking longer than normal to respond.  Don't worry, this happens sometimes.  We'll send you an email when the process is complete."
     }
     linked_account.push_update_to_client(push)
-    LinkedAccountMailer.send('delayed_account_linking', linked_account)
   end
 
 end

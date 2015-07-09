@@ -10,10 +10,10 @@
           .text-center.trym-fade-in
             %p.lead.trym-subtext
               i can upgrade, downgrade or cancel any expense.  i'll even call customer service for you.
+      -demos = demo_charges
       .row
         .col-xs-12
           .row.trym-fade-in
-            -demos = demo_charges
             -demos.in_groups_of(3,false) do |charge_group|
               -charge_group.each do |charge|
                 .col-lg-3.col-md-4.col-sm-6
