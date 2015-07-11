@@ -2,7 +2,7 @@ class LinkedAccount < ActiveRecord::Base
   belongs_to :user
   belongs_to :financial_institution
   validates_uniqueness_of :user_id, scope: [:financial_institution_id, :destroyed_at], if: Proc.new { |link| link.destroyed_at.nil? }
-  validates :status, inclusion: { in: %w(started mfa syncing analyzing linked unlinked) }
+  validates :status, inclusion: { in: %w(started mfa syncing analyzing linked unlinked delayed) }
 
   has_many :charges
   has_many :transaction_requests
