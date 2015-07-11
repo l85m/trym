@@ -28,9 +28,14 @@
                       unlinked
                     =link_to "Link", new_linked_account_path(financial_institution_id: institution.id), remote: true, class: "btn btn-primary btn-responsive linked-account-button"
 
-
                   -elsif linked_account.status == "mfa"
                     =link_to "Link", new_linked_account_path(financial_institution_id: institution.id), remote: true, class: "btn btn-primary btn-responsive"
+
+                  -elsif linked_account.status == "delayed"
+                    .tooltip-container{ data: {toggle: "tooltip", placement: "left", title: "#{linked_account.name} is taking longer than normal to respond.  Don't worry we'll send you an email when the process is complete." }}
+                      %a.btn.btn-primary-o.btn-responsive.linked-account-button{disabled: "disabled"}
+                        %i.fa.fa-clock
+                        delayed
 
                   -else
                     .tooltip-container{ data: {toggle: "tooltip", placement: "left", title: "Trym is #{linked_account.status} data from #{linked_account.account_name} to indentify potentially recurring charges.  This shouldn't take long." }}

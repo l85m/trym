@@ -56,7 +56,7 @@
   
   if $('#linked-account-index').is(":visible")
     row = $("li[data-linked-account-id=" + data.linked_account_id + "]")
-    button = '<a class="btn btn-primary btn-responsive linked-account-button"></a>'
+    button = '<a class="btn btn-primary-o btn-responsive linked-account-button"></a>'
 
     button = row.find(".linked-account-button").parent().html(button).find("a")
     
