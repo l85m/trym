@@ -15,6 +15,7 @@
                     
                     -if linked_account.error_message.blank?
                       =link_to linked_account, class: "btn btn-primary-o btn-responsive linked-account-button", data: {user_id: current_user.id} do
+                        %i.fa.fa-link
                         view account
 
                     -else
@@ -34,7 +35,7 @@
                   -elsif linked_account.status == "delayed"
                     .tooltip-container{ data: {toggle: "tooltip", placement: "left", title: "#{linked_account.name} is taking longer than normal to respond.  Don't worry we'll send you an email when the process is complete." }}
                       %a.btn.btn-primary-o.btn-responsive.linked-account-button{disabled: "disabled"}
-                        %i.fa.fa-clock
+                        %i.fa.fa-clock-o
                         delayed
 
                   -else
