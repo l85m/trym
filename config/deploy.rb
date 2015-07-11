@@ -73,9 +73,6 @@ desc "Deploys the current version to the server."
 task :deploy => :environment do
   deploy do
 
-    # stop accepting new workers
-    invoke :'sidekiq:quiet'
-
     invoke :'git:clone'
     invoke :'deploy:link_shared_paths'
     invoke :'bundle:install'
@@ -83,9 +80,24 @@ task :deploy => :environment do
     invoke :'rails:assets_precompile'
 
     to :launch do
-      invoke :'sidekiq:restart'
       invoke :'unicorn:restart'
       invoke :'whenever:update'
+      namespace :sidekiq do
+        task start: :environment do
+          queue %[echo "-----> Starting Sidekiq"]
+          queue "sudo initctl start sidekiq index=0 environment=#{rails_env}"
+        end
+
+        task stop: :environment do
+          queue %[echo "-----> Stopping Sidekiq"]
+          queue "sudo initctl stop sidekiq environment=#{rails_env}"
+        end
+
+        task restart: :environment do
+          invoke :"sidekiq:stop"
+          invoke :"sidekiq:start"
+        end
+      end
     end
   end
 end
