@@ -15,11 +15,12 @@
               %p.grid-title
                 =c.name
               .row
-                .col-xs-6.text-center
-                  -if charges.sum(:amount) > 0
-                    %small
-                      #{number_to_currency charges.sum(:amount) * 100} / month
-                .col-xs-6.text-center
+                / TODO: correct calculation of monthly cost
+                / .col-xs-6.text-center
+                /   -if charges.sum(:amount) > 0
+                /     %small
+                /       #{number_to_currency charges.sum(:amount) * 100} / month
+                .col-xs-12.text-center
                   %small #{charges.count} expenses
     %h5
       =link_to "click here when done adding expenses", charges_path
