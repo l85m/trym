@@ -10,13 +10,13 @@
         %p
           Hi there,
         %p
-          We are very pleased to announce that Trym.io has finally launched and you have been selected to join our private beta test as one of our first users.
+          I am part of the team building trym.io, a digital assistant which helps you manage your recurring expenses.  We just launched and are inviting our first users so naturally I wanted to send you an invite. 
         %p
-          Trym.io manages all the recurring payments in your life and let's you easily cancel any services you don't use and pay less for the services you do.  Want to get rid of your cable or landline services but hate talking to customer service?  We'll do it for you.  <b>All for free.</b>
+          Trym manages all your recurring expenses and let's you cancel or modify any service with a click.  Want to get rid of your cable or landline services but hate talking to customer service?  Trym will do it for you.  <b>All for free.</b>
         %p{style: "text-align:center;"}
           =link_to "To activate your account, click here.", accept_invitation_url(@resource, :invitation_token => @token), style: "color: #81CAA6; border-radius:4px;font-size:115%;"
         %p
-          During the private beta, we are going to be working hard to improve the service and implement new features. Your feedback is crucial to this process, so please share it!
+          We are going to be working hard to improve trym and implement new features. Your feedback is crucial to this process, so please share it!
         %p
           You can reply to this email or email me directly at 
           %a{href: "mailto:#{User.find(@resource.invited_by_id).email}", style: "color: #81CAA6; text-decoration: none;"}
@@ -26,11 +26,3 @@
           Thanks and enjoy!
           %br
           #{User.find(@resource.invited_by_id).first_name}
-        %p{style: "text-align:center; margin-top: 40px;"}
-          %small
-            #{User.find(@resource.invited_by_id).first_and_last_name}
-            %span &#x007C;
-            Co-Founder, Trym LLC
-            %span &#x007C;
-            %a{href: "mailto:#{User.find(@resource.invited_by_id).email}", style: "color: #81CAA6, text-decoration: none;"}
-              #{User.find(@resource.invited_by_id).email}
