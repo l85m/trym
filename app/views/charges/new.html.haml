@@ -10,7 +10,7 @@
       .col-md-10.col-md-offset-1
         .trym-category-grid
           -TrymCategory.other_last.each do |c|
-            -charges = c.charges.where(user_id: current_user.id)
+            -charges = c.charges.where(user_id: current_user.id).recurring
             =link_to new_charge_path(trym_category_id: c.id), class: "trym-category-grid-cell #{charges.present? ? nil : "off"}", remote: true do
               %p.grid-title
                 =c.name
