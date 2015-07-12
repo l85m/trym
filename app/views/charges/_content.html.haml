@@ -14,9 +14,10 @@
         tell me more about a recurring expenses by clicking modify > edit expense info
 
 .row.trym-fade-in#charge-list
-  -(@charges.select(&:next_billing_date).sort_by(&:next_billing_date) + @charges.reject(&:next_billing_date)).each do |charge|
-    .col-md-6
-      =render partial: "shared/charge_item", locals: {charge: charge}
+  -(@charges.select(&:next_billing_date).sort_by(&:next_billing_date) + @charges.reject(&:next_billing_date)).in_groups_of(2,false) do |charge_group|
+    -charge_group.each do |charge|
+      %div{ class: "col-md-6 #{charge_group.size == 2 ? '' : 'col-md-offset-3'}" }
+        =render partial: "shared/charge_item", locals: {charge: charge}
 
 -if @charges_outlook_chart_data && @charges.size > 1
   .row.trym-fade-in
