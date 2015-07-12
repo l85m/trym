@@ -127,17 +127,6 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 	border-color: $brand-color;
 	box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(129, 202, 166, 0.6);
 }
-.select2-dropdown-open{
-  background-color: white;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-}
-.select2-dropdown-open.select2-drop-above .select2-choices,
-.select2-container-active .select2-choice, .select2-container-multi.select2-container-active .select2-choices,
-.select2-drop-auto-width, .select2-drop.select2-drop-above.select2-drop-active {
-  border: none;
-  box-shadow: none;
- }
 .input-group-addon, .form-control{ 
 	box-shadow: none;
 }
@@ -367,8 +356,12 @@ abbr[title], abbr[data-original-title] {
 	width: 100%;
 	background: white;
 }
+.select2-container{
+	text-align: center;
+}
 .centered-select2 .select2-container .select2-choice > .select2-chosen {
 	margin-right: 0px !important;
+	text-align: center;
 }
 .centered-select2 .select2-search input{ padding: 4px 5px; }
 .centered-select2 .select2-results{ text-align: center; }
