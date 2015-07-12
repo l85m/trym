@@ -24,11 +24,17 @@
   .item.row
     .col-sm-12
       %h5 Send Text Message:
-    .col-sm-12.prefs
-      %span 3 Days Before Charge
-      .pull-right
-        %input.bootstrap-switch{type: "checkbox", disabled: !current_user.phone_verified?, checked: current_user.text_alert, data: {size: "mini", on_text: "Yes", off_text: "No", url: contact_preference_path(current_user.id, text_alert: "placeholder") }}
-    .col-sm-12.prefs
-      %span Monthly Summary
-      .pull-right
-        %input.bootstrap-switch{type: "checkbox", disabled: !current_user.phone_verified?, checked: current_user.text_summary, data: {size: "mini", on_text: "Yes", off_text: "No", url: contact_preference_path(current_user.id, text_summary: "placeholder") }}
+    -if current_user.phone_verified?
+      .col-sm-12.prefs
+        %span 3 Days Before Charge
+        .pull-right
+          %input.bootstrap-switch{type: "checkbox", checked: current_user.text_alert, data: {size: "mini", on_text: "Yes", off_text: "No", url: contact_preference_path(current_user.id, text_alert: "placeholder") }}
+      .col-sm-12.prefs
+        %span Monthly Summary
+        .pull-right
+          %input.bootstrap-switch{type: "checkbox", checked: current_user.text_summary, data: {size: "mini", on_text: "Yes", off_text: "No", url: contact_preference_path(current_user.id, text_summary: "placeholder") }}
+    -else
+      .col-sm-12
+        %p.text-center
+          =link_to edit_user_registration_path do
+            add a phone number to enable text alerts
