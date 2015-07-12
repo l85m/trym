@@ -1,0 +1,19 @@
+%div{style: "font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:14px; line-height:1.428571429; margin:0"}
+  %div{style: "margin:20px auto; padding:5px; width:450px"}
+    %div      
+      %div
+        %p{style: "margin: 0px auto; text-align:center;"}
+          %a{style: "font-size:200%; font-weight:400; line-height:1.4; text-decoration: none; color: black", href: "www.trym.io"}
+            <span style="color: #81CAA6;">t</span>rym.io
+        %p{style: "margin: 0px auto 20px auto; text-align:center;"}
+          %span{style: "color: gray"} nice to meet you
+        %p
+          Thanks for signing up! You can confirm your account through this link:
+        %p{style: "text-align:center;"}
+          =link_to 'Confirm My Account', confirmation_url(@resource, confirmation_token: @token), style: "color: #81CAA6; border-radius:4px;font-size:115%;"
+        %p
+          We are working hard to improve trym and implement new features. Your feedback is crucial to this process, so please share it! You can reply to this email or email us at 
+          %a{href: "mailto:team@trym.io", style: "color: #81CAA6; text-decoration: none;"}team@trym.io
+          %span>.
+        %p
+          

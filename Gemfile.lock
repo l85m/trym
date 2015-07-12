@@ -18,7 +18,7 @@ GIT
 
 GIT
   remote: git://github.com/demosophy/devise-3.4.1.usub.git
-  revision: 20764128046f004fd7cb04481cc4e653864c8e82
+  revision: 12964c20eeff60b951e5604ab9eaf6070f5e3ccb
   specs:
     devise (3.4.1)
       bcrypt (~> 3.0)

@@ -1,13 +1,27 @@
-.col-lg-4.col-lg-offset-4.col-md-6.col-md-offset-3.col-sm-6.col-sm-offset-3
-  .text-center{style: "margin: 30px;"}
-    %h2.modal-header-text Sign up
-    = simple_form_for resource, as: resource_name, url: registration_path(resource_name), defaults: {input_html: {class: "text-center"}} do |f|
-      = f.error_notification
-      .form-inputs
-        = f.input :email, required: true, autofocus: true
-        = f.input :password, required: true, placeholder: ("#{@minimum_password_length} characters minimum" if @validatable)
-        = f.input :password_confirmation, required: true
-      .form-actions
-        = render 'shared/cancel_button'
-        = f.button :submit, "Sign up"
-    = render "devise/shared/links"
+.paragraph-spacer
+.item.active
+  .flex-center
+    .text-center{style: "width: 100%;"}
+      .trym-talking
+        %p.opener.trym-fade-in
+          nice to meet you
+      .trym-fade-in
+        %p.lead
+          create an account and i'll start saving you money in no time
+        = simple_form_for resource, as: resource_name, url: registration_path(resource_name) do |f|
+          = f.error_notification
+          .form-inputs
+            .row
+              .col-lg-4.col-lg-offset-4.col-md-6.col-md-offset-3.col-sm-8.col-sm-offset-2.col-xs-10.col-xs-offset-1.text-center
+                = f.input :email, autofocus: true, required: false, input_html: { class: "text-center" }
+            .row
+              .col-lg-2.col-lg-offset-4.col-md-3.col-md-offset-3.col-sm-8.col-sm-offset-2.col-xs-10.col-xs-offset-1.text-center
+                = f.input :password, input_html: { class: "text-center" }
+              .col-lg-2.col-lg-offset-0.col-md-3.col-md-offset-0.col-sm-8.col-sm-offset-2.col-xs-10.col-xs-offset-1.text-center
+                = f.input :password_confirmation, label: "Confirm your password", input_html: { class: "text-center" }
+            .paragraph-spacer
+            .row
+              .col-lg-4.col-lg-offset-4.col-md-6.col-md-offset-3.col-sm-8.col-sm-offset-2.col-xs-10.col-xs-offset-1.text-center
+                = f.button :submit, "create my account", class: "btn btn-lg btn-primary btn-block", style: "margin-bottom: 5px;"
+                =link_to "sign in", new_user_session_path, class: "btn btn-lg btn-primary-o", style: "width: 49%; float: left;"
+                =link_to "learn more", about_path, class: "btn btn-lg btn-primary-o", style: "width: 49%; float: right;"
