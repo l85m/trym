@@ -18,7 +18,7 @@
     .charge-info.charge-description.text-left
       -if charge.merchant.present? && charge.merchant.name.present?
         .charge-lead
-          %p=charge.merchant.name.titlecase
+          %p=charge.merchant.name
 
       %p.without-margin.small
         %span.small-gray
