@@ -29,15 +29,6 @@ class StopOrdersController < ApplicationController
   end
 
   def new
-    @charge = current_user.charges.find(params[:charge_id])
-    
-    unless current_user.phone_verified? || @charge.details_not_required?
-      session[:referring_charge_id] = @charge.id
-      redirect_to controller: 'account_details', action: 'new', charge_id: @charge.id
-    end
-    
-    @merchant = @charge.merchant
-    @stop_order = @charge.stop_orders.new
   end
 
   def edit

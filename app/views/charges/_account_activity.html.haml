@@ -26,6 +26,21 @@
           -if s.status == "succeeded"
             %i.fa.fa-circle-check
           %small=s.status
+    .item-row
+      .col-sm-12
+        %h5
+          Manage Another Expense
+        %p.small
+          Select a service provider below to cancel, upgrade, or downgrade your account with just a few clicks
+
+        =form_for current_user.charges.build, url: create_then_manage_charges_path do |f|
+          %p=f.text_field :merchant_id, data: { url: merchants_path, placeholder: "Click to select a service provider" }
+          %p.text-center
+            %button.btn.btn-default#disabled-next-button{disabled: "disabled"}
+              select a service to continue
+            =f.button class: "btn btn-primary", id: "enabled-next-button" do 
+              continue
+              %i.fa.fa-arrow-circle-right
 
   -else
     .item.row
@@ -33,5 +48,18 @@
         %h5
           No Expense History
         %p.small
-          Did you know that you can <b>schedule a cancelation or change</b> for any expense? Just click cancel or modify on any recurring expense and select a future date.  
-        %p.small No more forgetting to cancel those pesky annual fees!
+          Select a service provider below to cancel, upgrade, or downgrade your account with just a few clicks
+
+        =form_for current_user.charges.build, url: create_then_manage_charges_path do |f|
+          %p=f.text_field :merchant_id, data: { url: merchants_path, placeholder: "Click to select a service provider" }
+          %p.text-center
+            %button.btn.btn-default#disabled-next-button{disabled: "disabled"}
+              select a service to continue
+            =f.button class: "btn btn-primary", id: "enabled-next-button" do 
+              continue
+              %i.fa.fa-arrow-circle-right
+
+        / TODO - actually do this.
+        / %p.small
+        /   Did you know that you can <b>schedule a cancelation or change</b> for any expense? Just click cancel or modify on any recurring expense and select a future date.  
+        / %p.small No more forgetting to cancel those pesky annual fees!

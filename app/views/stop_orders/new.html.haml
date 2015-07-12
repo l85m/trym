@@ -1,1 +1,21 @@
-=render 'new'
+.row.trym-fade-in
+  .col-sm-12.text-center
+    .trym-talking
+      %p.lead.without-margin
+        What service would you like me to manage?
+
+.paragraph-spacer
+
+.row.trym-fade-in
+  .col-lg-6.col-lg-offset-3.col-md-8.col-md-offset-2
+    %p.lead.text-center
+      Select a service provider below to cancel, upgrade, or downgrade your account with just a few clicks
+
+    =form_for current_user.charges.build, url: create_then_manage_charges_path do |f|
+      %p=f.text_field :merchant_id, data: { url: merchants_path, placeholder: "Click to select a service provider" }
+      %p.text-center
+        %button.btn.btn-default#disabled-next-button{disabled: "disabled"}
+          select a service to continue
+        =f.button class: "btn btn-primary", id: "enabled-next-button" do 
+          continue
+          %i.fa.fa-arrow-circle-right

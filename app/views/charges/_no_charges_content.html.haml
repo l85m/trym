@@ -21,7 +21,7 @@
 
     .paragraph-spacer
     %p.lead.text-center
-      or
+      or if you don't want to link your accounts
 
     .row
       .col-sm-10.col-sm-offset-1.text-center
@@ -30,3 +30,15 @@
             %span
               %i.fa.fa-plus-circle.fa-3x.pull-left
             %span i can help you quickly organize and input your recurring expenses manually
+
+    .paragraph-spacer
+    %p.lead.text-center
+      or if you have a service you want to change right now
+
+    .row
+      .col-sm-10.col-sm-offset-1.text-center
+        %p.lead.without-margin
+          =link_to new_stop_order_path, class: "btn btn-lg btn-block btn-primary-o btn-icon-left" do
+            %span
+              %i.fa.fa-cogs.fa-3x.pull-left
+            %span Cancel, upgrade, or downgrade any service with a few clicks
