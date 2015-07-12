@@ -21,7 +21,11 @@ $brand-color: #5dc38e;
 	  text-align: center;
 	}
 }
-
+#no-charge-options-container{
+	.btn{
+		min-height: 72px;
+	}
+}
 .charge-item{ 
 	height: 95px; 
 	width: 100%;
