@@ -152,20 +152,18 @@ class Charge < ActiveRecord::Base
 
   def smart_trym_category
     if trym_category.present?
-      trym_category
+      trym_category.name
     elsif plaid_category.present? && plaid_category.trym_category.present?
-      plaid_category.trym_category
+      plaid_category.trym_category.name
     elsif merchant.present? && merchant.trym_category.present?
-      merchant.trym_category
+      merchant.trym_category.name
     else
       nil
     end
   end
 
   def smart_description
-    if description.present?
-      description
-    elsif plaid_name.present?
+    if plaid_name.present?
       plaid_name
     elsif smart_trym_category.present?
       smart_category_name
@@ -177,8 +175,10 @@ class Charge < ActiveRecord::Base
   def descriptor
     if merchant.present?
       merchant.name
+    elsif plaid_name.present?
+      plaid_name
     else
-      smart_description
+      "Unknown Merchant"
     end
   end
  

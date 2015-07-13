@@ -18,7 +18,7 @@
     .charge-info.charge-description.text-left
       -if charge.merchant.present? && charge.merchant.name.present?
         .charge-lead
-          %p=charge.merchant.name
+          %p=charge.descriptor
 
       %p.without-margin.small
         %span.small-gray
@@ -29,14 +29,13 @@
             %i.fa.fa-clock-o.hidden-md
             ="last charge " + (distance_of_time_in_words charge.billing_day.to_time - Time.now) + " ago"
       %p.charge-descriptor
-        =charge.smart_description
+        =charge.smart_trym_category
     
     .charge-info.charge-buttons.text-center      
       -if stop_order_charge_ids.include?(charge.id)
         =render partial: "stop_orders/show", locals: {stop_order: charge.active_stop_order}
       -else        
         .btn-group-vertical.text-center{role: "group", style: "width: 100%"}
-          // Oh dear god this is so ugly
           =link_to stop_orders_path(charge_id: charge.id, option: "cancel_all"), method: :post, class: "btn btn-charge", style: "border-top-right-radius: 3px;" do
             %i.fa.fa-stop
             cancel
