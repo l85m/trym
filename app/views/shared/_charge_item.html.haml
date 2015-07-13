@@ -15,10 +15,9 @@
               %i.fa.fa-calendar
               history
               
-    .charge-info.charge-description.text-left
-      -if charge.merchant.present? && charge.merchant.name.present?
-        .charge-lead
-          %p=charge.descriptor
+    .charge-info.charge-description.text-left  
+      .charge-lead
+        %p=charge.descriptor
 
       %p.without-margin.small
         %span.small-gray
