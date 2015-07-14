@@ -8,16 +8,8 @@
 -else 
   .container#scrollable-with-offset
     .row      
-      .col-xs-12.scrollable
-        -unless @linked_account.status == "unlinked"
-          %h2
-            =@linked_account.financial_institution.name
-            %br.visible-xs-block
-            =link_to unlink_linked_accounts_path(id: @linked_account.id), method: :post, class: "btn btn-danger btn-sm linked-account-charges-buttons", data: {confirm: "Are you sure you want to unlink this account? To relink it you will need to re-enter your account credentials."} do
-              %i.fa.fa-unlink{style: "color: white"}
-              unlink account
-
-        -else
+      .col-xs-12.scrollable        
+        -if @linked_account.status == "unlinked"
           %h2
             =@linked_account.financial_institution.name
           .unlinked-info-box
@@ -30,6 +22,26 @@
                 %span.hidden-xs this account
             %p This account has been unlinked. Trym will no longer automatically search your account for new transactions or update you on changes to recurring expenses from this account.  You may relink this account at any time by re-entering your linked account credentials.
 
+        -else
+          %h2
+            =@linked_account.financial_institution.name
+            %br.visible-xs-block
+            =link_to unlink_linked_accounts_path(id: @linked_account.id), method: :post, class: "btn btn-danger btn-sm linked-account-charges-buttons", data: {confirm: "Are you sure you want to unlink this account? To relink it you will need to re-enter your account credentials."} do
+              %i.fa.fa-unlink{style: "color: white"}
+              unlink account
+
+        -if @linked_account.status == "delayed"
+          .unlinked-info-box
+            %h3 
+              %i.fa.fa-clock-o{style: "color: #f0ad4e"}
+              Linking Delayed
+
+            %p.lead
+              It's taking longer than normal to sync your #{@linked_account.name} account. We'll send you an email when it's finished. Please email us at
+              =link_to "support@trym.io", "mailto:support@trym.io?subject=Issues with Linked Account ID:#{@linked_account.id}"
+              if your account is not synced in the next 24 hours.
+
+
         -if @linked_account.charges.present?
           %p.lead  
             Transactions on this account for up to the past two years are displayed below. 
@@ -38,14 +50,14 @@
         
           =render 'charges/table/table'
 
-        -else
+        -elsif @linked_account.status != "delayed"
           .unlinked-info-box
-            %h3 
+            %h3
               %i.fa.fa-warning{style: "color: #f0ad4e"}
               No transactions found
 
             %p.lead
-              We haven't foudn any transactions in this account yet.  If you can see transactions on your financial institution's website or think there should be transactions on this account please email us at
+              We have not found any transactions in this account yet.  If you can see transactions on your financial institution's website or think there should be transactions on this account please email us at
               =link_to "support@trym.io", "mailto:support@trym.io?subject=Issues with Linked Account ID:#{@linked_account.id}"
           .paragraph-spacer
           .paragraph-spacer
