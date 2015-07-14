@@ -13,19 +13,34 @@
       %p.lead
         tell me more about a recurring expenses by clicking modify > edit expense info
 
-.row.trym-fade-in#charge-list
-  -(@charges.select(&:next_billing_date).sort_by(&:next_billing_date) + @charges.reject(&:next_billing_date)).in_groups_of(2,false) do |charge_group|
-    -charge_group.each do |charge|
-      %div{ class: "col-md-6 #{charge_group.size == 2 ? '' : 'col-md-offset-3'}" }
-        =render partial: "shared/charge_item", locals: {charge: charge}
+.trym-fade-in
+  .row#charge-list
+    -(@charges.select(&:next_billing_date).sort_by(&:next_billing_date) + @charges.reject(&:next_billing_date)).in_groups_of(2,false) do |charge_group|
+      -charge_group.each do |charge|
+        %div{ class: "col-md-6 #{charge_group.size == 2 ? '' : 'col-md-offset-3'}" }
+          =render partial: "shared/charge_item", locals: {charge: charge}
 
--if @charges_outlook_chart_data && @charges.size > 1
-  .row.trym-fade-in
-    .col-sm-12.text-center
-      %p.lead.without-margin    
-        it looks like you're paying the most for 
-        #{@charges_outlook_chart_data.bar_categories.first},
-        =link_to "click here", stop_orders_path(charge_id: @charges_outlook_chart_data.charges.select{ |c| c.merchant_name == @charges_outlook_chart_data.bar_categories.first }.first), method: :post
-        if you'd like me to cancel this service.
+  .paragraph-spacer
+
+  .row
+    .col-md-4
+      %p
+        =link_to linked_accounts_path, class: "btn btn-block btn-primary-o btn-icon-left" do
+          %span
+            %i.fa.fa-credit-card.fa-3x.pull-left
+          %span add expenses from linked accounts
+    .col-md-4
+      %p
+        =link_to new_charge_path, class: "btn btn-block btn-primary-o btn-icon-left" do
+          %span
+            %i.fa.fa-plus-circle.fa-3x.pull-left
+          %span add new recurring expenses manually
+    .col-md-4
+      %p
+        =link_to new_stop_order_path, class: "btn btn-block btn-primary-o btn-icon-left" do
+          %span
+            %i.fa.fa-cogs.fa-3x.pull-left
+          %span cancel or modify recurring expenses
+
 
 .paragraph-spacer

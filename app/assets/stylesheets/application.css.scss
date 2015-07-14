@@ -72,9 +72,17 @@ a:hover{
 	text-align: left;
 	white-space: normal;
 	display: table;
+	span:first-child{
+		width: 75px;
+	}
 	span{
 		vertical-align: middle;
 		display: table-cell;
+	}
+}
+@media (max-width: 767px) {
+	.btn-icon-left{
+		text-align: center;
 	}
 }
 i{ color: $brand-color; }
