@@ -18,7 +18,7 @@ class PlaidTransactionGetter
     end
     @link.update( status: "linked" )
     
-    LinkedAccountMailer.send('delayed_account_linking', linked_account).deliver if was_delayed
+    LinkedAccountMailer.send('delayed_account_linking', @link).deliver if was_delayed
     notify_client
   end
 
