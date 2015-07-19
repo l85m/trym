@@ -1,4 +1,5 @@
 class StopOrder < ActiveRecord::Base
+  attr_accessor :skip_cancelation_data_validation
   belongs_to :charge
   accepts_nested_attributes_for :charge, update_only: true
   
@@ -12,8 +13,8 @@ class StopOrder < ActiveRecord::Base
   validates :status, inclusion: { in: %w(started requested working succeeded failed canceled) }
   validates :contact_preference, inclusion: { in: %w(call text email) }
   
-  validate :required_cancelation_fields_must_be_present_on_requested_records
-  validate :required_cancelation_data_must_be_valid_on_requested_records
+  validate :required_cancelation_fields_must_be_present_on_requested_records, unless: :skip_cancelation_data_validation?
+  validate :required_cancelation_data_must_be_valid_on_requested_records, unless: :skip_cancelation_data_validation?
   
   scope :active_or_complete, -> {where(status: ["requested", "working", "succeeded"])}
   scope :active, -> {where(status: ["requested", "working"]).first}
@@ -119,6 +120,10 @@ class StopOrder < ActiveRecord::Base
       billing_day: [:string, "When is your next charge?", "Estimate if not sure", charge.billing_day ],
       renewal_period_in_weeks: [:string, "How often are you charged?", "", charge.renewal_period_in_weeks]
     }
+  end
+
+  def skip_cancelation_data_validation?
+    skip_cancelation_data_validation == 'true' || skip_cancelation_data_validation == true
   end
 
   private

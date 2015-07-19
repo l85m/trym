@@ -46,11 +46,11 @@ class Merchant < ActiveRecord::Base
 	end
 
 	def required_cancelation_fileds
-		cancelation_fields.presence || {}.select{ |_,a| a["required"] }.keys
+		(cancelation_fields.presence || {}).select{ |_,a| a["required"] }.keys
 	end
 
 	def reusable_cancelation_fields
-		cancelation_fields.presence || {}.select{ |_,a| a["reusable"] }.keys
+		(cancelation_fields.presence || {}).select{ |_,a| a["reusable"] }.keys
 	end
 
 	def trym_category_name

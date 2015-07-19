@@ -8,6 +8,7 @@ ActiveAdmin.register StopOrder do
     end
 
     def update(options={}, &block)
+      resource.skip_cancelation_data_validation = true
       resource.update! permitted_params
       update!
     end
