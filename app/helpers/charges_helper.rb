@@ -1,7 +1,7 @@
 module ChargesHelper
 
   def recurring_factors_for(charge)
-    return "<a data-toggle='tooltip' data-title='Trym thinks this charge is recurring because you created it'><i class='fa recurring-factor fa-user recurring-factor-good'></i></a>".html_safe unless charge.transaction_request.present?
+    return "<a data-toggle='tooltip' data-title='Trym thinks this expense is recurring because you created it'><i class='fa recurring-factor fa-user recurring-factor-good'></i></a>".html_safe unless charge.transaction_request.present?
     interval_class = "fa-calendar"
     amount_class = "fa-usd"
     category_class = "fa-tags"
@@ -29,9 +29,9 @@ module ChargesHelper
       }[r]
     end.sort_by{ |_,v| v }.inject({}){ |h,(k,v)| h[k].present? ? h[k] += v : h[k] = v ; h}.reject{ |_,v| v.between?(-1,1) }.
         collect do |f, v| 
-          recurring_explanation = "Trym thinks this charge #{ v > 0 ? 'is' : 'is not' } recurring because " + {
+          recurring_explanation = "This expense appears #{ v > 0 ? '' : 'not' } to be recurring because " + {
             "fa-calendar" => "of when you were charged",
-            "fa-usd" => "some past charges were #{v < 0 ? 'not' : nil} for similar amounts",
+            "fa-usd" => "some past expenses were #{v < 0 ? 'not' : nil} for similar amounts",
             "fa-tags" => "of the merchant category provided by your bank",
             "fa-building" => "it recognized the merchant name"
           }[f]
