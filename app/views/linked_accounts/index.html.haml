@@ -9,7 +9,9 @@
     .paragraph-spacer
 
     %p.lead.text-center
-      =link_to "click here to see all your transactions across your linked accounts", search_charges_path, class: "btn btn-primary-o"
+      =link_to search_charges_path, class: "btn btn-primary-o" do 
+        %i.fa.fa-list
+        View transactions across your linked accounts
     =render 'shared/financial_institutions'
 
 .row
