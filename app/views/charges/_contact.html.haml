@@ -4,13 +4,6 @@
     Contact Preferences
 .body
   .item.row
-    .col-sm-12.item-label
-      %span=current_user.phone_verified? ? current_user.phone : 'No verified phone'
-      %span.text-right
-        =link_to edit_user_registration_path, class: "btn btn-xs btn-default" do
-          %i.fa.fa-mobile
-          ="#{current_user.phone_verified? ? 'edit' : 'add'} phone"
-  .item.row
     .col-sm-12
       %h5 Send Email:
     .col-sm-12.prefs
