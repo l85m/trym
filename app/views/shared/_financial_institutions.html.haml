@@ -16,7 +16,7 @@
                     -if linked_account.error_message.blank?
                       =link_to linked_account, class: "btn btn-primary-o btn-responsive linked-account-button", data: {user_id: current_user.id} do
                         %i.fa.fa-link
-                        view expenses
+                        View Expenses
 
                     -else
                       .tooltip-container{ data: {toggle: "tooltip", placement: "left", title: "Message from your account: #{linked_account.error_message}" }}
@@ -26,8 +26,8 @@
 
                   -elsif linked_account.status == "unlinked"
                     =link_to linked_account, class: "btn btn-warning btn-responsive linked-account-button" do 
-                      unlinked
-                    =link_to "Link", new_linked_account_path(financial_institution_id: institution.id), remote: true, class: "btn btn-primary btn-responsive linked-account-button"
+                      Unlinked
+                    =link_to "Re-Link", new_linked_account_path(financial_institution_id: institution.id), remote: true, class: "btn btn-primary btn-responsive linked-account-button"
 
                   -elsif linked_account.status == "mfa"
                     =link_to "Link", new_linked_account_path(financial_institution_id: institution.id), remote: true, class: "btn btn-primary btn-responsive"
@@ -36,13 +36,13 @@
                     .tooltip-container{ data: {toggle: "tooltip", placement: "left", title: "#{linked_account.name} is taking longer than normal to respond.  Don't worry we'll send you an email when the process is complete." }}
                       %a.btn.btn-primary-o.btn-responsive.linked-account-button{disabled: "disabled"}
                         %i.fa.fa-clock-o
-                        delayed
+                        Delayed
 
                   -else
                     .tooltip-container{ data: {toggle: "tooltip", placement: "left", title: "Trym is #{linked_account.status} data from #{linked_account.account_name} to indentify potentially recurring charges.  This shouldn't take long." }}
                       %a.btn.btn-primary-o.btn-responsive.linked-account-button{disabled: "disabled"}
                         %i.fa.fa-circle-o-notch.fa-spin
-                        =linked_account.status
+                        =linked_account.status.titlecase
 
                 -else
                   .tooltip-container
