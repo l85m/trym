@@ -25,7 +25,7 @@
   .row
     .col-md-4
       %p
-        =link_to linked_accounts_path, class: "btn btn-block btn-primary-o btn-icon-left" do
+        =link_to current_user.has_linked_charges? ? search_charges_path : linked_accounts_path, class: "btn btn-block btn-primary-o btn-icon-left" do
           %span
             %i.fa.fa-credit-card.fa-3x.pull-left
           %span add expenses from linked accounts

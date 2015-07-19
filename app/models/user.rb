@@ -49,6 +49,10 @@ class User < ActiveRecord::Base
   	account_detail.present? && account_detail.phone_verified.present?
   end
 
+  def has_linked_charges?
+    linked_accounts.joins(transaction_requests: :charges).limit(1).pluck("charges.id").present?
+  end
+
   def phone
     account_detail.formatted_phone
   end
