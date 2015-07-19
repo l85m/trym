@@ -9,7 +9,7 @@
 					-if @category.present?
 						=hidden_field_tag :trym_category_id, @category.id
 
-					=text_field_tag :q, @query, placeholder: "Search#{@category.present? ? ' all' : ''} charges", class: "form-control"
+					=text_field_tag :q, @query, placeholder: "Search#{@category.present? ? ' all' : ''} expenses", class: "form-control"
 					%span.input-group-btn
 						=submit_tag "Search", class: "btn btn-primary"
 	.col-sm-4.hidden-xs.hidden-sm
