@@ -14,7 +14,7 @@ require 'mina/whenever'
 
 set :domain, '198.199.106.96'
 set :deploy_to, '/home/deployer/trym/'
-set :repository, 'git@github.com:demosophy/trym.git'
+set :repository, 'git@github.com:l85m/trym.git'
 set :branch, 'master'
 set :user, 'deployer'
 set :forward_agent, true
