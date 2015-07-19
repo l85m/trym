@@ -19,5 +19,3 @@
         =charge.transaction_request.linked_account.financial_institution.plaid_type
   %td.recurring-factor-cell{data: {title: "Recurring Factors"}}
     =recurring_factors_for(charge)
-  %td.text-center.hidden-sm.hidden-xs{style: "padding:8px 4px;"}
-    =link_to "edit", edit_charge_path(charge), remote: true, class: "btn btn-default btn-xs"
