@@ -29,7 +29,7 @@ class Charge < ActiveRecord::Base
   scope :recurring_very_unlikely_to_be, -> {not_recurring.where('recurring_score < ?', 0)}
 
   scope :uncategorized, -> { where(id: all.reject{ |x| x.smart_trym_category.present? }.collect(&:id) ) }
-  scope :sort_by_recurring_score, -> { order("recurring desc NULLS LAST, recurring_score desc NULLS LAST") }
+  scope :sort_by_recurring_score, -> { order("recurring desc NULLS LAST, recurring_score desc NULLS LAST, id desc") }
   scope :from_link, -> { where.not(transaction_request_id: nil) }
   scope :from_user, -> { where(transaction_request_id: nil) }
 
