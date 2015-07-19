@@ -39,7 +39,7 @@
           %li
             =link_to linked_accounts_path, class: class_header_link_formatting(linked_accounts_path) do
               %i.fa.fa-credit-card.header-icon
-              linked accounts
+              link accounts
           %li=link_to "sign out", destroy_user_session_path, method: :delete, class: class_header_link_formatting(destroy_user_session_path)
         -else
           -unless current_page?(new_user_session_path)
