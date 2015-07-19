@@ -46,7 +46,8 @@
 
               .form-group.horizontal-form-group.string.required
                 %label.string.required.col-sm-3.control-label.text-right
-                  %abbr{title: "required"}*
+                  -if @stop_order.merchant.required_cancelation_fileds.include?(cancelation_field.to_s)
+                    %abbr{title: "required"}*
                   Address on Account
                 .col-sm-9
                   .row

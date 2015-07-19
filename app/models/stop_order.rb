@@ -93,7 +93,7 @@ class StopOrder < ActiveRecord::Base
     if merchant.present? && merchant.cancelation_fields.present?
       merchant.cancelation_fields.sort_by{ |_,h| h["required"] ? 0 : 1 }.to_h.keys.map(&:to_sym)
     else
-      []
+      [:address, :phone_number_on_account]
     end
   end
 
