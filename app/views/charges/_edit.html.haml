@@ -12,7 +12,6 @@
           -if @trym_category_id.present?
             = f.input :trym_category_id, as: :hidden, input_html: {value: @trym_category_id}
           = f.input :merchant_id, as: :string, label: "Which company is the charge from?", input_html: {class: "text-center", data: {placeholder: merchant_name_example_helper(@trym_category_id), url: merchants_path(trym_category_id: @trym_category_id), init: {text: "#{@charge.merchant_name}", id: "#{@charge.merchant.present? ? @charge.merchant.id : nil}" }.to_json }}
-          = f.association :trym_category, label: "Charge Category", input_html: {class: "text-center"}
 
         .form-inputs
           = f.input :amount, as: :currency, label: "How much is your average bill?", input_html: { value: @charge.amount_in_currency, style: "text-align: center; text-indent: -30px;" }

@@ -19,16 +19,14 @@
       .charge-lead
         %p=charge.descriptor
 
-      %p.without-margin.small
-        %span.small-gray
+      %p.without-margin
+        %span.gray
           -if charge.next_billing_date.present?
             %i.fa.fa-clock-o.hidden-md
             =time_to_next_bill(charge.next_billing_date)
           -elsif charge.billing_day.present?
             %i.fa.fa-clock-o.hidden-md
             ="last charge " + (distance_of_time_in_words charge.billing_day.to_time - Time.now) + " ago"
-      %p.charge-descriptor
-        =charge.smart_trym_category
     
     .charge-info.charge-buttons.text-center      
       -if stop_order_charge_ids.include?(charge.id)
