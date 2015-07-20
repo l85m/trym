@@ -1,6 +1,10 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
+  namespace :api do
+    resources :docs, only: [:index]
+  end
+
   get 'main_page/home'
 
   resources :stop_orders do
