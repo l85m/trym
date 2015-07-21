@@ -1,7 +1,6 @@
 class LinkDelayNotifier
-  include Sidekiq::Worker
 
-  def perform
+  def initialize
     LinkedAccount.where(status: "syncing").where("updated_at < ?", 5.minutes.ago).each do |linked_account|
       notify_of_delay(linked_account)
     end
