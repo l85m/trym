@@ -28,6 +28,7 @@ end
 
 every 5.minutes do
 	rake "periodic:delayed_link_notifier"
+	rake "periodic:notify_of_sidekiq_failure"
 end
 
 # Learn more: http://github.com/javan/whenever
