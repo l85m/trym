@@ -1,0 +1,25 @@
+%h1 Listing merchant_aliases
+
+%table
+  %thead
+    %tr
+      %th Alias
+      %th Merchant
+      %th Financial institution
+      %th
+      %th
+      %th
+      
+  %tbody
+    - @merchant_aliases.each do |merchant_alias|
+      %tr
+        %td= merchant_alias.alias
+        %td= merchant_alias.merchant
+        %td= merchant_alias.financial_institution
+        %td= link_to 'Show', merchant_alias
+        %td= link_to 'Edit', edit_merchant_alias_path(merchant_alias)
+        %td= link_to 'Destroy', merchant_alias, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Merchant alias', new_merchant_alias_path

@@ -1,0 +1,15 @@
+%p#notice= notice
+
+%p
+  %b Alias:
+  = @merchant_alias.alias
+%p
+  %b Merchant:
+  = @merchant_alias.merchant
+%p
+  %b Financial institution:
+  = @merchant_alias.financial_institution
+
+= link_to 'Edit', edit_merchant_alias_path(@merchant_alias)
+\|
+= link_to 'Back', merchant_aliases_path

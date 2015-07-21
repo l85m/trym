@@ -1,6 +1,8 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
+  resources :merchant_aliases
+
   namespace :api do
     resources :docs, only: [:index]
   end
