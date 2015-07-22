@@ -1,0 +1,7 @@
+row = $("#alias-row-<%= @merchant_alias.id %>")
+
+<% if @saved %>
+	row.remove();
+<% else %>
+	row.animate({color: "red"}, 1000).animate({color: "black"}, 5000)
+<% end %>

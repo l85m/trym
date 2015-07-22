@@ -91,7 +91,7 @@ navbarCollapseFormatting = ->
     return
   return
 
-makeSwitches = () ->
+@makeSwitches = () ->
   if $(".bootstrap-switch").length > 0
     $(".bootstrap-switch").each (i, el) ->
       $(this).bootstrapSwitch()

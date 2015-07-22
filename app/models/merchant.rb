@@ -1,6 +1,8 @@
 class Merchant < ActiveRecord::Base
 	has_many :charges
 	has_many :notes, as: :noteable
+	has_many :merchant_aliases
+	accepts_nested_attributes_for :merchant_aliases
 
 	belongs_to :trym_category
 
@@ -30,7 +32,7 @@ class Merchant < ActiveRecord::Base
 		end
 	end
 
-	def self.selection_search(query=nil, category_id=nil)
+	def self.selection_search(query=nil, category_id=nil, allow_new = true)
 		return TrymCategory.merchant_select unless query.present?
 
 		if category_id.present?
@@ -42,7 +44,11 @@ class Merchant < ActiveRecord::Base
 					select(&:validated)
 		end 
 		r = r.present? ? r.collect{ |m| { id: m.id, text: m.name, category: m.trym_category_name } } : []
-		(r + [{ id: query, text: "New Provider: " + query, category: nil }]).to_json
+		if allow_new == "false"
+			r.to_json
+		else
+			(r + [{ id: query, text: "New Provider: " + query, category: nil }]).to_json
+		end
 	end
 
 	def required_cancelation_fileds

@@ -1,0 +1,23 @@
+.modal-dialog.modal-sm
+  .modal-content
+    .modal-header.text-center
+      %h4.modal-title 
+        create merchant and link to #{@merchant_alias.alias}
+    
+    = simple_form_for @merchant, remote: true do |f|
+      =f.input :merchant_alias_id, as: :hidden, input_html: { value: @merchant_alias.id }
+      
+      .modal-body
+        %ul.form-errors
+        .form-inputs.text-center
+          = f.input :name, as: :string, required: false, input_html: { value: @merchant_alias.alias }
+          = f.input :trym_category_id, collection: TrymCategory.all, label_method: :name, value_method: :id
+
+        .form-inputs.text-center
+          .row
+            .col-sm-6= f.input :validated, as: :boolean
+            .col-sm-6= f.input :recurring_score, as: :integer
+
+      .modal-footer{ style: "text-align: center;" }
+        = render partial: 'shared/cancel_button', locals: {btn_size: 'btn-md'}
+        = f.button :submit, "Save", class: "btn btn-primary btn-md", style: "width: 69px;"
