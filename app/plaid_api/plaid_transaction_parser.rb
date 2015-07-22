@@ -9,6 +9,8 @@ class PlaidTransactionParser
     # t = Time.now
     # puts "create_charge_list = T=#{Time.now - t}"
     parse 
+
+    PlaidMerchantAliasCreator.perform_async(@transaction_request.data, @link.id)
   end
 
   def parse

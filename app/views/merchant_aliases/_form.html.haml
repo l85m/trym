@@ -1,0 +1,10 @@
+= simple_form_for(@merchant_alias) do |f|
+  = f.error_notification
+
+  .form-inputs
+    = f.input :alias
+    = f.association :merchant
+    = f.association :financial_institution
+
+  .form-actions
+    = f.button :submit

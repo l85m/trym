@@ -1,6 +1,8 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
+  resources :merchant_aliases
+
   namespace :api do
     resources :docs, only: [:index]
   end
@@ -33,7 +35,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :merchants, only: :index
+  resources :merchants, only: [:index, :new, :create]
 
   resources :charges do
     resources :stop_orders, only: :new

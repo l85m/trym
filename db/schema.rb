@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150622043526) do
+ActiveRecord::Schema.define(version: 20150721221820) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -121,9 +121,21 @@ ActiveRecord::Schema.define(version: 20150622043526) do
   add_index "linked_accounts", ["financial_institution_id"], name: "index_linked_accounts_on_financial_institution_id", using: :btree
   add_index "linked_accounts", ["user_id"], name: "index_linked_accounts_on_user_id", using: :btree
 
+  create_table "merchant_aliases", force: true do |t|
+    t.string   "alias",                                    null: false
+    t.integer  "merchant_id"
+    t.integer  "financial_institution_id",                 null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.boolean  "ignore",                   default: false, null: false
+  end
+
+  add_index "merchant_aliases", ["alias", "financial_institution_id"], name: "index_merchant_aliases_on_alias_and_financial_institution_id", unique: true, using: :btree
+  add_index "merchant_aliases", ["financial_institution_id"], name: "index_merchant_aliases_on_financial_institution_id", using: :btree
+  add_index "merchant_aliases", ["merchant_id"], name: "index_merchant_aliases_on_merchant_id", using: :btree
+
   create_table "merchants", force: true do |t|
     t.text     "name"
-    t.text     "type"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "validated",          default: false, null: false

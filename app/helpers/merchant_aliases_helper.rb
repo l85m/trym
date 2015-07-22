@@ -1,0 +1,2 @@
+module MerchantAliasesHelper
+end

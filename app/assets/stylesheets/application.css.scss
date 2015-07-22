@@ -366,6 +366,11 @@ abbr[title], abbr[data-original-title] {
 .select2-container{
 	text-align: center;
 }
+.alias-row{
+	.select2-container{
+		text-align: left;
+	}
+}
 .centered-select2 .select2-container .select2-choice > .select2-chosen {
 	margin-right: 0px !important;
 	text-align: center;
