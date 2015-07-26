@@ -1,0 +1,7 @@
+<% if @merchant.errors.present? %>
+	errors = $("#modal-container").find(".form-errors")
+	errors.html()
+	errors.append("<%= @merchant.errors.messages.collect{ |a,v| '<li>' + m + ' ' + a + '</li>' }.join %>")
+<% else %>
+	location.reload();
+<% end %>

@@ -1,5 +1,7 @@
 class MerchantsController < ApplicationController
   before_action :authenticate_user!
+  before_action :find_merchant, only: [:edit, :update]
+  
   respond_to :json
 
   def index
@@ -16,9 +18,20 @@ class MerchantsController < ApplicationController
     @merchant.merchant_aliases << MerchantAlias.find(params[:merchant][:merchant_alias_id])
   end
 
+  def edit
+  end
+
+  def update
+    @merchant.update(merchant_params)
+  end
+
   private
 
+  def find_merchant
+    @merchant = Merchant.find(params[:id])
+  end
+
   def merchant_params
-    params.require(:merchant).permit( :name, :validated, :trym_category_id, :recurring_score )
+    params.require(:merchant).permit( :name, :validated, :trym_category_id, :recurring_score, :default_renewal_period )
   end
 end
