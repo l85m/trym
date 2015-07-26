@@ -1,7 +1,7 @@
 class PlaidMerchantAliasCreator
-  include Sidekiq::Worker
+  # include Sidekiq::Worker
 
-  def perform(transaction_request_data, linked_account_id)
+  def initialize(transaction_request_data, linked_account_id)
   	@transaction_request_data = transaction_request_data
   	
   	if @transaction_request_data.present?
@@ -14,9 +14,9 @@ class PlaidMerchantAliasCreator
   end
 
   def create_new_aliases
-  	new_merchant_aliases.each do |merchant_alias|
+  	new_merchant_aliases.each do |t|
   		begin
-  			MerchantAlias.create( alias: merchant_alias, financial_institution_id: @financial_institution_id )
+  			MerchantAlias.create( alias: t["name"], financial_institution_id: @financial_institution_id, transaction_meta_data: t )
   		rescue => e
   			Rails.logger.warn "[PlaidMerchantAliasCreator][#{Time.now}] Failed to save MerchantAlias: {e}"
   		end
@@ -24,9 +24,9 @@ class PlaidMerchantAliasCreator
   end
 
   def new_merchant_aliases
-  	candidate_aliases = @transaction_request_data.collect{ |t| t["name"] }.uniq
-  	existing_aliases = MerchantAlias.where(alias: candidate_aliases, financial_institution_id: @financial_institution_id ).pluck(:alias)
-  	candidate_aliases - existing_aliases
+  	candidate_aliases = @transaction_request_data.uniq { |t| t["name"] }
+  	existing_aliases = MerchantAlias.where( alias: candidate_aliases.map { |t| t["name"] }, financial_institution_id: @financial_institution_id ).pluck(:alias)
+  	candidate_aliases.reject { |t| existing_aliases.include? t["name"] }
   end
 
-end	
+end

@@ -1,10 +1,10 @@
 format = (merc) ->
-  if !merc.id 
+  if !merc.id && merc.category
     "<div class='ajax-opt-group'><strong><i class='fa fa-tag'></i> " + merc.category + "</strong></div>"
   else if !merc.category
-    "<div class='row'><div class='col-sm-12' style='color:gray'>" + merc.text + "</div></div>"
+    merc.text
   else
-    "<div class='row'><div class='col-sm-12'>" + merc.text + "</div></div>"
+    "<div class='row'><div class='col-xs-10'>" + merc.text + "</div>" + "<div class='col-xs-2 text-right'>" + merc.score + "</div></div>"
 
 initMerchantAliasSelect2 = (target) ->
   if target.size() > 0
@@ -12,6 +12,8 @@ initMerchantAliasSelect2 = (target) ->
 
     target.select2
       minimumInputLength: 0
+      formatResult: format
+      formatSelection: format
       placeholder: "select merchant"
       allowClear: true
       initSelection: (element, callback) ->

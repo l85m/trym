@@ -5,24 +5,7 @@
       .panel-heading
         %h4.without-margin 
           Merchant Aliases          
-      .panel-body
-        = paginate @merchant_aliases
-        %div
-          %small
-            -if params[:show_ignored_aliases] || params[:show_mapped_aliases]
-              =link_to "unmapped", merchant_aliases_path
-            -else
-              unmapped
-            &bull;
-            -if params[:show_mapped_aliases]
-              mapped
-            -else
-              =link_to "mapped", merchant_aliases_path(show_mapped_aliases: true)
-            &bull;
-            -if params[:show_ignored_aliases]
-              ignored
-            -else
-              =link_to "ignored", merchant_aliases_path(show_ignored_aliases: true)
+      =render 'index_links'
 
     %table.table.table-hover.table-condensed
       %thead
@@ -33,25 +16,24 @@
           
       %tbody
         - @merchant_aliases.each do |m|
-          %tr.alias-row{id: "alias-row-#{m.id}"}
+          %tr.alias-row{id: "alias-row-#{m.id}", data: { toggle: "tooltip", title: m.transaction_meta_data.inspect }}
             %td{style: "vertical-align:middle"}
-              = m.alias
+              %strong= m.alias
+              %br
+              %small= m.financial_institution.present? ? m.financial_institution.name : "No Financial Institution"
             %td{style: "width:300px; vertical-align:middle"}
-              %input.alias-select2{value: m.merchant ? m.merchant.name : nil, data: { url: merchants_path, search: m.alias, update_url: merchant_alias_path(m) } }
-            %td{style: "width:200px"}
+              %input.alias-select2{value: m.merchant ? "<div class='row'><div class='col-xs-10'>#{m.merchant.name}</div><div class='col-xs-2 text-right'>#{m.merchant.recurring_score}</div></div>".html_safe : nil, data: { url: merchants_path, search: m.alias, update_url: merchant_alias_path(m) } }
+            %td.text-right{style: "width:200px"}
               -if m.ignore
                 =link_to "un-ignore", merchant_alias_path(m, merchant_alias: {ignore: false}), method: :put, remote: true, class: "btn btn-default"
               -else
                 =link_to "ignore", merchant_alias_path(m, merchant_alias: {ignore: true}), method: :put, remote: true, class: "btn btn-default"
-              =link_to new_merchant_path(merchant_alias_id: m.id), remote: true, class: "btn btn-default" do
-                %span new merc
-                   
+              -if m.merchant
+                =link_to edit_merchant_path(m.merchant, merchant_alias_id: m.id), remote: true, class: "btn btn-default" do
+                  %span edit merc                
+              -else
+                =link_to new_merchant_path(merchant_alias_id: m.id), remote: true, class: "btn btn-default" do
+                  %span new merc
 
     .panel.panel-default.text-center
-      .panel-body
-        = paginate @merchant_aliases
-        %div
-          %small
-            %a ignored aliases
-            &bull;
-            %a mapped aliases
+      =render 'index_links'

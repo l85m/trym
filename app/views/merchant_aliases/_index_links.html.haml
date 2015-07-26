@@ -1,0 +1,18 @@
+.panel-body
+  = paginate @merchant_aliases
+  %div
+    %small
+      -if params[:show_ignored_aliases] || params[:show_mapped_aliases]
+        =link_to "unmapped", merchant_aliases_path
+      -else
+        unmapped
+      &bull;
+      -if params[:show_mapped_aliases]
+        mapped
+      -else
+        =link_to "mapped", merchant_aliases_path(show_mapped_aliases: true)
+      &bull;
+      -if params[:show_ignored_aliases]
+        ignored
+      -else
+        =link_to "ignored", merchant_aliases_path(show_ignored_aliases: true)

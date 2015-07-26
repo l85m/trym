@@ -35,7 +35,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :merchants, only: [:index, :new, :create]
+  resources :merchants
 
   resources :charges do
     resources :stop_orders, only: :new
