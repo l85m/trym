@@ -6,7 +6,7 @@
   .modal-body
     %ul.form-errors
     .form-inputs.text-center
-      = f.input :name, as: :string, required: false, input_html: { value: @merchant.present? ? @merchant.name : @merchant_alias.alias }
+      = f.input :name, as: :string, required: false, input_html: { value: @merchant.name.present? ? @merchant.name : @merchant_alias.alias }
       = f.input :trym_category_id, collection: TrymCategory.all, label_method: :name, value_method: :id
       = f.input :recurring_score, collection: recurring_score_collection, label_method: :description, value_method: :score
       = f.input :default_renewal_period, collection: default_renewal_period, label_method: :description, value_method: :period
