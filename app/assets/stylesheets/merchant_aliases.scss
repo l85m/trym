@@ -1,3 +1,11 @@
 // Place all the styles related to the MerchantAliases controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+#merchant-aliases-index{
+	.tooltip{
+		width: 100%;
+	}
+	.tooltip-inner{
+  	max-width: 100%;
+  }
+}

@@ -43,7 +43,7 @@ class Merchant < ActiveRecord::Base
 			r = find_by_fuzzy_name(query, limit: 5).
 					select(&:validated)
 		end 
-		r = r.present? ? r.collect{ |m| { id: m.id, text: m.name, category: m.trym_category_name } } : []
+		r = r.present? ? r.collect{ |m| { id: m.id, text: m.name, category: m.trym_category_name, score: m.recurring_score } } : []
 		if allow_new == "false"
 			r.to_json
 		else
