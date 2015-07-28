@@ -32,6 +32,6 @@ class MerchantsController < ApplicationController
   end
 
   def merchant_params
-    params.require(:merchant).permit( :name, :validated, :trym_category_id, :recurring_score, :default_renewal_period )
+    params.require(:merchant).permit( :name, :validated, :trym_category_id, :recurring_score, :default_renewal_period, :definitely_recurring_if_in_renewal_period )
   end
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150726192749) do
+ActiveRecord::Schema.define(version: 20150728005804) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -139,11 +139,12 @@ ActiveRecord::Schema.define(version: 20150726192749) do
     t.text     "name"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "validated",              default: false, null: false
-    t.integer  "recurring_score",        default: 0,     null: false
+    t.boolean  "validated",                                 default: false, null: false
+    t.integer  "recurring_score",                           default: 0,     null: false
     t.integer  "trym_category_id"
     t.json     "cancelation_fields"
     t.integer  "default_renewal_period"
+    t.boolean  "definitely_recurring_if_in_renewal_period", default: false
   end
 
   add_index "merchants", ["trym_category_id"], name: "index_merchants_on_trym_category_id", using: :btree

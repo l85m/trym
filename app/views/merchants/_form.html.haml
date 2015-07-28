@@ -10,6 +10,7 @@
       = f.input :trym_category_id, collection: TrymCategory.all, label_method: :name, value_method: :id
       = f.input :recurring_score, collection: recurring_score_collection, label_method: :description, value_method: :score
       = f.input :default_renewal_period, collection: default_renewal_period, label_method: :description, value_method: :period
+      = f.input :definitely_recurring_if_in_renewal_period, as: :boolean
 
   .modal-footer{ style: "text-align: center;" }
     = render partial: 'shared/cancel_button', locals: {btn_size: 'btn-md'}
