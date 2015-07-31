@@ -4,8 +4,10 @@
       = render 'linked_account_list'
       = render 'contact'
       = render 'account_activity'
+      = render 'shared/security_and_terms'
   .col-md-9.col-sm-8.scrollable
     -if @charges.present?
       =render 'content'
     -else
       =render 'no_charges_content'
+    .paragraph-spacer
