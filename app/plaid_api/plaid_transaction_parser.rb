@@ -6,29 +6,17 @@ class PlaidTransactionParser
     @link = @transaction_request.linked_account
 
     create_charge_list
-    # t = Time.now
-    # puts "create_charge_list = T=#{Time.now - t}"
     parse 
 
     PlaidMerchantAliasCreator.perform_async(@transaction_request.data, @link.id)
   end
 
   def parse
-    # t = Time.now
     group_charges_by_description
-    # puts "group_charges_by_description = T=#{Time.now - t}"
-    # t = Time.now
     match_to_merchants
-    # puts "match_to_merchants = T=#{Time.now - t}"
-    # t = Time.now
     remove_zero_dollar_charges
-    # puts "remove_zero_dollar_charges = T=#{Time.now - t}"
-    # t = Time.now
     calculate_recurring_score_and_renewal_period
-    # puts "calculate_recurring_score_and_renewal_period = T=#{Time.now - t}"
-    # t = Time.now
     create_attributes_for_charges
-    # puts "create_attributes_for_charges = T=#{Time.now - t}"
   end
 
   private
@@ -47,7 +35,7 @@ class PlaidTransactionParser
       charge[:history] = charge[:date].zip(charge[:amount]).sort_by{ |d,v| d }.to_h
       charge[:amount] = charge[:history][charge[:history].keys.max]
       charge[:billing_day] = charge[:date].max
-      charge[:renewal_period_in_weeks] = charge[:interval_in_days] < 10 ? 7 : charge[:interval_in_days] < 20 ? 2 : charge[:interval_in_days] < 40 ? 4 : charge[:interval_in_days] < 100 ? 13 : charge[:interval_in_days] < 200 ? 26 : 52
+      charge[:renewal_period_in_weeks] = charge[:renewal_period_in_weeks].presence || normalize_renewal_period(charge[:interval_in_days])
     end
   end
 
@@ -87,14 +75,22 @@ class PlaidTransactionParser
 
   def match_to_merchants
     @merchs = Merchant.validated.pluck(:name,:id).collect{ |name,id| [name.downcase.gsub(/[^0-9a-z ]/i, ''),id] }
+    @merch_aliases = MerchantAlias.linked_to_merchant.where( merch_query ).pluck(:alias, :merchant_id).to_h
+    
     @charge_list.map do |c|
-      match = find_by_fuzzy_name_with_similar_threshold(c[:name])
+      merch_id = @merch_aliases[c[:name]]
+      match = merch_id.present? ? Merchant.find(merch_id) : find_by_fuzzy_name_with_similar_threshold(c[:name])
+      
       if ( !match.present? && c[:meta]["payment_processor"].present? )
         match = find_by_fuzzy_name_with_similar_threshold(c[:meta]["payment_processor"]) if c[:meta]["payment_processor"].present?
       elsif ( !match.present? && card_membership_fees.select{ |n| c[:name].downcase.include?(n) }.present? && c[:category_id] == "10000000" )
         match = find_by_fuzzy_name_with_similar_threshold(@link.financial_institution.name)
       end
-      c[:merchant_id] = match.id if match.present?
+
+      if match.present?
+        c[:merchant_id] = match.id
+        c[:renewal_period_in_weeks] = match.default_renewal_period
+      end
     end
   end
 
@@ -112,5 +108,16 @@ class PlaidTransactionParser
 
   def card_membership_fees
     ["annual membership"]
+  end
+
+  def normalize_renewal_period(days)
+    days < 1 ? 4 : days < 10 ? 1 : days < 20 ? 2 : days < 40 ? 4 : days < 100 ? 13 : days < 200 ? 26 : 52
+  end
+
+  def merch_query
+    {
+      alias: @charge_list.map { |c| c[:name] }, 
+      financial_institution_id: @link.financial_institution.id
+    }
   end
 end
