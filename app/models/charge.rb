@@ -85,6 +85,10 @@ class Charge < ActiveRecord::Base
     update( recurring_score: TransactionScorer.new(self).score )
   end
 
+  def history_with_long_dates
+    history.collect{ |date,value| [Date.parse(date).strftime("%b %e, %Y"),value.to_f] }.to_h
+  end
+
   def new_transaction(new_after = 30.days.ago)
     if history.present?
       history.keys.max >= new_after
