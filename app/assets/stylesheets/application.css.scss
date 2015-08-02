@@ -386,9 +386,8 @@ abbr[title], abbr[data-original-title] {
 	width: 100%;
 }
 .modal-content{ 
-	background: #F0F1F4;
-	h1, h2, h3, h4, h5, p,
-	label{ color: rgba(0,0,0,0.7); }
+  border-radius: 2px;
+  border-color: #5dc38e;
 }
 .modal-backdrop.in {
   opacity: 0.8;
