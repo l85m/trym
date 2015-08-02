@@ -25,3 +25,5 @@
                 = f.button :submit, "create my account", class: "btn btn-lg btn-primary btn-block", style: "margin-bottom: 5px;"
                 =link_to "sign in", new_user_session_path, class: "btn btn-lg btn-primary-o", style: "width: 49%; float: left;"
                 =link_to "learn more", about_path, class: "btn btn-lg btn-primary-o", style: "width: 49%; float: right;"
+        .paragraph-spacer
+        =render 'shared/security_and_terms'

@@ -1,97 +1,101 @@
 .container
+  =render 'about_links', about_greeting: "Let me tell you a little bit about myself.", active: "about"
   .row
-    .col-md-10.col-sm-12
-      %h3 
-        What is Trym?
-        %a.anchorjs-link#what-is-trym{href: "#what-is-trym", style: "margin-top: -50px; padding-top: 50px;"}
-          %i.fa.fa-rocket
-      %p 
-        Trym helps you manage them or cancel any service with just a few clicks.  It also helps you realize when things cost more than they should, or when you can get a better deal somewhere else by notifiying you when the price you're paying goes up, or by telling you when someone else is offering a better deal.  
+    .col-md-10.col-md-offset-1.col-sm-12
+      .row.about-page-section
+        .col-lg-2.col-md-3.about-page-section-header
+          %strong What is trym?
+        .col-lg-10.col-md-9
+          %p 
+            Trym helps you manage them or cancel any service with just a few clicks.  It also helps you find and keep track of all your recurring expenses.  Trym can also alert you before expenses hit so that you have a chance to cancel or modify them before the next billing cycle starts.
+        
+      .row.about-page-section
+        .col-lg-2.col-md-3.about-page-section-header
+          %a{ name: "security" }
+          %strong How does trym keep my personal information secure?
+        .col-lg-10.col-md-9
+          %p 
+            Trym takes your security and privacy very seriously. Trym uses industry leading security measures to protect your information, including but not limited to:
+            %dl
+              %dt Secure Physical Infrastructure
+              %dd
+                All information held by trym is stored on restricted database servers which are housed in a secure facility located in San Francisco, CA.  This facility is PCI compliant and SSAE16 SOC-1 Type II certified.
+              %dt Strict Access Control
+              %dd
+                Administrator access to trym's databases and servers is restricted to a small group of trusted custodians who are also full voting members of Trym LLC.
+              %dt Network Security
+              %dd
+                We only allow traffic to and from trym using strong TLS protocols and ciphers. Your connection to trym.io is encrypted using a modern cipher suite which has been certified by the Comodo Group, the largest SSL certificate provider in the world.
+              %dt Additional Security to Protect Your Linked Account Credentials
+              %dd
+                %p
+                  We partner with 
+                  %a{ href: "https://www.plaid.com/security/" }Plaid Technologies
+                  to link to financial institutions in a highly secure way. Credentials for third party financial institutions are encrypted in storage. Decryption is only possible with dedicated hardware the private network. Private keys are split and stored securely via both hardware and software encryption on physical devices.  A strict rotation is maintained for all encryption keys. Communication with financial institutions are only transmitted over encrypted endpoints and utilize cryptographically hashed headers and timestamps to verify authenticity.
+          %p 
+            If you have any questions or concerns about privacy or security, please contact us at
+            %a{ href: 'mailto:infosec@trym.io'} infosec@trym.
+
+      .row.about-page-section
+        .col-lg-2.col-md-3.about-page-section-header
+          %strong How much does trym cost?
+        .col-lg-10.col-md-9
+          %p Nothing, trym is 100% free for users.
+
+      .row.about-page-section
+        .col-lg-2.col-md-3.about-page-section-header
+          %strong How does trym make money?
+        .col-lg-10.col-md-9
+          %p 
+            We partner with service providers to offer you better deals on services than you already use, or gives providers a chance to lower their prices to you before you cancel or downgrade them. Trym will never partner with service providers in ways that prevent you from learning about better deals with other providers or make it more difficult for you to manage or cancel a service.
       
-      %h3 
-        How much does Trym cost?
-        %a.anchorjs-link#whats-it-cost{href: "#whats-it-cost", style: "margin-top: -50px; padding-top: 50px;"}
-          %i.fa.fa-rocket      
-      %p Trym is 100% free.
+      .row.about-page-section
+        .col-lg-2.col-md-3.about-page-section-header
+          %strong What information does trym require to cancel or modify my services?
+        .col-lg-10.col-md-9
+          %p 
+            This depends on who your service provider is. Often we'll need the account name, your address, and maybe something like the last four digits of your social security number. In any case, we’ll let you know what information is required by that merchant immediately upon your request to modify a service.
 
-      %h3 
-        How does Trym make money?
-        %a.anchorjs-link#show-me-the-money{href: "#show-me-the-money", style: "margin-top: -50px; padding-top: 50px;"}
-          %i.fa.fa-rocket
-      %p 
-        Trym partners with service providers to offer you better deals on services than you already use, or gives providers a chance to lower their prices to you before you cancel or downgrade them. Trym will never partner with service providers in ways that prevent you from learning about better deals with other providers or make it more difficult for you to manage or cancel a service.
-      %h3 
-        What information does Trym require to cancel or modify my services?
-        %a.anchorjs-link#info-requirements{href: "#info-requirements", style: "margin-top: -50px; padding-top: 50px;"}
-          %i.fa.fa-rocket
-      %p 
-        This depends on who your service provider is. Often we'll need the account name, your address, and maybe something like the last four digits of your social security number. In any case, we’ll let you know what information is required by that merchant immediately upon your request to modify a service.
+      .row.about-page-section
+        .col-lg-2.col-md-3.about-page-section-header
+          %strong Why should I link accounts to Trym?
+        .col-lg-10.col-md-9
+          %p            
+            Linking accounts is optional, but one of the benefits of trym is helping you locate which of your expenses may be recurring. People commonly forget about one or more expenses, and if you link your accounts trym can help you find expenses you may have forgotten about.
 
-      %h3 
-        How does Trym keep my personal information secure?
-        %a.anchorjs-link#info-sec{href: "#info-sec", style: "margin-top: -50px; padding-top: 50px;"}
-          %i.fa.fa-rocket
-      %p 
-        Trym takes your security and privacy very seriously. We will never sell your personal data to anyone or share it without your explicit consent. All information you exchange with Trym.io is encrypted.
-        %ul
-          %li The “https” indicator in your browser’s address bar is your signal that encryption is working and active.
-          %li Trym stores your sensitive information securely and will never sell your personal data to anyone.
-      %p 
-        If you have any questions or concerns about privacy or security, please contact us at 
-        %a{ href: 'mailto:infosec@trym.io'} infosec@trym.
+      .row.about-page-section
+        .col-lg-2.col-md-3.about-page-section-header
+          %strong If I link a credit card how does trym know which of my expenses are recurring?
+        .col-lg-10.col-md-9
+          %p 
+            To determine expense recurrance, trym uses factors such as merchant name, timing and amount of the payments to each merchant, and how long ago the last expense occurred to generate a likeliness of recurring score. Factors which are contributing to each expense on the 
+            =link_to 'view all expenses page', search_charges_path
+            under linked accounts.
 
-      %h3 
-        If I link a credit card how does Trym know which of my expenses are recurring?
-        %a.anchorjs-link#recurring-score{href: "#recurring-score", style: "margin-top: -50px; padding-top: 50px;"}
-          %i.fa.fa-rocket
-      %p 
-        Trym uses factors such as merchant name, timing and amount of the payments to each merchant, and how long ago the last charge occurred to generate a likeliness of recurring score. We show you which factors are contributing to each charge on the Charges page of Linked Accounts.
+      .row.about-page-section
+        .col-lg-2.col-md-3.about-page-section-header
+          %strong How can I link my accounts to trym?
+        .col-lg-10.col-md-9
+          %p 
+            At the top of the main page, click on "Linked Accounts," where you'll see a list of the financial institutions that can currently be linked with trym. Once you click link, you’ll be asked to provide the username and password that you use to access the financial institution online.
+          %p 
+            The list of linkable financial institutions is always growing, so if your bank isn't currently listed, check back soon. In the meantime, you can manually input any known charge for trym to track, modify, or cancel.
 
-      %h3 
-        How can I link my accounts to Trym?
-        %a.anchorjs-link#link-accounts{href: "#link-accounts", style: "margin-top: -50px; padding-top: 50px;"}
-          %i.fa.fa-rocket
-      %p 
-        At the top of the main page, click on "Linked Accounts," where you'll see a list of the financial institutions that can currently be linked with Trym. Once you click link, you’ll be asked to provide the username and password that you use to access the financial institution online.
-      %p 
-        This list is always growing, so be sure to check back regularly if your bank isn’t currently listed. In the meantime, you can manually input any known recurring expenses from the left bar of the main page by clicking "Track New Expense."
+      .row.about-page-section
+        .col-lg-2.col-md-3.about-page-section-header
+          %strong What if I forgot my login information?
 
-      %h3 
-        What if I forgot my login information?
-        %a.anchorjs-link#forgot-login{href: "#forgot-login", style: "margin-top: -50px; padding-top: 50px;"}
-          %i.fa.fa-rocket
+        .col-lg-10.col-md-9
+          %p 
+            We’ve all been there. Just click sign in at the top of the page, and you’ll see a prompt with a forgot password link at the bottom. You’ll be asked for your email address, and we’ll send you instructions on how to reset your password.
 
-      %p 
-        We’ve all been there. Just click sign in at the top of the page, and you’ll see a prompt with a forgot password link at the bottom. You’ll be asked for your email address, and we’ll send you instructions on how to reset your password.
+      .row.about-page-section
+        .col-lg-2.col-md-3.about-page-section-header
+          %strong How do I contact you?
+        .col-lg-10.col-md-9
+          %p 
+            Send us an email at 
+            %a{href: "mailto:support@trym.io"} support@trym.io 
+            and we’ll get back to you ASAP.
 
-      %h3 
-        How do I contact you?
-        %a.anchorjs-link#contact-info{href: "#contact-info", style: "margin-top: -50px; padding-top: 50px;"}
-          %i.fa.fa-rocket
-      %p 
-        Send us an email at 
-        %a{href: "mailto:support@trym.io"} support@trym.io 
-        and we’ll get back to you ASAP.
-
-      .paragraph-spacer{style: "margin-bottom:400px;"}
-
-    %nav.col-md-2.about-sidebar.hidden-xs.hidden-sm
-      %ul#sidebar.nav.nav-stacked.fixed
-        %li
-          %a{:href => "#what-is-trym"} What is Trym?
-        %li
-          %a{:href => "#whats-it-cost"} How much does Trym cost?
-        %li
-          %a{:href => "#show-me-the-money"} How does Trym make money?
-        %li
-          %a{href: "#info-requirements"} What information does Trym require to cancel or modify my services?
-        %li
-          %a{href: "#info-sec"} How does Trym keep my personal information secure?
-        %li
-          %a{href: "#recurring-score"} If I link a credit card how does Trym know which of my expenses are recurring?
-        %li
-          %a{href: "#link-accounts"} How can I link my accounts to Trym?
-        %li
-          %a{href: "#forgot-login"} What if I forgot my login information?
-        %li
-          %a{href: "#contact-info"} How do I contact you?
+      .paragraph-spacer

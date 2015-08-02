@@ -1,0 +1,13 @@
+.row
+  .col-md-10.col-md-offset-1.col-sm-12.text-center
+    .paragraph-spacer
+    .trym-talking
+      %p.lead.without-margin
+        =about_greeting
+    %ul.list-inline.text-center#about-links
+      %li{ class: active == "about" ? "active" : ""} 
+        =link_to "About", about_path
+      %li{ class: active == "privacy" ? "active" : ""}
+        =link_to "Privacy Policy", privacy_path
+      %li{ class: active == "legal" ? "active" : ""}
+        =link_to "Terms of Use", legal_path
