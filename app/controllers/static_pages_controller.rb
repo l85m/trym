@@ -2,10 +2,10 @@ class StaticPagesController < ApplicationController
   def landing
   end
 
-  def t
+  def legal
   end
 
-  def legal
+  def privacy
   end
 
   def test
