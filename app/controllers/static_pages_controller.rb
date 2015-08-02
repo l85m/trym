@@ -1,4 +1,6 @@
 class StaticPagesController < ApplicationController
+  before_action :show_location_restriction
+
   def landing
   end
 
@@ -13,5 +15,5 @@ class StaticPagesController < ApplicationController
 
   def about
   end
-  
+
 end
