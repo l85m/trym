@@ -146,8 +146,13 @@ html#static-pages-landing, html#invitations-edit, html#invitations-update{
 	}
 }
 
-@media (min-width: 768px) {
+@media (min-width: 992px) {
 	.about-page-section-header{
 		text-align: right;
+	}
+}
+@media (max-width: 991px) {
+	.about-page-section-header{
+		font-size: 18px;
 	}
 }
