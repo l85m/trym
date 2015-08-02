@@ -3,15 +3,15 @@
   .col-sm-12.text-center
     .trym-talking
       %p.lead.without-margin
-        hello#{current_user.first_name.present? ? ' ' + current_user.first_name : ''}, here's what i'm tracking for you    
+        Hello#{current_user.first_name.present? ? ' ' + current_user.first_name : ''}, here's what i'm tracking for you.
     -if @charges_outlook_chart_data
       %p.lead
-        you're on track to spend 
+        You're on track to spend 
         %b #{number_to_currency @charges_outlook_chart_data.total_next_twelve_months}
-        on recurring expenses over the next year
+        on recurring expenses over the next year.
     -else
       %p.lead
-        tell me more about a recurring expenses by clicking modify > edit expense info
+        Tell me more about any recurring expense by clicking modify > edit expense info.
 
 .trym-fade-in
   .row#charge-list
@@ -28,18 +28,18 @@
         =link_to current_user.has_linked_charges? ? search_charges_path : linked_accounts_path, class: "btn btn-block btn-primary-o btn-icon-left" do
           %span
             %i.fa.fa-credit-card.fa-3x.pull-left
-          %span add expenses from linked accounts
+          %span Add expenses from linked accounts
     .col-md-4
       %p
         =link_to new_charge_path, class: "btn btn-block btn-primary-o btn-icon-left" do
           %span
             %i.fa.fa-plus-circle.fa-3x.pull-left
-          %span add new recurring expenses manually
+          %span Add new recurring expenses manually
     .col-md-4
       %p
         =link_to new_stop_order_path, class: "btn btn-block btn-primary-o btn-icon-left" do
           %span
             %i.fa.fa-cogs.fa-3x.pull-left
-          %span cancel or modify recurring expenses
+          %span Cancel or modify recurring expenses
 
   .paragraph-spacer

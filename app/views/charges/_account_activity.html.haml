@@ -5,11 +5,11 @@
     .pull-right.visible-lg-inline-block
       =link_to new_charge_path, class: "btn btn-xs btn-default", remote: true do
         %i.fa.fa-plus-circle
-        track new expense
+        Track New Expense
         
 =link_to new_charge_path, class: "btn btn-xs btn-block sub-heading-link hidden-lg", remote: true do
   %i.fa.fa-plus-circle
-  track new expense
+  Track New Expense
 .body
   -if @stop_orders.present?
     -@stop_orders.each do |s|
@@ -37,7 +37,7 @@
           %p=f.text_field :merchant_id, data: { url: merchants_path, placeholder: "Click to select a service provider" }
           %p.text-center
             %button.btn.btn-default#disabled-next-button{disabled: "disabled"}
-              select a service to continue
+              Select a service to continue
             =f.button class: "btn btn-primary", id: "enabled-next-button" do 
               continue
               %i.fa.fa-arrow-circle-right
@@ -54,7 +54,7 @@
           %p=f.text_field :merchant_id, data: { url: merchants_path, placeholder: "Click to select a service provider" }
           %p.text-center
             %button.btn.btn-default#disabled-next-button{disabled: "disabled"}
-              select a service to continue
+              Select a service to continue
             =f.button class: "btn btn-primary", id: "enabled-next-button" do 
               continue
               %i.fa.fa-arrow-circle-right
