@@ -2,6 +2,7 @@ class Merchant < ActiveRecord::Base
 	has_many :charges
 	has_many :notes, as: :noteable
 	has_many :merchant_aliases
+	has_many :transactions
 	accepts_nested_attributes_for :merchant_aliases
 
 	belongs_to :trym_category

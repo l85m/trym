@@ -1,5 +1,6 @@
 class TransactionRequest < ActiveRecord::Base
   belongs_to :linked_account
+  has_many :transactions
   has_many :charges
 
   def previous_transactions

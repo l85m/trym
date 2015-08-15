@@ -6,6 +6,7 @@ class LinkedAccount < ActiveRecord::Base
 
   has_many :charges
   has_many :transaction_requests
+  has_many :transactions, through: :transaction_requests
 
   scope :linked, -> {where( status: ["syncing", "analyzing", "linked"] )}
   scope :not_destroyed, -> {where( destroyed_at: nil)}

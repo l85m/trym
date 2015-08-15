@@ -8,8 +8,8 @@ class Charge < ActiveRecord::Base
 
   has_one :financial_institution, through: :linked_account
   has_many :stop_orders, dependent: :destroy
-  
   has_many :notes, as: :noteable
+  has_many :transactions
 
   validates_presence_of :user_id
   validates_numericality_of :amount, only_integer: true, greater_than_or_equal_to: 0, allow_nil: true
@@ -79,6 +79,10 @@ class Charge < ActiveRecord::Base
     where.not(history: nil).each do |charge|
       charge.update( recurring_score: TransactionScorer.new(charge).score )
     end
+  end
+
+  def history
+    transactions.order(date: :desc).pluck(:date, :amount).map{ |date,amount| [date, amount/100.0] }.to_h
   end
 
   def rescore!

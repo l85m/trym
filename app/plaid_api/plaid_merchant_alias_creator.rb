@@ -1,7 +1,6 @@
 class PlaidMerchantAliasCreator
-  include Sidekiq::Worker
 
-  def perform(transaction_request_data, linked_account_id)
+  def initialize(transaction_request_data, linked_account_id)
   	@transaction_request_data = transaction_request_data
   	
   	if @transaction_request_data.present?
