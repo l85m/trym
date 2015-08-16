@@ -77,7 +77,7 @@ class Charge < ActiveRecord::Base
 
   def self.rescore
     where.not(history: nil).each do |charge|
-      charge.update( recurring_score: TransactionScorer.new(charge).score )
+      charge.update( recurring_score: TransactionScorer.new(charge.transactions).score )
     end
   end
 
@@ -86,7 +86,7 @@ class Charge < ActiveRecord::Base
   end
 
   def rescore!
-    update( recurring_score: TransactionScorer.new(self).score )
+    update( recurring_score: TransactionScorer.new(self.transactions).score )
   end
 
   def history_with_long_dates
