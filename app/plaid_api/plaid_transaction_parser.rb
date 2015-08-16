@@ -4,7 +4,7 @@ class PlaidTransactionParser
   def initialize(transaction_data, transaction_request)
     return false unless init_instance_variables(transaction_data, transaction_request)
     create_transactions_from_plaid
-    PlaidMerchantAliasCreator.new(transaction_data, @linked_account.id)
+    PlaidMerchantAliasCreator.new(@transaction_list) if @transaction_list.present?
   end
 
   def init_instance_variables(transaction_data, transaction_request)

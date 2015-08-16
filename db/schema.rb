@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150802222928) do
+ActiveRecord::Schema.define(version: 20150816134627) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -128,7 +128,7 @@ ActiveRecord::Schema.define(version: 20150802222928) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "ignore",                   default: false, null: false
-    t.json     "transaction_meta_data"
+    t.integer  "transaction_id"
   end
 
   add_index "merchant_aliases", ["alias", "financial_institution_id"], name: "index_merchant_aliases_on_alias_and_financial_institution_id", unique: true, using: :btree
