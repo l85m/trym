@@ -93,7 +93,7 @@ class ChargeBuilder
 			scorer = TransactionScorer.new(charge.transactions)
 			columns.each do |a| 
 				attribute = charge_attribute_accessor(transaction, charge, scorer, a)
-				recurring_charge_sql[a] += sql_when_then(charge.id, attribute) if attribute
+				recurring_charge_sql[a] += sql_when_then(charge.id, attribute) if attribute.present?
 			end
 		end
 		columns.each { |a| recurring_charge_sql[a] += "END" }
