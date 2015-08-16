@@ -12,16 +12,19 @@ class PlaidTransactionParser
     @transaction_request = transaction_request
     @linked_account = @transaction_request.linked_account
     @transaction_data = filter_transaction_data transaction_data
-    return false unless @transaction_data.present?
-    @merchant_aliases = map_merchant_alias
-    @charge_to_merc_id = @linked_account.user.charges.where.not(merchant_id: nil).pluck(:merchant_id, :id).to_h
-    @charge_to_plaid_name = @linked_account.user.charges.where.not(plaid_name: nil).pluck(:plaid_name, :id).to_h
-    @merchant_id_map = Merchant.validated.pluck(:name, :id).map{ |merchant,id| [normalize_name(merchant),id] }.to_h
-    true
+    if @transaction_data.present?
+      @merchant_aliases = map_merchant_alias
+      @charge_to_merc_id = @linked_account.user.charges.where.not(merchant_id: nil).pluck(:merchant_id, :id).to_h
+      @charge_to_plaid_name = @linked_account.user.charges.where.not(plaid_name: nil).pluck(:plaid_name, :id).to_h
+      @merchant_id_map = Merchant.validated.pluck(:name, :id).map{ |merchant,id| [normalize_name(merchant),id] }.to_h
+      true
+    else
+      false
+    end
   end
 
   def filter_transaction_data(transaction_data)
-    existing_ids = @linked_account.transactions.pluck('transactions.plaid_id')
+    existing_ids = @linked_account.transactions.pluck('plaid_id')
     transaction_data.reject { |t| existing_ids.include?(t["_id"]) || t["amount"] <= 0 }
   end
 
