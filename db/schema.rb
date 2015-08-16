@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150728005804) do
+ActiveRecord::Schema.define(version: 20150816134627) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -128,7 +128,7 @@ ActiveRecord::Schema.define(version: 20150728005804) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "ignore",                   default: false, null: false
-    t.json     "transaction_meta_data"
+    t.integer  "transaction_id"
   end
 
   add_index "merchant_aliases", ["alias", "financial_institution_id"], name: "index_merchant_aliases_on_alias_and_financial_institution_id", unique: true, using: :btree
@@ -197,6 +197,23 @@ ActiveRecord::Schema.define(version: 20150728005804) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "transactions", force: true do |t|
+    t.text    "plaid_id",               null: false
+    t.text    "name"
+    t.date    "date"
+    t.integer "amount"
+    t.text    "category_id"
+    t.integer "charge_id"
+    t.integer "merchant_id"
+    t.integer "transaction_request_id"
+  end
+
+  add_index "transactions", ["category_id"], name: "index_transactions_on_category_id", using: :btree
+  add_index "transactions", ["charge_id"], name: "index_transactions_on_charge_id", using: :btree
+  add_index "transactions", ["merchant_id"], name: "index_transactions_on_merchant_id", using: :btree
+  add_index "transactions", ["plaid_id"], name: "index_transactions_on_plaid_id", unique: true, using: :btree
+  add_index "transactions", ["transaction_request_id"], name: "index_transactions_on_transaction_request_id", using: :btree
 
   create_table "trigrams", force: true do |t|
     t.string  "trigram",     limit: 3

@@ -1,4 +1,5 @@
 class StaticPagesController < ApplicationController
+  layout "down", only: [:upgrades]
   before_action :show_location_restriction
 
   def landing
@@ -16,4 +17,7 @@ class StaticPagesController < ApplicationController
   def about
   end
 
+  def upgrades
+  end
+  
 end

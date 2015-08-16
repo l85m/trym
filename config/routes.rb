@@ -68,6 +68,8 @@ Rails.application.routes.draw do
   get 'about', to: 'static_pages#about'
   get 'test', to: 'static_pages#test'
   get 'privacy', to: 'static_pages#privacy'
+  get 't', to: 'static_pages#t'
+  get 'upgrades', to: 'static_pages#upgrades'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

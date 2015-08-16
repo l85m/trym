@@ -10,11 +10,11 @@ class PlaidTransactionGetter
     @link.update( status: "analyzing" )
     connect_to_plaid
 
-    @link.update( prep_linked_account_params.merge({last_api_response: @user.api_res}) )
-    @new_transactions = has_new_transactions?
+    @link.update prep_linked_account_params.merge({last_api_response: @user.api_res})
     
-    if @user.transactions.present? && @new_transactions
-      ChargeBuilder.new @link.transaction_requests.create(data: @user.transactions)
+    if @user.transactions.present?
+      parser = PlaidTransactionParser.new @user.transactions, @link.transaction_requests.create
+      ChargeBuilder.new parser.transaction_list
     end
     @link.update( status: "linked" )
     
@@ -45,13 +45,6 @@ class PlaidTransactionGetter
     else
       {}
     end
-  end
-
-  def has_new_transactions?
-    return true unless @link.transaction_requests.present?
-    last_ids = @link.transaction_requests.last.data.collect{ |x| x["_id"]} 
-    new_ids = @user.transactions.collect{ |x| x["_id"]} 
-    (new_ids - last_ids).present?
   end
 
   def notify_client

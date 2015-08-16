@@ -13,9 +13,9 @@
     -if charge.recurring && charge.renewal_period_in_weeks.present? && charge.renewal_period_in_weeks > 0
       =billing_interval_in_words(charge.renewal_period_in_weeks)
   %td{data: {title: "History"}}
-    -if charge.transaction_request_id.present? && charge.transaction_request.linked_account.present?
-      %a.icon-link.charge-history-popover{tabindex: "0", data: {toggle: "popover", placement: "auto", content: formatted_history(charge.history_with_long_dates)} }
+    -if charge.transactions.present?
+      %a.icon-link.charge-history-popover{tabindex: "0", data: {toggle: "popover", placement: "auto", content: formatted_history(charge.history)} }
         %i.fa.fa-credit-card
-        =charge.transaction_request.linked_account.financial_institution.plaid_type
+        =charge.linked_account.financial_institution.plaid_type
   %td.recurring-factor-cell{data: {title: "Recurring Factors"}}
     =recurring_factors_for(charge)
