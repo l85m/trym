@@ -90,7 +90,7 @@ class Charge < ActiveRecord::Base
   end
 
   def history_with_long_dates
-    history.collect{ |date,value| [Date.parse(date).strftime("%b %e, %Y"),value.to_f] }.to_h
+    history.collect{ |date,value| [date.strftime("%b %e, %Y"),value] }.to_h
   end
 
   def new_transaction(new_after = 30.days.ago)
