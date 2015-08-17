@@ -1,15 +1,17 @@
-#home-carousel.carousel.slide{data: { ride: "carousel", interval: "false" } }
-  .carousel-inner{:role => "listbox"}
+.row
+  .col-xs-12#landing-slide-land
     =render "static_pages/landing/land"
+  .col-xs-12#tell-me-more
+    %a{ onclick: "$('html, body').animate({scrollTop: $('#landing-slide-one').offset().top - 30 + 'px'}, 'slow');" } 
+      %p{style: "margin-bottom: -10px;"} Tell Me More
+      %i.fa.fa-angle-down.fa-3x
+  .col-xs-12#landing-slide-one
     =render "static_pages/landing/slide_one"
+  .col-xs-12#landing-slide-two
     =render "static_pages/landing/slide_two"
+  .col-xs-12#landing-slide-three
     =render "static_pages/landing/slide_three"
+  .col-xs-12#landing-slide-four
     =render "static_pages/landing/slide_four"
+  .col-xs-12#landing-slide-five
     =render "static_pages/landing/slide_five"
-
-  %a.left.carousel-control.hidden{href: "#home-carousel", role: "button", data: { slide: "prev" } }
-    %span.glyphicon.glyphicon-chevron-left{"aria-hidden" => "true"}
-    %span.sr-only Previous
-  %a.right.carousel-control.hidden{href: "#home-carousel", role: "button", data: { slide: "next" } }
-    %span.glyphicon.glyphicon-chevron-right{"aria-hidden" => "true"}
-    %span.sr-only Next
