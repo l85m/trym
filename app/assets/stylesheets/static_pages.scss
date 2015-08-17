@@ -34,9 +34,6 @@ html#static-pages-landing, html#invitations-edit, html#invitations-update{
 	  height: 100%;
 	  overflow-y: scroll;
   }
-  .bs-wizard{
-  	opacity: 0;
-  }
   .alert-email{
   	margin: 10px;
   	border-radius: 6px;
@@ -56,44 +53,6 @@ html#static-pages-landing, html#invitations-edit, html#invitations-update{
   	}
   }
 }
-
-#home-carousel{
-	.left.carousel-control{
-  	background-image: linear-gradient(left, rgba(255,255,255,1), rgba(255,255,255,0)) !important;
-	}
-	.right.carousel-control{
-  	background-image: linear-gradient(right, rgba(255,255,255,1), rgba(255,255,255,0)) !important;
-	}
-	.carousel-control{
-		width: 5%;
-		opacity: 1;
-		color: rgba(0,0,0,0.4);
-		background-image: none;
-		span{ font-family: "FontAwesome" }
-		.glyphicon-chevron-left:before{ content: "\f137" }
-		.glyphicon-chevron-right:before{ content: "\f138" }
-	}
-	.carousel-control:hover{
-		color: $brand-color;
-	}
-}
-#home-carousel-controls{	
-	div.row > div{ padding: 10px 15px 0px 15px; }
-}
-
-.home-carousel-control:hover{
-	cursor: pointer;
-	p{ color: $brand-color; }
-}
-.home-carousel-control.active{
-	p{ color: $brand-color; }
-}
-.carousel-arrow {
-	position: relative;
-	top: 35px;
-	z-index: 1;
-}
-
 .trym-talking{
 	margin: 10px auto;
 	display: inline-block;
@@ -126,6 +85,36 @@ html#static-pages-landing, html#invitations-edit, html#invitations-update{
 @media (max-width: 767px) {
 	.trym-talking p.opener{ font-size: 170%; }
 	#trym-body{ margin-top: 10px; }
+}
+#landing-slide-land{
+	padding: 170px 0px;
+}
+#tell-me-more{
+	text-align: center;
+}
+#landing-slide-one{
+	padding: 30px 0px 75px 0px;
+	color: white;
+	background-color: $brand-color;
+	p, h3, i{ color: white; }
+	.trym-talking{
+		border-bottom: 1px solid white;
+	}
+}
+#landing-slide-two, #landing-slide-three, #landing-slide-four, {
+	padding: 75px 0px 75px 0px;
+}
+#landing-slide-five{
+	@extend #landing-slide-one;
+	.btn{ 
+		border-color: white;
+		color: white;
+	}
+	.btn:hover{
+		background-color: white;
+		color: $brand-color;
+	}
+	padding: 150px 0px 150px 0px;
 }
 
 // about page

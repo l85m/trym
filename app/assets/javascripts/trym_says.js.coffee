@@ -7,6 +7,4 @@
       
 $ ->
   trymSays()
-  $('#home-carousel').on 'slid.bs.carousel', ->
-    trymSays()
   return
