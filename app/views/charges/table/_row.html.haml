@@ -14,7 +14,7 @@
       =billing_interval_in_words(charge.renewal_period_in_weeks)
   %td{data: {title: "History"}}
     -if charge.transactions.present?
-      %a.icon-link.charge-history-popover{tabindex: "0", data: {toggle: "popover", placement: "auto", content: formatted_history(charge.history)} }
+      %a.icon-link.charge-history-popover{tabindex: "0", data: {toggle: "popover", placement: "auto", content: formatted_history(charge.history_with_long_dates)} }
         %i.fa.fa-credit-card
         =charge.linked_account.financial_institution.plaid_type
   %td.recurring-factor-cell{data: {title: "Recurring Factors"}}

@@ -30,8 +30,8 @@ class Charge < ActiveRecord::Base
 
   scope :uncategorized, -> { where(id: all.reject{ |x| x.smart_trym_category.present? }.collect(&:id) ) }
   scope :sort_by_recurring_score, -> { order("recurring desc NULLS LAST, recurring_score desc NULLS LAST, id desc") }
-  scope :from_link, -> { where.not(transaction_request_id: nil) }
-  scope :from_user, -> { where(transaction_request_id: nil) }
+  scope :from_link, -> { where.not(linked_account_id: nil) }
+  scope :from_user, -> { where(linked_account_id: nil) }
 
   scope :has_recurring_period, -> { where('renewal_period_in_weeks > ?', 0).where.not( renewal_period_in_weeks: nil ) }
   scope :has_billing_day, -> { where.not(billing_day: nil) }
