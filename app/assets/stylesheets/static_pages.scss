@@ -5,35 +5,36 @@
 $brand-color: #5dc38e;
 
 html#static-pages-landing, html#invitations-edit, html#invitations-update{
-	#demo-touch{
-	  width: 30px;
-	  height: 30px;
-	  display: inline-block;
-	  background-color: white;
-	  border-radius: 100%;
-	  position: absolute;
-	  z-index: 9;
-	  border: 2px solid black;
-	  transition: all 0.5s;
-	}
-	#demo-touch.pop{
-		width: 100px;
-		height: 100px;
-		opacity: 0;
-	}
+	// #demo-touch{
+	//   width: 30px;
+	//   height: 30px;
+	//   display: inline-block;
+	//   background-color: white;
+	//   border-radius: 100%;
+	//   position: absolute;
+	//   z-index: 9;
+	//   border: 2px solid black;
+	//   transition: all 0.5s;
+	// }
+	// #demo-touch.pop{
+	// 	width: 100px;
+	// 	height: 100px;
+	// 	opacity: 0;
+	// }
   .container-fluid{
+  	.row{margin: 0px}
   	padding: 0px;
   }
-  .carousel-inner{
-  	height: 100%;
-  }
-  .item{ height: 100%; }
-  .flex-center{
-	  display: flex;
-	  align-items: center;
-	  height: 100%;
-	  overflow-y: scroll;
-  }
+ //  .carousel-inner{
+ //  	height: 100%;
+ //  }
+ //  .item{ height: 100%; }
+ //  .flex-center{
+	//   display: flex;
+	//   align-items: center;
+	//   height: 100%;
+	//   overflow-y: scroll;
+ //  }
   .alert-email{
   	margin: 10px;
   	border-radius: 6px;
@@ -52,6 +53,10 @@ html#static-pages-landing, html#invitations-edit, html#invitations-update{
   		height: 100%;
   	}
   }
+}
+p.trym-opener{
+	font-weight: 300; 
+	font-size: 250%;
 }
 .trym-talking{
 	margin: 10px auto;
@@ -83,7 +88,7 @@ html#static-pages-landing, html#invitations-edit, html#invitations-update{
 	margin-bottom: 30px;
 }
 @media (max-width: 767px) {
-	.trym-talking p.opener{ font-size: 170%; }
+	p.trym-opener, .trym-talking p.opener{ font-size: 170%; }
 	#trym-body{ margin-top: 10px; }
 }
 #landing-slide-land{
@@ -93,19 +98,22 @@ html#static-pages-landing, html#invitations-edit, html#invitations-update{
 	text-align: center;
 }
 #landing-slide-one{
-	padding: 30px 0px 75px 0px;
 	color: white;
-	background-color: $brand-color;
+	text-shadow: 1px 1px 4px black;
+	background-image: url('grid.png');
 	p, h3, i{ color: white; }
+
+}
+#landing-slide-one, #landing-slide-two, #landing-slide-three, #landing-slide-four, {
+	padding-top: 75px;
+	padding-bottom: 75px;
+}
+#landing-slide-five{
+	p, h3, i{ color: white; }
+	background: $brand-color;
 	.trym-talking{
 		border-bottom: 1px solid white;
 	}
-}
-#landing-slide-two, #landing-slide-three, #landing-slide-four, {
-	padding: 75px 0px 75px 0px;
-}
-#landing-slide-five{
-	@extend #landing-slide-one;
 	.btn{ 
 		border-color: white;
 		color: white;
@@ -114,10 +122,12 @@ html#static-pages-landing, html#invitations-edit, html#invitations-update{
 		background-color: white;
 		color: $brand-color;
 	}
-	padding: 150px 0px 150px 0px;
+	padding-top: 150px;
+	padding-bottom: 150px;
 }
 #landing-footer{
-	padding: 5px 0px;
+	padding-top: 5px;
+	padding-bottom: 5px;
 	background-color: black;
 	color: white;
 	a{ 
@@ -132,7 +142,8 @@ html#static-pages-landing, html#invitations-edit, html#invitations-update{
 
 // about page
 .about-page-section{
-	margin-top: 30px;
+	padding-top: 15px;
+	padding-bottom: 15px;
 }
 
 #about-links{
