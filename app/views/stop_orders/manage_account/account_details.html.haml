@@ -44,11 +44,11 @@
 
           -@stop_order.cancelation_fields.each do |cancelation_field|
             -if cancelation_field.to_sym == :address
-              =cancelation_datum.input cancelation_field.to_sym, as: :hidden, required: @stop_order.merchant.required_cancelation_fileds.include?(cancelation_field.to_s), input_html: {value: @stop_order.cancelation_data.present? ? @stop_order.cancelation_data[cancelation_field.to_s] : ( cancelation_field == :phone_number_on_account ? current_user.phone : current_user.account_detail.account_data[cancelation_field.to_s] ) }
+              =cancelation_datum.input cancelation_field.to_sym, as: :hidden, required: @stop_order.merchant.present? ? @stop_order.merchant.required_cancelation_fileds.include?(cancelation_field.to_s) : false, input_html: {value: @stop_order.cancelation_data.present? ? @stop_order.cancelation_data[cancelation_field.to_s] : ( cancelation_field == :phone_number_on_account ? current_user.phone : current_user.account_detail.account_data[cancelation_field.to_s] ) }
 
               .form-group.horizontal-form-group.string.required
                 %label.string.required.col-sm-3.control-label.text-right
-                  -if @stop_order.merchant.required_cancelation_fileds.include?(cancelation_field.to_s)
+                  -if @stop_order.merchant.present? ? @stop_order.merchant.required_cancelation_fileds.include?(cancelation_field.to_s) : false
                     %abbr{title: "required"}*
                   Address on Account
                 .col-sm-9
