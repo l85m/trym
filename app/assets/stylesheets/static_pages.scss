@@ -100,9 +100,13 @@ p.trym-opener{
 #landing-slide-one{
 	color: white;
 	text-shadow: 1px 1px 4px black;
-	background-image: image-url('grid.png');
+	background-image: image-url('star_trails.jpg');
 	p, h3, i{ color: white; }
 
+}
+#landing-slide-three {
+	background-color: whitesmoke;
+	border: 1px solid lightgray;
 }
 #landing-slide-one, #landing-slide-two, #landing-slide-three, #landing-slide-four, {
 	padding-top: 75px;
