@@ -26,16 +26,14 @@ class AccountLinker
   def connect_to_plaid
     if @params["mfa_response"].present?
       rebuild_plaid_user
-      @user.mfa_authentication(*prep_plaid_mfa_params)
+      @user.mfa_authentication(@params["mfa_response"])
     else
-      @user = Plaid.add_user('connect', prep_plaid_params)
+      @user = Plaid.add_user('connect', @params["username"], @params["password"], @params["pin"], prep_plaid_params)
     end
   end
 
   def rebuild_plaid_user
-    @user = Plaid::User.new
-    @user.access_token = @link.plaid_access_token
-    @user.permissions = ['connect']
+    @user = Plaid.set_user @link.plaid_access_token, ['connect']
   end
 
   def account_linked?
@@ -43,14 +41,7 @@ class AccountLinker
   end
 
   def prep_plaid_params
-    new_params = {}
-    new_params[:type] = @link.financial_institution.plaid_type
-    new_params[:username] = @params["username"]
-    new_params[:password] = @params["password"]
-    new_params[:options] = JSON.generate({ "login_only" => "true", "webhook" => webhook_endpoint })
-    #new_params[:start_date] = "60 days ago"
-    new_params[:pin] = @params["pin"] if @params["pin"].present?
-    new_params
+    { login_only: "true", webhook: webhook_endpoint, start_date: '60 days ago' }
   end
 
   def webhook_endpoint
@@ -59,10 +50,6 @@ class AccountLinker
     else
       Rails.application.routes.url_helpers.plaid_webhook_linked_accounts_url(host: "trym.ngrok.io", protocol: "https://")
     end
-  end
-
-  def prep_plaid_mfa_params
-    [@params["mfa_response"], @link.financial_institution.plaid_type]
   end
 
   def prep_linked_account_params

@@ -77,11 +77,6 @@
 
 $ ->
   if $('#whoami').length
-    # Pusher.log = (message) ->
-    #   if window.console and window.console.log
-    #     window.console.log message
-    #   return
-
     pusher = new Pusher('98d6e8e3a6d1437792da', { encrypted: true })
     channel = pusher.subscribe('private-user-' + $('#whoami').data("user-id") + '-channel')
     channel.bind 'linked-account-notifications', (data) ->
