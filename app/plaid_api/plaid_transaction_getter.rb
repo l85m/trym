@@ -26,11 +26,9 @@ class PlaidTransactionGetter
     rebuild_plaid_user
     @user.get_connect
   end
-
+  
   def rebuild_plaid_user
-    @user = Plaid::User.new
-    @user.access_token = @link.plaid_access_token
-    @user.permissions = ['connect']
+    @user = Plaid.set_user @link.plaid_access_token, ['connect']
   end
 
   def prep_linked_account_params

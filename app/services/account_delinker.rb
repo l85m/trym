@@ -9,7 +9,6 @@ class AccountDelinker
   private
 
   def delink_account
-  	#TODO
+  	Plaid.set_user(@link.plaid_access_token, ['connect']).delete_user
   end
-
 end

@@ -71,7 +71,7 @@ class LinkedAccount < ActiveRecord::Base
   end
 
   def delink
-    #AccountDelinker.perform_async(id)
+    AccountDelinker.perform_async(id)
     update!( destroyed_at: Time.now )
     if charges.present?
       charges.recurring.update_all(linked_account_id: nil)
