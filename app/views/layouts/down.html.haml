@@ -1,0 +1,8 @@
+!!!
+%html{id: "#{controller_name.gsub("_","-")}-#{action_name.gsub("_","-")}"}
+  %head
+    =render 'layouts/head'
+
+  %body
+    .container-fluid
+      = yield

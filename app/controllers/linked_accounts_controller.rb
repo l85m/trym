@@ -1,6 +1,7 @@
 class LinkedAccountsController < ApplicationController
   before_action :authenticate_user!, except: :plaid_webhook
   before_action :set_linked_account, only: [:show, :edit, :update, :destroy, :unlink]
+
   skip_before_filter :verify_authenticity_token, only: :plaid_webhook
 
   respond_to :html, :js, :json

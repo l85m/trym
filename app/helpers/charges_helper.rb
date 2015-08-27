@@ -1,13 +1,13 @@
 module ChargesHelper
 
   def recurring_factors_for(charge)
-    return "<a data-toggle='tooltip' data-title='Trym thinks this expense is recurring because you created it'><i class='fa recurring-factor fa-user recurring-factor-good'></i></a>".html_safe unless charge.transaction_request.present?
+    return "<a data-toggle='tooltip' data-title='Trym thinks this expense is recurring because you created it'><i class='fa recurring-factor fa-user recurring-factor-good'></i></a>".html_safe unless charge.transactions.present?
     interval_class = "fa-calendar"
     amount_class = "fa-usd"
     category_class = "fa-tags"
     merchant_class = "fa-building"
 
-    factors = TransactionScorer.new(charge).reason_for_score.collect do |r, v|
+    factors = TransactionScorer.new(charge.transactions).reason_for_score.collect do |r, v|
       {
         dates_are_perfectly_recurring: [interval_class, v],
         amounts_are_similar: [amount_class, v],
@@ -90,10 +90,9 @@ module ChargesHelper
   def formatted_history(history)
     if history.present?
       "<div class='charge-history-container'>" +
-      "<div class='strong charge-history-left'>2 Yr Total:</div><div class='strong charge-history-right'>#{number_to_currency history.values.inject(0.0){ |s,v| s+= v.to_f }}</div>" +
-      history.to_a.reverse.collect{ |d,v| "<div><div class='charge-history-left'>#{d}:</div><div class='charge-history-right'>#{number_to_currency v.to_f}</div>" }.join("</div>")+
+      "<div class='strong charge-history-left'>2 Yr Total:</div><div class='strong charge-history-right'>#{number_to_currency history.values.inject(0.0){ |s,v| s+= v }}</div>" +
+      history.to_a.reverse.collect{ |d,v| "<div><div class='charge-history-left'>#{d}:</div><div class='charge-history-right'>#{number_to_currency v}</div>" }.join("</div>")+
       "</div>"
-
     else
       nil
     end

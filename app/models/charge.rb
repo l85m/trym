@@ -8,8 +8,8 @@ class Charge < ActiveRecord::Base
 
   has_one :financial_institution, through: :linked_account
   has_many :stop_orders, dependent: :destroy
-  
   has_many :notes, as: :noteable
+  has_many :transactions
 
   validates_presence_of :user_id
   validates_numericality_of :amount, only_integer: true, greater_than_or_equal_to: 0, allow_nil: true
@@ -30,8 +30,8 @@ class Charge < ActiveRecord::Base
 
   scope :uncategorized, -> { where(id: all.reject{ |x| x.smart_trym_category.present? }.collect(&:id) ) }
   scope :sort_by_recurring_score, -> { order("recurring desc NULLS LAST, recurring_score desc NULLS LAST, id desc") }
-  scope :from_link, -> { where.not(transaction_request_id: nil) }
-  scope :from_user, -> { where(transaction_request_id: nil) }
+  scope :from_link, -> { where.not(linked_account_id: nil) }
+  scope :from_user, -> { where(linked_account_id: nil) }
 
   scope :has_recurring_period, -> { where('renewal_period_in_weeks > ?', 0).where.not( renewal_period_in_weeks: nil ) }
   scope :has_billing_day, -> { where.not(billing_day: nil) }
@@ -77,12 +77,20 @@ class Charge < ActiveRecord::Base
 
   def self.rescore
     where.not(history: nil).each do |charge|
-      charge.update( recurring_score: TransactionScorer.new(charge).score )
+      charge.update( recurring_score: TransactionScorer.new(charge.transactions).score )
     end
   end
 
+  def history
+    transactions.order(date: :desc).pluck(:date, :amount).map{ |date,amount| [date, amount/100.0] }.to_h
+  end
+
   def rescore!
-    update( recurring_score: TransactionScorer.new(self).score )
+    update( recurring_score: TransactionScorer.new(self.transactions).score )
+  end
+
+  def history_with_long_dates
+    history.collect{ |date,value| [date.strftime("%b %e, %Y"),value] }.to_h
   end
 
   def new_transaction(new_after = 30.days.ago)

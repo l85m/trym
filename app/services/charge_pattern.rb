@@ -2,7 +2,7 @@ class ChargePattern
 	attr_reader :interval, :interval_likely_recurring, :recurring_amounts_similar, :dates_are_perfectly_recurring, :recurring_date_count
 	
 	def initialize(history)
-		@history = history.collect{ |d,v| [d.to_date,v.to_f] }.to_h
+		@history = history.to_h
 		check_for_perfect_recurrance
 		unless @dates_are_perfectly_recurring
 			find_interval
@@ -16,13 +16,13 @@ class ChargePattern
 	end
 
 	def check_for_perfect_recurrance
-		distances = distances_between_dates(@history.keys.sort)
+		distances = distances_between_dates @history.keys
 		if @history.size > 2 && distances.uniq.size == 1 && recurring_periods_in_days.include?(distances.first)
 			@recurring_date_count = @history.size
 			@dates_are_perfectly_recurring = true
 			@interval_likely_recurring = true
 			@recurring_amounts_similar = amounts_are_similar? @history.values
-			@interval = distances_between_dates(@history.keys.sort).first
+			@interval = distances.first
 		else
 			@dates_are_perfectly_recurring = false
 		end
@@ -31,7 +31,7 @@ class ChargePattern
 	def find_interval
 
 		## First try to find recurrance without any hocus pokus
-		@interval = find_recurring_interval( distances_between_dates @history.keys.sort )
+		@interval = find_recurring_interval( distances_between_dates @history.keys )
 		
 		if @interval.present?
 			@interval_likely_recurring = true

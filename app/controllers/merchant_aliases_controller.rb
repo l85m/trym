@@ -9,7 +9,7 @@ class MerchantAliasesController < InheritedResources::Base
     elsif params[:show_mapped_aliases]
       @merchant_aliases = MerchantAlias.where.not(merchant_id: nil).page(params[:page])
     else
-      @merchant_aliases = MerchantAlias.where(ignore: false).page(params[:page])
+      @merchant_aliases = MerchantAlias.where(ignore: false, merchant_id: nil).page(params[:page])
     end
   end
 

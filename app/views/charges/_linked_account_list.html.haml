@@ -5,10 +5,10 @@
     .pull-right.visible-lg-inline-block
       =link_to linked_accounts_path, class: "btn btn-xs btn-default" do
         %i.fa.fa-plus-circle
-        link new account
+        Link New Account
 =link_to linked_accounts_path, class: "btn btn-xs btn-block sub-heading-link hidden-lg" do
   %i.fa.fa-plus-circle
-  link new account
+  Link new account
 .body
   -if current_user.linked_accounts.linked.present?
     -current_user.linked_accounts.linked.each do |fin|
@@ -18,7 +18,7 @@
         .col-sm-5.col-sm-5.item-stats
           %small
             =link_to linked_account_path(fin) do
-              view account
+              View Account
             %ul.list-inline
               %li{data: {toggle: "tooltip", placement: "top", title: "total transactions"}}
                 #{fin.charges.count}
@@ -33,4 +33,4 @@
           No Accounts Linked
         %p.small
           =link_to "Link your financial accounts", linked_accounts_path 
-          to automatically identify recurring expenses and alert you when prices change or new recurring expenses pop up
+          to automatically identify recurring expenses.

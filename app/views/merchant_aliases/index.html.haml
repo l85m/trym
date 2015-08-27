@@ -16,7 +16,7 @@
           
       %tbody
         - @merchant_aliases.each do |m|
-          %tr.alias-row{id: "alias-row-#{m.id}", data: { toggle: "tooltip", title: m.transaction_meta_data.inspect }}
+          %tr.alias-row{id: "alias-row-#{m.id}"}
             %td{style: "vertical-align:middle"}
               %strong= m.alias
               %br

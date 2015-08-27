@@ -1,59 +1,84 @@
-.container-fluid
+.container-fluid#legal
+  =render 'about_links', about_greeting: "Terms of Use", active: "legal"
   .row
-    .col-lg-8.col-lg-offset-2.col-xs-10.col-xs-offset-1{style: "margin-top:40px; margin-bottom:40px;"}
-      .text-center
-        %span.strong SECURITY STATEMENT
-      %p.text-center
-        %span (February 22, 2015)
-      %p.text-justify
-        Trym utilizes industry leading security measures, including data encryption, to protect your use of our website and the information you share with us. All of your personal information is encrypted, stored and protected on secure servers. While on our website, the “https” indicator in your browser’s address bar is your signal that encryption is working and active. If you have any questions or concerns about security, please contact us at 
-        %a{ href: "mailto:infosec@trym.io" } infosec@trym.io
-        – we are here to help and committed to providing you a safe online experience.        
-
-      .paragraph-spacer
-
-      .text-center
-        %span.strong TERMS OF USE
-      %p.text-center 
-        %span (January 18, 2015)
-      %p.text-justify
-        IMPORTANT READ CAREFULLY: These Terms of Use (“Terms”) govern your access to and use of the website, www.trym.io, and the functions and services related thereto (collectively, the “Site”). These Terms constitute a legal agreement between you and Trym, LLC (“Trym”). <b>BY ACCESSING AND USING THE SITE, YOU ARE ACCEPTING AND AGREEING TO THESE TERMS.  IF YOU DO NOT AGREE TO THESE TERMS, YOU SHOULD EXIT THE SITE NOW AND NOT USE THE SITE IN THE FUTURE.</b>
-      %p.text-justify
-        <b>1. ELIGIBILITY.</b> The Site is available only to individuals of the age of majority who can form legally binding contracts under applicable law, and your use of the Site is your representation that you satisfy this requirement. The Site is not available to any users previously prohibited from using the Site by Trym.
-      %p.text-justify
-        <b>2. ACCOUNTS.</b> To use the Site, you are required to first activate or register for a Trym user account (“Account”) and provide certain information about yourself and your designated expenses. You represent and warrant that: (a) all information you submit is truthful and accurate; and (b) you will maintain the accuracy of such information. You are solely responsible for maintaining the confidentiality of your Account login and password and for all activities that occur under your Account. You agree to immediately notify Trym of any unauthorized use, or suspected unauthorized use, of your Account or any other breach of security. 
-      %p.text-justify
-        <b>3. ACCESS AND USE.</b> Subject to and conditioned upon your strict compliance with these Terms, Trym grants you a limited, non-transferable, non-sublicensable and non-exclusive right to access and use the Site solely for the purpose of managing your designated expenses and acquiring services offered through the Site (the “Permitted Use”).
-      %p.text-justify
-        <b>4. MODIFICATION.</b> Trym reserves the right, at any time, to modify, suspend or discontinue the Site or any part thereof with or without notice. You agree that Trym will not be liable to you or to any third party for any modification, suspension or discontinuance of the Site or any part thereof.
-      %p.text-justify
-        <b>5. CERTAIN RESTRICTIONS.</b> The rights granted to you in these Terms are subject to the following restrictions: (a) you agree not to license, sell, rent, lease, transfer, assign, distribute, host or otherwise commercially exploit any part of the Site, including the Content; (b) you agree not to access the Site in order to build a similar or competitive service; (c) you agree not to grant any third party not authorized by Trym access to your Account; (d) you agree not to upload, transmit or distribute any viruses, worms or any other software through the Site; (e) you agree not to attempt to gain unauthorized access to the servers or networks connected to the Site; and (f) you agree not to remove, obscure or alter any proprietary rights notices (including copyrights and trademark notices) which may be contained in or displayed in connection with the Site.
-      %p.strong 6. OWNERSHIP AND INTELLECTUAL PROPERTY. 
-      %p.text-justify
+    .col-lg-8.col-lg-offset-2.col-xs-10.col-xs-offset-1
+      %h5.about-page-section
+        Last updated August 3, 2015
+      %p.about-page-section
+        %strong 
+          These terms are important, read them carfully: 
+        These Terms of Use (“Terms”) govern your access to and use of the website, www.trym.io, and the functions and services related thereto (collectively,h5the “Site”). These Terms constitute a legal agreement between you and Trym, LLC (“Trym”). 
+        %strong By accessing and using the site, you are accepting and agreeing to these terms.  if you do not agree to these terms, you should exit the site now and not use the site in the future.
+      
+      %h5.about-page-section
+        1. Eligibility
+      %p
+        The Site is available only to individuals of the age of majority who can form legally binding contracts under applicable law, and your use of the Site is your representation that you satisfy this requirement. The Site is not available to any users previously prohibited from using the Site by Trym.
+      
+      %h5.about-page-section
+        2. Accounts
+      %p
+        To use the Site, you are required to first activate or register for a Trym user account (“Account”) and provide certain information about yourself and your designated expenses. You represent and warrant that: (a) all information you submit is truthful and accurate; and (b) you will maintain the accuracy of such information. You are solely responsible for maintaining the confidentiality of your Account login and password and for all activities that occur under your Account. You agree to immediately notify Trym of any unauthorized use, or suspected unauthorized use, of your Account or any other breach of security. 
+      
+      %h5.about-page-section
+        3. Access and Use
+      %p
+        Subject to and conditioned upon your strict compliance with these Terms, Trym grants you a limited, non-transferable, non-sublicensable and non-exclusive right to access and use the Site solely for the purpose of managing your designated expenses and acquiring services offered through the Site (the “Permitted Use”).
+      
+      %h5.about-page-section
+        4. Modification
+      %p
+        Trym reserves the right, at any time, to modify, suspend or discontinue the Site or any part thereof with or without notice. You agree that Trym will not be liable to you or to any third party for any modification, suspension or discontinuance of the Site or any part thereof.
+      
+      %h5.about-page-section
+        5. Certain Restrictions
+      %p
+        The rights granted to you in these Terms are subject to the following restrictions: (a) you agree not to license, sell, rent, lease, transfer, assign, distribute, host or otherwise commercially exploit any part of the Site, including the Content; (b) you agree not to access the Site in order to build a similar or competitive service; (c) you agree not to grant any third party not authorized by Trym access to your Account; (d) you agree not to upload, transmit or distribute any viruses, worms or any other software through the Site; (e) you agree not to attempt to gain unauthorized access to the servers or networks connected to the Site; and (f) you agree not to remove, obscure or alter any proprietary rights notices (including copyrights and trademark notices) which may be contained in or displayed in connection with the Site.
+      
+      %h5.about-page-section 
+        6. Ownership and Intellectual Property
+      %p
         The Site contains trademarks, copyrights and proprietary information and materials owned by Trym or its licensors (collectively, “Content”). Your access to and use of the Site does not transfer to you any rights, title or interest in or to the Site or any Content. Trym and its licensors retain full and complete title to the Site and all Content. For clarity, “Content” does not include any of your personal information.
-      %p.text-justify
+      %p
         You may only copy parts of the Site (including the Content) on to your own computers for the Permitted Use. You may not use the Content in any public or commercial way nor may you copy or incorporate any Content into any other work, including your own website without the prior written consent of Trym. You must have express written permission from Trym prior to posting, displaying or otherwise distributing any portion of the Site or Content.
-      %p.text-justify
-        <b>7. FEEDBACK.</b> You may choose to, or Trym may invite you to, submit comments, suggestions or ideas about the Site, including how to improve the Site (collectively, “Ideas”). By submitting Ideas, you agree that your submissions are voluntary, gratuitous and without restriction. Accordingly, Trym may use, copy, modify, publish or redistribute any Ideas for any purpose and in any way without any compensation to you. You also agree that Trym does not waive any rights to use similar or related ideas previously known to Trym, developed by its employees or obtained from other sources.
-      %p.text-justify
-        <b>8. CONSENT TO COLLECTION AND USE OF DATA.</b> You agree that Trym and its affiliates may collect and use information regarding your use of the Site. You agree that Trym may use such information for any purpose, including but not limited to: (a) improving the performance of the Site and (b) verifying your compliance with these Terms. To the extent any information collected and used by Trym includes personal information, such collection and use shall be in accordance with applicable law and shall not be disclosed by Trym to any third party without your consent, except as necessary to comply with any court order.  
-      %p.strong 9. TERM; TERMINATION. 
-      %p.text-justify
+      
+      %h5.about-page-section
+        7. Feedback
+      %p
+        You may choose to, or Trym may invite you to, submit comments, suggestions or ideas about the Site, including how to improve the Site (collectively, “Ideas”). By submitting Ideas, you agree that your submissions are voluntary, gratuitous and without restriction. Accordingly, Trym may use, copy, modify, publish or redistribute any Ideas for any purpose and in any way without any compensation to you. You also agree that Trym does not waive any rights to use similar or related ideas previously known to Trym, developed by its employees or obtained from other sources.
+      
+      %h5.about-page-section
+        8. Consent to Collection and Use of Data
+      %p
+        You agree that Trym and its affiliates may collect and use information regarding your use of the Site. You agree that Trym may use such information for any purpose, including but not limited to: (a) improving the performance of the Site and (b) verifying your compliance with these Terms. To the extent any information collected and used by Trym includes personal information, such collection and use shall be in accordance with applicable law and shall not be disclosed by Trym to any third party without your consent, except as necessary to comply with any court order.  
+      
+      %h5.about-page-section 9. Term; Termination
+      %p
         These Terms will remain in full force and effect so long as you continue to access or use the Site, unless earlier terminated as provided below. 
-      %p.text-justify
+      %p
         At any time Trym may terminate these Terms or temporarily suspend your rights to access or use the Site if Trym in good faith believes that you have used the Site or any Content in violation of these Terms. Upon termination of these Terms, your Account and your right to use the Site will automatically terminate. Trym’s foregoing suspension and termination rights are in addition to any other rights or remedies available to Trym at law or in equity.
-      %p.strong 10. NO WARRANTIES; DISCLAIMER OF LIABILITY AND LIMITED REMEDY. 
-      %p.text-justify
-        THE SITE AND CONTENT ARE PROVIDED TO YOU “AS-IS”, AND TRYM AND ITS LICENSORS EXPRESSLY DISCLAIM ANY WARRANTIES AND CONDITIONS OF ANY KIND, WHETHER EXPRESS OR IMPLIED, INCLUDING THE WARRANTIES OF MERCHANTABILITY, FITNESS OR A PARTICULAR PURPOSE, ACCURACY AND NON-INFRINGEMENT.
-      %p.text-justify
-        TRYM AND ITS LICENSORS MAKE NO WARRANTIES THAT: (A) ACCESS TO OR USE OF THE SITE WILL BE UNINTERRUPTED; (B) THE SITE OR ANY CONTENT WILL BE RELIABLE OR FREE FROM DEFECTS OR ERRORS OR THAT ANY DEFECTS OR ERRORS WILL BE CORRECTED; OR (C) THE SITE AND ITS SERVERS ARE FREE OF HARMFUL COMPONENTS.
-      %p.text-justify
-        YOU ACKNOWLEDGE THAT TRYM WILL NOT BE RESPONSIBLE FOR ANY INJURIES OR DAMAGES OF ANY KIND IN CONNECTION WITH THE USE OF, LOSS OF USE OF OR INABILITY TO USE, THE SITE OR ANY CONTENT. YOUR SOLE AND EXCLUSIVE REMEDY UNDER THESE TERMS IS TO DISCONTINUE YOUR USE OF THE SITE.
-      %p.text-justify
+      
+      %h5.about-page-section 10. No Warranties; Disclaimer of Liability and Limited Warranty 
+      %p.strong
+        The site and content are provided to you “as-is”, and Trym and its licensors expressly disclaim any warranties and conditions of any kind, whether express or implied, including the warranties of merchantability, fitness or a particular purpose, accuracy and non-infringement.
+      %p.strong
+        Trym and its licensors make no warranties that: (a) access to or use of the site will be uninterrupted; (b) the site or any content will be reliable or free from defects or errors or that any defects or errors will be corrected; or (c) the site and its servers are free of harmful components.
+      %p.strong
+        You acknowledge that trym will not be responsible for any injuries or damages of any kind in connection with the use of, loss of use of or inability to use, the site or any content. your sole and exclusive remedy under these terms is to discontinue your use of the site.
+      %p
         Nothing in these Terms shall attempt to exclude liability that cannot be excluded under applicable law.
-      %p.text-justify
-        <b>11. INDEMNIFICATION.</b> You agree that Trym, its affiliates, officers and employees will not be held responsible for any third party claim, demand or damage, including reasonable attorneys’ fees, arising out of your use of the Site or any Content.
-      %p.text-justify
-        <b>12. GOVERNING LAW; JURISDICTION.</b> These Terms will be governed by and interpreted according to the internal laws of California. All claims, disputes or other matters arising out of these Terms shall be filed in the state courts of the County of Santa Clara, California or the federal courts of the Northern District of California, which shall have exclusive jurisdiction.
-      %p.text-justify
-        <b>13. ENTIRE AGREEMENT; SEVERABILITY.</b> These Terms constitute the entire agreement between you and Trym relating to the Site and Content, and they supersede all prior or contemporaneous oral or written communications, proposals and representations with respect to any subject matter covered by these Terms. If any provision of these Terms is held to be invalid, illegal or unenforceable in any jurisdiction, such invalidity, illegality or unenforceability shall not affect any other term or provision of these Terms or invalidate or render unenforceable such term or provision in any other jurisdiction.
+      
+      %h5.about-page-section
+        11. Indemnification
+      %p
+        You agree that Trym, its affiliates, officers and employees will not be held responsible for any third party claim, demand or damage, including reasonable attorneys’ fees, arising out of your use of the Site or any Content.
+      
+      %h5.about-page-section
+        12. Governing Law; Jurisdiction
+      %p
+        These Terms will be governed by and interpreted according to the internal laws of California. All claims, disputes or other matters arising out of these Terms shall be filed in the state courts of the County of Santa Clara, California or the federal courts of the Northern District of California, which shall have exclusive jurisdiction.
+      
+      %h5.about-page-section
+        13. Entire Agreement; Severability
+      %p
+        These Terms constitute the entire agreement between you and Trym relating to the Site and Content, and they supersede all prior or contemporaneous oral or written communications, proposals and representations with respect to any subject matter covered by these Terms. If any provision of these Terms is held to be invalid, illegal or unenforceable in any jurisdiction, such invalidity, illegality or unenforceability shall not affect any other term or provision of these Terms or invalidate or render unenforceable such term or provision in any other jurisdiction.

@@ -1,34 +1,28 @@
 class TransactionScorer
-  attr_accessor :reason_for_score, :score, :interval
+  attr_accessor :reason_for_score, :score, :interval, :recurring
 
-  ## charge = a transaction object from plaid
-  ## @dates = past transactions from this merchant/source (ie all transactions 
-  ##          from the apple store) sorted in ascending order (newer dates last)
-  def initialize(charge, transaction_request = nil)
-    @charge = charge
-    if charge.instance_of?(Charge)
-      @dates = charge.history.present? ? charge.history.keys.sort.map(&:to_date) : []
-      @name = charge.plaid_name.present? ? charge.plaid_name.downcase : ''
-      @merchant_id = charge.merchant.present? ? charge.merchant.id : nil
-      @category_id = charge.category_id
-      @history = charge.history
-      transaction_request = charge.transaction_request
-    else
-      @dates = charge[:date].sort
-      @name = (charge[:name].presence || "").downcase
-      @merchant_id = charge[:merchant_id]
-      @category_id = charge[:category_id]
-      @history = charge[:date].zip(charge[:amount])
-    end
+  def initialize(transactions, transaction_request = nil, merchant = nil)
+    @history = transactions.sort_by(&:date).collect { |t| [t.date,t.amount] }
+    @dates = @history.collect(&:first)
+    @names = transactions.collect { |n| n.name.downcase }.uniq
+    @merchant = merchant.presence || get_merchant_if_present(transactions)
+    @category_id = get_category_if_present(transactions)
+    @recurring = false
 
     @reason_for_score = {}
-    @date_data_was_pulled = transaction_request.present? ? transaction_request.created_at : Time.now
+    @date_data_was_pulled = transaction_request.present? ? transaction_request.created_at : transactions.sort_by(&:date).first.transaction_request.created_at
     calculate_recurring_score
-    
-    @interval = @charge_pattern.present? ? @charge_pattern.interval : 30
   end
   
   private
+
+  def get_merchant_if_present(transactions)
+    (transactions.find { |t| t.merchant.present? }.presence || transactions.first).merchant
+  end
+
+  def get_category_if_present(transactions)
+    (transactions.find { |t| t.category_id.present? }.presence || transactions.first).category_id    
+  end
 
   ## Returns integer score representing how likely a charge is to recur.  Higher
   ## score is better.
@@ -105,10 +99,18 @@ class TransactionScorer
       @reason_for_score[:unlikely_description] = -3
       @score -= 3
     end
+
+    @interval ||= @charge_pattern.present? ? @charge_pattern.interval : 30
     
-    if @merchant_id.present?
-      @reason_for_score[:merchant_recurring_score] = Merchant.find(@merchant_id).recurring_score
-      @score += Merchant.find(@merchant_id).recurring_score
+    if @merchant.present?
+      @reason_for_score[:merchant_recurring_score] = @merchant.recurring_score
+      @score += @merchant.recurring_score
+      if @merchant.default_renewal_period.present?
+        @interval = @merchant.default_renewal_period
+      end
+      if @merchant.definitely_recurring_if_in_renewal_period.present? && @interval < (@date_data_was_pulled.to_date - @dates[0])
+        @recurring = true
+      end
     end
 
     @score
@@ -156,13 +158,13 @@ class TransactionScorer
       "drugs", "emergency", "halloween", "christmas", "tire", "toys", "breakfast", "lunch", "dinner", "donuts", "ice cream", "tacos",
       "pub", "juice", "thai", "japanese", "mexican", "italian", "chinese", "kitchen", "hamburger", "grill", "sushi", "grocery", "chateau",
       "google checkout seller", "transaction processed by", "foreign transaction fee", "late payment fee", "interest charge", "adjustment"
-    ].select{ |d| @name.downcase.include?(d) }.present?
+    ].select{ |d| @names.first.include?(d) }.present?
   end
 
   def likely_description?
     [
       "membership", "recurring", "monthly", "annual", "periodic", "insurance", "renewal"
-    ].select{ |d| @name.downcase.include?(d) }.present?
+    ].select{ |d| @names.first.include?(d) }.present?
   end
 
   def very_unlikely_category?

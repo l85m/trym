@@ -3,13 +3,13 @@
     .sm-full-height.text-center
       .trym-talking
         %p.opener.trym-fade-in
-          you tell me which charges to cancel or change.
+          You tell me which charges to cancel or change.
       .row
         .col-xs-10.col-xs-offset-1
           .paragraph-spacer
           .text-center.trym-fade-in
             %p.lead.trym-subtext
-              i can upgrade, downgrade or cancel any expense.  i'll even call customer service for you.
+              I can upgrade, downgrade or cancel any expense.  I'll even call customer service for you.
       -demos = demo_charges
       .row
         .col-xs-12
@@ -19,7 +19,7 @@
                 .col-lg-3.col-md-4.col-sm-6
                   =render partial: "static_pages/landing/demo_charge_item", locals: {charge: charge}
 
-      .row.bs-wizard{:style => "border-bottom:0;"}
+      .row.bs-wizard.trym-fade-in{:style => "border-bottom:0;"}
         -order = StopOrder.new(charge: demos[1], status: "working", option: "cancel_all")
         -manage_account_progress(order).each do |step, status|
           .col-xs-4.bs-wizard-step{class: status}

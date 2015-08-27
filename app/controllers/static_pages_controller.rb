@@ -1,17 +1,23 @@
 class StaticPagesController < ApplicationController
+  layout "down", only: [:upgrades]
+  before_action :show_location_restriction
+
   def landing
   end
 
-  def t
+  def legal
   end
 
-  def legal
+  def privacy
   end
 
   def test
   end
 
   def about
+  end
+
+  def upgrades
   end
   
 end

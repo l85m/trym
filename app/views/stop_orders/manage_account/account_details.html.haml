@@ -5,28 +5,30 @@
   .col-lg-8.col-lg-offset-2.col-md-10.col-md-offset-1.text-center.trym-fade-in    
     .trym-talking
       %p.lead.without-margin
-        i need a few details to #{manage_account_second_person_action_statement(@stop_order).downcase}  
+        I need a few details to #{manage_account_second_person_action_statement(@stop_order).downcase}.
     %p
-      try and provide as much information as you can, the more i have the more likely i'll be able to help.
-    
+      Try and provide as much information as you can, the more i have the more likely i'll be able to help.
+
 .row.trym-fade-in    
   .col-lg-6.col-lg-offset-3.col-md-8.col-md-offset-2.col-sm-10.col-sm-offset-1
     .paragraph-spacer
     =simple_form_for @stop_order, url: wizard_path, method: :put, wrapper: :horizontal_form, wrapper_mappings: {currency: :horizontal_form}, html: {class: "form-horizontal"} do |f|
       =f.input :status, as: :hidden, input_html: { value: "requested" }
       =f.input :contact_preference, as: :hidden, input_html: { value: "call" }
-   
-      %p.text-center 
-        fields marked with * are required
-        %br  
+
+      %p.text-center
         %small
           =render 'shared/security_notice'
+   
+      %p.text-center 
+        %small
+          fields marked with * are required
 
       =f.simple_fields_for :cancelation_data do |cancelation_datum|
 
         -unless @stop_order.option == "cancel_all"
           .unlinked-info-box
-            %h4.text-center what can we help with?
+            %h4.text-center What can we help with?
             .paragraph-spacer
           
             -if @stop_order.option == "upgrade"
@@ -37,16 +39,16 @@
               =cancelation_datum.input :change_description, as: :text, required: true, label: "What sort of deal would you like us to find for you?", input_html: {placeholder: "Please be specific", value: @stop_order.cancelation_data.present? ? @stop_order.cancelation_data["change_description"] : nil }
 
         .unlinked-info-box
-          %h4.text-center account details
+          %h4.text-center Account details
           .paragraph-spacer
 
           -@stop_order.cancelation_fields.each do |cancelation_field|
             -if cancelation_field.to_sym == :address
-              =cancelation_datum.input cancelation_field.to_sym, as: :hidden, required: @stop_order.merchant.required_cancelation_fileds.include?(cancelation_field.to_s), input_html: {value: @stop_order.cancelation_data.present? ? @stop_order.cancelation_data[cancelation_field.to_s] : ( cancelation_field == :phone_number_on_account ? current_user.phone : current_user.account_detail.account_data[cancelation_field.to_s] ) }
+              =cancelation_datum.input cancelation_field.to_sym, as: :hidden, required: @stop_order.merchant.present? ? @stop_order.merchant.required_cancelation_fileds.include?(cancelation_field.to_s) : false, input_html: {value: @stop_order.cancelation_data.present? ? @stop_order.cancelation_data[cancelation_field.to_s] : ( cancelation_field == :phone_number_on_account ? current_user.phone : current_user.account_detail.account_data[cancelation_field.to_s] ) }
 
               .form-group.horizontal-form-group.string.required
                 %label.string.required.col-sm-3.control-label.text-right
-                  -if @stop_order.merchant.required_cancelation_fileds.include?(cancelation_field.to_s)
+                  -if @stop_order.merchant.present? ? @stop_order.merchant.required_cancelation_fileds.include?(cancelation_field.to_s) : false
                     %abbr{title: "required"}*
                   Address on Account
                 .col-sm-9
@@ -57,12 +59,12 @@
                       %input.form-control.text-left#zip{placeholder: "zip", value: split_address(@stop_order, "zip")}
 
             -else
-              =cancelation_datum.input cancelation_field.to_sym, required: @stop_order.merchant.required_cancelation_fileds.include?(cancelation_field.to_s), input_html: {value: @stop_order.cancelation_data.present? ? @stop_order.cancelation_data[cancelation_field.to_s] : ( cancelation_field == :phone_number_on_account ? current_user.phone : current_user.account_detail.account_data[cancelation_field.to_s] ) }
+              =cancelation_datum.input cancelation_field.to_sym, required: @stop_order.merchant.present? ? @stop_order.merchant.required_cancelation_fileds.include?(cancelation_field.to_s) : false, input_html: {value: @stop_order.cancelation_data.present? ? @stop_order.cancelation_data[cancelation_field.to_s] : ( cancelation_field == :phone_number_on_account ? current_user.phone : current_user.account_detail.account_data[cancelation_field.to_s] ) }
           
           =cancelation_datum.input :comments, as: :text, label: "Anything else we should know?", input_html: {value: @stop_order.cancelation_data.present? ? @stop_order.cancelation_data["comments"] : nil }
 
         .unlinked-info-box
-          %h4.text-center how much are you paying?
+          %h4.text-center How much are you paying?
           .paragraph-spacer
           =f.simple_fields_for :charge_attributes do |charge_field|
             -@stop_order.charge_fields.each do |field, (type, label, placeholder, value)|
@@ -80,7 +82,7 @@
             
       .text-center           
         %p.strong
-          By clicking "#{manage_account_first_person_action_statement(@stop_order)}", you hereby authorize Trym to act as your agent to manage this service on your behalf, including in substantially the same way you would do so yourself.      
+          By clicking "#{manage_account_first_person_action_statement(@stop_order)}", you hereby authorize trym to act as your agent for managing this service on your behalf, which may include acting as you solely for the purpose of completing this request.      
 
       .paragraph-spacer
 
