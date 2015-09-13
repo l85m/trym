@@ -8,13 +8,13 @@
         =billing_interval_in_words(charge.renewal_period_in_weeks)
     
       .small
-        %a.icon-link{tabindex: "0", data: {toggle: "popover", content: formatted_history(charge.history_with_long_dates)} }
+        %a.icon-link{tabindex: "0", data: {toggle: "popover", content: formatted_history(charge_history)} }
           %i.fa.fa-calendar
           history
             
     .charge-info.charge-description.text-left
       .charge-lead
-        %p=charge.merchant.name.titlecase
+        %p=charge.merchant.name
       %p.without-margin.small
         %span.small-gray
           %i.fa.fa-clock-o.hidden-md

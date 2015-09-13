@@ -97,13 +97,7 @@ p.trym-opener{
 #tell-me-more{
 	text-align: center;
 }
-#landing-slide-one{
-	color: white;
-	text-shadow: 1px 1px 4px black;
-	background-image: image-url('star_trails.jpg');
-	p, h3, i{ color: white; }
 
-}
 #landing-slide-three {
 	background-color: whitesmoke;
 	border: 1px solid lightgray;
@@ -112,8 +106,8 @@ p.trym-opener{
 	padding-top: 75px;
 	padding-bottom: 75px;
 }
-#landing-slide-five{
-	p, h3, i{ color: white; }
+#landing-slide-one, #landing-slide-five{
+	.trym-fade-in, p, h3, i{ color: white; }
 	background: $brand-color;
 	.trym-talking{
 		border-bottom: 1px solid white;
@@ -126,6 +120,8 @@ p.trym-opener{
 		background-color: white;
 		color: $brand-color;
 	}
+}
+#landing-slide-five{
 	padding-top: 150px;
 	padding-bottom: 150px;
 }

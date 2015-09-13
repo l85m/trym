@@ -14,13 +14,12 @@
       .row
         .col-xs-12
           .row.trym-fade-in
-            -demos.in_groups_of(3,false) do |charge_group|
-              -charge_group.each do |charge|
-                .col-lg-3.col-md-4.col-sm-6
-                  =render partial: "static_pages/landing/demo_charge_item", locals: {charge: charge}
+            -demos.each do |charge, charge_history|
+              .col-md-4.col-sm-12
+                =render partial: "static_pages/landing/demo_charge_item", locals: {charge: charge, charge_history: charge_history}
 
       .row.bs-wizard.trym-fade-in{:style => "border-bottom:0;"}
-        -order = StopOrder.new(charge: demos[1], status: "working", option: "cancel_all")
+        -order = StopOrder.new(charge: demos[1][0], status: "working", option: "cancel_all")
         -manage_account_progress(order).each do |step, status|
           .col-xs-4.bs-wizard-step{class: status}
             .text-center.bs-wizard-stepnum= step

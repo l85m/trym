@@ -32,25 +32,26 @@ module StaticPagesHelper
 	end
 
 	def demo_charges
-		Merchant.validated.order("random()").limit(4).collect do |m|
-			amount = 20000 * rand()
+		[
+			[Merchant.find_by_name("Comcast"), {amount: 12131, period: 4, times: 14}],
+			[Merchant.find_by_name("FreeCreditReport.com"), {amount: 7995, period: 52, times: 3}],
+			[Merchant.find_by_name("Gold's Gym"), {amount: 6231, period: 4, times: 22}]
+		].collect do |m, data|
 			day = Date.today + (30 * rand).to_i
-			period = rand() > 0.25 ? 4 : 52
-			history = (rand(5..15)).to_i.times.collect do |i| 
+			history = data[:times].times.collect do |i| 
 				[
-					day - (i * 7 * period), 
-					(amount + amount * ( rand() > 0.05 ? rand(-0.1..0.1) : rand(-0.5..2) ))/100
+					(day - (i * 7 * data[:period])).strftime("%b %e, %Y"), 
+					(data[:amount] + data[:amount] * ( rand() > 0.05 ? 0 : rand(-0.5..2) ))/100
 				]
 			end.reverse.to_h
-
-			Charge.new( 
-				merchant: m, 
-				amount: amount, 
+			[Charge.new( 
+				merchant: m,
+				amount: data[:amount], 
 				billing_day: day, 
-				renewal_period_in_weeks: period,
+				renewal_period_in_weeks: data[:period],
 				recurring: true,
 				history: history
-			)
+			), history]
 		end
 	end
 end

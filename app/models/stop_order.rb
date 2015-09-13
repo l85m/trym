@@ -30,7 +30,7 @@ class StopOrder < ActiveRecord::Base
     when "requested"
       "We've recieved your trym request for #{charge.descriptor} and will start working on it soon"
     when "working"
-      "We're working on your request for #{charge.descriptor}, we'll let you know if we have any issues"
+      "We're working on your request for #{charge.descriptor}; we'll let you know if we have any issues"
     when "succeeded"
       case option
       when "cancel_all"
