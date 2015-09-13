@@ -11,7 +11,7 @@
             =billing_interval_in_words(charge.renewal_period_in_weeks)
         -if charge.history.present?
           .small
-            %a.icon-link{tabindex: "0", data: {toggle: "popover", content: formatted_history(charge.history_with_long_dates)} }
+            %a.icon-link{href: "#a", tabindex: "0", data: {toggle: "popover", content: formatted_history(charge.history_with_long_dates)} }
               %i.fa.fa-calendar
               history
               
