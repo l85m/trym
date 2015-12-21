@@ -1,4 +1,5 @@
 ActiveAdmin.register Merchant do
+  begin
   menu priority: 1
   permit_params :name, :validated, :trym_category_id, :cancelation_fields, :recurring_score
   
@@ -97,5 +98,6 @@ ActiveAdmin.register Merchant do
     end
     actions
   end
-
+rescue
+  p "active admin is not happy"
 end
