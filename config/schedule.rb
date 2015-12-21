@@ -17,13 +17,13 @@
 set :output, "~/trym/shared/log/cron_log.log"
 
 every 1.day, :at => '1:30 am' do
-  runner "puts 'running PlaidFinancialInstitutionUpdater.perform_async @ #{Time.now}'; PlaidFinancialInstitutionUpdater.perform_async"
-  runner "puts 'running PlaidCategoryUpdater.perform_async @ #{Time.now}'; PlaidCategoryUpdater.perform_async"
+  # runner "puts 'running PlaidFinancialInstitutionUpdater.perform_async @ #{Time.now}'; PlaidFinancialInstitutionUpdater.perform_async"
+  # runner "puts 'running PlaidCategoryUpdater.perform_async @ #{Time.now}'; PlaidCategoryUpdater.perform_async"
  	runner "puts 'running AlertWorker.perform_async @ #{Time.now}'; AlertWorker.perform_async"
 end
 
 every '30 0 1 * *' do
-	runner "puts 'running PlaidCategoryUpdater.perform_async @ #{Time.now}'; SummaryWorker.perform_async"
+	# runner "puts 'running PlaidCategoryUpdater.perform_async @ #{Time.now}'; SummaryWorker.perform_async"
 end
 
 every 5.minutes do

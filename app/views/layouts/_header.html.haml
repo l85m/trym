@@ -41,4 +41,4 @@
             %li=link_to "sign in", new_user_session_path, remote: true
           -unless user_signed_in? && current_page?(new_user_session_path)
             %li          
-              =link_to "sign up", new_user_registration_path
+              =link_to "learn more", about_path
